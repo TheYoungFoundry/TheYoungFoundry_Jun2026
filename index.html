@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Young Foundry — Where Young Minds Build</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#E53935; --green:#43A047; --light:#F8F9FA; --dark:#2d3748;
+  --yellow:#FDD835; --blue:#1E88E5; --orange:#F97316; --purple:#8B5CF6;
+  --paper:#ffffff; --ink:#2d3748; --muted:#7b8694; --line:#eceef1;
+  --soft:#eef1f5;
+  --head:'Fredoka One',cursive;
+  --body:'Nunito',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --shadow:0 14px 34px -16px rgba(45,55,72,.28);
+  --shadow-sm:0 6px 16px -8px rgba(45,55,72,.25);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;scroll-behavior:smooth;}
+body{font-family:var(--body);color:var(--ink);background:var(--light);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+h1,h2,h3{font-family:var(--head);font-weight:400;letter-spacing:.2px;}
+a{color:inherit;text-decoration:none;}
+button{font-family:var(--body);cursor:pointer;border:none;}
+
+/* background blobs — exactly like math quest */
+.blob{position:fixed;z-index:0;opacity:.07;pointer-events:none;}
+.blob.tl{top:-60px;left:-60px;width:380px;color:var(--red);}
+.blob.br{bottom:-80px;right:-80px;width:420px;color:var(--green);}
+
+/* ---- TOPBAR (mirrors math quest .topbar) ---- */
+.topbar{position:relative;z-index:10;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  max-width:1280px;margin:0 auto;padding:16px 24px;}
+.brand{font-family:var(--head);font-size:26px;cursor:pointer;white-space:nowrap;}
+.brand .g{color:var(--green);} .brand .r{color:var(--red);}
+.tspacer{flex:1;}
+.nav-links{display:flex;align-items:center;gap:6px;}
+.nav-links a{font-family:var(--body);font-weight:800;font-size:14px;color:var(--muted);
+  padding:8px 14px;border-radius:999px;transition:.15s;}
+.nav-links a:hover{color:var(--dark);background:var(--soft);}
+.nav-links a.cta{background:var(--green);color:#fff;padding:9px 18px;}
+.nav-links a.cta:hover{background:#388E3C;transform:translateY(-1px);}
+.mobile-menu{display:none;background:#fff;border:2px solid var(--line);color:var(--dark);
+  border-radius:12px;padding:8px 12px;font-size:18px;cursor:pointer;box-shadow:var(--shadow-sm);}
+
+/* ---- HERO ---- */
+.hero{position:relative;z-index:10;max-width:1280px;margin:0 auto;padding:16px 24px 40px;}
+.hero-inner{background:var(--paper);border:2px solid var(--line);border-radius:30px;
+  padding:40px;box-shadow:var(--shadow);display:flex;gap:32px;align-items:center;position:relative;overflow:hidden;}
+.hero-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;
+  background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--blue),var(--purple));}
+.hero-text{flex:1;min-width:0;}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;background:var(--soft);
+  border:2px solid var(--line);border-radius:999px;padding:6px 14px;
+  font-size:12px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:16px;}
+.hero h1{font-size:42px;line-height:1.1;color:var(--dark);margin:0 0 14px;}
+.hero h1 .hi{color:var(--blue);} .hero h1 .ho{color:var(--orange);}
+.hero p{font-size:17px;color:var(--muted);font-weight:600;margin:0 0 22px;max-width:520px;line-height:1.65;}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:13px 24px;
+  border-radius:999px;font-family:var(--body);font-weight:900;font-size:16px;cursor:pointer;
+  border:none;transition:all .2s ease;text-decoration:none;}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 15px -3px rgba(0,0,0,.12);}
+.btn.green{background:var(--green);color:#fff;}
+.btn.blue{background:var(--blue);color:#fff;}
+.btn.ghost{background:#fff;border:2px solid var(--line);color:var(--dark);}
+.hero-fig{flex:0 0 220px;height:200px;position:relative;display:none;}
+@media(min-width:760px){.hero-fig{display:block;}}
+.fblock{position:absolute;border-radius:22px;display:grid;place-items:center;box-shadow:var(--shadow);}
+.fblock.c{width:96px;height:96px;background:var(--red);transform:rotate(12deg);top:52px;left:62px;animation:float 4s ease-in-out infinite;z-index:2;}
+.fblock.a{width:64px;height:64px;border-radius:50%;background:var(--green);top:8px;left:8px;animation:float 5s ease-in-out infinite;animation-delay:1s;}
+.fblock.b{width:74px;height:74px;border-radius:20px;background:var(--blue);transform:rotate(-12deg);bottom:6px;right:10px;animation:float 4.5s ease-in-out infinite;animation-delay:.5s;}
+.fdot{position:absolute;border-radius:50%;}
+.fdot.y{width:16px;height:16px;background:var(--yellow);top:48%;right:6px;animation:pulse 2s infinite;}
+.fdot.p{width:12px;height:12px;background:var(--purple);bottom:24%;left:0;animation:bounce 2.2s infinite;}
+@keyframes float{0%{transform:translateY(0) rotate(var(--r,0))}50%{transform:translateY(-10px) rotate(var(--r,0))}100%{transform:translateY(0) rotate(var(--r,0))}}
+.fblock.c{--r:12deg;} .fblock.b{--r:-12deg;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* ---- SECTION LABEL (matches math quest .sectlab) ---- */
+.sectlab{font-family:var(--head);font-size:22px;color:var(--dark);
+  margin:4px 2px 16px;display:flex;align-items:center;gap:9px;}
+.section-wrap{position:relative;z-index:10;max-width:1280px;margin:0 auto;padding:0 24px 40px;}
+
+/* ---- ROLES ---- */
+.roles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.role-card{background:var(--paper);border:2px solid var(--line);border-radius:24px;
+  padding:26px 22px;box-shadow:var(--shadow-sm);transition:.2s;}
+.role-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);}
+.role-card.teacher:hover{border-color:var(--yellow);}
+.role-card.student:hover{border-color:var(--blue);}
+.role-card.parent:hover{border-color:var(--purple);}
+.role-emoji{font-size:2rem;margin-bottom:10px;display:block;}
+.role-title{font-family:var(--head);font-size:20px;margin-bottom:7px;}
+.role-desc{font-size:14px;line-height:1.6;color:var(--muted);margin-bottom:14px;font-weight:700;}
+.role-features{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;}
+.role-features li{font-size:13px;font-weight:800;color:var(--ink);padding-left:16px;position:relative;}
+.role-features li::before{content:'✦';position:absolute;left:0;font-size:.6rem;top:2px;}
+.role-card.teacher .role-features li::before{color:var(--yellow);}
+.role-card.student .role-features li::before{color:var(--blue);}
+.role-card.parent .role-features li::before{color:var(--purple);}
+
+/* ---- CARDS (shared by apps, programs, blog) ---- */
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.grid-auto{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+.card{background:var(--paper);border:2px solid var(--line);border-radius:24px;
+  overflow:hidden;box-shadow:var(--shadow-sm);transition:.2s;}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow);}
+.card-preview{height:160px;display:flex;align-items:center;justify-content:center;font-size:3.5rem;position:relative;overflow:hidden;}
+.card-preview::after{content:'';position:absolute;bottom:0;left:0;right:0;height:50px;
+  background:linear-gradient(transparent,var(--paper));}
+.card-body{padding:18px;}
+.card-tag{font-size:11px;font-weight:900;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}
+.card-name{font-family:var(--head);font-size:20px;color:var(--dark);margin-bottom:6px;}
+.card-desc{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:12px;font-weight:700;}
+.card-link{font-size:13px;font-weight:900;color:var(--blue);
+  display:inline-flex;align-items:center;gap:5px;transition:gap .15s;}
+.card-link:hover{gap:10px;}
+
+/* ---- CURATED PROGRAMS ---- */
+.program-card{background:var(--paper);border:2px solid var(--line);border-radius:24px;
+  box-shadow:var(--shadow);padding:26px;}
+.program-head{display:flex;align-items:center;gap:14px;margin-bottom:18px;}
+.program-icon{width:64px;height:64px;border-radius:20px;background:linear-gradient(135deg,var(--blue),var(--purple));
+  display:grid;place-items:center;font-size:30px;flex:0 0 auto;box-shadow:0 6px 0 rgba(30,136,229,.25);}
+.program-info .ptag{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:var(--blue);margin-bottom:4px;}
+.program-info h3{font-family:var(--head);font-size:22px;color:var(--dark);margin:0 0 4px;}
+.program-info p{font-size:13px;font-weight:700;color:var(--muted);margin:0;}
+.program-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+.pmeta{display:inline-flex;align-items:center;gap:5px;background:var(--soft);
+  border:2px solid var(--line);border-radius:999px;padding:5px 12px;
+  font-size:12px;font-weight:900;color:var(--ink);}
+
+/* level list inside program */
+.level-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.lvl-row{display:flex;align-items:center;gap:14px;background:var(--light);
+  border:2px solid var(--line);border-radius:16px;padding:12px 14px;transition:.15s;}
+.lvl-row:hover{border-color:var(--blue);transform:translateX(3px);}
+.lvl-row.locked{opacity:.55;}
+.lvl-row.locked:hover{transform:none;border-color:var(--line);}
+.lvl-num{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;
+  font-family:var(--head);font-size:20px;color:#fff;flex:0 0 auto;}
+.lvl-num.open{background:linear-gradient(135deg,var(--blue),var(--purple));box-shadow:0 4px 0 rgba(30,136,229,.3);}
+.lvl-num.soon{background:var(--soft);color:var(--muted);box-shadow:none;}
+.lvl-info{flex:1;min-width:0;}
+.lvl-name{font-weight:900;font-size:14px;color:var(--dark);}
+.lvl-meta{font-size:12px;font-weight:700;color:var(--muted);margin-top:3px;}
+.lvl-badge{font-size:11px;font-weight:900;padding:4px 11px;border-radius:999px;white-space:nowrap;}
+.lvl-badge.open{background:#e8f5e9;color:var(--green);}
+.lvl-badge.soon{background:var(--soft);color:var(--muted);}
+
+/* apps inside a level */
+.lvl-apps{display:flex;flex-direction:column;gap:8px;margin:8px 0 0 58px;}
+.lvl-app{display:flex;align-items:center;gap:10px;background:var(--paper);
+  border:2px solid var(--line);border-radius:13px;padding:10px 12px;transition:.15s;}
+.lvl-app:hover{border-color:var(--green);transform:translateX(3px);}
+.lvl-app .aico{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:17px;flex:0 0 auto;}
+.lvl-app .ainfo{flex:1;min-width:0;}
+.lvl-app .aname{font-weight:900;font-size:13px;color:var(--dark);}
+.lvl-app .asub{font-size:11.5px;font-weight:700;color:var(--muted);margin-top:1px;}
+.lvl-app a.alink{font-size:12px;font-weight:900;color:var(--blue);
+  display:inline-flex;align-items:center;gap:4px;white-space:nowrap;transition:gap .12s;}
+.lvl-app a.alink:hover{gap:8px;}
+
+.program-cta-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  width:100%;padding:14px;border-radius:999px;font-family:var(--body);font-weight:900;
+  font-size:16px;cursor:pointer;border:none;transition:all .2s;background:var(--green);color:#fff;}
+.program-cta-btn:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(67,160,71,.3);}
+.program-cta-btn:disabled{background:var(--soft);color:var(--muted);transform:none;box-shadow:none;cursor:not-allowed;}
+
+/* ---- BLOG ---- */
+.blog-img{height:130px;display:flex;align-items:center;justify-content:center;font-size:2.8rem;}
+.blog-category{font-size:11px;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:var(--orange);margin-bottom:6px;}
+.blog-title{font-family:var(--head);font-size:17px;color:var(--dark);margin-bottom:7px;line-height:1.3;}
+.blog-excerpt{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:10px;font-weight:700;}
+.blog-meta{font-size:11px;color:var(--muted);font-weight:800;display:flex;align-items:center;gap:7px;}
+
+/* ---- FOOTER ---- */
+footer{background:var(--paper);border-top:2px solid var(--line);padding:48px 0 28px;position:relative;z-index:10;}
+.footer-inner{max-width:1280px;margin:0 auto;padding:0 24px;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:36px;}
+.footer-brand{font-family:var(--head);font-size:22px;margin-bottom:8px;}
+.footer-brand .g{color:var(--green);} .footer-brand .r{color:var(--red);}
+.footer-desc{font-size:13px;color:var(--muted);line-height:1.6;max-width:260px;font-weight:700;}
+.footer-col h4{font-family:var(--head);font-weight:400;font-size:17px;margin-bottom:10px;color:var(--dark);}
+.footer-col a{display:block;font-size:13px;color:var(--muted);font-weight:700;padding:3px 0;transition:color .2s;}
+.footer-col a:hover{color:var(--green);}
+.footer-bottom{border-top:2px solid var(--line);padding-top:20px;display:flex;
+  justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);font-weight:800;flex-wrap:wrap;gap:8px;}
+
+/* ---- REVEAL ---- */
+.reveal{opacity:0;transform:translateY(24px);transition:all .6s cubic-bezier(.16,1,.3,1);}
+.reveal.visible{opacity:1;transform:none;}
+
+/* ---- RESPONSIVE ---- */
+@media(max-width:900px){
+  .roles-grid,.grid-3{grid-template-columns:1fr 1fr;}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+  .hero h1{font-size:30px;}
+  .nav-links{display:none;}
+  .mobile-menu{display:block;}
+}
+@media(max-width:560px){
+  .roles-grid,.grid-3,.grid-auto{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr;}
+  .hero-inner{padding:24px;}
+}
+</style>
+</head>
+<body>
+
+<!-- background blobs (exact match to math quest) -->
+<svg class="blob tl" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <path fill="currentColor" d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.4,-32.6,90,-16.3,89.1,-.5C88.2,15.3,83.8,30.6,75.5,43.6C67.2,56.6,55,67.2,41.2,74.6C27.4,82,12,86.1,-2,85.3C-16,84.6,-32,79,-46.5,71.6C-61,64.2,-74,55,-81.2,42.4C-88.4,29.9,-89.8,14.9,-88.2,.9C-86.5,-13.2,-81.7,-26.4,-74.4,-38C-67,-49.7,-57,-59.9,-44.2,-67.5C-31.4,-75.2,-15.7,-80.4,.6,-81.3C16.9,-82.2,30.6,-83.6,44.7,-76.4Z" transform="translate(100 100)"/>
+</svg>
+<svg class="blob br" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <path fill="currentColor" d="M39.5,-65.3C52.3,-59.7,64.5,-51.4,71.5,-39.8C78.5,-28.2,80.4,-14.1,79.8,-.3C79.1,13.5,75.9,27.1,69.4,39.4C62.9,51.8,53.1,62.9,40.8,70.3C28.5,77.8,14.2,81.6,.4,81C-13.4,80.4,-26.8,75.3,-39,68.1C-51.2,60.8,-62.3,51.3,-70.2,39.5C-78.1,27.7,-82.9,13.8,-83.1,-.2C-83.3,-14.1,-79,-28.2,-71.4,-39.8C-63.8,-51.4,-52.9,-60.3,-40.5,-66.1C-28.2,-71.9,-14.1,-74.6,-.3,-74.2C14.5,-73.7,26.7,-70.9,39.5,-65.3Z" transform="translate(100 100)"/>
+</svg>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span class="brand"><span class="r">The Young</span> <span class="g">Foundry</span></span>
+  <div class="tspacer"></div>
+  <nav class="nav-links">
+    <a href="#roles">Who It's For</a>
+    <a href="#apps">Apps</a>
+    <a href="#programs">Curated Programs</a>
+    <a href="#free-apps">Free Resources</a>
+    <a href="#blog">Blog</a>
+    <a href="#programs" class="cta">Explore Curated Programs →</a>
+  </nav>
+  <button class="mobile-menu" onclick="document.querySelector('.nav-links').classList.toggle('show')">☰</button>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner reveal">
+    <div class="hero-text">
+      <div class="hero-tag">🚀 Now open for early access</div>
+      <h1>Where Young Minds <span class="hi">Build</span> &amp; <span class="ho">Grow</span></h1>
+      <p>The all-in-one coding &amp; computational thinking platform for ages 9–14. Teachers teach. Students build. Parents track. All in one place.</p>
+      <div class="hero-cta">
+        <a href="#programs" class="btn green">Explore Curated Programs</a>
+        <a href="#free-apps" class="btn ghost">Free Resources →</a>
+      </div>
+    </div>
+    <div class="hero-fig">
+      <div class="fblock c"><span style="font-size:42px">💻</span></div>
+      <div class="fblock a"><span style="font-size:26px">🔢</span></div>
+      <div class="fblock b"><span style="font-size:30px">🧠</span></div>
+      <div class="fdot y"></div>
+      <div class="fdot p"></div>
+    </div>
+  </div>
+</div>
+
+<!-- WHO IT'S FOR -->
+<div class="section-wrap" id="roles">
+  <div class="sectlab reveal">👥 Who It's For</div>
+  <div class="roles-grid">
+    <div class="role-card teacher reveal">
+      <span class="role-emoji">👩‍🏫</span>
+      <div class="role-title" style="color:var(--dark)">Teacher</div>
+      <p class="role-desc">Create classrooms, design custom learning paths, assign activities, and track every student's progress in real time.</p>
+      <ul class="role-features">
+        <li>Create class via invite code or link</li>
+        <li>Design &amp; assign custom learning plans</li>
+        <li>Real-time student analytics dashboard</li>
+        <li>Grade activities and give feedback</li>
+        <li>Batch management (up to 30 per class)</li>
+        <li>Blog space to share lessons &amp; tips</li>
+      </ul>
+    </div>
+    <div class="role-card student reveal" style="transition-delay:.08s">
+      <span class="role-emoji">👧🏽</span>
+      <div class="role-title" style="color:var(--blue)">Student</div>
+      <p class="role-desc">Learn algorithms through interactive apps, build flowcharts, earn badges, level up from Sequencer to Collector!</p>
+      <ul class="role-features">
+        <li>Gamified learning with 5 progressive levels</li>
+        <li>Drag-and-drop flowchart builder</li>
+        <li>Quizzes to unlock new concepts</li>
+        <li>Personal progress dashboard</li>
+        <li>Badges, streaks, and achievements</li>
+        <li>Self-paced or teacher-guided tracks</li>
+      </ul>
+    </div>
+    <div class="role-card parent reveal" style="transition-delay:.16s">
+      <span class="role-emoji">👨‍👩‍👧</span>
+      <div class="role-title" style="color:var(--purple)">Parent</div>
+      <p class="role-desc">Stay in the loop — see what your child is learning, how they're progressing, and what's next in their journey.</p>
+      <ul class="role-features">
+        <li>Register child &amp; link to teacher</li>
+        <li>Weekly progress email summaries</li>
+        <li>Score &amp; accuracy trends over time</li>
+        <li>Activity completion reports</li>
+        <li>Family plan for multiple children</li>
+        <li>Purchase &amp; manage subscriptions</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- APP SHOWCASE -->
+<div class="section-wrap" id="apps">
+  <div class="sectlab reveal">🧩 App Showcase</div>
+  <div class="grid-3">
+    <div class="card reveal">
+      <div class="card-preview" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb)">🧩</div>
+      <div class="card-body">
+        <div class="card-tag" style="color:var(--orange)">Flagship App</div>
+        <div class="card-name">FlowChart Quest</div>
+        <p class="card-desc">5-level progression from simple sequences to arrays. Drag-and-drop flowchart builder with quiz gates at 85% accuracy.</p>
+        <a href="flowchart-quest.html" class="card-link">Launch App →</a>
+      </div>
+    </div>
+    <div class="card reveal" style="transition-delay:.06s">
+      <div class="card-preview" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9)">🧪</div>
+      <div class="card-body">
+        <div class="card-tag" style="color:var(--green)">Algorithm Track</div>
+        <div class="card-name">AlgoLab</div>
+        <p class="card-desc">Master algorithms through hands-on modules. Earn XP, climb the belt system from White to Black belt, and prove your skills.</p>
+        <a href="algolab.html" class="card-link">Launch App →</a>
+      </div>
+    </div>
+    <div class="card reveal" style="transition-delay:.12s">
+      <div class="card-preview" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7)">🧠</div>
+      <div class="card-body">
+        <div class="card-tag" style="color:var(--purple)">Thinking Track</div>
+        <div class="card-name">ThinkFirst</div>
+        <p class="card-desc">Build computational thinking through structured challenges — sequential thinking, pattern recognition, decomposition, and abstraction.</p>
+        <a href="thinkfirst.html" class="card-link">Launch App →</a>
+      </div>
+    </div>
+    <div class="card reveal" style="transition-delay:.18s">
+      <div class="card-preview" style="background:linear-gradient(135deg,#e3f2fd,#b3e5fc)">💡</div>
+      <div class="card-body">
+        <div class="card-tag" style="color:var(--blue)">Binary &amp; Data</div>
+        <div class="card-name">Binary Decoder Ring</div>
+        <p class="card-desc">Convert between text, numbers, and binary. Encode images and files into 1s and 0s — see how computers really store data.</p>
+        <a href="yf-binary-converter.html" class="card-link">Launch App →</a>
+      </div>
+    </div>
+    <div class="card reveal" style="transition-delay:.24s">
+      <div class="card-preview" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2)">🔗</div>
+      <div class="card-body">
+        <div class="card-tag" style="color:var(--orange)">Logic &amp; Flow</div>
+        <div class="card-name">Logic Flow Designer</div>
+        <p class="card-desc">Full visual flowchart designer with Start, Action, Decision, and Loops. Drag nodes, connect them, and build real program logic.</p>
+        <a href="yf-logic-flow-designer.html" class="card-link">Launch App →</a>
+      </div>
+    </div>
+    <div class="card reveal" style="transition-delay:.30s">
+      <div class="card-preview" style="background:linear-gradient(135deg,#e8f5e9,#dcedc8)">🐍</div>
+      <div class="card-body">
+        <div class="card-tag" style="color:var(--green)">Arrays &amp; Quest</div>
+        <div class="card-name">Arrays-Quest</div>
+        <p class="card-desc">Master arrays through puzzles, quests, and coding adventures!</p>
+        <a href="Arrays-Quest.html" class="card-link">Launch App →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CURATED PROGRAMS -->
+<div class="section-wrap" id="programs">
+  <div class="sectlab reveal">🎓 Curated Programs</div>
+
+  <!-- Coding Base Camp -->
+  <div class="program-card reveal">
+    <div class="program-head">
+      <div class="program-icon">💻</div>
+      <div class="program-info">
+        <div class="ptag">Coding &amp; Computational Thinking</div>
+        <h3>Coding Base Camp</h3>
+        <p>A guided, multi-level program — from thinking like a computer to writing real logic, one level at a time.</p>
+      </div>
+    </div>
+    <div class="program-meta">
+      <span class="pmeta">🎒 Ages 9–14</span>
+      <span class="pmeta">📅 5 Levels</span>
+      <span class="pmeta">⏱ ~4 hrs/level</span>
+    </div>
+
+    <div class="level-list">
+
+      <!-- LEVEL 1 — OPEN -->
+      <div class="lvl-row">
+        <div class="lvl-num open">1</div>
+        <div class="lvl-info">
+          <div class="lvl-name">Level 1 — Foundations</div>
+          <div class="lvl-meta">Sequences · Decisions · Loops · Your first algorithm</div>
+        </div>
+        <span class="lvl-badge open">🔓 Open</span>
+      </div>
+      <!-- apps inside Level 1 — add your files here -->
+      <div class="lvl-apps">
+        <div class="lvl-app">
+          <div class="aico" style="background:#e3f2fd">🧩</div>
+          <div class="ainfo">
+            <div class="aname">Binary Decoder Ring</div>
+            <div class="asub">Sequences, decisions &amp; loops</div>
+          </div>
+          <a href="yf-binary-converter.html" class="alink">Open →</a>
+        </div>
+
+        <div class="lvl-app">
+          <div class="aico" style="background:#f3e5f5">🧠</div>
+          <div class="ainfo">
+            <div class="aname">ThinkFirst</div>
+            <div class="asub">Decomposition &amp; pattern recognition</div>
+          </div>
+          <a href="thinkfirst.html" class="alink">Open →</a>
+        </div>
+      </div>
+
+
+	 <div class="lvl-row locked">
+        <div class="lvl-num soon">3</div>
+        <div class="lvl-info">
+          <div class="lvl-name">Logic Flow Designer</div>
+          <div class="lvl-meta">Build real flowcharts visually</div>
+        </div>
+        <span class="lvl-badge soon">🔒 Coming Soon</span>
+      </div>
+
+
+    </div>
+    <button class="program-cta-btn">Start Level 1 — Free →</button>
+  </div>
+</div>
+
+<!-- Free Resources / FREE RESOURCES -->
+<div class="section-wrap" id="free-apps">
+  <div class="sectlab reveal">🎁 Free Apps &amp; Resources</div>
+  <div class="grid-auto">
+
+    <div class="card reveal">
+      <div class="card-preview" style="background:linear-gradient(135deg,#fff8e1,#fff3c4)">🔢</div>
+      <div class="card-body">
+        <div class="card-tag" style="color:var(--blue)">Math Practice</div>
+        <div class="card-name">Math Quest</div>
+        <p class="card-desc">Gamified math practice across 8 topics. Timed drills, speed tests, level mastery, and detailed analytics for grades 4–8.</p>
+        <a href="math-quest.html" class="card-link">Launch App →</a>
+      </div>
+    </div>
+
+    <div class="card reveal" style="transition-delay:.06s">
+      <div class="card-preview" style="background:linear-gradient(135deg,#f3e5f5,#ede7f6)">✍️</div>
+      <div class="card-body">
+        <div class="card-tag" style="color:var(--purple)">Creative Writing</div>
+        <div class="card-name">MyFirstChapter</div>
+        <p class="card-desc">A narrative writing studio for young authors. Pick a genre, roll the plot dice, build chapters, track word count, and export your story to Word.</p>
+        <a href="MyFirstChapter.html" class="card-link">Launch App →</a>
+      </div>
+    </div>
+
+    <div class="card reveal" style="transition-delay:.12s">
+      <div class="card-preview" style="background:linear-gradient(135deg,#0F1D32,#1F4E79)">
+        <span style="font-size:3rem;color:#D4A828">అ</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tag" style="color:var(--orange)">Telugu Literacy</div>
+        <div class="card-name">Telugu Velugu</div>
+        <p class="card-desc">A gamified, AI-powered Telugu literacy app for kids (grades 3–5). Timed, adaptive daily lessons across letters, words, sentences, guninthalu &amp; vottulu, and grammar — plus AI-generated Telugu stories and a parent dashboard.</p>
+        <a href="TeluguVelugu.html" class="card-link">Launch App →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BLOG -->
+<div class="section-wrap" id="blog">
+  <div class="sectlab reveal">📝 Blog &amp; Community</div>
+  <div class="grid-3">
+    <div class="card reveal">
+      <div class="blog-img" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb)">🧠</div>
+      <div class="card-body">
+        <div class="blog-category">Teaching Tips</div>
+        <div class="blog-title">How to Teach Algorithms to 10-Year-Olds Without Losing Them</div>
+        <p class="blog-excerpt">Start with sandwich-making. Seriously. The key to teaching computational thinking is grounding abstract concepts in everyday activities.</p>
+        <div class="blog-meta"><span>By Priya S.</span><span>•</span><span>5 min read</span></div>
+      </div>
+    </div>
+    <div class="card reveal" style="transition-delay:.08s">
+      <div class="blog-img" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7)">🔍</div>
+      <div class="card-body">
+        <div class="blog-category">Student Spotlight</div>
+        <div class="blog-title">Arjun, 11, Completed All 5 Levels in 3 Weeks — Here's How</div>
+        <p class="blog-excerpt">Consistent 20-minute daily sessions, a competitive streak with classmates, and a love for the sorting level puzzles.</p>
+        <div class="blog-meta"><span>By The Young Foundry</span><span>•</span><span>3 min read</span></div>
+      </div>
+    </div>
+    <div class="card reveal" style="transition-delay:.16s">
+      <div class="blog-img" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9)">📊</div>
+      <div class="card-body">
+        <div class="blog-category">Discussion</div>
+        <div class="blog-title">Should Kids Learn Sorting Algorithms? A Parent-Teacher Debate</div>
+        <p class="blog-excerpt">Two perspectives on whether Bubble Sort belongs in a 5th grader's curriculum — and what the research says.</p>
+        <div class="blog-meta"><span>Community Thread</span><span>•</span><span>12 replies</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand"><span class="r">The Young</span> <span class="g">Foundry</span></div>
+        <p class="footer-desc">Where young minds build. The all-in-one platform for teaching computational thinking to kids aged 9–14.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <a href="#apps">App Showcase</a>
+        <a href="#programs">Curated Programs</a>
+        <a href="#free-apps">Free Resources</a>
+        <a href="#blog">Blog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Roles</h4>
+        <a href="#roles">For Students</a>
+        <a href="#roles">For Teachers</a>
+        <a href="#roles">For Parents</a>
+      </div>
+      <div class="footer-col">
+        <h4>Community</h4>
+        <a href="#blog">Blog</a>
+        <a href="#">Help Centre</a>
+        <a href="#">Contact</a>
+        <a href="#">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 The Young Foundry. All rights reserved.</span>
+      <span>Made with 💛 in Hyderabad, India</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Reveal on scroll
+const obs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}
+  });
+});
+
+// Mobile nav
+const mstyle=document.createElement('style');
+mstyle.textContent=`.nav-links.show{display:flex!important;flex-direction:column;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(248,249,250,.97);backdrop-filter:blur(12px);padding:80px 24px 24px;gap:8px;z-index:200;align-items:flex-start;}`;
+document.head.appendChild(mstyle);
+</script>
+</body>
+</html>
