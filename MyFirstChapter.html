@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyFirstChapter — The Young Foundry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#E53935;--green:#43A047;--light:#F8F9FA;--dark:#2d3748;
+  --yellow:#FDD835;--blue:#1E88E5;--orange:#F97316;--purple:#8B5CF6;
+  --paper:#ffffff;--ink:#2d3748;--muted:#7b8694;--line:#eceef1;
+  --soft:#eef1f5;--teal:#00897B;--pink:#E91E63;
+  --head:'Fredoka One',cursive;
+  --body:'Nunito',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --prose:'Merriweather',Georgia,serif;
+  --shadow:0 14px 34px -16px rgba(45,55,72,.28);
+  --shadow-sm:0 6px 16px -8px rgba(45,55,72,.25);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{font-family:var(--body);color:var(--ink);background:var(--light);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+h1,h2,h3,h4{font-family:var(--head);font-weight:400;}
+button{font-family:var(--body);cursor:pointer;border:none;background:none;}
+input,textarea,select{font-family:var(--body);}
+a{color:inherit;text-decoration:none;}
+
+/* BLOBS */
+.blob{position:fixed;z-index:0;opacity:.05;pointer-events:none;}
+.blob.tl{top:-60px;left:-60px;width:360px;color:var(--purple);}
+.blob.br{bottom:-80px;right:-80px;width:400px;color:var(--orange);}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:100;background:rgba(248,249,250,.96);backdrop-filter:blur(12px);border-bottom:2px solid var(--line);}
+.topbar-inner{max-width:1200px;margin:0 auto;padding:11px 24px;display:flex;align-items:center;gap:12px;}
+.brand{font-family:var(--head);font-size:20px;}
+.brand .r{color:var(--red);}.brand .g{color:var(--green);}
+.brand-sep{color:var(--muted);font-size:14px;font-weight:700;margin:0 4px;}
+.brand-sub{font-family:var(--head);font-size:20px;color:var(--purple);}
+.tsp{flex:1;}
+.topbar-btns{display:flex;align-items:center;gap:8px;}
+
+/* BTN */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 20px;border-radius:999px;font-family:var(--body);font-weight:900;font-size:13px;cursor:pointer;border:none;transition:all .2s;}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 16px -4px rgba(0,0,0,.12);}
+.btn.green{background:var(--green);color:#fff;}
+.btn.blue{background:var(--blue);color:#fff;}
+.btn.purple{background:var(--purple);color:#fff;}
+.btn.orange{background:var(--orange);color:#fff;}
+.btn.ghost{background:#fff;border:2px solid var(--line);color:var(--dark);}
+.btn.ghost:hover{border-color:var(--blue);}
+.btn.red{background:var(--red);color:#fff;}
+.btn.sm{padding:7px 14px;font-size:12px;}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+
+/* LAYOUT */
+.page{max-width:1200px;margin:0 auto;padding:28px 24px;}
+.two-col{display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start;}
+
+/* SIDEBAR */
+.sidebar{position:sticky;top:72px;}
+.sidebar-card{background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--shadow-sm);margin-bottom:16px;}
+.sidebar-card h4{font-family:var(--head);font-size:16px;margin-bottom:12px;color:var(--dark);}
+
+/* FIELD */
+.field{margin-bottom:14px;}
+.field label{display:block;font-weight:800;font-size:12px;color:var(--dark);margin-bottom:5px;letter-spacing:.2px;}
+.field input,.field select,.field textarea{width:100%;padding:10px 13px;border:2px solid var(--line);border-radius:12px;font-size:13px;font-weight:700;color:var(--ink);background:#fff;outline:none;transition:border-color .15s;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue);}
+.field textarea{resize:vertical;min-height:80px;line-height:1.6;}
+
+/* BADGE / CHIP */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:900;}
+.badge.green{background:#e8f5e9;color:var(--green);}
+.badge.blue{background:#e3f2fd;color:var(--blue);}
+.badge.orange{background:#fff3e0;color:var(--orange);}
+.badge.red{background:#ffebee;color:var(--red);}
+.badge.purple{background:#f3e5f5;color:var(--purple);}
+.badge.muted{background:var(--soft);color:var(--muted);}
+.badge.yellow{background:#fffde7;color:#F57F17;}
+
+/* WRITING AREA */
+.writing-card{background:var(--paper);border:2px solid var(--line);border-radius:24px;box-shadow:var(--shadow);overflow:hidden;}
+.writing-toolbar{display:flex;align-items:center;gap:8px;padding:12px 20px;border-bottom:2px solid var(--line);flex-wrap:wrap;}
+.tb-btn{padding:6px 12px;border-radius:8px;border:2px solid var(--line);background:#fff;font-size:12px;font-weight:800;color:var(--muted);cursor:pointer;transition:.15s;}
+.tb-btn:hover{border-color:var(--blue);color:var(--blue);}
+.tb-sep{width:2px;height:20px;background:var(--line);border-radius:999px;}
+.word-count-bar{margin-left:auto;font-size:12px;font-weight:800;color:var(--muted);}
+#chapter-editor{width:100%;min-height:420px;padding:28px 32px;font-family:var(--prose);font-size:16px;line-height:1.85;color:var(--ink);border:none;outline:none;resize:none;background:transparent;}
+#chapter-editor::placeholder{color:#ccc;font-style:italic;}
+.editor-footer{padding:14px 20px;border-top:2px solid var(--soft);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+
+/* GENRE CARDS */
+.genre-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.genre-btn{background:var(--soft);border:2px solid var(--line);border-radius:14px;padding:10px;text-align:center;cursor:pointer;transition:.15s;font-weight:800;font-size:12px;color:var(--dark);}
+.genre-btn:hover{border-color:var(--purple);background:#f3e5f5;}
+.genre-btn.active{background:var(--purple);color:#fff;border-color:var(--purple);}
+.genre-emoji{font-size:1.6rem;display:block;margin-bottom:4px;}
+
+/* DICE */
+.dice-btn{width:100%;padding:12px;background:linear-gradient(135deg,var(--orange),var(--yellow));color:#fff;border-radius:14px;font-family:var(--head);font-size:16px;cursor:pointer;border:none;transition:.15s;}
+.dice-btn:hover{transform:scale(1.02);}
+.dice-result{background:var(--soft);border:2px solid var(--line);border-radius:12px;padding:10px 12px;font-size:13px;font-weight:700;color:var(--dark);margin-top:8px;min-height:42px;line-height:1.5;}
+
+/* CHAPTER LIST */
+.chapter-item{background:var(--paper);border:2px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:.15s;}
+.chapter-item:hover{border-color:var(--blue);box-shadow:var(--shadow-sm);}
+.chapter-item.active{border-color:var(--purple);background:#f9f5ff;}
+.ch-num{font-family:var(--head);font-size:18px;color:var(--purple);min-width:28px;}
+.ch-info{flex:1;min-width:0;}
+.ch-title{font-weight:900;font-size:13px;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ch-words{font-size:11px;color:var(--muted);font-weight:700;margin-top:2px;}
+
+/* DOCUMENT CARD (repository) */
+.doc-card{background:var(--paper);border:2px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px;display:flex;align-items:flex-start;gap:14px;transition:.15s;}
+.doc-card:hover{border-color:var(--blue);box-shadow:var(--shadow-sm);}
+.doc-icon{font-size:2.2rem;flex-shrink:0;}
+.doc-info{flex:1;min-width:0;}
+.doc-title{font-weight:900;font-size:14px;color:var(--dark);margin-bottom:3px;}
+.doc-meta{font-size:12px;color:var(--muted);font-weight:700;}
+.doc-actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
+
+/* AI PANEL */
+.ai-panel{border-radius:14px;padding:12px 14px;margin-top:10px;display:none;}
+.ai-panel.ok{background:#e8f5e9;border:2px solid #a5d6a7;}
+.ai-panel.warn{background:#fff8e1;border:2px solid #ffe082;}
+.ai-panel.block{background:#ffebee;border:2px solid #ef9a9a;}
+.ai-title{font-weight:900;font-size:13px;margin-bottom:4px;}
+.ai-panel.ok .ai-title{color:#2E7D32;}
+.ai-panel.warn .ai-title{color:#E65100;}
+.ai-panel.block .ai-title{color:#C62828;}
+.ai-msg{font-size:12px;font-weight:700;color:var(--muted);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(45,55,72,.55);backdrop-filter:blur(4px);z-index:500;display:none;place-items:center;}
+.modal-overlay.open{display:grid;}
+.modal{background:#fff;border-radius:24px;padding:28px;max-width:460px;width:calc(100% - 32px);box-shadow:0 24px 64px -12px rgba(45,55,72,.4);position:relative;max-height:90vh;overflow-y:auto;}
+.modal-close{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;background:var(--soft);font-size:15px;display:grid;place-items:center;cursor:pointer;color:var(--muted);}
+.modal-close:hover{background:var(--line);}
+.modal h3{font-family:var(--head);font-size:20px;margin-bottom:5px;}
+.modal .sub{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:18px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;z-index:600;background:var(--dark);color:#fff;padding:11px 18px;border-radius:12px;font-size:13px;font-weight:800;box-shadow:var(--shadow);opacity:0;transform:translateY(8px);transition:.3s;pointer-events:none;}
+.toast.show{opacity:1;transform:none;}
+
+/* STATUS BANNER */
+.status-banner{padding:10px 16px;border-radius:14px;font-size:13px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.status-banner.info{background:#e3f2fd;color:#1565C0;border:2px solid #90caf9;}
+.status-banner.warn{background:#fff8e1;color:#E65100;border:2px solid #ffe082;}
+.status-banner.success{background:#e8f5e9;color:#2E7D32;border:2px solid #a5d6a7;}
+.status-banner.pending{background:#f3e5f5;color:#6A1B9A;border:2px solid #ce93d8;}
+
+/* RAINBOW TOP */
+.rainbow-top{height:4px;background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--blue),var(--purple));position:fixed;top:0;left:0;right:0;z-index:200;}
+
+/* RESPONSIVE */
+@media(max-width:860px){
+  .two-col{grid-template-columns:1fr;}
+  .sidebar{position:static;}
+  .genre-grid{grid-template-columns:repeat(4,1fr);}
+}
+@media(max-width:560px){
+  #chapter-editor{padding:18px;}
+  .page{padding:16px;}
+  .genre-grid{grid-template-columns:repeat(3,1fr);}
+}
+</style>
+</head>
+<body>
+<div class="rainbow-top"></div>
+
+<!-- BLOBS -->
+<svg class="blob tl" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.4,-32.6,90,-16.3,89.1,-.5C88.2,15.3,83.8,30.6,75.5,43.6C67.2,56.6,55,67.2,41.2,74.6C27.4,82,12,86.1,-2,85.3C-16,84.6,-32,79,-46.5,71.6C-61,64.2,-74,55,-81.2,42.4C-88.4,29.9,-89.8,14.9,-88.2,.9C-86.5,-13.2,-81.7,-26.4,-74.4,-38C-67,-49.7,-57,-59.9,-44.2,-67.5C-31.4,-75.2,-15.7,-80.4,.6,-81.3C16.9,-82.2,30.6,-83.6,44.7,-76.4Z" transform="translate(100 100)"/></svg>
+<svg class="blob br" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M39.5,-65.3C52.3,-59.7,64.5,-51.4,71.5,-39.8C78.5,-28.2,80.4,-14.1,79.8,-.3C79.1,13.5,75.9,27.1,69.4,39.4C62.9,51.8,53.1,62.9,40.8,70.3C28.5,77.8,14.2,81.6,.4,81C-13.4,80.4,-26.8,75.3,-39,68.1C-51.2,60.8,-62.3,51.3,-70.2,39.5C-78.1,27.7,-82.9,13.8,-83.1,-.2C-83.3,-14.1,-79,-28.2,-71.4,-39.8C-63.8,-51.4,-52.9,-60.3,-40.5,-66.1C-28.2,-71.9,-14.1,-74.6,-.3,-74.2C14.5,-73.7,26.7,-70.9,39.5,-65.3Z" transform="translate(100 100)"/></svg>
+
+<div class="toast" id="toast"></div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="r">The Young</span> <span class="g">Foundry</span></div>
+    <span class="brand-sep">›</span>
+    <div class="brand-sub">✍️ MyFirstChapter</div>
+    <div class="tsp"></div>
+    <div class="topbar-btns">
+      <button class="btn ghost sm" onclick="showScreen('repository')">📁 My Repository</button>
+      <button class="btn ghost sm" onclick="window.location='TYF_Network.html'">🌐 TYF Network</button>
+      <button class="btn ghost sm" onclick="window.location='index.html'">← Home</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN: LOGIN (no TYF session found)
+============================================================ -->
+<div id="screen-login" style="display:none">
+  <div style="min-height:80vh;display:grid;place-items:center;padding:24px;">
+    <div style="background:var(--paper);border:2px solid var(--line);border-radius:28px;padding:36px;max-width:400px;width:100%;box-shadow:var(--shadow);text-align:center;position:relative;overflow:hidden;">
+      <div style="height:4px;background:linear-gradient(90deg,var(--purple),var(--blue),var(--green));position:absolute;top:0;left:0;right:0;"></div>
+      <div style="font-size:3rem;margin-bottom:12px">✍️</div>
+      <div style="font-family:var(--head);font-size:24px;margin-bottom:6px">MyFirstChapter</div>
+      <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:24px">A narrative writing studio for young authors. Log in with your TYF Network identity to save and publish your work.</p>
+      <div class="field">
+        <label>Your Name (from TYF Network)</label>
+        <input type="text" id="login-name" placeholder="e.g. Arjun K." />
+      </div>
+      <div class="field">
+        <label>School ID</label>
+        <input type="text" id="login-sid" placeholder="SCH2026-..." />
+      </div>
+      <button class="btn purple" style="width:100%" onclick="mfcLogin()">Start Writing →</button>
+      <p style="margin-top:12px;font-size:12px;color:var(--muted);font-weight:700">New to TYF? <a href="TYF_Network.html" style="color:var(--blue);font-weight:900">Register on TYF Network first →</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN: MAIN WRITING STUDIO
+============================================================ -->
+<div id="screen-studio" style="display:none">
+  <div class="page">
+    <div class="two-col">
+
+      <!-- LEFT SIDEBAR -->
+      <div class="sidebar">
+
+        <!-- Story Info -->
+        <div class="sidebar-card">
+          <h4>📖 Your Story</h4>
+          <div class="field">
+            <label>Story Title</label>
+            <input type="text" id="story-title" placeholder="Give your story a title..." oninput="autoSave()" />
+          </div>
+          <div class="field">
+            <label>Genre</label>
+            <div class="genre-grid" id="genre-grid"></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+            <span style="font-size:12px;font-weight:700;color:var(--muted)">Total words:</span>
+            <span id="total-words" style="font-family:var(--head);font-size:18px;color:var(--purple)">0</span>
+          </div>
+        </div>
+
+        <!-- Plot Dice -->
+        <div class="sidebar-card">
+          <h4>🎲 Plot Dice</h4>
+          <p style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:10px">Stuck? Roll for inspiration!</p>
+          <button class="dice-btn" onclick="rollDice()">🎲 Roll the Dice</button>
+          <div class="dice-result" id="dice-result">Hit the dice for a plot twist…</div>
+        </div>
+
+        <!-- Chapters -->
+        <div class="sidebar-card">
+          <h4>📑 Chapters</h4>
+          <div id="chapter-list"></div>
+          <button class="btn ghost sm" style="width:100%;margin-top:8px" onclick="addChapter()">+ Add Chapter</button>
+        </div>
+
+        <!-- User -->
+        <div class="sidebar-card" style="background:linear-gradient(135deg,var(--purple),var(--blue));border:none;color:#fff">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+            <div style="font-size:1.8rem" id="user-avatar-disp">✍️</div>
+            <div>
+              <div style="font-family:var(--head);font-size:15px" id="user-name-disp">Author</div>
+              <div style="font-size:11px;font-weight:700;opacity:.8" id="user-grade-disp">Grade —</div>
+            </div>
+          </div>
+          <button class="btn sm" style="width:100%;background:rgba(255,255,255,.2);color:#fff;border:2px solid rgba(255,255,255,.3)" onclick="showScreen('repository')">📁 My Repository</button>
+        </div>
+      </div>
+
+      <!-- MAIN WRITING AREA -->
+      <div>
+        <div id="studio-status-banner"></div>
+
+        <div class="writing-card">
+          <div class="writing-toolbar">
+            <button class="tb-btn" onclick="fmt('bold')" title="Bold"><b>B</b></button>
+            <button class="tb-btn" onclick="fmt('italic')" title="Italic"><i>I</i></button>
+            <button class="tb-btn" onclick="fmt('underline')" title="Underline"><u>U</u></button>
+            <div class="tb-sep"></div>
+            <button class="tb-btn" onclick="insertStarter('opening')" title="Opening hook">🌅 Hook</button>
+            <button class="tb-btn" onclick="insertStarter('conflict')" title="Add conflict">⚡ Conflict</button>
+            <button class="tb-btn" onclick="insertStarter('dialogue')" title="Add dialogue">💬 Dialogue</button>
+            <button class="tb-btn" onclick="insertStarter('resolution')" title="Resolution">🌟 Resolve</button>
+            <div class="tb-sep"></div>
+            <span class="word-count-bar">Chapter words: <span id="chapter-word-count" style="font-family:var(--head);color:var(--purple)">0</span></span>
+          </div>
+
+          <div id="chapter-editor" contenteditable="true"
+               placeholder="Begin your chapter here… let the words flow."
+               oninput="onEditorInput()"
+               spellcheck="true"></div>
+
+          <div class="editor-footer">
+            <div id="chapter-title-display" style="font-family:var(--head);font-size:15px;color:var(--purple)">Chapter 1</div>
+            <div class="tsp"></div>
+            <button class="btn ghost sm" onclick="saveCurrentChapter()">💾 Save Chapter</button>
+            <button class="btn purple sm" onclick="openPublishFlow()">🚀 Review &amp; Publish</button>
+          </div>
+        </div>
+
+        <!-- Writing Prompts -->
+        <div style="background:var(--paper);border:2px solid var(--line);border-radius:18px;padding:18px;margin-top:16px;">
+          <div style="font-family:var(--head);font-size:15px;margin-bottom:10px;color:var(--dark)">✨ Writing Prompts</div>
+          <div id="prompts-strip" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN: REPOSITORY (My Documents)
+============================================================ -->
+<div id="screen-repository" style="display:none">
+  <div class="page" style="max-width:860px;margin:0 auto;">
+    <button class="btn ghost sm" onclick="showScreen('studio')" style="margin-bottom:16px">← Back to Writing</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+      <div>
+        <div style="font-family:var(--head);font-size:26px;color:var(--dark)">📁 My Repository</div>
+        <p style="font-size:13px;color:var(--muted);font-weight:700;margin-top:3px">Your saved stories and chapters — safe in your TYF profile</p>
+      </div>
+      <button class="btn purple" onclick="startNewStory()">✍️ New Story</button>
+    </div>
+    <div style="background:#e3f2fd;border:2px solid #90caf9;border-radius:14px;padding:12px 16px;font-size:13px;font-weight:700;color:#1565C0;margin-bottom:20px;">
+      🔒 Your documents are saved to your TYF Network profile. To publish to the <strong>Literature &amp; Creativity</strong> community, your story passes AI review and — for students — parent approval first.
+    </div>
+    <div id="repository-list"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: PUBLISH FLOW
+============================================================ -->
+<div class="modal-overlay" id="modal-publish">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-publish')">✕</button>
+    <h3>🚀 Review &amp; Publish</h3>
+    <p class="sub">Your story will be reviewed by AI, then sent for parent approval before going live in Literature &amp; Creativity.</p>
+
+    <div style="background:var(--soft);border:2px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:16px;">
+      <div style="font-weight:900;font-size:14px;margin-bottom:4px" id="pub-story-name">Untitled Story</div>
+      <div style="font-size:12px;color:var(--muted);font-weight:700" id="pub-story-meta"></div>
+    </div>
+
+    <!-- Step 1: AI Review -->
+    <div id="pub-step-ai">
+      <div style="background:#e3f2fd;border:2px solid #90caf9;border-radius:12px;padding:10px 14px;font-size:12px;font-weight:700;color:#1565C0;margin-bottom:12px">
+        🤖 AI review is required before you can submit. This checks your writing is safe and appropriate for the community.
+      </div>
+      <button class="btn blue" style="width:100%" id="run-ai-btn" onclick="runPublishAiReview()">🤖 Run AI Review</button>
+      <div class="ai-panel" id="pub-ai-panel"></div>
+    </div>
+
+    <!-- Step 2: Confirm & note (shown after AI passes) -->
+    <div id="pub-step-confirm" style="display:none;margin-top:14px">
+      <div class="field">
+        <label>Add a Note to Parent (optional)</label>
+        <textarea id="pub-parent-note" placeholder="Tell your parent what this story is about and why you wrote it…" style="min-height:70px"></textarea>
+      </div>
+      <div style="background:#fff8e1;border:2px solid #ffe082;border-radius:12px;padding:10px 14px;font-size:12px;font-weight:800;color:#E65100;margin-bottom:14px">
+        ⚠️ Once you submit, your story goes to your parent for approval. Are you sure it's your best work?
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn ghost" style="flex:1" onclick="closeModal('modal-publish')">← Go Back &amp; Edit</button>
+        <button class="btn green" style="flex:1" id="submit-publish-btn" onclick="submitForParentApproval()">
+          📤 Yes, Submit for Approval →
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 3: Published — share panel -->
+    <div id="pub-step-share" style="display:none;margin-top:14px">
+      <div style="background:#e8f5e9;border:2px solid #a5d6a7;border-radius:14px;padding:14px;text-align:center;margin-bottom:14px">
+        <div style="font-size:2rem;margin-bottom:6px">🏆</div>
+        <div style="font-weight:900;font-size:15px;color:#2E7D32;margin-bottom:4px">Your story is published!</div>
+        <div style="font-size:12px;font-weight:700;color:var(--muted)">Share it with anyone — they can read it without a TYF account.</div>
+      </div>
+      <div style="background:var(--soft);border-radius:12px;padding:10px 14px;font-family:monospace;font-size:12px;word-break:break-all;margin-bottom:12px" id="pub-share-link"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn ghost sm" onclick="copyStoryLink()">📋 Copy Link</button>
+        <button class="btn ghost sm" style="color:#25D366;border-color:#25D366" onclick="shareStoryWhatsApp()">📲 WhatsApp</button>
+        <button class="btn ghost sm" onclick="shareStoryEmail()">📧 Email</button>
+      </div>
+    </div>
+
+    <p style="text-align:center;font-size:11px;color:var(--muted);font-weight:700;margin-top:10px">
+      AI reviews first · Parent approves · Published to Literature &amp; Creativity · Shareable with anyone
+    </p>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: NEW STORY
+============================================================ -->
+<div class="modal-overlay" id="modal-new-story">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-new-story')">✕</button>
+    <h3>✍️ Start a New Story</h3>
+    <p class="sub">Your new story will be saved to your repository.</p>
+    <div class="field">
+      <label>Story Title</label>
+      <input type="text" id="ns-title" placeholder="My Amazing Story" />
+    </div>
+    <div class="field">
+      <label>Genre</label>
+      <select id="ns-genre">
+        <option value="">Choose genre...</option>
+        <option value="fantasy">🧙 Fantasy</option>
+        <option value="adventure">🗺️ Adventure</option>
+        <option value="mystery">🔍 Mystery</option>
+        <option value="scifi">🚀 Sci-Fi</option>
+        <option value="realistic">🌸 Realistic Fiction</option>
+        <option value="folklore">🏺 Folklore & Mythology</option>
+        <option value="humour">😂 Humour</option>
+        <option value="poem">📜 Poetry</option>
+      </select>
+    </div>
+    <button class="btn purple" style="width:100%" onclick="createNewStory()">Create Story →</button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+let mfcUser = null;
+let currentStory = null;
+let currentChapterIdx = 0;
+let activeGenre = '';
+
+// ============================================================
+// DATA — shares localStorage with TYF_Network
+// ============================================================
+function load(k, d){ try{ return JSON.parse(localStorage.getItem(k))||d; }catch{ return d; } }
+function save(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
+
+function getDocs(){ return load('mfc_docs', []); }
+function saveDocs(d){ save('mfc_docs', d); }
+
+// Also writes into TYF Network post queue when published
+function getTyfPosts(){ return load('yfs_posts', []); }
+function saveTyfPosts(p){ save('yfs_posts', p); }
+function getTyfAccounts(){ return load('yfs_accounts', []); }
+
+// ============================================================
+// CONTENT DATA
+// ============================================================
+const GENRES = [
+  {id:'fantasy',  label:'Fantasy',   emoji:'🧙'},
+  {id:'adventure',label:'Adventure', emoji:'🗺️'},
+  {id:'mystery',  label:'Mystery',   emoji:'🔍'},
+  {id:'scifi',    label:'Sci-Fi',    emoji:'🚀'},
+  {id:'realistic',label:'Realistic', emoji:'🌸'},
+  {id:'folklore', label:'Folklore',  emoji:'🏺'},
+  {id:'humour',   label:'Humour',    emoji:'😂'},
+  {id:'poem',     label:'Poetry',    emoji:'📜'},
+];
+
+const PLOT_DICE = [
+  '🌩️ A sudden storm traps your hero in an unexpected place.',
+  '🗝️ A locked door appears in a room that didn\'t have one yesterday.',
+  '👥 Two characters who hate each other must work together to survive.',
+  '📬 A letter arrives — but it\'s dated 50 years in the future.',
+  '🐾 An animal leads your hero somewhere dangerous.',
+  '🔦 The lights go out at exactly the wrong moment.',
+  '💰 Your hero finds a bag of money — but keeping it has consequences.',
+  '🪞 The mirror shows something that isn\'t there.',
+  '🎭 Someone is pretending to be someone they\'re not.',
+  '⏰ Your hero has only one hour to fix everything.',
+  '🌱 A forgotten seed grows into something that changes the story.',
+  '📸 An old photograph reveals a shocking truth.',
+  '🎵 A song triggers a memory that changes everything.',
+  '🚪 Behind the door is not what anyone expected.',
+  '✉️ A secret is accidentally overheard.',
+];
+
+const WRITING_PROMPTS = [
+  '"The door opened and everything changed."',
+  '"I never believed in magic until the day I—"',
+  '"The last person I expected to see was—"',
+  '"It started with a small lie. Just one."',
+  '"She found the map when she was cleaning out the attic."',
+  '"Everyone said the old house was empty. They were wrong."',
+  '"The robot looked at me and asked: \'What is a feeling?\'"',
+  '"On the day the sky turned green, nobody was prepared."',
+];
+
+const ADULT_KEYWORDS=['sex','nude','naked','porn','violence','kill','abuse','drug','alcohol'];
+const TRANS_CURSES=['bhenchod','madarchod','chutiya','gaandu','randi','punda','otha','dengu','pendejo','merde','scheisse','cazzo','blyad','suka'];
+const DEFAMATION=['worst teacher','bad school','hate my school','terrible school','bully teacher'];
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+  // Check for public share view (no login needed)
+  const params = new URLSearchParams(window.location.search);
+  const viewId = params.get('view');
+  if (viewId) {
+    showPublicStoryView(viewId);
+    return;
+  }
+  // Try auto-login from TYF Network session
+  const tyfSession = load('mfc_session', null);
+  if (tyfSession) {
+    mfcUser = tyfSession;
+    initStudio();
+  } else {
+    showScreen('login');
+  }
+  renderGenreGrid();
+  renderPrompts();
+});
+
+function showPublicStoryView(shareId) {
+  const posts = getTyfPosts();
+  const post = posts.find(p => p.publicShareId === shareId);
+  const docs = getDocs();
+  const doc = docs.find(d => d.publicShareId === shareId);
+  const source = post || doc;
+  document.body.innerHTML = `
+    <div class="rainbow-top"></div>
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="brand"><span class="r">The Young</span> <span class="g">Foundry</span></div>
+        <span class="brand-sep">›</span>
+        <div class="brand-sub">✍️ MyFirstChapter</div>
+        <div class="tsp"></div>
+        <a href="TYF_Network.html" class="btn ghost sm" style="text-decoration:none">🌐 Join TYF Network</a>
+      </div>
+    </div>
+    <div style="max-width:720px;margin:0 auto;padding:32px 24px;">
+      ${source ? `
+        <div style="background:linear-gradient(135deg,var(--purple),var(--blue));border-radius:24px;padding:28px;color:#fff;margin-bottom:24px">
+          <div style="font-size:1.8rem;margin-bottom:8px">${source.genre||'📖'}</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:28px;margin-bottom:6px">${escHtml(source.title||post?.text?.match(/"([^"]+)"/)?.[1]||'Story')}</div>
+          <div style="font-size:13px;opacity:.85;font-weight:700">by ${escHtml(source.authorName||post?.authorName||'TYF Author')}</div>
+        </div>
+        <div style="background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:28px 32px;box-shadow:var(--shadow);font-family:'Merriweather',Georgia,serif;font-size:15px;line-height:1.9;color:var(--ink);margin-bottom:20px">
+          ${source.chapters ? source.chapters.map((ch,i)=>`<h3 style="font-family:'Fredoka One',cursive;margin:20px 0 10px;color:var(--purple)">Chapter ${i+1}: ${escHtml(ch.title)}</h3><div>${ch.content}</div>`).join('') : `<div>${(post?.text||'').replace(/\n/g,'<br>')}</div>`}
+        </div>
+        <div style="background:var(--soft);border-radius:14px;padding:16px;text-align:center">
+          <p style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px">Enjoyed this story? Join The Young Foundry to write and share your own!</p>
+          <a href="TYF_Network.html" class="btn purple" style="text-decoration:none">Join TYF Network →</a>
+        </div>
+      ` : `
+        <div style="text-align:center;padding:48px 24px;color:var(--muted)">
+          <div style="font-size:3rem;margin-bottom:12px">🔍</div>
+          <p style="font-size:14px;font-weight:700">Story not found or not yet published.</p>
+          <a href="TYF_Network.html" class="btn ghost sm" style="text-decoration:none;margin-top:12px;display:inline-flex">← TYF Network</a>
+        </div>
+      `}
+    </div>`;
+}
+
+function mfcLogin() {
+  const name = document.getElementById('login-name').value.trim();
+  const sid  = document.getElementById('login-sid').value.trim();
+  if (!name || !sid) { toast('Please fill both fields'); return; }
+  // Try to find in TYF accounts
+  const accounts = getTyfAccounts();
+  let account = accounts.find(a => a.schoolId === sid && a.role === 'student');
+  if (!account) {
+    // Create lightweight session
+    account = { id:'mfc_'+Date.now(), name, schoolId:sid, role:'student', grade:null, foundryScore:0, avatar:null };
+  }
+  mfcUser = account;
+  save('mfc_session', mfcUser);
+  initStudio();
+}
+
+function initStudio() {
+  showScreen('studio');
+  document.getElementById('user-name-disp').textContent = mfcUser.name;
+  document.getElementById('user-grade-disp').textContent = mfcUser.grade ? 'Grade ' + mfcUser.grade : 'TYF Author';
+  if (mfcUser.avatar) document.getElementById('user-avatar-disp').textContent = mfcUser.avatar;
+  // Load most recent story or start blank
+  const docs = getDocs().filter(d => d.authorId === mfcUser.id);
+  if (docs.length > 0) {
+    loadStory(docs[0].id);
+  } else {
+    newBlankStory();
+  }
+}
+
+// ============================================================
+// SCREENS
+// ============================================================
+function showScreen(id) {
+  ['login','studio','repository'].forEach(s => {
+    document.getElementById('screen-'+s).style.display = 'none';
+  });
+  document.getElementById('screen-'+id).style.display = 'block';
+  window.scrollTo(0,0);
+  if (id === 'repository') renderRepository();
+}
+
+// ============================================================
+// STORY MANAGEMENT
+// ============================================================
+function newBlankStory() {
+  currentStory = {
+    id: 'story_' + Date.now(),
+    authorId: mfcUser.id,
+    authorName: mfcUser.name,
+    title: '',
+    genre: '',
+    chapters: [{ id: 'ch_1', title: 'Chapter 1', content: '', wordCount: 0 }],
+    totalWords: 0,
+    status: 'draft',          // draft | pending_ai | pending_parent | published
+    parentApproved: false,
+    aiStatus: null,
+    created: Date.now(),
+    updated: Date.now(),
+  };
+  currentChapterIdx = 0;
+  renderChapterList();
+  loadChapterIntoEditor(0);
+  updateStatusBanner();
+}
+
+function startNewStory() {
+  openModal('modal-new-story');
+}
+
+function createNewStory() {
+  const title = document.getElementById('ns-title').value.trim();
+  const genre = document.getElementById('ns-genre').value;
+  if (!title) { toast('Please give your story a title'); return; }
+  closeModal('modal-new-story');
+  saveCurrentChapter(); // save current work first
+  currentStory = {
+    id: 'story_' + Date.now(),
+    authorId: mfcUser.id,
+    authorName: mfcUser.name,
+    title,
+    genre,
+    chapters: [{ id: 'ch_1', title: 'Chapter 1', content: '', wordCount: 0 }],
+    totalWords: 0,
+    status: 'draft',
+    parentApproved: false,
+    aiStatus: null,
+    created: Date.now(),
+    updated: Date.now(),
+  };
+  currentChapterIdx = 0;
+  document.getElementById('story-title').value = title;
+  setGenre(genre);
+  renderChapterList();
+  loadChapterIntoEditor(0);
+  saveStoryToDocs();
+  showScreen('studio');
+  toast('✅ New story started!');
+}
+
+function loadStory(id) {
+  const docs = getDocs();
+  const doc = docs.find(d => d.id === id);
+  if (!doc) return;
+  currentStory = JSON.parse(JSON.stringify(doc));
+  currentChapterIdx = 0;
+  document.getElementById('story-title').value = currentStory.title || '';
+  setGenre(currentStory.genre || '');
+  renderChapterList();
+  loadChapterIntoEditor(0);
+  updateStatusBanner();
+  updateTotalWordCount();
+}
+
+function saveStoryToDocs() {
+  if (!currentStory) return;
+  currentStory.updated = Date.now();
+  const docs = getDocs();
+  const idx = docs.findIndex(d => d.id === currentStory.id);
+  if (idx >= 0) docs[idx] = currentStory;
+  else docs.unshift(currentStory);
+  saveDocs(docs);
+}
+
+function autoSave() {
+  if (!currentStory) return;
+  currentStory.title = document.getElementById('story-title').value.trim();
+  saveStoryToDocs();
+}
+
+// ============================================================
+// CHAPTER MANAGEMENT
+// ============================================================
+function addChapter() {
+  if (!currentStory) return;
+  saveCurrentChapter();
+  const num = currentStory.chapters.length + 1;
+  currentStory.chapters.push({ id: 'ch_'+Date.now(), title: 'Chapter '+num, content: '', wordCount: 0 });
+  currentChapterIdx = currentStory.chapters.length - 1;
+  renderChapterList();
+  loadChapterIntoEditor(currentChapterIdx);
+  saveStoryToDocs();
+}
+
+function switchChapter(idx) {
+  saveCurrentChapter();
+  currentChapterIdx = idx;
+  renderChapterList();
+  loadChapterIntoEditor(idx);
+}
+
+function loadChapterIntoEditor(idx) {
+  const ch = currentStory && currentStory.chapters[idx];
+  if (!ch) return;
+  const editor = document.getElementById('chapter-editor');
+  editor.innerHTML = ch.content || '';
+  document.getElementById('chapter-title-display').textContent = ch.title;
+  updateChapterWordCount();
+}
+
+function saveCurrentChapter() {
+  if (!currentStory) return;
+  const editor = document.getElementById('chapter-editor');
+  const ch = currentStory.chapters[currentChapterIdx];
+  if (!ch) return;
+  ch.content = editor.innerHTML;
+  ch.wordCount = countWords(editor.innerText || editor.textContent);
+  updateTotalWordCount();
+  saveStoryToDocs();
+}
+
+function renderChapterList() {
+  if (!currentStory) return;
+  document.getElementById('chapter-list').innerHTML = currentStory.chapters.map((ch, i) => `
+    <div class="chapter-item ${i===currentChapterIdx?'active':''}" onclick="switchChapter(${i})">
+      <div class="ch-num">${i+1}</div>
+      <div class="ch-info">
+        <div class="ch-title">${escHtml(ch.title)}</div>
+        <div class="ch-words">${ch.wordCount} words</div>
+      </div>
+    </div>`).join('');
+}
+
+// ============================================================
+// EDITOR HELPERS
+// ============================================================
+function onEditorInput() {
+  updateChapterWordCount();
+  autoSave();
+}
+
+function fmt(cmd) {
+  document.execCommand(cmd, false, null);
+  document.getElementById('chapter-editor').focus();
+}
+
+function insertStarter(type) {
+  const starters = {
+    opening: '\n\n[Opening hook: Describe the scene — what does your hero see, hear, smell?]\n\n',
+    conflict: '\n\n[Conflict: Something goes wrong. What is it? How does your hero react?]\n\n',
+    dialogue: '\n\n"[Character A]," said [Character B], "[What do they say?]"\n\n',
+    resolution: '\n\n[Resolution: How does this chapter end? What changes for your hero?]\n\n',
+  };
+  const editor = document.getElementById('chapter-editor');
+  editor.focus();
+  document.execCommand('insertText', false, starters[type] || '');
+}
+
+function updateChapterWordCount() {
+  const editor = document.getElementById('chapter-editor');
+  const w = countWords(editor.innerText || editor.textContent || '');
+  document.getElementById('chapter-word-count').textContent = w;
+}
+
+function updateTotalWordCount() {
+  if (!currentStory) return;
+  currentStory.totalWords = currentStory.chapters.reduce((s, ch) => s + (ch.wordCount||0), 0);
+  document.getElementById('total-words').textContent = currentStory.totalWords;
+}
+
+function countWords(text) {
+  return (text || '').trim().split(/\s+/).filter(w => w.length > 0).length;
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ============================================================
+// GENRE
+// ============================================================
+function renderGenreGrid() {
+  document.getElementById('genre-grid').innerHTML = GENRES.map(g => `
+    <button class="genre-btn ${activeGenre===g.id?'active':''}" onclick="setGenre('${g.id}')">
+      <span class="genre-emoji">${g.emoji}</span>${g.label}
+    </button>`).join('');
+}
+
+function setGenre(id) {
+  activeGenre = id;
+  if (currentStory) currentStory.genre = id;
+  renderGenreGrid();
+  autoSave();
+}
+
+// ============================================================
+// PLOT DICE
+// ============================================================
+function rollDice() {
+  const btn = document.querySelector('.dice-btn');
+  btn.textContent = '🎲 Rolling…';
+  setTimeout(() => {
+    const result = PLOT_DICE[Math.floor(Math.random() * PLOT_DICE.length)];
+    document.getElementById('dice-result').textContent = result;
+    btn.textContent = '🎲 Roll Again';
+  }, 400);
+}
+
+// ============================================================
+// WRITING PROMPTS
+// ============================================================
+function renderPrompts() {
+  document.getElementById('prompts-strip').innerHTML = WRITING_PROMPTS.map(p => `
+    <button style="background:var(--soft);border:2px solid var(--line);border-radius:10px;padding:7px 12px;font-size:12px;font-weight:700;color:var(--dark);cursor:pointer;transition:.15s;font-style:italic;text-align:left"
+      onmouseover="this.style.borderColor='var(--purple)'"
+      onmouseout="this.style.borderColor='var(--line)'"
+      onclick="usePrompt(this.dataset.prompt)" data-prompt="${escHtml(p)}">${escHtml(p)}</button>`).join('');
+}
+
+function usePrompt(p) {
+  const editor = document.getElementById('chapter-editor');
+  editor.focus();
+  document.execCommand('insertText', false, p + ' ');
+}
+
+// ============================================================
+// STATUS BANNER
+// ============================================================
+function updateStatusBanner() {
+  if (!currentStory) return;
+  const el = document.getElementById('studio-status-banner');
+  const s = currentStory.status;
+  const map = {
+    draft:          {cls:'info',    icon:'📝', msg:'Draft — write freely. Use <strong>Review &amp; Publish</strong> when you\'re ready.'},
+    pending_ai:     {cls:'warn',    icon:'🤖', msg:'Waiting for AI review…'},
+    pending_parent: {cls:'pending', icon:'⏳', msg:'Waiting for parent approval before publishing to Literature &amp; Creativity.'},
+    published:      {cls:'success', icon:'🏆', msg:'Published to <strong>Literature &amp; Creativity</strong>! The community can now read your story.'},
+    rejected:       {cls:'warn',    icon:'✏️',  msg:'Parent requested revisions. Make your edits and resubmit.'},
+  };
+  const info = map[s] || map['draft'];
+  el.innerHTML = `<div class="status-banner ${info.cls}">${info.icon} ${info.msg}</div>`;
+}
+
+// ============================================================
+// AI REVIEW (client-side heuristics)
+// ============================================================
+function aiReviewStory(fullText) {
+  const lower = fullText.toLowerCase();
+  for (const w of ADULT_KEYWORDS)
+    if (lower.includes(w)) return {pass:false, severity:'block', reason:`Contains inappropriate content ("${w}"). Please revise before submitting.`};
+  for (const w of TRANS_CURSES)
+    if (lower.includes(w)) return {pass:false, severity:'block', reason:'Contains language that is not allowed on TYF Network.'};
+  for (const p of DEFAMATION)
+    if (lower.includes(p)) return {pass:false, severity:'block', reason:'Content appears to defame a school or teacher. Please revise.'};
+  if (/[^a-zA-Z0-9\s]{2,}/.test(fullText))
+    return {pass:false, severity:'warn', reason:'Contains unusual special characters. Please remove them.'};
+  const letters = fullText.replace(/[^a-zA-Z]/g,'').length;
+  if (fullText.replace(/\s/g,'').length > 30 && letters / fullText.replace(/\s/g,'').length < 0.4)
+    return {pass:false, severity:'warn', reason:'Content has too many numbers or symbols. Make sure it is real writing.'};
+  const words = countWords(fullText);
+  if (words < 30) return {pass:false, severity:'warn', reason:'Story is very short (fewer than 30 words). Add more content before publishing.'};
+  return {pass:true, severity:'ok', reason:`Great writing! ${words} words, no issues found. Ready for parent approval.`};
+}
+
+// ============================================================
+// PUBLISH FLOW
+// ============================================================
+function openPublishFlow() {
+  if (!mfcUser) { toast('Please log in first'); return; }
+  saveCurrentChapter();
+  if (!currentStory || !currentStory.title) { toast('Please give your story a title first'); return; }
+  const genre = GENRES.find(g => g.id === currentStory.genre);
+  document.getElementById('pub-story-name').textContent = currentStory.title;
+  document.getElementById('pub-story-meta').textContent =
+    `${genre ? genre.emoji+' '+genre.label : 'No genre'} · ${currentStory.totalWords} words · ${currentStory.chapters.length} chapter${currentStory.chapters.length!==1?'s':''}`;
+  // Reset steps
+  document.getElementById('pub-step-ai').style.display = 'block';
+  document.getElementById('pub-ai-panel').style.display = 'none';
+  document.getElementById('pub-step-confirm').style.display = 'none';
+  document.getElementById('pub-step-share').style.display = 'none';
+  document.getElementById('run-ai-btn').disabled = false;
+  openModal('modal-publish');
+  // If already published, jump straight to share panel
+  if (currentStory.status === 'published') showPublishedSharePanel();
+  else if (currentStory.status === 'pending_parent') {
+    document.getElementById('pub-step-ai').style.display = 'none';
+    document.getElementById('pub-step-share').innerHTML = `<div style="background:#f3e5f5;border:2px solid #ce93d8;border-radius:14px;padding:14px;text-align:center"><div style="font-size:2rem;margin-bottom:6px">⏳</div><div style="font-weight:900;font-size:15px;color:#6A1B9A;margin-bottom:4px">Waiting for parent approval</div><div style="font-size:12px;font-weight:700;color:var(--muted)">You'll get a notification here when they approve. Share links will unlock after publishing.</div></div>`;
+    document.getElementById('pub-step-share').style.display = 'block';
+  }
+}
+
+function runPublishAiReview() {
+  const fullText = currentStory.chapters.map(ch => {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = ch.content;
+    return tmp.innerText || tmp.textContent || '';
+  }).join('\n\n');
+  const result = aiReviewStory(fullText);
+  const panel = document.getElementById('pub-ai-panel');
+  panel.className = 'ai-panel ' + result.severity;
+  panel.style.display = 'block';
+  const icons = {ok:'✅',warn:'⚠️',block:'❌'};
+  const titles = {ok:'AI Review: Approved',warn:'AI Review: Needs Revision',block:'AI Review: Cannot Be Published'};
+  panel.innerHTML = `<div class="ai-title">${icons[result.severity]} ${titles[result.severity]}</div><div class="ai-msg">${result.reason}</div>`;
+  document.getElementById('run-ai-btn').disabled = true;
+  currentStory.aiStatus = result.severity === 'ok' ? 'approved' : 'flagged';
+  saveStoryToDocs();
+  if (result.pass) {
+    // Reveal confirm step
+    document.getElementById('pub-step-confirm').style.display = 'block';
+  }
+}
+
+function submitForParentApproval() {
+  if (!currentStory) return;
+  const parentNote = document.getElementById('pub-parent-note').value.trim();
+  const fullHtml = currentStory.chapters.map((ch, i) =>
+    `<strong>Chapter ${i+1}: ${ch.title}</strong>\n${ch.content}`).join('\n\n');
+  const tmp = document.createElement('div');
+  tmp.innerHTML = fullHtml;
+  const fullText = `📖 "${escHtml(currentStory.title)}"\n\n${(tmp.innerText||tmp.textContent||'').slice(0,2000)}${(tmp.innerText||tmp.textContent||'').length>2000?'\n\n… [continued in My First Chapter]':''}`;
+  const genre = GENRES.find(g => g.id === currentStory.genre);
+  const postId = 'mfc_pub_' + currentStory.id;
+  const post = {
+    id: postId,
+    authorId: mfcUser.id,
+    authorName: mfcUser.name,
+    authorAvatar: mfcUser.avatar || null,
+    communityId: 'literature',
+    text: fullText,
+    parentNote: parentNote || '',
+    imageB64: null,
+    timestamp: Date.now(),
+    aiStatus: 'approved',
+    parentApproved: false,
+    reactions: {loveIt:0,likeIt:0,canDoBetter:0,workToBetter:0,motivated:0,inspire:0,keepGoing:0},
+    reports: [],
+    isMentorTip: false,
+    isStoryPost: true,
+    storyId: currentStory.id,
+    publicShareId: 'share_' + currentStory.id,  // public permalink (no login needed)
+    genre: genre ? genre.emoji+' '+genre.label : '',
+  };
+  const posts = getTyfPosts().filter(p => p.storyId !== currentStory.id);
+  posts.unshift(post);
+  saveTyfPosts(posts);
+  currentStory.status = 'pending_parent';
+  currentStory.parentApproved = false;
+  currentStory.publicShareId = post.publicShareId;
+  saveStoryToDocs();
+  // Hide confirm, show pending message
+  document.getElementById('pub-step-confirm').style.display = 'none';
+  document.getElementById('pub-step-ai').style.display = 'none';
+  const shareDiv = document.getElementById('pub-step-share');
+  shareDiv.style.display = 'block';
+  shareDiv.innerHTML = `<div style="background:#f3e5f5;border:2px solid #ce93d8;border-radius:14px;padding:14px;text-align:center">
+    <div style="font-size:2rem;margin-bottom:6px">⏳</div>
+    <div style="font-weight:900;font-size:15px;color:#6A1B9A;margin-bottom:4px">Submitted for parent approval!</div>
+    <div style="font-size:12px;font-weight:700;color:var(--muted)">Once your parent approves, it will go live in Literature &amp; Creativity and you can share it with anyone.</div>
+  </div>`;
+  updateStatusBanner();
+  toast('📤 Submitted for parent approval!');
+}
+
+function showPublishedSharePanel() {
+  if (!currentStory || !currentStory.publicShareId) return;
+  const shareLink = `${window.location.origin}${window.location.pathname}?view=${currentStory.publicShareId}`;
+  const shareDiv = document.getElementById('pub-step-share');
+  document.getElementById('pub-step-ai').style.display = 'none';
+  document.getElementById('pub-step-confirm').style.display = 'none';
+  shareDiv.style.display = 'block';
+  shareDiv.innerHTML = `
+    <div style="background:#e8f5e9;border:2px solid #a5d6a7;border-radius:14px;padding:14px;text-align:center;margin-bottom:14px">
+      <div style="font-size:2rem;margin-bottom:6px">🏆</div>
+      <div style="font-weight:900;font-size:15px;color:#2E7D32;margin-bottom:4px">Your story is published!</div>
+      <div style="font-size:12px;font-weight:700;color:var(--muted)">Share it with anyone — no TYF account needed to read it.</div>
+    </div>
+    <div style="background:var(--soft);border-radius:12px;padding:10px 14px;font-family:monospace;font-size:12px;word-break:break-all;margin-bottom:12px" id="pub-share-link">${shareLink}</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn ghost sm" onclick="copyStoryLink('${shareLink}')">📋 Copy Link</button>
+      <button class="btn ghost sm" style="color:#25D366;border-color:#25D366" onclick="shareStoryWhatsApp('${shareLink}')">📲 WhatsApp</button>
+      <button class="btn ghost sm" onclick="shareStoryEmail('${shareLink}')">📧 Email</button>
+    </div>`;
+}
+
+function copyStoryLink(link) {
+  const url = link || (currentStory && currentStory.publicShareId ? `${window.location.origin}${window.location.pathname}?view=${currentStory.publicShareId}` : window.location.href);
+  navigator.clipboard.writeText(url).then(() => toast('📋 Link copied!')).catch(() => toast('Copy: ' + url));
+}
+
+function shareStoryWhatsApp(link) {
+  const url = link || window.location.href;
+  const text = encodeURIComponent(`Read my story "${currentStory?.title||'My Story'}" on The Young Foundry:\n\n${url}`);
+  window.open(`https://wa.me/?text=${text}`, '_blank');
+}
+
+function shareStoryEmail(link) {
+  const url = link || window.location.href;
+  const subject = encodeURIComponent(`Read my story: "${currentStory?.title||'My Story'}"`);
+  const body = encodeURIComponent(`Hi!\n\nI wrote a story on The Young Foundry and wanted to share it with you.\n\n📖 "${currentStory?.title||'My Story'}"\n\nRead it here: ${url}\n\nYou don't need an account to read it!`);
+  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+}
+
+// Watch for parent approval in TYF Network (poll localStorage every 5s)
+setInterval(() => {
+  if (!currentStory || currentStory.status !== 'pending_parent') return;
+  const posts = getTyfPosts();
+  const post = posts.find(p => p.storyId === currentStory.id);
+  if (post && post.parentApproved && currentStory.status !== 'published') {
+    currentStory.status = 'published';
+    currentStory.parentApproved = true;
+    currentStory.publicShareId = post.publicShareId;
+    saveStoryToDocs();
+    updateStatusBanner();
+    toast('🏆 Parent approved! Your story is now live in Literature & Creativity!');
+    // If publish modal is open, show share panel
+    if (document.getElementById('modal-publish').classList.contains('open')) {
+      showPublishedSharePanel();
+    }
+  }
+}, 5000);
+
+// ============================================================
+// REPOSITORY
+// ============================================================
+function renderRepository() {
+  const docs = getDocs().filter(d => d.authorId === mfcUser?.id);
+  const el = document.getElementById('repository-list');
+  if (!docs.length) {
+    el.innerHTML = `<div style="text-align:center;padding:48px 24px;color:var(--muted)"><span style="font-size:3rem;display:block;margin-bottom:12px">📁</span><p style="font-size:14px;font-weight:700">No stories saved yet. Start writing!</p></div>`;
+    return;
+  }
+  const statusMap = {
+    draft:          {label:'Draft',            cls:'muted'},
+    pending_parent: {label:'⏳ Pending Approval', cls:'yellow'},
+    published:      {label:'✅ Published',      cls:'green'},
+    rejected:       {label:'✏️ Needs Revision',  cls:'orange'},
+  };
+  el.innerHTML = docs.map(doc => {
+    const genre = GENRES.find(g => g.id === doc.genre);
+    const st = statusMap[doc.status] || statusMap['draft'];
+    return `<div class="doc-card">
+      <div class="doc-icon">${genre ? genre.emoji : '📄'}</div>
+      <div class="doc-info">
+        <div class="doc-title">${escHtml(doc.title || 'Untitled Story')}</div>
+        <div class="doc-meta">
+          ${genre ? genre.label+' · ' : ''}${doc.totalWords||0} words · ${doc.chapters.length} chapter${doc.chapters.length!==1?'s':''} · Updated ${timeAgo(doc.updated)}
+        </div>
+        <div style="margin-top:6px"><span class="badge ${st.cls}">${st.label}</span></div>
+        <div class="doc-actions">
+          <button class="btn ghost sm" onclick="loadAndEdit('${doc.id}')">✏️ Edit</button>
+          ${doc.status === 'draft' || doc.status === 'rejected' ? `<button class="btn purple sm" onclick="loadAndPublish('${doc.id}')">🚀 Publish</button>` : ''}
+          ${doc.status === 'published' ? `<span class="badge green">Live in Literature &amp; Creativity 🎉</span>` : ''}
+          <button class="btn red sm" onclick="deleteDoc('${doc.id}')">🗑️ Delete</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function loadAndEdit(id) {
+  loadStory(id);
+  showScreen('studio');
+}
+
+function loadAndPublish(id) {
+  loadStory(id);
+  showScreen('studio');
+  setTimeout(openPublishFlow, 200);
+}
+
+function deleteDoc(id) {
+  if (!confirm('Delete this story? This cannot be undone.')) return;
+  const docs = getDocs().filter(d => d.id !== id);
+  saveDocs(docs);
+  // Also remove pending post from TYF queue
+  const posts = getTyfPosts().filter(p => p.storyId !== id);
+  saveTyfPosts(posts);
+  renderRepository();
+  toast('Story deleted.');
+}
+
+// ============================================================
+// MODAL HELPERS
+// ============================================================
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', e => { if (e.target===m) m.classList.remove('open'); });
+  });
+});
+
+// ============================================================
+// UTILS
+// ============================================================
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+function timeAgo(ts) {
+  const d = Date.now() - ts;
+  if (d < 60000) return 'just now';
+  if (d < 3600000) return Math.floor(d/60000)+'m ago';
+  if (d < 86400000) return Math.floor(d/3600000)+'h ago';
+  return Math.floor(d/86400000)+'d ago';
+}
+</script>
+</body>
+</html>
