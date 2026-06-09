@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TYF Network — The Young Foundry Community</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#E53935;--green:#43A047;--light:#F8F9FA;--dark:#2d3748;
+  --yellow:#FDD835;--blue:#1E88E5;--orange:#F97316;--purple:#8B5CF6;
+  --paper:#ffffff;--ink:#2d3748;--muted:#7b8694;--line:#eceef1;
+  --soft:#eef1f5;--teal:#00897B;--pink:#E91E63;
+  --head:'Fredoka One',cursive;
+  --body:'Nunito',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --shadow:0 14px 34px -16px rgba(45,55,72,.28);
+  --shadow-sm:0 6px 16px -8px rgba(45,55,72,.25);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0;}
+html,body{font-family:var(--body);color:var(--ink);background:var(--light);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+h1,h2,h3,h4{font-family:var(--head);font-weight:400;letter-spacing:.2px;}
+a{color:inherit;text-decoration:none;}
+button{font-family:var(--body);cursor:pointer;border:none;background:none;}
+input,textarea,select{font-family:var(--body);}
+
+/* BLOBS */
+.blob{position:fixed;z-index:0;opacity:.06;pointer-events:none;}
+.blob.tl{top:-60px;left:-60px;width:380px;color:var(--red);}
+.blob.br{bottom:-80px;right:-80px;width:420px;color:var(--green);}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:100;background:rgba(248,249,250,.95);backdrop-filter:blur(12px);border-bottom:2px solid var(--line);}
+.topbar-inner{max-width:1280px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:12px;}
+.brand{font-family:var(--head);font-size:22px;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.brand .r{color:var(--red);}.brand .g{color:var(--green);}.brand .b{color:var(--blue);}
+.tspacer{flex:1;}
+.topbar-nav{display:flex;align-items:center;gap:6px;}
+.topbar-nav button{font-weight:800;font-size:13px;color:var(--muted);padding:7px 14px;border-radius:999px;transition:.15s;}
+.topbar-nav button:hover,.topbar-nav button.active{color:var(--dark);background:var(--soft);}
+.topbar-nav button.cta{background:var(--green);color:#fff;padding:8px 16px;}
+.topbar-nav button.cta:hover{background:#388E3C;}
+.avatar-chip{display:flex;align-items:center;gap:8px;background:var(--soft);border:2px solid var(--line);border-radius:999px;padding:5px 12px 5px 5px;cursor:pointer;transition:.15s;}
+.avatar-chip:hover{border-color:var(--blue);}
+.av{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-family:var(--head);font-size:14px;color:#fff;flex-shrink:0;}
+.av-name{font-size:13px;font-weight:800;color:var(--dark);}
+
+/* SCREENS */
+.screen{display:none;min-height:calc(100vh - 60px);}
+.screen.active{display:block;}
+
+/* LAYOUT */
+.page-wrap{max-width:1280px;margin:0 auto;padding:24px;}
+.two-col{display:grid;grid-template-columns:280px 1fr;gap:24px;align-items:start;}
+.three-col{display:grid;grid-template-columns:240px 1fr 300px;gap:24px;align-items:start;}
+
+/* CARDS */
+.card{background:var(--paper);border:2px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:var(--shadow-sm);transition:.2s;}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow);}
+.card-body{padding:20px;}
+
+/* BTN */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 22px;border-radius:999px;font-family:var(--body);font-weight:900;font-size:14px;cursor:pointer;border:none;transition:all .2s;}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 16px -4px rgba(0,0,0,.12);}
+.btn.green{background:var(--green);color:#fff;}
+.btn.blue{background:var(--blue);color:#fff;}
+.btn.red{background:var(--red);color:#fff;}
+.btn.orange{background:var(--orange);color:#fff;}
+.btn.purple{background:var(--purple);color:#fff;}
+.btn.ghost{background:#fff;border:2px solid var(--line);color:var(--dark);}
+.btn.ghost:hover{border-color:var(--blue);}
+.btn.sm{padding:7px 14px;font-size:12px;}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none;}
+
+/* FORM */
+.field{margin-bottom:16px;}
+.field label{display:block;font-weight:800;font-size:13px;color:var(--dark);margin-bottom:6px;}
+.field input,.field textarea,.field select{width:100%;padding:11px 14px;border:2px solid var(--line);border-radius:14px;font-size:14px;font-weight:700;color:var(--ink);background:#fff;outline:none;transition:border-color .15s;}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--blue);}
+.field textarea{resize:vertical;min-height:100px;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* BADGE */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:900;letter-spacing:.3px;}
+.badge.green{background:#e8f5e9;color:var(--green);}
+.badge.blue{background:#e3f2fd;color:var(--blue);}
+.badge.orange{background:#fff3e0;color:var(--orange);}
+.badge.red{background:#ffebee;color:var(--red);}
+.badge.purple{background:#f3e5f5;color:var(--purple);}
+.badge.yellow{background:#fffde7;color:#F57F17;}
+.badge.muted{background:var(--soft);color:var(--muted);}
+
+/* TABS */
+.tabs{display:flex;gap:4px;background:var(--soft);border-radius:16px;padding:4px;margin-bottom:20px;}
+.tab{flex:1;padding:9px;border-radius:12px;font-weight:800;font-size:13px;color:var(--muted);cursor:pointer;text-align:center;transition:.15s;border:none;background:none;}
+.tab.active{background:#fff;color:var(--dark);box-shadow:var(--shadow-sm);}
+
+/* SECTION LABEL */
+.sectlab{font-family:var(--head);font-size:20px;color:var(--dark);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+
+/* SIDEBAR CARD */
+.sidebar-card{background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--shadow-sm);margin-bottom:16px;}
+.sidebar-card h4{font-family:var(--head);font-size:16px;margin-bottom:12px;color:var(--dark);}
+
+/* POST CARD */
+.post-card{background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--shadow-sm);margin-bottom:16px;transition:.2s;}
+.post-card:hover{border-color:var(--line);box-shadow:var(--shadow);}
+.post-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.post-av{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-family:var(--head);font-size:18px;color:#fff;flex-shrink:0;}
+.post-meta{flex:1;}
+.post-author{font-weight:900;font-size:14px;color:var(--dark);}
+.post-sub{font-size:12px;color:var(--muted);font-weight:700;margin-top:2px;}
+.post-community-tag{font-size:11px;font-weight:900;padding:2px 8px;border-radius:999px;margin-left:6px;}
+.post-body{font-size:14px;font-weight:700;color:var(--ink);line-height:1.65;margin-bottom:14px;}
+.post-image{width:100%;border-radius:14px;max-height:280px;object-fit:cover;margin-bottom:14px;display:block;}
+.post-pending{background:#fff8e1;border:2px solid var(--yellow);border-radius:12px;padding:10px 14px;font-size:13px;font-weight:800;color:#E65100;margin-bottom:12px;}
+.reactions{display:flex;gap:6px;flex-wrap:wrap;padding-top:12px;border-top:2px solid var(--soft);}
+.rxn-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;border:2px solid var(--line);background:#fff;font-size:13px;font-weight:800;color:var(--muted);cursor:pointer;transition:.15s;}
+.rxn-btn:hover{border-color:var(--blue);color:var(--blue);transform:scale(1.05);}
+.rxn-btn.reacted{background:var(--soft);border-color:var(--blue);color:var(--blue);}
+.rxn-count{font-size:12px;font-weight:900;}
+
+/* COMMUNITY CARD */
+.comm-card{background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--shadow-sm);transition:.2s;cursor:pointer;}
+.comm-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--blue);}
+.comm-emoji{font-size:2.2rem;margin-bottom:8px;display:block;}
+.comm-name{font-family:var(--head);font-size:17px;margin-bottom:4px;}
+.comm-desc{font-size:12px;color:var(--muted);font-weight:700;line-height:1.5;margin-bottom:10px;}
+.comm-footer{display:flex;align-items:center;justify-content:space-between;}
+.comm-members{font-size:12px;font-weight:900;color:var(--muted);}
+
+/* COMMUNITY GRID */
+.comm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
+
+/* PROFILE */
+.profile-hero{background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:24px;padding:30px;color:#fff;margin-bottom:20px;position:relative;overflow:hidden;}
+.profile-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.08);}
+.profile-av{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.25);display:grid;place-items:center;font-family:var(--head);font-size:28px;margin-bottom:12px;border:3px solid rgba(255,255,255,.4);}
+.profile-name{font-family:var(--head);font-size:24px;margin-bottom:4px;}
+.profile-sub{font-size:13px;opacity:.8;font-weight:700;}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;}
+.pstat{text-align:center;background:rgba(255,255,255,.12);border-radius:14px;padding:10px;}
+.pstat-num{font-family:var(--head);font-size:22px;}
+.pstat-label{font-size:11px;font-weight:700;opacity:.8;margin-top:2px;}
+
+/* SCORE RING */
+.score-ring{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--yellow),var(--orange));border-radius:16px;padding:10px 16px;color:#fff;margin-top:12px;}
+.score-val{font-family:var(--head);font-size:28px;}
+.score-label{font-size:12px;font-weight:900;opacity:.9;}
+
+/* AI REVIEW */
+.ai-panel{border-radius:16px;padding:14px 16px;margin-top:12px;display:none;}
+.ai-panel.ok{background:#e8f5e9;border:2px solid #a5d6a7;}
+.ai-panel.warn{background:#fff8e1;border:2px solid #ffe082;}
+.ai-panel.block{background:#ffebee;border:2px solid #ef9a9a;}
+.ai-panel-title{font-weight:900;font-size:14px;margin-bottom:4px;}
+.ai-panel.ok .ai-panel-title{color:#2E7D32;}
+.ai-panel.warn .ai-panel-title{color:#E65100;}
+.ai-panel.block .ai-panel-title{color:#C62828;}
+.ai-panel-msg{font-size:13px;font-weight:700;color:var(--muted);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(45,55,72,.55);backdrop-filter:blur(4px);z-index:500;display:none;place-items:center;}
+.modal-overlay.open{display:grid;}
+.modal{background:#fff;border-radius:24px;padding:30px;max-width:480px;width:calc(100% - 40px);box-shadow:0 24px 64px -12px rgba(45,55,72,.4);position:relative;max-height:90vh;overflow-y:auto;}
+.modal-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;background:var(--soft);border:none;cursor:pointer;font-size:16px;display:grid;place-items:center;color:var(--muted);}
+.modal-close:hover{background:var(--line);}
+.modal h3{font-family:var(--head);font-size:22px;margin-bottom:6px;}
+.modal p.sub{font-size:13px;color:var(--muted);font-weight:700;margin-bottom:20px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;z-index:600;background:var(--dark);color:#fff;padding:12px 20px;border-radius:14px;font-size:13px;font-weight:800;box-shadow:var(--shadow);opacity:0;transform:translateY(10px);transition:.3s;pointer-events:none;}
+.toast.show{opacity:1;transform:none;}
+
+/* PROPOSAL CARD */
+.proposal-card{background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px;display:flex;align-items:center;gap:14px;}
+.prop-votes{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;}
+.prop-vote-btn{width:32px;height:32px;border-radius:10px;border:2px solid var(--line);background:#fff;font-size:16px;cursor:pointer;display:grid;place-items:center;transition:.15s;}
+.prop-vote-btn:hover{border-color:var(--blue);}
+.prop-vote-btn.up:hover{background:#e8f5e9;border-color:var(--green);}
+.prop-vote-btn.down:hover{background:#ffebee;border-color:var(--red);}
+.prop-score{font-family:var(--head);font-size:18px;color:var(--dark);}
+.prop-info{flex:1;}
+.prop-name{font-weight:900;font-size:15px;color:var(--dark);margin-bottom:3px;}
+.prop-desc{font-size:12px;color:var(--muted);font-weight:700;}
+
+/* MOD LOG */
+.mod-row{background:var(--paper);border:2px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;}
+.mod-icon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:18px;flex-shrink:0;}
+.mod-info{flex:1;}
+.mod-title{font-weight:900;font-size:13px;color:var(--dark);}
+.mod-sub{font-size:12px;color:var(--muted);font-weight:700;margin-top:2px;}
+
+/* PENDING QUEUE */
+.pending-item{background:var(--paper);border:2px solid var(--yellow);border-radius:16px;padding:16px;margin-bottom:12px;}
+.pending-item .pi-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.pending-item .pi-text{font-size:14px;font-weight:700;color:var(--ink);line-height:1.6;margin-bottom:12px;}
+.pending-item .pi-actions{display:flex;gap:8px;}
+
+/* MENTOR BADGE */
+.mentor-tag{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,var(--orange),var(--yellow));color:#fff;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:900;}
+
+/* QUEST CARD */
+.quest-card{background:linear-gradient(135deg,var(--blue),var(--teal));border-radius:20px;padding:20px;color:#fff;margin-bottom:16px;position:relative;overflow:hidden;}
+.quest-card::after{content:'🏆';position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:3rem;opacity:.3;}
+.quest-title{font-family:var(--head);font-size:18px;margin-bottom:4px;}
+.quest-desc{font-size:13px;opacity:.85;font-weight:700;margin-bottom:12px;}
+.quest-meta{font-size:12px;font-weight:900;opacity:.7;}
+
+/* FOUNDRY FELLOW */
+.fellow-banner{background:linear-gradient(135deg,var(--yellow),var(--orange));border-radius:20px;padding:18px;margin-bottom:16px;display:flex;align-items:center;gap:14px;}
+.fellow-icon{font-size:2.5rem;}
+.fellow-text h4{font-family:var(--head);font-size:16px;color:#fff;margin-bottom:3px;}
+.fellow-text p{font-size:12px;color:rgba(255,255,255,.85);font-weight:700;}
+
+/* SEPARATOR */
+.sep{height:2px;background:var(--soft);border-radius:999px;margin:20px 0;}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:48px 24px;color:var(--muted);}
+.empty .empty-icon{font-size:3rem;margin-bottom:12px;display:block;}
+.empty p{font-size:14px;font-weight:700;}
+
+/* LOGIN SCREEN */
+.login-wrap{min-height:100vh;display:grid;place-items:center;padding:24px;background:var(--light);}
+.login-card{background:var(--paper);border:2px solid var(--line);border-radius:30px;padding:40px;max-width:460px;width:100%;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+.login-card::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--blue),var(--purple));}
+.login-brand{font-family:var(--head);font-size:28px;margin-bottom:4px;}
+.login-tagline{font-size:14px;color:var(--muted);font-weight:700;margin-bottom:28px;}
+.login-tabs{display:flex;gap:4px;background:var(--soft);border-radius:14px;padding:4px;margin-bottom:24px;}
+.login-tab{flex:1;padding:9px;border-radius:10px;font-weight:800;font-size:13px;color:var(--muted);cursor:pointer;text-align:center;transition:.15s;border:none;background:none;}
+.login-tab.active{background:#fff;color:var(--dark);box-shadow:var(--shadow-sm);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .three-col{grid-template-columns:1fr;}
+  .two-col{grid-template-columns:1fr;}
+  .field-row{grid-template-columns:1fr;}
+  .comm-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));}
+}
+@media(max-width:560px){
+  .topbar-nav .desktop-only{display:none;}
+  .page-wrap{padding:16px;}
+  .profile-stats{grid-template-columns:repeat(3,1fr);}
+}
+
+/* NOTIFICATION DOT */
+.notif-dot{width:8px;height:8px;background:var(--red);border-radius:50%;display:inline-block;margin-left:4px;vertical-align:middle;}
+
+/* CHAT (parent communities) */
+.chat-bubble{background:var(--soft);border-radius:16px 16px 16px 4px;padding:10px 14px;margin-bottom:10px;max-width:85%;}
+.chat-bubble.mine{background:var(--blue);color:#fff;border-radius:16px 16px 4px 16px;margin-left:auto;}
+.chat-author{font-size:11px;font-weight:900;color:var(--muted);margin-bottom:3px;}
+.chat-text{font-size:13px;font-weight:700;line-height:1.5;}
+.chat-input-row{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:2px solid var(--line);}
+.chat-input-row input{flex:1;padding:10px 14px;border:2px solid var(--line);border-radius:999px;font-size:13px;font-weight:700;outline:none;}
+.chat-input-row input:focus{border-color:var(--blue);}
+
+/* RAINBOW BAR */
+.rainbow-bar{height:4px;background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--blue),var(--purple));border-radius:999px;margin-bottom:20px;}
+</style>
+</head>
+<body>
+
+<!-- BACKGROUND BLOBS -->
+<svg class="blob tl" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <path fill="currentColor" d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.4,-32.6,90,-16.3,89.1,-.5C88.2,15.3,83.8,30.6,75.5,43.6C67.2,56.6,55,67.2,41.2,74.6C27.4,82,12,86.1,-2,85.3C-16,84.6,-32,79,-46.5,71.6C-61,64.2,-74,55,-81.2,42.4C-88.4,29.9,-89.8,14.9,-88.2,.9C-86.5,-13.2,-81.7,-26.4,-74.4,-38C-67,-49.7,-57,-59.9,-44.2,-67.5C-31.4,-75.2,-15.7,-80.4,.6,-81.3C16.9,-82.2,30.6,-83.6,44.7,-76.4Z" transform="translate(100 100)"/>
+</svg>
+<svg class="blob br" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <path fill="currentColor" d="M39.5,-65.3C52.3,-59.7,64.5,-51.4,71.5,-39.8C78.5,-28.2,80.4,-14.1,79.8,-.3C79.1,13.5,75.9,27.1,69.4,39.4C62.9,51.8,53.1,62.9,40.8,70.3C28.5,77.8,14.2,81.6,.4,81C-13.4,80.4,-26.8,75.3,-39,68.1C-51.2,60.8,-62.3,51.3,-70.2,39.5C-78.1,27.7,-82.9,13.8,-83.1,-.2C-83.3,-14.1,-79,-28.2,-71.4,-39.8C-63.8,-51.4,-52.9,-60.3,-40.5,-66.1C-28.2,-71.9,-14.1,-74.6,-.3,-74.2C14.5,-73.7,26.7,-70.9,39.5,-65.3Z" transform="translate(100 100)"/>
+</svg>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ============================================================
+     SCREEN: LOGIN
+============================================================ -->
+<div class="screen active" id="screen-login">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-brand"><span class="r">The Young</span> <span class="g">Foundry</span> <span class="b">Network</span></div>
+      <div class="login-tagline">A safe space where young minds connect, create & grow 🚀</div>
+      <div class="rainbow-bar"></div>
+
+      <div class="login-tabs">
+        <button class="login-tab active" onclick="switchLoginTab('student')">👧 Student</button>
+        <button class="login-tab" onclick="switchLoginTab('parent')">👨‍👩‍👧 Parent</button>
+        <button class="login-tab" onclick="switchLoginTab('admin')">🛡️ Admin</button>
+      </div>
+
+      <!-- Student Login -->
+      <div id="login-student">
+        <div class="field">
+          <label>School ID</label>
+          <input type="text" id="s-schoolid" placeholder="e.g. SCH2026-4A-042" />
+        </div>
+        <div class="field">
+          <label>Display Name</label>
+          <input type="text" id="s-name" placeholder="Your first name" />
+        </div>
+        <div class="field">
+          <label>Grade</label>
+          <select id="s-grade">
+            <option value="">Select grade...</option>
+            <option value="4">Grade 4</option>
+            <option value="5">Grade 5</option>
+            <option value="6">Grade 6</option>
+            <option value="7">Grade 7</option>
+            <option value="8">Grade 8</option>
+            <option value="9">Grade 9</option>
+            <option value="10">Grade 10</option>
+          </select>
+        </div>
+        <button class="btn green" style="width:100%" onclick="studentLogin()">Enter Network →</button>
+        <p style="text-align:center;margin-top:12px;font-size:12px;color:var(--muted);font-weight:700;">New? Your parent must approve your account first.</p>
+        <div style="margin-top:12px;text-align:center;">
+          <button class="btn ghost sm" onclick="switchLoginTab('register')">Request New Account</button>
+        </div>
+      </div>
+
+      <!-- Parent Login -->
+      <div id="login-parent" style="display:none">
+        <div class="field">
+          <label>Parent Name</label>
+          <input type="text" id="p-name" placeholder="Your full name" />
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="p-email" placeholder="your@email.com" />
+        </div>
+        <button class="btn purple" style="width:100%" onclick="parentLogin()">Parent Portal →</button>
+      </div>
+
+      <!-- Register -->
+      <div id="login-register" style="display:none">
+        <div style="background:var(--soft);border-radius:14px;padding:14px;margin-bottom:16px;font-size:13px;font-weight:700;color:var(--muted);">📋 Your parent will receive an approval request. Once approved, you can log in.</div>
+        <div class="field">
+          <label>Child's Full Name</label>
+          <input type="text" id="r-name" placeholder="Full name" />
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>School ID</label>
+            <input type="text" id="r-schoolid" placeholder="SCH2026-..." />
+          </div>
+          <div class="field">
+            <label>Grade</label>
+            <select id="r-grade">
+              <option value="">Grade...</option>
+              <option value="4">4</option><option value="5">5</option>
+              <option value="6">6</option><option value="7">7</option>
+              <option value="8">8</option><option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Parent Email (for approval)</label>
+          <input type="email" id="r-pemail" placeholder="parent@email.com" />
+        </div>
+        <button class="btn green" style="width:100%" onclick="requestAccount()">Send Approval Request</button>
+        <div style="margin-top:12px;text-align:center;">
+          <button class="btn ghost sm" onclick="switchLoginTab('student')">← Back to Login</button>
+        </div>
+      </div>
+
+      <!-- Admin Login -->
+      <div id="login-admin" style="display:none">
+        <div class="field">
+          <label>Admin Key</label>
+          <input type="password" id="a-key" placeholder="Enter admin key" />
+        </div>
+        <button class="btn red" style="width:100%" onclick="adminLogin()">Admin Access →</button>
+      </div>
+
+      <div class="sep"></div>
+      <div style="text-align:center;font-size:12px;color:var(--muted);font-weight:700;">
+        🔒 Safe platform for Grades 4–10 · Parent-approved accounts only · AI-moderated content
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TOPBAR (shown after login)
+============================================================ -->
+<div class="topbar" id="main-topbar" style="display:none">
+  <div class="topbar-inner">
+    <div class="brand" onclick="showScreen('feed')"><span class="r">TYF</span> <span class="g">Network</span></div>
+    <div class="tspacer"></div>
+    <div class="topbar-nav">
+      <button onclick="showScreen('feed')" id="nav-feed" class="desktop-only">🏠 Feed</button>
+      <button onclick="showScreen('communities')" id="nav-communities" class="desktop-only">🌐 Communities</button>
+      <button onclick="showScreen('quests')" id="nav-quests" class="desktop-only">🏆 Quests</button>
+      <button onclick="showScreen('profile')" id="nav-profile" class="desktop-only">👤 Profile</button>
+      <button onclick="openPostModal()" class="btn green sm desktop-only">+ Post</button>
+      <div class="avatar-chip" onclick="showScreen('profile')" id="topbar-avatar" style="display:none">
+        <div class="av" id="topbar-av-circle">?</div>
+        <span class="av-name" id="topbar-av-name">User</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN: FEED
+============================================================ -->
+<div class="screen" id="screen-feed">
+  <div class="page-wrap">
+    <div class="three-col">
+      <!-- LEFT SIDEBAR -->
+      <div>
+        <div class="sidebar-card">
+          <h4>My Communities</h4>
+          <div id="my-communities-list"></div>
+          <button class="btn ghost sm" style="width:100%;margin-top:8px" onclick="showScreen('communities')">Browse All →</button>
+        </div>
+        <div class="sidebar-card">
+          <h4>🏙️ City Quest</h4>
+          <div class="quest-card">
+            <div class="quest-title">This Week's Quest</div>
+            <div class="quest-desc" id="active-quest-desc">Photograph something that represents your neighborhood</div>
+            <div class="quest-meta" id="active-quest-deadline">Ends Sunday · 📸 Photography</div>
+          </div>
+          <button class="btn orange sm" style="width:100%" onclick="openPostModal('city-bulletin')">Submit Entry →</button>
+        </div>
+        <div class="sidebar-card" id="pending-approval-sidebar" style="display:none">
+          <h4>⏳ Pending Approval <span class="notif-dot"></span></h4>
+          <p style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:10px">Posts waiting for your child to review</p>
+          <button class="btn yellow sm" style="width:100%;background:var(--yellow);color:var(--dark)" onclick="showScreen('parent-queue')">Review Queue →</button>
+        </div>
+      </div>
+
+      <!-- MAIN FEED -->
+      <div>
+        <div class="tabs">
+          <button class="tab active" onclick="switchFeedTab('all')">🌐 All</button>
+          <button class="tab" onclick="switchFeedTab('mine')">✨ My Communities</button>
+          <button class="tab" onclick="switchFeedTab('trending')">🔥 Trending</button>
+          <button class="tab" onclick="switchFeedTab('city')">🏙️ City Board</button>
+        </div>
+        <div id="feed-posts"></div>
+      </div>
+
+      <!-- RIGHT SIDEBAR -->
+      <div>
+        <div id="foundry-fellow-banner" style="display:none"></div>
+        <div class="sidebar-card">
+          <h4>🌟 Foundry Score</h4>
+          <div id="score-display"></div>
+          <p style="font-size:12px;color:var(--muted);font-weight:700;margin-top:8px">Earn points by posting, inspiring others & mentoring</p>
+        </div>
+        <div class="sidebar-card" id="mentor-sidebar" style="display:none">
+          <h4>🎓 Mentor Bridge</h4>
+          <p style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:10px">You're a Mentor! Share tips with younger grades.</p>
+          <button class="btn orange sm" style="width:100%" onclick="openPostModal(null, true)">Post a Tip →</button>
+        </div>
+        <div class="sidebar-card">
+          <h4>👥 Suggested Communities</h4>
+          <div id="suggested-communities"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN: COMMUNITIES
+============================================================ -->
+<div class="screen" id="screen-communities">
+  <div class="page-wrap">
+    <div class="two-col">
+      <div>
+        <div class="sidebar-card">
+          <h4>🏷️ Filter</h4>
+          <div style="display:flex;flex-direction:column;gap:6px;" id="comm-filter-list"></div>
+        </div>
+        <div class="sidebar-card">
+          <h4>💡 Suggest a Community</h4>
+          <p style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:10px">Have an idea? Propose it and get votes!</p>
+          <button class="btn blue sm" style="width:100%" onclick="openSuggestModal()">+ Suggest →</button>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <div class="sectlab" style="margin:0">🌐 All Communities</div>
+          <button class="btn ghost sm" onclick="showScreen('proposals')">🗳️ Proposals (<span id="proposal-count">0</span>)</button>
+        </div>
+        <div class="comm-grid" id="all-communities-grid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN: COMMUNITY DETAIL
+============================================================ -->
+<div class="screen" id="screen-community-detail">
+  <div class="page-wrap">
+    <button class="btn ghost sm" onclick="showScreen('communities')" style="margin-bottom:16px">← Back</button>
+    <div id="comm-detail-header" style="border-radius:20px;padding:24px;margin-bottom:20px;color:#fff;position:relative;overflow:hidden;">
+      <div style="position:relative;z-index:1;">
+        <div id="comm-detail-emoji" style="font-size:3rem;margin-bottom:8px;display:block;"></div>
+        <div id="comm-detail-name" style="font-family:'Fredoka One',cursive;font-size:28px;margin-bottom:4px;"></div>
+        <div id="comm-detail-desc" style="font-size:14px;opacity:.85;font-weight:700;margin-bottom:12px;"></div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <span id="comm-detail-members" style="font-size:13px;font-weight:900;opacity:.8;"></span>
+          <button class="btn sm" id="comm-join-btn" onclick="toggleJoinCommunity()" style="background:rgba(255,255,255,.2);color:#fff;border:2px solid rgba(255,255,255,.3);"></button>
+          <span id="comm-parent-badge" class="badge" style="display:none;background:rgba(255,255,255,.2);color:#fff;"></span>
+        </div>
+      </div>
+    </div>
+    <div class="two-col" id="comm-detail-layout">
+      <div id="comm-detail-sidebar"></div>
+      <div id="comm-detail-posts"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN: PROPOSALS
+============================================================ -->
+<div class="screen" id="screen-proposals">
+  <div class="page-wrap">
+    <button class="btn ghost sm" onclick="showScreen('communities')" style="margin-bottom:16px">← Back to Communities</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div class="sectlab" style="margin:0">🗳️ Community Proposals</div>
+      <button class="btn blue sm" onclick="openSuggestModal()">+ Suggest a Community</button>
+    </div>
+    <div style="background:#e3f2fd;border:2px solid #90caf9;border-radius:14px;padding:14px;margin-bottom:20px;font-size:13px;font-weight:700;color:#1565C0;">
+      💡 Vote on community ideas! Top 3 proposals will be reviewed by admins for creation. Proposers earn a <strong>Founder</strong> badge if their community is created.
+    </div>
+    <div id="proposals-list"></div>
+    <div id="top-proposals-admin" style="display:none">
+      <div class="sep"></div>
+      <div class="sectlab">🏆 Top 3 — Admin Review</div>
+      <div id="top3-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN: QUESTS
+============================================================ -->
+<div class="screen" id="screen-quests">
+  <div class="page-wrap">
+    <div class="sectlab">🏆 City Quests</div>
+    <div style="background:linear-gradient(135deg,var(--blue),var(--teal));border-radius:20px;padding:24px;color:#fff;margin-bottom:24px;">
+      <div style="font-family:'Fredoka One',cursive;font-size:22px;margin-bottom:6px;">Weekly Community Challenges</div>
+      <div style="font-size:14px;opacity:.85;font-weight:700;">Complete quests, earn reactions, build your Foundry Score. The most-reacted submission becomes a Foundry Fellow!</div>
+    </div>
+    <div id="quests-list"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN: PROFILE
+============================================================ -->
+<div class="screen" id="screen-profile">
+  <div class="page-wrap">
+    <div style="max-width:720px;margin:0 auto;">
+      <div id="profile-hero-block"></div>
+      <div class="tabs">
+        <button class="tab active" onclick="switchProfileTab('posts')">📝 Posts</button>
+        <button class="tab" onclick="switchProfileTab('communities')">🌐 Communities</button>
+        <button class="tab" onclick="switchProfileTab('badges')">🏅 Badges</button>
+        <button class="tab" onclick="switchProfileTab('portfolio')">🔗 Portfolio</button>
+      </div>
+      <div id="profile-tab-content"></div>
+      <div class="sep"></div>
+      <button class="btn ghost sm" onclick="logout()">Sign Out</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN: PARENT QUEUE
+============================================================ -->
+<div class="screen" id="screen-parent-queue">
+  <div class="page-wrap" style="max-width:720px;margin:0 auto;">
+    <button class="btn ghost sm" onclick="showScreen('feed')" style="margin-bottom:16px">← Back</button>
+    <div class="sectlab">⏳ Pending Approval Queue</div>
+    <p style="font-size:14px;color:var(--muted);font-weight:700;margin-bottom:20px">Review your child's creative posts before they go live. AI has already pre-screened these.</p>
+    <div id="parent-queue-list"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN: MOD LOG
+============================================================ -->
+<div class="screen" id="screen-mod">
+  <div class="page-wrap">
+    <div class="sectlab">🛡️ Moderation Dashboard</div>
+    <div class="tabs">
+      <button class="tab active" onclick="switchModTab('flags')">🚩 Flagged Posts</button>
+      <button class="tab" onclick="switchModTab('accounts')">👤 Accounts</button>
+      <button class="tab" onclick="switchModTab('proposals')">💡 Top Proposals</button>
+    </div>
+    <div id="mod-tab-content"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: NEW POST
+============================================================ -->
+<div class="modal-overlay" id="modal-post">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-post')">✕</button>
+    <h3>✍️ New Post</h3>
+    <p class="sub">Share your work with the community</p>
+    <div class="field">
+      <label>Community</label>
+      <select id="post-community"></select>
+    </div>
+    <div class="field">
+      <label>What's on your mind?</label>
+      <textarea id="post-text" placeholder="Share your creation, idea, or story..." oninput="resetAiPanel()"></textarea>
+    </div>
+    <div class="field">
+      <label>Attach Image (optional)</label>
+      <input type="file" id="post-image" accept="image/*" onchange="previewImage(this)" style="border:none;padding:0;" />
+      <img id="post-image-preview" style="display:none;width:100%;border-radius:12px;margin-top:8px;max-height:200px;object-fit:cover;" />
+    </div>
+    <div id="mentor-tip-toggle" style="display:none">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:800;font-size:13px;margin-bottom:12px">
+        <input type="checkbox" id="is-mentor-tip" /> Post as Mentor Tip (visible to younger grades)
+      </label>
+    </div>
+    <button class="btn blue" style="width:100%;margin-bottom:10px" onclick="runAiReview()">🤖 Run AI Review</button>
+    <div class="ai-panel" id="ai-review-panel"></div>
+    <div style="margin-top:12px;">
+      <button class="btn green" style="width:100%" id="submit-post-btn" disabled onclick="submitPost()">Submit Post →</button>
+    </div>
+    <p style="text-align:center;font-size:11px;color:var(--muted);font-weight:700;margin-top:8px;">AI reviews first · Parent approves creative posts · Community sees it after</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: SUGGEST COMMUNITY
+============================================================ -->
+<div class="modal-overlay" id="modal-suggest">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-suggest')">✕</button>
+    <h3>💡 Suggest a Community</h3>
+    <p class="sub">Get +10 to your Foundry Score if it gets created!</p>
+    <div class="field">
+      <label>Community Name</label>
+      <input type="text" id="suggest-name" placeholder="e.g. Astronomy & Space" />
+    </div>
+    <div class="field">
+      <label>Emoji Icon</label>
+      <input type="text" id="suggest-emoji" placeholder="🔭" maxlength="2" />
+    </div>
+    <div class="field">
+      <label>Description (why does this community matter?)</label>
+      <textarea id="suggest-desc" placeholder="Describe what kids will share and learn..." style="min-height:80px;"></textarea>
+    </div>
+    <button class="btn blue" style="width:100%" onclick="submitProposal()">Submit Proposal →</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: REPORT POST
+============================================================ -->
+<div class="modal-overlay" id="modal-report">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-report')">✕</button>
+    <h3>🚩 Report Post</h3>
+    <p class="sub">Help keep TYF Network safe. Reports are reviewed by AI and admins.</p>
+    <div class="field">
+      <label>Reason</label>
+      <select id="report-reason">
+        <option value="inappropriate">Inappropriate content</option>
+        <option value="bullying">Bullying or hurtful</option>
+        <option value="defamation">Defaming school/teacher/student</option>
+        <option value="spam">Spam or copied content</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <input type="hidden" id="report-post-id" />
+    <button class="btn red" style="width:100%" onclick="submitReport()">Submit Report</button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+let currentUser = null;
+let activeFeedTab = 'all';
+let activeCommFilter = 'all';
+let currentCommunityId = null;
+let activeProfileTab = 'posts';
+let activeModTab = 'flags';
+let pendingPostCommunity = null;
+let pendingPostMentor = false;
+
+// ============================================================
+// DATA LAYER
+// ============================================================
+function load(key, def) {
+  try { return JSON.parse(localStorage.getItem(key)) || def; } catch { return def; }
+}
+function save(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+const COMMUNITIES = [
+  {id:'literature',name:'Literature & Creativity',emoji:'📚',desc:'Stories, poems, essays — express yourself through words.',color:'#8B5CF6',members:['demo'],creative:true,parent:false},
+  {id:'photography',name:'Photography',emoji:'📷',desc:'Share your best shots. Every frame tells a story.',color:'#1E88E5',members:['demo'],creative:true,parent:false},
+  {id:'painting',name:'Painting & Arts',emoji:'🎨',desc:'Paintings, sketches, digital art — your canvas, your rules.',color:'#E53935',members:['demo'],creative:true,parent:false},
+  {id:'robotics',name:'Robotics',emoji:'🤖',desc:'Build bots, code circuits, engineer the future.',color:'#00897B',members:[],creative:false,parent:false},
+  {id:'coding',name:'Coding',emoji:'💻',desc:'Projects, scripts, apps — coders of all skill levels welcome.',color:'#1E88E5',members:[],creative:false,parent:false},
+  {id:'speaking',name:'Public Speaking',emoji:'🎤',desc:'Speeches, debates, presentations — find your voice.',color:'#F97316',members:[],creative:true,parent:false},
+  {id:'music',name:'Music & Performing Arts',emoji:'🎵',desc:'Songs, performances, compositions — let the music play.',color:'#E91E63',members:[],creative:true,parent:false},
+  {id:'science',name:'Science Experiments',emoji:'🧪',desc:'Experiments, discoveries, science fair projects.',color:'#43A047',members:[],creative:false,parent:false},
+  {id:'chess',name:'Chess & Strategy',emoji:'♟️',desc:'Games, puzzles, tournament results, strategy tips.',color:'#5D4037',members:[],creative:false,parent:false},
+  {id:'environment',name:'Environment & Nature',emoji:'🌱',desc:'Eco projects, nature photos, sustainability ideas.',color:'#2E7D32',members:[],creative:true,parent:false},
+  {id:'sports',name:'Sports & Fitness',emoji:'🏃',desc:'Game highlights, training tips, team spirit.',color:'#F97316',members:[],creative:false,parent:false},
+  {id:'filmmaking',name:'Filmmaking & Animation',emoji:'🎬',desc:'Short films, animations, storyboards — lights, camera, action!',color:'#7B1FA2',members:[],creative:true,parent:false},
+  {id:'city-bulletin',name:'City Bulletin Board',emoji:'🏙️',desc:'Local events, city quests, neighborhood activities.',color:'#0288D1',members:[],creative:false,parent:false},
+  {id:'parents-corner',name:"Parents' Corner",emoji:'👨‍👩‍👧',desc:'School updates, tips, community discussions for parents.',color:'#5E35B1',members:[],creative:false,parent:true},
+];
+
+const QUESTS = [
+  {id:'q1',title:'Neighborhood Lens',desc:'Photograph something that represents your neighborhood — a street, a face, a texture.',community:'photography',deadline:'This Sunday',reward:50,active:true},
+  {id:'q2',title:'Short Story Sprint',desc:'Write a 200-word story that starts with: "The door opened and everything changed."',community:'literature',deadline:'Next Friday',reward:40,active:true},
+  {id:'q3',title:'Mini Robot Design',desc:'Draw or build a mini robot that solves one everyday problem. Document with photos.',community:'robotics',deadline:'In 2 weeks',reward:60,active:false},
+  {id:'q4',title:'Green Corner',desc:'Find an environmental problem near your home and propose a kid-sized solution.',community:'environment',deadline:'This Saturday',reward:45,active:true},
+];
+
+const ADULT_KEYWORDS = ['sex','nude','naked','porn','violence','kill','hate','abuse','drug','alcohol','curse','damn','hell','stupid','idiot'];
+const DEFAMATION_TRIGGERS = ['worst teacher','bad school','hate my school','terrible school','worst principal','bully teacher','worst class'];
+const NEGATIVE_WORDS = ['hate','worst','terrible','bad','awful','stupid','idiot','trash','garbage','useless','fake'];
+
+function getAccounts() { return load('yfs_accounts', []); }
+function saveAccounts(a) { save('yfs_accounts', a); }
+function getPosts() { return load('yfs_posts', getSeedPosts()); }
+function savePosts(p) { save('yfs_posts', p); }
+function getReactions() { return load('yfs_reactions', []); }
+function saveReactions(r) { save('yfs_reactions', r); }
+function getFlags() { return load('yfs_flags', []); }
+function saveFlags(f) { save('yfs_flags', f); }
+function getProposals() { return load('yfs_proposals', []); }
+function saveProposals(p) { save('yfs_proposals', p); }
+function getProposalVotes() { return load('yfs_pvotes', []); }
+function saveProposalVotes(v) { save('yfs_pvotes', v); }
+function getUserCommunities(uid) { return load('yfs_joined_'+uid, []); }
+function saveUserCommunities(uid, c) { save('yfs_joined_'+uid, c); }
+
+function getSeedPosts() {
+  return [
+    {id:'seed1',authorId:'seed-maya',authorName:'Maya S.',communityId:'literature',text:'I wrote my first poem about the monsoon! "The rain taps on my window like a friend who knows I need a hug." — still editing but I love where it\'s going 🌧️',imageB64:null,timestamp:Date.now()-3600000*2,aiStatus:'approved',parentApproved:true,reactions:{loveIt:8,likeIt:5,canDoBetter:1,workToBetter:0,motivated:6,inspire:4,keepGoing:3},reports:[],isMentorTip:false},
+    {id:'seed2',authorId:'seed-arjun',authorName:'Arjun K.',communityId:'coding',text:'Finished my first Python project — a quiz game! It asks 10 questions about Indian geography and tracks your score. Built it in 3 evenings. Code on GitHub 🐍💻',imageB64:null,timestamp:Date.now()-3600000*5,aiStatus:'approved',parentApproved:true,reactions:{loveIt:12,likeIt:9,canDoBetter:2,workToBetter:0,motivated:10,inspire:7,keepGoing:5},reports:[],isMentorTip:false},
+    {id:'seed3',authorId:'seed-priya',authorName:'Priya M.',communityId:'photography',text:'Submitted this for the Neighborhood Lens quest 📸 This is the old banyan tree at the end of our street — it\'s been there longer than my grandparents!',imageB64:null,timestamp:Date.now()-3600000*8,aiStatus:'approved',parentApproved:true,reactions:{loveIt:15,likeIt:7,canDoBetter:0,workToBetter:0,motivated:4,inspire:11,keepGoing:6},reports:[],isMentorTip:false},
+    {id:'seed4',authorId:'seed-rishi',authorName:'Rishi T.',communityId:'robotics',text:'Our team built a line-following robot using Arduino and two IR sensors. Took 4 weekends! It can now navigate a figure-8 path without falling off. 🤖⚡',imageB64:null,timestamp:Date.now()-3600000*12,aiStatus:'approved',parentApproved:true,reactions:{loveIt:18,likeIt:11,canDoBetter:1,workToBetter:0,motivated:14,inspire:9,keepGoing:8},reports:[],isMentorTip:false},
+    {id:'seed5',authorId:'seed-ananya',authorName:'Ananya R.',communityId:'painting',text:'Tried watercolor for the first time this week! I know the edges are messy but I actually love how it blurs. Painting the view from my terrace 🎨🌇',imageB64:null,timestamp:Date.now()-3600000*20,aiStatus:'approved',parentApproved:true,reactions:{loveIt:10,likeIt:8,canDoBetter:3,workToBetter:1,motivated:5,inspire:6,keepGoing:7},reports:[],isMentorTip:false},
+    {id:'seed6',authorId:'seed-mentor',authorName:'Dev P.',communityId:'coding',text:'💡 Mentor Tip: When you\'re stuck on a bug, don\'t stare at the code — explain it out loud like you\'re teaching a 5-year-old. You\'ll find the bug 80% of the time. This is called Rubber Duck Debugging! 🦆',imageB64:null,timestamp:Date.now()-3600000*30,aiStatus:'approved',parentApproved:true,reactions:{loveIt:22,likeIt:15,canDoBetter:0,workToBetter:0,motivated:18,inspire:13,keepGoing:9},reports:[],isMentorTip:true},
+  ];
+}
+
+// ============================================================
+// AUTH
+// ============================================================
+function switchLoginTab(tab) {
+  ['student','parent','admin','register'].forEach(t => {
+    const el = document.getElementById('login-'+t);
+    if (el) el.style.display = 'none';
+  });
+  document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
+  const show = document.getElementById('login-'+tab);
+  if (show) show.style.display = 'block';
+  const tabs = document.querySelectorAll('.login-tab');
+  const map = {student:0,parent:1,admin:2,register:null};
+  if (map[tab] !== null && tabs[map[tab]]) tabs[map[tab]].classList.add('active');
+}
+
+function studentLogin() {
+  const schoolId = document.getElementById('s-schoolid').value.trim();
+  const name = document.getElementById('s-name').value.trim();
+  const grade = document.getElementById('s-grade').value;
+  if (!schoolId || !name || !grade) { toast('Please fill all fields'); return; }
+  const accounts = getAccounts();
+  let account = accounts.find(a => a.schoolId === schoolId && a.role === 'student');
+  if (!account) {
+    account = {id:'u_'+Date.now(),name,grade:parseInt(grade),schoolId,role:'student',status:'active',parentId:null,joined:Date.now(),foundryScore:0,isMentor:parseInt(grade)>=9,badges:[],joinedCommunities:['coding','city-bulletin']};
+    accounts.push(account);
+    saveAccounts(accounts);
+  }
+  if (account.status === 'suspended') { toast('⚠️ Your account is suspended. Contact admin.'); return; }
+  currentUser = account;
+  enterApp();
+}
+
+function parentLogin() {
+  const name = document.getElementById('p-name').value.trim();
+  const email = document.getElementById('p-email').value.trim();
+  if (!name || !email) { toast('Please fill all fields'); return; }
+  const accounts = getAccounts();
+  let account = accounts.find(a => a.email === email && a.role === 'parent');
+  if (!account) {
+    account = {id:'p_'+Date.now(),name,email,role:'parent',status:'active',joined:Date.now(),foundryScore:0,badges:[],children:[]};
+    accounts.push(account);
+    saveAccounts(accounts);
+  }
+  currentUser = account;
+  enterApp();
+}
+
+function adminLogin() {
+  const key = document.getElementById('a-key').value;
+  if (key !== 'tyfadmin2026') { toast('Invalid admin key'); return; }
+  currentUser = {id:'admin',name:'Admin',role:'admin',status:'active',grade:null,foundryScore:999,isMentor:false,badges:['admin'],joinedCommunities:[]};
+  enterApp();
+}
+
+function requestAccount() {
+  const name = document.getElementById('r-name').value.trim();
+  const schoolId = document.getElementById('r-schoolid').value.trim();
+  const grade = document.getElementById('r-grade').value;
+  const pemail = document.getElementById('r-pemail').value.trim();
+  if (!name || !schoolId || !grade || !pemail) { toast('Please fill all fields'); return; }
+  const accounts = getAccounts();
+  if (accounts.find(a => a.schoolId === schoolId)) { toast('Account already exists with this School ID'); return; }
+  const pending = {id:'u_'+Date.now(),name,grade:parseInt(grade),schoolId,role:'student',status:'pending',parentEmail:pemail,joined:Date.now(),foundryScore:0,badges:[],joinedCommunities:[]};
+  accounts.push(pending);
+  saveAccounts(accounts);
+  toast('✅ Request sent! Your parent will receive an approval notification.');
+  switchLoginTab('student');
+}
+
+function logout() {
+  currentUser = null;
+  document.getElementById('main-topbar').style.display = 'none';
+  showScreen('login');
+}
+
+function enterApp() {
+  document.getElementById('main-topbar').style.display = 'block';
+  const av = document.getElementById('topbar-av-circle');
+  const avName = document.getElementById('topbar-av-name');
+  const chip = document.getElementById('topbar-avatar');
+  av.textContent = currentUser.name.charAt(0).toUpperCase();
+  av.style.background = avatarColor(currentUser.name);
+  avName.textContent = currentUser.name.split(' ')[0];
+  chip.style.display = 'flex';
+  if (currentUser.role === 'admin') { showScreen('mod'); renderModTab(); }
+  else if (currentUser.role === 'parent') { showScreen('feed'); renderFeed(); renderParentSidebar(); }
+  else { showScreen('feed'); renderFeed(); }
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const sc = document.getElementById('screen-'+id);
+  if (sc) sc.classList.add('active');
+  document.querySelectorAll('.topbar-nav button[id^="nav-"]').forEach(b => b.classList.remove('active'));
+  const nb = document.getElementById('nav-'+id);
+  if (nb) nb.classList.add('active');
+  window.scrollTo(0,0);
+  if (id==='feed') renderFeed();
+  else if (id==='communities') renderCommunities();
+  else if (id==='quests') renderQuests();
+  else if (id==='profile') renderProfile();
+  else if (id==='proposals') renderProposals();
+  else if (id==='parent-queue') renderParentQueue();
+  else if (id==='mod') renderModTab();
+}
+
+// ============================================================
+// FEED
+// ============================================================
+function switchFeedTab(tab) {
+  activeFeedTab = tab;
+  document.querySelectorAll('#screen-feed .tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#screen-feed .tab')[['all','mine','trending','city'].indexOf(tab)].classList.add('active');
+  renderPosts();
+}
+
+function renderFeed() {
+  renderMySidebarCommunities();
+  renderSuggestedCommunities();
+  renderScoreDisplay();
+  renderFoundryFellow();
+  renderPosts();
+  if (currentUser && currentUser.isMentor) document.getElementById('mentor-sidebar').style.display = 'block';
+  renderParentSidebar();
+}
+
+function renderParentSidebar() {
+  if (!currentUser || currentUser.role !== 'parent') return;
+  const posts = getPosts();
+  const pending = posts.filter(p => !p.parentApproved && p.aiStatus === 'approved');
+  const sidebar = document.getElementById('pending-approval-sidebar');
+  if (pending.length > 0) sidebar.style.display = 'block';
+  else sidebar.style.display = 'none';
+}
+
+function renderPosts() {
+  const container = document.getElementById('feed-posts');
+  let posts = getPosts().filter(p => p.parentApproved && p.aiStatus === 'approved');
+  if (activeFeedTab === 'mine' && currentUser) {
+    const joined = getUserCommunities(currentUser.id);
+    posts = posts.filter(p => joined.includes(p.communityId));
+  } else if (activeFeedTab === 'trending') {
+    posts = posts.sort((a,b) => totalReactions(b) - totalReactions(a));
+  } else if (activeFeedTab === 'city') {
+    posts = posts.filter(p => p.communityId === 'city-bulletin');
+  } else {
+    posts = posts.sort((a,b) => b.timestamp - a.timestamp);
+  }
+  if (posts.length === 0) {
+    container.innerHTML = `<div class="empty"><span class="empty-icon">🌱</span><p>No posts yet. Be the first to share something!</p></div>`;
+    return;
+  }
+  container.innerHTML = posts.map(p => renderPostCard(p)).join('');
+}
+
+function renderPostCard(post) {
+  const comm = COMMUNITIES.find(c => c.id === post.communityId) || {name:'Community',emoji:'🌐',color:'#1E88E5'};
+  const mentorTag = post.isMentorTip ? `<span class="mentor-tag">🎓 Mentor Tip</span>` : '';
+  const img = post.imageB64 ? `<img src="${post.imageB64}" class="post-image" alt="post image"/>` : '';
+  const rxns = REACTIONS.map(r =>
+    `<button class="rxn-btn ${hasReacted(post.id,r.key)?'reacted':''}" onclick="react('${post.id}','${r.key}')">
+      ${r.emoji} <span class="rxn-count">${post.reactions[r.key]||0}</span>
+    </button>`
+  ).join('');
+  const reportBtn = currentUser && currentUser.id !== post.authorId
+    ? `<button class="rxn-btn" onclick="openReportModal('${post.id}')" style="margin-left:auto;color:var(--red)">🚩 Report</button>` : '';
+  return `<div class="post-card" id="post-${post.id}">
+    <div class="post-header">
+      <div class="post-av" style="background:${avatarColor(post.authorName)}">${post.authorName.charAt(0)}</div>
+      <div class="post-meta">
+        <div class="post-author">${post.authorName} ${mentorTag}</div>
+        <div class="post-sub">${timeAgo(post.timestamp)} · <span style="display:inline-flex;align-items:center;gap:3px;">${comm.emoji} ${comm.name}</span></div>
+      </div>
+    </div>
+    <div class="post-body">${escHtml(post.text)}</div>
+    ${img}
+    <div class="reactions">${rxns}${reportBtn}</div>
+  </div>`;
+}
+
+const REACTIONS = [
+  {key:'loveIt',emoji:'❤️',label:'Love It'},
+  {key:'likeIt',emoji:'👍',label:'Like It'},
+  {key:'canDoBetter',emoji:'💪',label:'Can Do Better'},
+  {key:'workToBetter',emoji:'🔧',label:'Work To Do Better'},
+  {key:'motivated',emoji:'🔥',label:'I\'m Motivated'},
+  {key:'inspire',emoji:'✨',label:'You Inspire Me'},
+  {key:'keepGoing',emoji:'🌟',label:'Keep Going'},
+];
+
+function totalReactions(post) {
+  return Object.values(post.reactions).reduce((a,b) => a+(b||0), 0);
+}
+
+function hasReacted(postId, key) {
+  if (!currentUser) return false;
+  return getReactions().some(r => r.postId === postId && r.userId === currentUser.id && r.type === key);
+}
+
+function react(postId, key) {
+  if (!currentUser) { toast('Please log in to react'); return; }
+  const rxns = getReactions();
+  const existing = rxns.find(r => r.postId === postId && r.userId === currentUser.id && r.type === key);
+  const posts = getPosts();
+  const post = posts.find(p => p.id === postId);
+  if (!post) return;
+  if (existing) {
+    const idx = rxns.indexOf(existing);
+    rxns.splice(idx, 1);
+    post.reactions[key] = Math.max(0, (post.reactions[key]||0) - 1);
+  } else {
+    rxns.push({postId, userId: currentUser.id, type: key});
+    post.reactions[key] = (post.reactions[key]||0) + 1;
+    // Boost author's foundry score
+    const accounts = getAccounts();
+    const author = accounts.find(a => a.id === post.authorId);
+    if (author && ['inspire','loveIt','motivated'].includes(key)) {
+      author.foundryScore = (author.foundryScore||0) + 2;
+      saveAccounts(accounts);
+    }
+    // Boost current user score
+    const cu = accounts.find(a => a.id === currentUser.id);
+    if (cu) { cu.foundryScore = (cu.foundryScore||0) + 1; saveAccounts(accounts); }
+  }
+  saveReactions(rxns);
+  savePosts(posts);
+  renderPosts();
+  renderScoreDisplay();
+}
+
+function renderMySidebarCommunities() {
+  if (!currentUser) return;
+  const joined = getUserCommunities(currentUser.id);
+  const list = document.getElementById('my-communities-list');
+  if (!joined.length) { list.innerHTML = `<p style="font-size:12px;color:var(--muted);font-weight:700">Not in any communities yet.</p>`; return; }
+  list.innerHTML = joined.slice(0,5).map(cid => {
+    const c = COMMUNITIES.find(x => x.id === cid);
+    if (!c) return '';
+    return `<div onclick="openCommunity('${c.id}')" style="display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:12px;cursor:pointer;transition:.15s;" onmouseover="this.style.background='var(--soft)'" onmouseout="this.style.background='none'">
+      <span style="font-size:1.3rem">${c.emoji}</span>
+      <span style="font-weight:800;font-size:13px">${c.name}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderSuggestedCommunities() {
+  if (!currentUser) return;
+  const joined = getUserCommunities(currentUser.id);
+  const suggestions = COMMUNITIES.filter(c => !joined.includes(c.id) && !c.parent).slice(0,3);
+  const el = document.getElementById('suggested-communities');
+  el.innerHTML = suggestions.map(c => `
+    <div style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:12px;border:2px solid var(--line);margin-bottom:8px;cursor:pointer" onclick="joinCommunity('${c.id}')">
+      <span style="font-size:1.4rem">${c.emoji}</span>
+      <div style="flex:1"><div style="font-weight:900;font-size:13px">${c.name}</div></div>
+      <button class="btn green sm" style="padding:4px 10px;font-size:11px">Join</button>
+    </div>`).join('');
+}
+
+function renderScoreDisplay() {
+  if (!currentUser) return;
+  const accounts = getAccounts();
+  const me = accounts.find(a => a.id === currentUser.id) || currentUser;
+  const score = me.foundryScore || 0;
+  document.getElementById('score-display').innerHTML = `
+    <div class="score-ring">
+      <div>
+        <div class="score-val">${score}</div>
+        <div class="score-label">Foundry Points</div>
+      </div>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:var(--muted);font-weight:700">${scoreLabel(score)}</div>`;
+}
+
+function scoreLabel(s) {
+  if (s < 20) return '🌱 Seedling — keep posting!';
+  if (s < 60) return '🌿 Grower — you\'re finding your voice';
+  if (s < 120) return '🌳 Builder — the community knows you';
+  if (s < 200) return '⭐ Maker — real impact!';
+  return '🏆 Foundry Fellow — you inspire others!';
+}
+
+function renderFoundryFellow() {
+  const posts = getPosts().filter(p => p.parentApproved && p.aiStatus === 'approved');
+  if (!posts.length) return;
+  const top = posts.reduce((best, p) => totalReactions(p) > totalReactions(best) ? p : best, posts[0]);
+  const el = document.getElementById('foundry-fellow-banner');
+  el.style.display = 'block';
+  el.innerHTML = `<div class="fellow-banner">
+    <div class="fellow-icon">🏅</div>
+    <div class="fellow-text">
+      <h4>Foundry Fellow This Month</h4>
+      <p>${top.authorName} · ${totalReactions(top)} reactions</p>
+    </div>
+  </div>`;
+}
+
+// ============================================================
+// COMMUNITIES
+// ============================================================
+function renderCommunities() {
+  const grid = document.getElementById('all-communities-grid');
+  const filter = document.getElementById('comm-filter-list');
+  const joined = currentUser ? getUserCommunities(currentUser.id) : [];
+  const cats = ['all','creative','parent','stem'];
+  filter.innerHTML = cats.map(c => `<button onclick="filterComms('${c}')" class="btn ${activeCommFilter===c?'blue':'ghost'} sm">${c.charAt(0).toUpperCase()+c.slice(1)}</button>`).join('');
+  let comms = COMMUNITIES;
+  if (activeCommFilter === 'creative') comms = COMMUNITIES.filter(c => c.creative);
+  else if (activeCommFilter === 'parent') comms = COMMUNITIES.filter(c => c.parent);
+  else if (activeCommFilter === 'stem') comms = COMMUNITIES.filter(c => ['robotics','coding','science','chess'].includes(c.id));
+  grid.innerHTML = comms.map(c => {
+    const isJoined = joined.includes(c.id);
+    return `<div class="comm-card" onclick="openCommunity('${c.id}')">
+      <span class="comm-emoji">${c.emoji}</span>
+      <div class="comm-name" style="color:${c.color}">${c.name}</div>
+      <div class="comm-desc">${c.desc}</div>
+      <div class="comm-footer">
+        <span class="comm-members">👥 ${c.members.length + (isJoined?1:0)} members</span>
+        <span class="badge ${isJoined?'green':'muted'}">${isJoined?'✓ Joined':'+ Join'}</span>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('proposal-count').textContent = getProposals().length;
+}
+
+function filterComms(cat) {
+  activeCommFilter = cat;
+  renderCommunities();
+}
+
+function openCommunity(id) {
+  currentCommunityId = id;
+  const comm = COMMUNITIES.find(c => c.id === id);
+  if (!comm) return;
+  const joined = currentUser ? getUserCommunities(currentUser.id) : [];
+  const isJoined = joined.includes(id);
+  const header = document.getElementById('comm-detail-header');
+  header.style.background = `linear-gradient(135deg,${comm.color},${comm.color}cc)`;
+  document.getElementById('comm-detail-emoji').textContent = comm.emoji;
+  document.getElementById('comm-detail-name').textContent = comm.name;
+  document.getElementById('comm-detail-desc').textContent = comm.desc;
+  document.getElementById('comm-detail-members').textContent = `👥 ${comm.members.length + (isJoined?1:0)} members`;
+  const joinBtn = document.getElementById('comm-join-btn');
+  joinBtn.textContent = isJoined ? '✓ Joined' : '+ Join Community';
+  const parentBadge = document.getElementById('comm-parent-badge');
+  if (comm.creative && (!currentUser || currentUser.role === 'student')) {
+    parentBadge.style.display = 'inline-flex';
+    parentBadge.textContent = '⏳ Posts need parent approval';
+  } else parentBadge.style.display = 'none';
+  renderCommDetailContent(comm, isJoined);
+  showScreen('community-detail');
+}
+
+function renderCommDetailContent(comm, isJoined) {
+  const posts = getPosts().filter(p => p.communityId === comm.id && p.parentApproved && p.aiStatus === 'approved');
+  const sidebar = document.getElementById('comm-detail-sidebar');
+  const postsEl = document.getElementById('comm-detail-posts');
+  sidebar.innerHTML = `
+    <div class="sidebar-card">
+      <h4>About</h4>
+      <p style="font-size:13px;color:var(--muted);font-weight:700;line-height:1.6">${comm.desc}</p>
+      ${comm.creative ? '<div class="badge orange" style="margin-top:10px">✏️ Creative Community — parent approval required</div>' : ''}
+      ${comm.parent ? '<div class="badge purple" style="margin-top:10px">👨‍👩‍👧 Parents Only — comments & blog posts allowed</div>' : ''}
+    </div>
+    ${isJoined ? `<button class="btn green" style="width:100%" onclick="openPostModal('${comm.id}')">+ Post to ${comm.name}</button>` : ''}
+    ${comm.parent ? renderParentChatSidebar() : ''}
+  `;
+  if (posts.length === 0) {
+    postsEl.innerHTML = `<div class="empty"><span class="empty-icon">${comm.emoji}</span><p>No posts yet in ${comm.name}. Be the first!</p></div>`;
+  } else {
+    postsEl.innerHTML = posts.sort((a,b) => b.timestamp - a.timestamp).map(p => renderPostCard(p)).join('');
+  }
+}
+
+function renderParentChatSidebar() {
+  if (!currentUser || currentUser.role !== 'parent') return '';
+  const chats = load('yfs_chat_parents', [
+    {author:'Sunita P.',text:'Has anyone tried the Math Quest app? My daughter loves it!',time:Date.now()-3600000*2,mine:false},
+    {author:'Raj K.',text:'Yes! It helped my son a lot. The timed drills are great.',time:Date.now()-3600000*1,mine:false},
+  ]);
+  const bubbles = chats.slice(-5).map(c =>
+    `<div class="chat-bubble ${c.mine?'mine':''}">
+      ${!c.mine?`<div class="chat-author">${c.author}</div>`:''}
+      <div class="chat-text">${escHtml(c.text)}</div>
+    </div>`).join('');
+  return `<div class="sidebar-card" style="margin-top:12px">
+    <h4>💬 Parent Chat</h4>
+    <div id="parent-chat-area">${bubbles}</div>
+    <div class="chat-input-row">
+      <input type="text" id="parent-chat-input" placeholder="Type a message..." />
+      <button class="btn blue sm" onclick="sendParentChat()">Send</button>
+    </div>
+  </div>`;
+}
+
+function sendParentChat() {
+  const input = document.getElementById('parent-chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const chats = load('yfs_chat_parents', []);
+  chats.push({author:currentUser.name, text, time:Date.now(), mine:true});
+  save('yfs_chat_parents', chats);
+  input.value = '';
+  openCommunity(currentCommunityId);
+}
+
+function toggleJoinCommunity() {
+  if (!currentUser) { toast('Please log in first'); return; }
+  joinCommunity(currentCommunityId);
+  openCommunity(currentCommunityId);
+}
+
+function joinCommunity(id) {
+  if (!currentUser) return;
+  const joined = getUserCommunities(currentUser.id);
+  if (joined.includes(id)) {
+    const idx = joined.indexOf(id);
+    joined.splice(idx, 1);
+    toast('Left community');
+  } else {
+    joined.push(id);
+    // Boost score
+    const accounts = getAccounts();
+    const me = accounts.find(a => a.id === currentUser.id);
+    if (me) { me.foundryScore = (me.foundryScore||0) + 5; saveAccounts(accounts); }
+    toast('Joined! +5 Foundry Points 🎉');
+  }
+  saveUserCommunities(currentUser.id, joined);
+  renderFeed();
+}
+
+// ============================================================
+// POST CREATION
+// ============================================================
+function openPostModal(communityId, isMentor) {
+  pendingPostCommunity = communityId || null;
+  pendingPostMentor = !!isMentor;
+  const sel = document.getElementById('post-community');
+  sel.innerHTML = COMMUNITIES.filter(c => !c.parent || currentUser?.role === 'parent')
+    .map(c => `<option value="${c.id}" ${communityId===c.id?'selected':''}>${c.emoji} ${c.name}${c.creative?' (parent approval)':''}</option>`).join('');
+  document.getElementById('post-text').value = '';
+  document.getElementById('post-image').value = '';
+  document.getElementById('post-image-preview').style.display = 'none';
+  document.getElementById('submit-post-btn').disabled = true;
+  document.getElementById('ai-review-panel').style.display = 'none';
+  const mentorToggle = document.getElementById('mentor-tip-toggle');
+  if (currentUser && currentUser.isMentor) mentorToggle.style.display = 'block';
+  openModal('modal-post');
+}
+
+function previewImage(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const preview = document.getElementById('post-image-preview');
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function resetAiPanel() {
+  document.getElementById('ai-review-panel').style.display = 'none';
+  document.getElementById('submit-post-btn').disabled = true;
+}
+
+function aiReview(text) {
+  const lower = text.toLowerCase();
+  for (const word of ADULT_KEYWORDS) {
+    if (lower.includes(word)) return {pass:false,severity:'block',reason:`Content contains inappropriate language ("${word}"). Please revise your post.`};
+  }
+  for (const phrase of DEFAMATION_TRIGGERS) {
+    if (lower.includes(phrase)) return {pass:false,severity:'block',reason:'Content appears to defame a school or teacher. TYF Network does not allow this. Please revise.'};
+  }
+  let negCount = NEGATIVE_WORDS.filter(w => lower.includes(w)).length;
+  if (negCount >= 2) return {pass:false,severity:'warn',reason:'Your post has multiple negative words that could feel hurtful. Try reframing it constructively. You can still submit after rewording.'};
+  const words = text.split(' ');
+  if (words.length > 40 && !lower.match(/\b(i|my|me|we|our|us)\b/)) {
+    return {pass:false,severity:'warn',reason:'This looks like it might be copied text (no personal voice detected). Add your own perspective to make it genuinely yours!'};
+  }
+  if (text.length < 10) return {pass:false,severity:'warn',reason:'Post seems too short. Share more about your work or idea!'};
+  return {pass:true,severity:'ok',reason:'Content looks great! Your post follows community guidelines.'};
+}
+
+function runAiReview() {
+  const text = document.getElementById('post-text').value.trim();
+  if (!text) { toast('Please write something first'); return; }
+  const result = aiReview(text);
+  const panel = document.getElementById('ai-review-panel');
+  panel.className = 'ai-panel ' + result.severity;
+  panel.style.display = 'block';
+  const icons = {ok:'✅',warn:'⚠️',block:'❌'};
+  const titles = {ok:'AI Review: Approved',warn:'AI Review: Needs a Revision',block:'AI Review: Cannot Be Posted'};
+  panel.innerHTML = `<div class="ai-panel-title">${icons[result.severity]} ${titles[result.severity]}</div><div class="ai-panel-msg">${result.reason}</div>`;
+  document.getElementById('submit-post-btn').disabled = !result.pass;
+}
+
+function submitPost() {
+  if (!currentUser) return;
+  const text = document.getElementById('post-text').value.trim();
+  const communityId = document.getElementById('post-community').value;
+  const isMentorTip = document.getElementById('is-mentor-tip')?.checked || false;
+  const preview = document.getElementById('post-image-preview');
+  const imageB64 = preview.style.display !== 'none' ? preview.src : null;
+  const comm = COMMUNITIES.find(c => c.id === communityId);
+  const needsParentApproval = comm && comm.creative && currentUser.role === 'student';
+  const post = {
+    id:'p_'+Date.now(),
+    authorId:currentUser.id,
+    authorName:currentUser.name,
+    communityId,
+    text,
+    imageB64,
+    timestamp:Date.now(),
+    aiStatus:'approved',
+    parentApproved:!needsParentApproval,
+    reactions:{loveIt:0,likeIt:0,canDoBetter:0,workToBetter:0,motivated:0,inspire:0,keepGoing:0},
+    reports:[],
+    isMentorTip,
+  };
+  const posts = getPosts();
+  posts.unshift(post);
+  savePosts(posts);
+  // Boost score
+  const accounts = getAccounts();
+  const me = accounts.find(a => a.id === currentUser.id);
+  if (me) { me.foundryScore = (me.foundryScore||0) + 10; saveAccounts(accounts); }
+  closeModal('modal-post');
+  if (needsParentApproval) toast('✅ Post submitted! Waiting for parent approval before it goes live.');
+  else toast('✅ Post published! +10 Foundry Points 🎉');
+  renderFeed();
+  renderParentSidebar();
+}
+
+// ============================================================
+// PARENT APPROVAL QUEUE
+// ============================================================
+function renderParentQueue() {
+  const posts = getPosts();
+  const pending = posts.filter(p => !p.parentApproved && p.aiStatus === 'approved');
+  const el = document.getElementById('parent-queue-list');
+  if (pending.length === 0) {
+    el.innerHTML = `<div class="empty"><span class="empty-icon">✅</span><p>No posts pending approval. All clear!</p></div>`;
+    return;
+  }
+  el.innerHTML = pending.map(p => {
+    const comm = COMMUNITIES.find(c => c.id === p.communityId);
+    return `<div class="pending-item">
+      <div class="pi-header">
+        <div class="post-av" style="background:${avatarColor(p.authorName)};width:36px;height:36px;font-size:16px">${p.authorName.charAt(0)}</div>
+        <div>
+          <div style="font-weight:900;font-size:13px">${p.authorName}</div>
+          <div style="font-size:12px;color:var(--muted);font-weight:700">${comm?comm.emoji+' '+comm.name:p.communityId} · ${timeAgo(p.timestamp)}</div>
+        </div>
+        <span class="badge yellow" style="margin-left:auto">⏳ Pending</span>
+      </div>
+      <div class="pi-text">${escHtml(p.text)}</div>
+      <div class="pi-actions">
+        <button class="btn green sm" onclick="approvePost('${p.id}')">✅ Approve</button>
+        <button class="btn red sm" onclick="rejectPost('${p.id}')">❌ Reject</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function approvePost(id) {
+  const posts = getPosts();
+  const p = posts.find(x => x.id === id);
+  if (p) { p.parentApproved = true; savePosts(posts); }
+  toast('✅ Post approved and published!');
+  renderParentQueue();
+  renderParentSidebar();
+}
+
+function rejectPost(id) {
+  const posts = getPosts().filter(p => p.id !== id);
+  savePosts(posts);
+  toast('Post rejected and removed.');
+  renderParentQueue();
+  renderParentSidebar();
+}
+
+// ============================================================
+// PROPOSALS
+// ============================================================
+function openSuggestModal() { openModal('modal-suggest'); }
+
+function submitProposal() {
+  if (!currentUser) { toast('Please log in'); return; }
+  const name = document.getElementById('suggest-name').value.trim();
+  const emoji = document.getElementById('suggest-emoji').value.trim() || '💡';
+  const desc = document.getElementById('suggest-desc').value.trim();
+  if (!name || !desc) { toast('Please fill all fields'); return; }
+  const props = getProposals();
+  props.push({id:'prop_'+Date.now(), name, emoji, desc, proposerId:currentUser.id, proposerName:currentUser.name, score:1, created:Date.now()});
+  saveProposals(props);
+  // Boost score
+  const accounts = getAccounts();
+  const me = accounts.find(a => a.id === currentUser.id);
+  if (me) { me.foundryScore = (me.foundryScore||0) + 5; saveAccounts(accounts); }
+  closeModal('modal-suggest');
+  toast('✅ Proposal submitted! +5 Foundry Points');
+  showScreen('proposals');
+}
+
+function voteProposal(id, dir) {
+  if (!currentUser) { toast('Please log in'); return; }
+  const votes = getProposalVotes();
+  const existing = votes.find(v => v.propId === id && v.userId === currentUser.id);
+  if (existing) { toast('You already voted on this proposal'); return; }
+  votes.push({propId:id, userId:currentUser.id, dir});
+  saveProposalVotes(votes);
+  const props = getProposals();
+  const p = props.find(x => x.id === id);
+  if (p) { p.score = (p.score||0) + dir; saveProposals(props); }
+  renderProposals();
+  toast(dir > 0 ? '👍 Upvoted!' : '👎 Downvoted');
+}
+
+function renderProposals() {
+  const props = getProposals().sort((a,b) => (b.score||0)-(a.score||0));
+  const el = document.getElementById('proposals-list');
+  if (!props.length) {
+    el.innerHTML = `<div class="empty"><span class="empty-icon">💡</span><p>No proposals yet. Be the first to suggest a community!</p></div>`;
+    return;
+  }
+  el.innerHTML = props.map(p => `
+    <div class="proposal-card">
+      <div class="prop-votes">
+        <button class="prop-vote-btn up" onclick="voteProposal('${p.id}',1)">▲</button>
+        <div class="prop-score" style="color:${(p.score||0)>0?'var(--green)':(p.score||0)<0?'var(--red)':'var(--muted)'}">${p.score||0}</div>
+        <button class="prop-vote-btn down" onclick="voteProposal('${p.id}',-1)">▼</button>
+      </div>
+      <div class="prop-info">
+        <div class="prop-name">${p.emoji} ${p.name}</div>
+        <div class="prop-desc">${p.desc}</div>
+        <div style="margin-top:6px;font-size:11px;color:var(--muted);font-weight:700">Proposed by ${p.proposerName} · ${timeAgo(p.created)}</div>
+      </div>
+    </div>`).join('');
+
+  const top3Block = document.getElementById('top-proposals-admin');
+  const top3List = document.getElementById('top3-list');
+  if (currentUser && currentUser.role === 'admin' && props.filter(p => (p.score||0) > 0).length >= 1) {
+    top3Block.style.display = 'block';
+    const top3 = props.filter(p => (p.score||0) > 0).slice(0,3);
+    top3List.innerHTML = top3.map(p => `
+      <div class="proposal-card">
+        <div style="font-size:2rem;margin-right:4px">${p.emoji}</div>
+        <div class="prop-info">
+          <div class="prop-name">${p.name} <span class="badge green">+${p.score} votes</span></div>
+          <div class="prop-desc">${p.desc}</div>
+        </div>
+        <button class="btn green sm" onclick="createCommunityFromProposal('${p.id}')">✅ Create</button>
+      </div>`).join('');
+  }
+}
+
+function createCommunityFromProposal(id) {
+  const props = getProposals();
+  const p = props.find(x => x.id === id);
+  if (!p) return;
+  toast(`🎉 Community "${p.name}" created! The proposer earns a Founder badge.`);
+  // In a real app, would add to COMMUNITIES and give founder badge
+  props.splice(props.indexOf(p), 1);
+  saveProposals(props);
+  renderProposals();
+}
+
+// ============================================================
+// QUESTS
+// ============================================================
+function renderQuests() {
+  const el = document.getElementById('quests-list');
+  el.innerHTML = QUESTS.map(q => {
+    const comm = COMMUNITIES.find(c => c.id === q.community);
+    return `<div class="quest-card" style="margin-bottom:14px;">
+      <div class="quest-title">${q.title} ${q.active ? '<span class="badge green" style="background:rgba(255,255,255,.2);color:#fff;font-size:11px">Active</span>' : '<span class="badge muted" style="background:rgba(0,0,0,.2);color:rgba(255,255,255,.7);font-size:11px">Coming Soon</span>'}</div>
+      <div class="quest-desc">${q.desc}</div>
+      <div class="quest-meta">⏰ ${q.deadline} · ${comm?comm.emoji+' '+comm.name:q.community} · 🏅 +${q.reward} pts</div>
+      ${q.active ? `<button class="btn sm" style="background:rgba(255,255,255,.2);color:#fff;border:2px solid rgba(255,255,255,.3);margin-top:12px" onclick="openPostModal('${q.community}')">Submit Entry →</button>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// PROFILE
+// ============================================================
+function renderProfile() {
+  if (!currentUser) return;
+  const accounts = getAccounts();
+  const me = accounts.find(a => a.id === currentUser.id) || currentUser;
+  const posts = getPosts().filter(p => p.authorId === currentUser.id && p.parentApproved);
+  const score = me.foundryScore || 0;
+  const joined = getUserCommunities(currentUser.id);
+  document.getElementById('profile-hero-block').innerHTML = `
+    <div class="profile-hero">
+      <div class="profile-av">${me.name.charAt(0)}</div>
+      <div class="profile-name">${me.name}</div>
+      <div class="profile-sub">
+        ${me.role === 'student' ? `Grade ${me.grade} · ${me.schoolId||''}` : me.role === 'parent' ? 'Parent' : 'Admin'}
+        ${me.isMentor ? ' · <span class="mentor-tag">🎓 Mentor</span>' : ''}
+      </div>
+      <div style="margin-top:10px">
+        <span class="badge ${me.status==='active'?'green':me.status==='suspended'?'red':'orange'}">${me.status||'active'}</span>
+      </div>
+      <div class="profile-stats">
+        <div class="pstat"><div class="pstat-num">${posts.length}</div><div class="pstat-label">Posts</div></div>
+        <div class="pstat"><div class="pstat-num">${joined.length}</div><div class="pstat-label">Communities</div></div>
+        <div class="pstat"><div class="pstat-num">${posts.reduce((s,p) => s+totalReactions(p),0)}</div><div class="pstat-label">Reactions</div></div>
+      </div>
+      <div style="margin-top:12px;display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.15);border-radius:14px;padding:10px 16px;">
+        <span style="font-family:'Fredoka One',cursive;font-size:26px">${score}</span>
+        <div><div style="font-size:12px;font-weight:900">Foundry Score</div><div style="font-size:11px;opacity:.8;font-weight:700">${scoreLabel(score)}</div></div>
+      </div>
+    </div>`;
+  renderProfileTab();
+}
+
+function switchProfileTab(tab) {
+  activeProfileTab = tab;
+  document.querySelectorAll('#screen-profile .tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#screen-profile .tab')[['posts','communities','badges','portfolio'].indexOf(tab)].classList.add('active');
+  renderProfileTab();
+}
+
+function renderProfileTab() {
+  const el = document.getElementById('profile-tab-content');
+  if (activeProfileTab === 'posts') {
+    const posts = getPosts().filter(p => p.authorId === currentUser.id);
+    el.innerHTML = posts.length ? posts.map(p => renderPostCard(p)).join('') : `<div class="empty"><span class="empty-icon">✍️</span><p>No posts yet. Share your first creation!</p></div>`;
+  } else if (activeProfileTab === 'communities') {
+    const joined = getUserCommunities(currentUser.id);
+    el.innerHTML = joined.length ? `<div class="comm-grid">${joined.map(cid => {
+      const c = COMMUNITIES.find(x => x.id === cid);
+      return c ? `<div class="comm-card" onclick="openCommunity('${c.id}')"><span class="comm-emoji">${c.emoji}</span><div class="comm-name" style="color:${c.color}">${c.name}</div><div class="comm-desc">${c.desc}</div></div>` : '';
+    }).join('')}</div>` : `<div class="empty"><span class="empty-icon">🌐</span><p>No communities joined yet.</p></div>`;
+  } else if (activeProfileTab === 'badges') {
+    const accounts = getAccounts();
+    const me = accounts.find(a => a.id === currentUser.id) || currentUser;
+    const badges = getBadges(me);
+    el.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;">
+      ${badges.map(b => `<div style="background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:16px;text-align:center;box-shadow:var(--shadow-sm)">
+        <div style="font-size:2.5rem;margin-bottom:8px">${b.emoji}</div>
+        <div style="font-weight:900;font-size:13px;color:var(--dark)">${b.name}</div>
+        <div style="font-size:11px;color:var(--muted);font-weight:700;margin-top:4px">${b.desc}</div>
+      </div>`).join('')}
+    </div>`;
+  } else if (activeProfileTab === 'portfolio') {
+    const accounts = getAccounts();
+    const me = accounts.find(a => a.id === currentUser.id) || currentUser;
+    const score = me.foundryScore || 0;
+    const posts = getPosts().filter(p => p.authorId === currentUser.id && p.parentApproved);
+    const canShare = parseInt(me.grade||0) >= 9 || score >= 100;
+    el.innerHTML = `<div class="card"><div class="card-body">
+      <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:12px">🔗 Foundry Portfolio</div>
+      ${canShare ? `
+        <p style="font-size:14px;font-weight:700;color:var(--muted);margin-bottom:16px">Share your Foundry journey. This link shows your posts, communities, and score.</p>
+        <div style="background:var(--soft);border-radius:12px;padding:12px;font-family:monospace;font-size:13px;word-break:break-all;margin-bottom:12px">
+          tyf.network/portfolio/${currentUser.id}
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn green sm" onclick="toast('Portfolio link copied! 🎉')">Copy Link</button>
+          <button class="btn ghost sm">Download PDF</button>
+        </div>
+      ` : `
+        <div style="text-align:center;padding:24px;">
+          <div style="font-size:3rem;margin-bottom:12px">🔒</div>
+          <p style="font-weight:800;color:var(--dark);margin-bottom:6px">Portfolio available from Grade 9+</p>
+          <p style="font-size:13px;color:var(--muted);font-weight:700">Or earn 100 Foundry Points to unlock early. You have ${score} points.</p>
+        </div>
+      `}
+    </div></div>`;
+  }
+}
+
+function getBadges(user) {
+  const posts = getPosts().filter(p => p.authorId === user.id);
+  const badges = [];
+  if (posts.length >= 1) badges.push({emoji:'✍️',name:'First Post',desc:'Posted for the first time'});
+  if (posts.length >= 5) badges.push({emoji:'📝',name:'Active Voice',desc:'5+ posts shared'});
+  const score = user.foundryScore || 0;
+  if (score >= 20) badges.push({emoji:'🌱',name:'Seedling',desc:'20+ Foundry Points'});
+  if (score >= 60) badges.push({emoji:'🌿',name:'Grower',desc:'60+ Foundry Points'});
+  if (score >= 120) badges.push({emoji:'🌳',name:'Builder',desc:'120+ Foundry Points'});
+  if (user.isMentor) badges.push({emoji:'🎓',name:'Mentor',desc:'Sharing wisdom with younger grades'});
+  if (getUserCommunities(user.id).length >= 3) badges.push({emoji:'🌐',name:'Community Citizen',desc:'Joined 3+ communities'});
+  if (!badges.length) badges.push({emoji:'🚀',name:'Just Getting Started',desc:'Keep posting and reacting!'});
+  return badges;
+}
+
+// ============================================================
+// MODERATION
+// ============================================================
+function renderModTab() {
+  const el = document.getElementById('mod-tab-content');
+  document.querySelectorAll('#screen-mod .tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#screen-mod .tab')[['flags','accounts','proposals'].indexOf(activeModTab)].classList.add('active');
+  if (activeModTab === 'flags') {
+    const flags = getFlags();
+    if (!flags.length) { el.innerHTML = `<div class="empty"><span class="empty-icon">✅</span><p>No flagged posts. Community is clean!</p></div>`; return; }
+    el.innerHTML = flags.map(f => `
+      <div class="mod-row">
+        <div class="mod-icon" style="background:#ffebee">🚩</div>
+        <div class="mod-info">
+          <div class="mod-title">${f.reason}</div>
+          <div class="mod-sub">Post ID: ${f.postId} · ${timeAgo(f.timestamp)}</div>
+        </div>
+        <button class="btn red sm" onclick="adminRemovePost('${f.postId}')">Remove Post</button>
+      </div>`).join('');
+  } else if (activeModTab === 'accounts') {
+    const accounts = getAccounts().filter(a => a.role === 'student');
+    if (!accounts.length) { el.innerHTML = `<div class="empty"><span class="empty-icon">👤</span><p>No student accounts yet.</p></div>`; return; }
+    el.innerHTML = accounts.map(a => `
+      <div class="mod-row">
+        <div class="av" style="background:${avatarColor(a.name)};width:40px;height:40px">${a.name.charAt(0)}</div>
+        <div class="mod-info">
+          <div class="mod-title">${a.name} · Grade ${a.grade}</div>
+          <div class="mod-sub">${a.schoolId} · <span style="color:${a.status==='active'?'var(--green)':a.status==='suspended'?'var(--red)':'var(--orange)'}">${a.status}</span></div>
+        </div>
+        ${a.status==='active'
+          ? `<button class="btn orange sm" onclick="suspendAccount('${a.id}')">Suspend</button>`
+          : a.status==='suspended'
+          ? `<button class="btn green sm" onclick="reinstateAccount('${a.id}')">Reinstate</button>`
+          : `<button class="btn green sm" onclick="approveAccount('${a.id}')">Approve</button>`
+        }
+      </div>`).join('');
+  } else if (activeModTab === 'proposals') {
+    renderProposals();
+  }
+}
+
+function switchModTab(tab) {
+  activeModTab = tab;
+  renderModTab();
+}
+
+function adminRemovePost(id) {
+  const posts = getPosts().filter(p => p.id !== id);
+  savePosts(posts);
+  const flags = getFlags().filter(f => f.postId !== id);
+  saveFlags(flags);
+  toast('Post removed');
+  renderModTab();
+}
+
+function suspendAccount(id) {
+  const accounts = getAccounts();
+  const a = accounts.find(x => x.id === id);
+  if (a) { a.status = 'suspended'; saveAccounts(accounts); }
+  toast('Account suspended');
+  renderModTab();
+}
+
+function reinstateAccount(id) {
+  const accounts = getAccounts();
+  const a = accounts.find(x => x.id === id);
+  if (a) { a.status = 'active'; saveAccounts(accounts); }
+  toast('Account reinstated');
+  renderModTab();
+}
+
+function approveAccount(id) {
+  const accounts = getAccounts();
+  const a = accounts.find(x => x.id === id);
+  if (a) { a.status = 'active'; saveAccounts(accounts); }
+  toast('Account approved');
+  renderModTab();
+}
+
+// ============================================================
+// REPORT
+// ============================================================
+function openReportModal(postId) {
+  document.getElementById('report-post-id').value = postId;
+  openModal('modal-report');
+}
+
+function submitReport() {
+  if (!currentUser) return;
+  const postId = document.getElementById('report-post-id').value;
+  const reason = document.getElementById('report-reason').value;
+  const flags = getFlags();
+  flags.push({postId, reason, timestamp:Date.now(), reviewedBy:'ai', action:'pending', reporterId:currentUser.id});
+  saveFlags(flags);
+  // Auto-check report count
+  const postFlags = flags.filter(f => f.postId === postId);
+  if (postFlags.length >= 3) {
+    const posts = getPosts();
+    const p = posts.find(x => x.id === postId);
+    if (p) { p.aiStatus = 'flagged'; savePosts(posts); }
+    toast('⚠️ Post has been automatically hidden pending admin review.');
+  } else {
+    toast('🚩 Report submitted. Admins will review this post.');
+  }
+  closeModal('modal-report');
+  renderPosts();
+}
+
+// ============================================================
+// MODAL HELPERS
+// ============================================================
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+
+// ============================================================
+// UTILS
+// ============================================================
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function timeAgo(ts) {
+  const diff = Date.now() - ts;
+  if (diff < 60000) return 'just now';
+  if (diff < 3600000) return Math.floor(diff/60000)+'m ago';
+  if (diff < 86400000) return Math.floor(diff/3600000)+'h ago';
+  return Math.floor(diff/86400000)+'d ago';
+}
+
+function avatarColor(name) {
+  const colors = ['#E53935','#43A047','#1E88E5','#F97316','#8B5CF6','#00897B','#E91E63','#5D4037'];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash<<5)-hash);
+  return colors[Math.abs(hash) % colors.length];
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Init seed data so feed isn't empty on first load
+if (!localStorage.getItem('yfs_posts')) savePosts(getSeedPosts());
+</script>
+</body>
+</html>
