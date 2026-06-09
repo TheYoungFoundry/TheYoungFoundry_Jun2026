@@ -3,2115 +3,1143 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MyFirstChapter — YoungFoundry</title>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<title>MyFirstChapter — The Young Foundry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-:root {
-  /* ─── Pastel Palette ─── */
-  --p-sky:       #daf0fa;
-  --p-sky-mid:   #b8e4f7;
-  --p-sky-deep:  #7ec8e3;
-  --p-mint:      #d4f5e9;
-  --p-mint-mid:  #a8e6cf;
-  --p-mint-deep: #52c29b;
-  --p-peach:     #ffe8d6;
-  --p-peach-mid: #ffcba4;
-  --p-peach-deep:#f4956a;
-  --p-lav:       #ece8fb;
-  --p-lav-mid:   #d5ccf5;
-  --p-lav-deep:  #9b8de0;
-  --p-rose:      #fde8ee;
-  --p-rose-mid:  #f9c0d0;
-  --p-rose-deep: #e87fa3;
-  --p-lemon:     #fef8db;
-  --p-lemon-mid: #fde99a;
-  --p-lemon-deep:#f0c832;
-  --p-lilac:     #f3eafd;
-  --p-lilac-mid: #e0cafc;
-  --p-lilac-deep:#b07de8;
+:root{
+  --red:#E53935;--green:#43A047;--light:#F8F9FA;--dark:#2d3748;
+  --yellow:#FDD835;--blue:#1E88E5;--orange:#F97316;--purple:#8B5CF6;
+  --paper:#ffffff;--ink:#2d3748;--muted:#7b8694;--line:#eceef1;
+  --soft:#eef1f5;--teal:#00897B;--pink:#E91E63;
+  --head:'Fredoka One',cursive;
+  --body:'Nunito',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --prose:'Merriweather',Georgia,serif;
+  --shadow:0 14px 34px -16px rgba(45,55,72,.28);
+  --shadow-sm:0 6px 16px -8px rgba(45,55,72,.25);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{font-family:var(--body);color:var(--ink);background:var(--light);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+h1,h2,h3,h4{font-family:var(--head);font-weight:400;}
+button{font-family:var(--body);cursor:pointer;border:none;background:none;}
+input,textarea,select{font-family:var(--body);}
+a{color:inherit;text-decoration:none;}
 
-  --ink:         #2d2640;
-  --ink-mid:     #5a5370;
-  --ink-light:   #8c85a8;
-  --card:        #ffffff;
-  --card-soft:   #fdfcff;
+/* BLOBS */
+.blob{position:fixed;z-index:0;opacity:.05;pointer-events:none;}
+.blob.tl{top:-60px;left:-60px;width:360px;color:var(--purple);}
+.blob.br{bottom:-80px;right:-80px;width:400px;color:var(--orange);}
 
-  --bg: linear-gradient(150deg, #daf0fa 0%, #ece8fb 25%, #ffe8d6 50%, #d4f5e9 75%, #fde8ee 100%);
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:100;background:rgba(248,249,250,.96);backdrop-filter:blur(12px);border-bottom:2px solid var(--line);}
+.topbar-inner{max-width:1200px;margin:0 auto;padding:11px 24px;display:flex;align-items:center;gap:12px;}
+.brand{font-family:var(--head);font-size:20px;}
+.brand .r{color:var(--red);}.brand .g{color:var(--green);}
+.brand-sep{color:var(--muted);font-size:14px;font-weight:700;margin:0 4px;}
+.brand-sub{font-family:var(--head);font-size:20px;color:var(--purple);}
+.tsp{flex:1;}
+.topbar-btns{display:flex;align-items:center;gap:8px;}
 
-  --radius-sm: 12px;
-  --radius:    18px;
-  --radius-lg: 24px;
-  --shadow:    0 3px 20px rgba(80,60,120,0.08);
-  --shadow-md: 0 6px 32px rgba(80,60,120,0.13);
+/* BTN */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 20px;border-radius:999px;font-family:var(--body);font-weight:900;font-size:13px;cursor:pointer;border:none;transition:all .2s;}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 16px -4px rgba(0,0,0,.12);}
+.btn.green{background:var(--green);color:#fff;}
+.btn.blue{background:var(--blue);color:#fff;}
+.btn.purple{background:var(--purple);color:#fff;}
+.btn.orange{background:var(--orange);color:#fff;}
+.btn.ghost{background:#fff;border:2px solid var(--line);color:var(--dark);}
+.btn.ghost:hover{border-color:var(--blue);}
+.btn.red{background:var(--red);color:#fff;}
+.btn.sm{padding:7px 14px;font-size:12px;}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
 
-  --font-display: 'Baloo 2', sans-serif;
-  --font-body:    'Nunito', sans-serif;
-}
+/* LAYOUT */
+.page{max-width:1200px;margin:0 auto;padding:28px 24px;}
+.two-col{display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start;}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* SIDEBAR */
+.sidebar{position:sticky;top:72px;}
+.sidebar-card{background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--shadow-sm);margin-bottom:16px;}
+.sidebar-card h4{font-family:var(--head);font-size:16px;margin-bottom:12px;color:var(--dark);}
 
-html { scroll-behavior: smooth; }
+/* FIELD */
+.field{margin-bottom:14px;}
+.field label{display:block;font-weight:800;font-size:12px;color:var(--dark);margin-bottom:5px;letter-spacing:.2px;}
+.field input,.field select,.field textarea{width:100%;padding:10px 13px;border:2px solid var(--line);border-radius:12px;font-size:13px;font-weight:700;color:var(--ink);background:#fff;outline:none;transition:border-color .15s;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue);}
+.field textarea{resize:vertical;min-height:80px;line-height:1.6;}
 
-body {
-  font-family: var(--font-body);
-  background: var(--bg);
-  background-attachment: fixed;
-  color: var(--ink);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+/* BADGE / CHIP */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:900;}
+.badge.green{background:#e8f5e9;color:var(--green);}
+.badge.blue{background:#e3f2fd;color:var(--blue);}
+.badge.orange{background:#fff3e0;color:var(--orange);}
+.badge.red{background:#ffebee;color:var(--red);}
+.badge.purple{background:#f3e5f5;color:var(--purple);}
+.badge.muted{background:var(--soft);color:var(--muted);}
+.badge.yellow{background:#fffde7;color:#F57F17;}
 
-/* ─── Floating bg blobs ─── */
-.blob {
-  position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
-  filter: blur(60px); opacity: 0.35;
-}
-.blob-1 { width:320px;height:320px; top:-80px;right:-60px; background:#c9e8f9; }
-.blob-2 { width:260px;height:260px; bottom:-60px;left:-40px; background:#b8e8d4; }
-.blob-3 { width:200px;height:200px; top:40%;left:60%; background:#f4d5f0; }
+/* WRITING AREA */
+.writing-card{background:var(--paper);border:2px solid var(--line);border-radius:24px;box-shadow:var(--shadow);overflow:hidden;}
+.writing-toolbar{display:flex;align-items:center;gap:8px;padding:12px 20px;border-bottom:2px solid var(--line);flex-wrap:wrap;}
+.tb-btn{padding:6px 12px;border-radius:8px;border:2px solid var(--line);background:#fff;font-size:12px;font-weight:800;color:var(--muted);cursor:pointer;transition:.15s;}
+.tb-btn:hover{border-color:var(--blue);color:var(--blue);}
+.tb-sep{width:2px;height:20px;background:var(--line);border-radius:999px;}
+.word-count-bar{margin-left:auto;font-size:12px;font-weight:800;color:var(--muted);}
+#chapter-editor{width:100%;min-height:420px;padding:28px 32px;font-family:var(--prose);font-size:16px;line-height:1.85;color:var(--ink);border:none;outline:none;resize:none;background:transparent;}
+#chapter-editor::placeholder{color:#ccc;font-style:italic;}
+.editor-footer{padding:14px 20px;border-top:2px solid var(--soft);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 
-/* ─── HEADER ─── */
-.header {
-  background: linear-gradient(135deg, #b07de8 0%, #9b8de0 40%, #7ec8e3 100%);
-  padding: 30px 20px 24px;
-  text-align: center;
-  color: #fff;
-  position: relative; overflow: hidden;
-  box-shadow: 0 4px 20px rgba(155,141,224,0.3);
-}
-.header::before {
-  content: '📚'; position:absolute; top:-8px; right:12px;
-  font-size:80px; opacity:0.12; animation: floaty 4s ease-in-out infinite;
-}
-.header::after {
-  content: '✏️'; position:absolute; bottom:-4px; left:14px;
-  font-size:52px; opacity:0.12; animation: floaty 5.5s ease-in-out infinite 1.2s;
-}
-.header-brand { font-size:10px; letter-spacing:4px; text-transform:uppercase; opacity:0.75; font-weight:700; }
-.header h1 { font-family:var(--font-display); font-size:38px; font-weight:800; margin:4px 0 4px; text-shadow:0 2px 14px rgba(0,0,0,0.15); }
-.header-tagline { font-size:14px; opacity:0.88; font-weight:600; }
-.header-free-badge {
-  display:inline-block; background:rgba(255,255,255,0.22);
-  border:1.5px solid rgba(255,255,255,0.5); border-radius:20px;
-  font-size:11px; font-weight:700; padding:3px 12px; margin-top:8px;
-  letter-spacing:1px;
-}
+/* GENRE CARDS */
+.genre-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.genre-btn{background:var(--soft);border:2px solid var(--line);border-radius:14px;padding:10px;text-align:center;cursor:pointer;transition:.15s;font-weight:800;font-size:12px;color:var(--dark);}
+.genre-btn:hover{border-color:var(--purple);background:#f3e5f5;}
+.genre-btn.active{background:var(--purple);color:#fff;border-color:var(--purple);}
+.genre-emoji{font-size:1.6rem;display:block;margin-bottom:4px;}
 
-/* ─── TOOLBAR ─── */
-.toolbar {
-  display:flex; gap:8px; justify-content:center; flex-wrap:wrap;
-  padding:14px 16px 6px;
-  max-width:760px; margin:0 auto; position:relative; z-index:2;
-}
-.toolbar button {
-  padding:8px 18px; border-radius:24px;
-  font-family:var(--font-display); font-size:13px; font-weight:700;
-  cursor:pointer; border:2px solid transparent; transition:all 0.22s;
-  position:relative; overflow:hidden;
-}
-.toolbar button:active { transform:scale(0.96); }
-.btn-save   { background:var(--p-mint);  color:#1a6647; border-color:var(--p-mint-mid); }
-.btn-save:hover   { background:var(--p-mint-mid); border-color:var(--p-mint-deep); }
-.btn-load   { background:var(--p-sky);   color:#0e4f73; border-color:var(--p-sky-mid); }
-.btn-load:hover   { background:var(--p-sky-mid); border-color:var(--p-sky-deep); }
-.btn-export { background:var(--p-peach); color:#7a3b12; border-color:var(--p-peach-mid); }
-.btn-export:hover { background:var(--p-peach-mid); border-color:var(--p-peach-deep); }
-.btn-new    { background:var(--p-rose);  color:#8a2542; border-color:var(--p-rose-mid); }
-.btn-new:hover    { background:var(--p-rose-mid); border-color:var(--p-rose-deep); }
+/* DICE */
+.dice-btn{width:100%;padding:12px;background:linear-gradient(135deg,var(--orange),var(--yellow));color:#fff;border-radius:14px;font-family:var(--head);font-size:16px;cursor:pointer;border:none;transition:.15s;}
+.dice-btn:hover{transform:scale(1.02);}
+.dice-result{background:var(--soft);border:2px solid var(--line);border-radius:12px;padding:10px 12px;font-size:13px;font-weight:700;color:var(--dark);margin-top:8px;min-height:42px;line-height:1.5;}
 
-/* ─── WELCOME BACK BANNER ─── */
-.welcome-back-banner {
-  max-width:760px; margin:8px auto 0;
-  background:linear-gradient(135deg, var(--p-lemon) 0%, var(--p-peach) 100%);
-  border:2px solid var(--p-lemon-mid); border-radius:var(--radius);
-  padding:16px 20px; display:flex; align-items:center; gap:14px;
-  position:relative; z-index:2; animation:slideDown 0.4s ease;
-}
-.welcome-back-banner .wb-icon { font-size:32px; }
-.welcome-back-banner .wb-text h3 { font-family:var(--font-display); font-size:16px; color:#6b4a10; font-weight:800; }
-.welcome-back-banner .wb-text p { font-size:12px; color:#8a6520; margin-top:2px; }
-.wb-close { position:absolute; top:8px; right:12px; background:none; border:none; font-size:18px; cursor:pointer; color:#b07840; opacity:0.6; }
-.wb-close:hover { opacity:1; }
+/* CHAPTER LIST */
+.chapter-item{background:var(--paper);border:2px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:.15s;}
+.chapter-item:hover{border-color:var(--blue);box-shadow:var(--shadow-sm);}
+.chapter-item.active{border-color:var(--purple);background:#f9f5ff;}
+.ch-num{font-family:var(--head);font-size:18px;color:var(--purple);min-width:28px;}
+.ch-info{flex:1;min-width:0;}
+.ch-title{font-weight:900;font-size:13px;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ch-words{font-size:11px;color:var(--muted);font-weight:700;margin-top:2px;}
 
-/* ─── PROGRESS BOOKSHELF ─── */
-.bookshelf {
-  display:flex; gap:4px; align-items:flex-end;
-  padding:12px 16px 2px;
-  max-width:760px; margin:0 auto; position:relative; z-index:2;
-}
-.book-spine { flex:1; display:flex; flex-direction:column; align-items:center; cursor:pointer; transition:transform 0.2s; }
-.book-spine:hover { transform:translateY(-3px); }
-.spine-bar {
-  width:100%; border-radius:5px 5px 0 0;
-  display:flex; align-items:center; justify-content:center;
-  font-size:11px; font-weight:800; color:#fff;
-  transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);
-}
-.spine-bar.done   { background:linear-gradient(180deg,#b07de8,#8b63cc); height:50px; }
-.spine-bar.active { background:linear-gradient(180deg,#f4956a,#e67050); height:42px; box-shadow:0 0 16px rgba(244,149,106,0.5); }
-.spine-bar.future { background:linear-gradient(180deg,#ddd6f0,#ccc4e8); height:28px; color:#a09ab8; }
-.spine-label { font-size:9px; font-weight:700; margin-top:4px; text-align:center; line-height:1.2; color:var(--ink-light); }
-.spine-label.done   { color:#8b63cc; }
-.spine-label.active { color:#c0562e; font-weight:800; }
+/* DOCUMENT CARD (repository) */
+.doc-card{background:var(--paper);border:2px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px;display:flex;align-items:flex-start;gap:14px;transition:.15s;}
+.doc-card:hover{border-color:var(--blue);box-shadow:var(--shadow-sm);}
+.doc-icon{font-size:2.2rem;flex-shrink:0;}
+.doc-info{flex:1;min-width:0;}
+.doc-title{font-weight:900;font-size:14px;color:var(--dark);margin-bottom:3px;}
+.doc-meta{font-size:12px;color:var(--muted);font-weight:700;}
+.doc-actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
 
-/* ─── BADGES ─── */
-.badges { display:flex; gap:6px; flex-wrap:wrap; padding:6px 16px; max-width:760px; margin:0 auto; }
-.badge {
-  padding:4px 12px; border-radius:20px; font-size:11px;
-  font-family:var(--font-display); font-weight:700; transition:all 0.3s;
-}
-.badge.earned { background:linear-gradient(135deg,#c4a0f8,#9b8de0); color:#fff; box-shadow:0 2px 8px rgba(155,141,224,0.3); }
-.badge.locked { background:#ece9f7; color:#b0aac8; opacity:0.55; }
+/* AI PANEL */
+.ai-panel{border-radius:14px;padding:12px 14px;margin-top:10px;display:none;}
+.ai-panel.ok{background:#e8f5e9;border:2px solid #a5d6a7;}
+.ai-panel.warn{background:#fff8e1;border:2px solid #ffe082;}
+.ai-panel.block{background:#ffebee;border:2px solid #ef9a9a;}
+.ai-title{font-weight:900;font-size:13px;margin-bottom:4px;}
+.ai-panel.ok .ai-title{color:#2E7D32;}
+.ai-panel.warn .ai-title{color:#E65100;}
+.ai-panel.block .ai-title{color:#C62828;}
+.ai-msg{font-size:12px;font-weight:700;color:var(--muted);}
 
-/* ─── SAVE REMINDER ─── */
-.save-reminder {
-  max-width:760px; margin:0 auto; padding:0 16px;
-  display:flex; align-items:center; gap:8px;
-  font-size:11.5px; color:#8a6520; font-weight:600;
-  opacity:0.85; position:relative; z-index:2;
-}
-.save-reminder span { font-size:14px; }
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(45,55,72,.55);backdrop-filter:blur(4px);z-index:500;display:none;place-items:center;}
+.modal-overlay.open{display:grid;}
+.modal{background:#fff;border-radius:24px;padding:28px;max-width:460px;width:calc(100% - 32px);box-shadow:0 24px 64px -12px rgba(45,55,72,.4);position:relative;max-height:90vh;overflow-y:auto;}
+.modal-close{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;background:var(--soft);font-size:15px;display:grid;place-items:center;cursor:pointer;color:var(--muted);}
+.modal-close:hover{background:var(--line);}
+.modal h3{font-family:var(--head);font-size:20px;margin-bottom:5px;}
+.modal .sub{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:18px;}
 
-/* ─── MAIN ─── */
-.main { max-width:760px; margin:0 auto; padding:10px 16px 130px; position:relative; z-index:2; }
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;z-index:600;background:var(--dark);color:#fff;padding:11px 18px;border-radius:12px;font-size:13px;font-weight:800;box-shadow:var(--shadow);opacity:0;transform:translateY(8px);transition:.3s;pointer-events:none;}
+.toast.show{opacity:1;transform:none;}
 
-/* ─── SECTION CARD ─── */
-.section-card {
-  background:var(--card);
-  border-radius:var(--radius);
-  padding:26px;
-  box-shadow:var(--shadow);
-  border:2px solid transparent;
-  animation:slideUp 0.4s ease;
-  margin-bottom:16px;
-}
-.section-header { display:flex; align-items:center; gap:10px; margin-bottom:18px; }
-.section-header span { font-size:30px; }
-.section-header h2 { font-family:var(--font-display); font-size:22px; font-weight:800; color:#4a357a; }
+/* STATUS BANNER */
+.status-banner{padding:10px 16px;border-radius:14px;font-size:13px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.status-banner.info{background:#e3f2fd;color:#1565C0;border:2px solid #90caf9;}
+.status-banner.warn{background:#fff8e1;color:#E65100;border:2px solid #ffe082;}
+.status-banner.success{background:#e8f5e9;color:#2E7D32;border:2px solid #a5d6a7;}
+.status-banner.pending{background:#f3e5f5;color:#6A1B9A;border:2px solid #ce93d8;}
 
-/* ─── FORM ELEMENTS ─── */
-.label { margin-top:16px; margin-bottom:6px; }
-.label-main { font-family:var(--font-display); font-size:15px; font-weight:800; color:#4a357a; }
-.label-sub  { font-size:12px; color:var(--ink-light); margin-top:2px; }
+/* RAINBOW TOP */
+.rainbow-top{height:4px;background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--blue),var(--purple));position:fixed;top:0;left:0;right:0;z-index:200;}
 
-input[type="text"], input[type="password"], textarea {
-  width:100%; padding:10px 14px;
-  border-radius:var(--radius-sm); border:2px solid #e5e0f5;
-  font-family:var(--font-body); font-size:15px; color:var(--ink);
-  background:#faf8ff; outline:none;
-  transition:border-color 0.2s, box-shadow 0.2s;
-  resize:vertical;
+/* RESPONSIVE */
+@media(max-width:860px){
+  .two-col{grid-template-columns:1fr;}
+  .sidebar{position:static;}
+  .genre-grid{grid-template-columns:repeat(4,1fr);}
+}
+@media(max-width:560px){
+  #chapter-editor{padding:18px;}
+  .page{padding:16px;}
+  .genre-grid{grid-template-columns:repeat(3,1fr);}
 }
-input:focus, textarea:focus {
-  border-color:var(--p-lav-deep);
-  box-shadow:0 0 0 3px rgba(176,125,232,0.15);
-  background:#fff;
-}
-
-/* ─── CHIPS ─── */
-.chip-group { display:flex; flex-wrap:wrap; gap:8px; }
-.chip {
-  padding:8px 18px; border-radius:24px;
-  border:2px solid #e5e0f5; background:#faf8ff;
-  font-family:var(--font-display); font-size:14px; font-weight:700;
-  color:var(--ink-mid); cursor:pointer; transition:all 0.2s;
-}
-.chip:hover { border-color:var(--p-lav-deep); background:var(--p-lilac); }
-.chip.selected {
-  border-color:#9b8de0; background:var(--p-lav);
-  color:#4a357a; transform:scale(1.06);
-  box-shadow:0 2px 10px rgba(155,141,224,0.2);
-}
-
-/* ─── TIP BOX ─── */
-.tip-box {
-  background:var(--p-lemon); border-radius:var(--radius-sm); padding:14px;
-  font-size:13px; color:#6b4a10; border:1.5px solid var(--p-lemon-mid);
-  margin-bottom:14px; line-height:1.6;
-}
-
-/* ─── PLOT DICE ─── */
-.dice-box {
-  background:linear-gradient(135deg,#fef6d0,#fde9a0);
-  border-radius:var(--radius); padding:20px; border:2px dashed var(--p-lemon-deep);
-  margin-top:18px;
-}
-.dice-title { display:flex; align-items:center; gap:8px; margin-bottom:12px; }
-.dice-title span { font-size:26px; }
-.dice-title strong { font-family:var(--font-display); font-size:18px; color:#7a5010; }
-.dice-cats { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
-.dice-cat {
-  padding:6px 16px; border-radius:20px; border:none;
-  font-family:var(--font-display); font-size:13px; font-weight:700;
-  cursor:pointer; transition:all 0.2s;
-}
-.dice-cat.active   { background:#f4956a; color:#fff; }
-.dice-cat.inactive { background:#fff8e8; color:#7a5010; border:1.5px solid var(--p-lemon-mid); }
-.dice-roll-btn {
-  padding:10px 32px; border-radius:12px; border:none;
-  background:linear-gradient(135deg,#f4956a,#e67050);
-  color:#fff; font-weight:800; font-size:16px;
-  cursor:pointer; font-family:var(--font-display); transition:all 0.2s;
-}
-.dice-roll-btn:hover { transform:scale(1.05); box-shadow:0 4px 14px rgba(244,149,106,0.4); }
-.dice-roll-btn.rolling { animation:shake 0.3s infinite; cursor:wait; }
-.dice-result {
-  margin-top:12px; padding:16px; background:#fff;
-  border-radius:12px; border:2px solid #f4c87a;
-  font-size:15px; color:#6b4a10; font-weight:600;
-  animation:slideUp 0.35s ease;
-}
-.dice-use-btn {
-  display:inline-block; margin-top:8px; padding:5px 16px;
-  border-radius:8px; border:1.5px solid #f4956a;
-  background:#fff8f0; color:#c0562e; font-size:12px;
-  font-weight:800; cursor:pointer; font-family:var(--font-display);
-}
-
-/* ─── BOOK COVER ─── */
-.book-cover {
-  width:240px; height:360px; margin:18px auto;
-  border-radius:4px 16px 16px 4px;
-  padding:22px; display:flex; flex-direction:column;
-  justify-content:space-between;
-  box-shadow:8px 4px 24px rgba(0,0,0,0.2), -2px 0 8px rgba(0,0,0,0.08);
-  position:relative; overflow:hidden; color:#fff;
-}
-.book-cover::before {
-  content:''; position:absolute; left:0; top:0; bottom:0; width:12px;
-  background:linear-gradient(90deg,rgba(0,0,0,0.22),transparent);
-}
-
-/* ─── DRAFT WRITING AREA ─── */
-.draft-write-area {
-  background:var(--card-soft); border-radius:var(--radius); padding:22px;
-  border:2px solid var(--p-lav-mid); margin-top:16px;
-}
-.draft-write-area h3 { font-family:var(--font-display); font-size:17px; color:#4a357a; margin-bottom:10px; }
-.chapter-editor {
-  background:#fff; border-radius:14px; padding:18px;
-  border:2px solid var(--p-lav-mid); margin-bottom:14px;
-  animation:slideUp 0.35s ease;
-}
-.chapter-editor .chapter-title-row {
-  display:flex; align-items:center; gap:10px; margin-bottom:10px;
-}
-.chapter-editor .chapter-num {
-  background:linear-gradient(135deg,#b07de8,#9b8de0); color:#fff;
-  border-radius:10px; padding:4px 14px; font-family:var(--font-display);
-  font-size:13px; font-weight:800; white-space:nowrap;
-}
-.chapter-editor .chapter-title-input {
-  flex:1; padding:8px 12px; border-radius:10px;
-  border:2px solid var(--p-lav-mid); font-family:var(--font-display);
-  font-size:15px; font-weight:700; color:#4a357a; background:#faf8ff;
-}
-.chapter-editor textarea.chapter-body {
-  min-height:160px; font-size:15px; line-height:1.8;
-  border-color:var(--p-lav-mid); background:#fffcff;
-}
-.chapter-editor textarea.chapter-body:focus { border-color:var(--p-lav-deep); }
-.add-chapter-btn {
-  width:100%; padding:12px; border-radius:14px; border:2.5px dashed var(--p-lav-deep);
-  background:var(--p-lav); color:#6b4fa8; font-family:var(--font-display);
-  font-size:15px; font-weight:800; cursor:pointer; transition:all 0.2s;
-}
-.add-chapter-btn:hover { background:var(--p-lav-mid); border-style:solid; }
-
-/* ─── RICH TEXT TOOLBAR ─── */
-.rte-toolbar {
-  display:flex; flex-wrap:wrap; gap:3px; padding:8px 10px;
-  background:linear-gradient(135deg,#f0ecff,#e8f4ff);
-  border:2px solid var(--p-lav-mid); border-bottom:none;
-  border-radius:12px 12px 0 0;
-  align-items:center;
-}
-.rte-toolbar select {
-  padding:4px 8px; border-radius:7px; border:1.5px solid #d5ccf5;
-  font-family:var(--font-body); font-size:12px; color:#4a357a;
-  background:#fff; cursor:pointer; outline:none; height:28px;
-}
-.rte-toolbar select:hover { border-color:#9b8de0; }
-.rte-sep {
-  width:1px; height:22px; background:#d5ccf5; margin:0 4px; flex-shrink:0;
-}
-.rte-btn {
-  width:28px; height:28px; border-radius:7px; border:1.5px solid transparent;
-  background:transparent; cursor:pointer; display:flex; align-items:center;
-  justify-content:center; font-size:13px; font-weight:700; color:#5a5370;
-  transition:all 0.15s; flex-shrink:0; padding:0;
-}
-.rte-btn:hover { background:#e2dcf8; border-color:#c0b0f0; color:#4a357a; }
-.rte-btn.active { background:linear-gradient(135deg,#b07de8,#9b8de0); color:#fff; border-color:#9b8de0; }
-.rte-btn svg { width:14px; height:14px; fill:currentColor; }
-.rte-color-btn {
-  width:28px; height:28px; border-radius:7px; border:1.5px solid #d5ccf5;
-  cursor:pointer; overflow:hidden; padding:2px; background:#fff;
-}
-.rte-color-btn input[type=color] {
-  width:100%; height:100%; border:none; padding:0; cursor:pointer;
-  background:none; border-radius:5px;
-}
-.rte-group { display:flex; gap:2px; align-items:center; }
-
-/* ─── RICH TEXT EDITOR BODY ─── */
-.chapter-rte {
-  min-height:200px; max-height:500px; overflow-y:auto;
-  border:2px solid var(--p-lav-mid); border-top:none;
-  border-radius:0 0 12px 12px;
-  padding:14px 16px; background:#fffcff;
-  font-family:var(--font-body); font-size:15px; color:var(--ink);
-  line-height:1.8; outline:none; white-space:pre-wrap; word-break:break-word;
-}
-.chapter-rte:focus { border-color:var(--p-lav-deep); background:#fff; }
-.chapter-rte:empty::before {
-  content:attr(data-placeholder); color:#c0b8d8; pointer-events:none;
-}
-.chapter-rte table {
-  border-collapse:collapse; width:100%; margin:10px 0;
-}
-.chapter-rte td, .chapter-rte th {
-  border:2px solid #d5ccf5; padding:6px 10px; min-width:60px;
-}
-.chapter-rte th { background:var(--p-lav); font-weight:700; }
-.chapter-rte img { max-width:100%; border-radius:8px; margin:6px 0; }
-
-/* ─── AI APPLY BUTTON ─── */
-.ai-apply-btn {
-  margin-top:12px; padding:10px 20px; border-radius:10px; border:none;
-  background:linear-gradient(135deg,#52c29b,#3aab80); color:#fff;
-  font-family:var(--font-display); font-size:13px; font-weight:800;
-  cursor:pointer; transition:all 0.2s; display:inline-flex; align-items:center; gap:6px;
-  box-shadow:0 3px 10px rgba(82,194,155,0.3);
-}
-.ai-apply-btn:hover { transform:translateY(-1px); box-shadow:0 5px 16px rgba(82,194,155,0.4); }
-.ai-apply-btn:disabled { background:#ccc; box-shadow:none; cursor:default; transform:none; }
-.ai-applied-badge {
-  display:inline-flex; align-items:center; gap:5px;
-  margin-top:10px; padding:7px 14px; border-radius:10px;
-  background:var(--p-mint); color:#1a6647; font-size:12px; font-weight:800;
-  border:1.5px solid var(--p-mint-mid);
-}
-
-/* ─── DRAFT DISPLAY (read-only) ─── */
-.draft-container {
-  background:#fff; border-radius:var(--radius); padding:28px;
-  border:2px solid var(--p-lav-mid);
-  max-height:600px; overflow-y:auto;
-  margin-top:18px; line-height:1.8;
-}
-.draft-container h2 {
-  font-family:var(--font-display); font-size:22px; color:#4a357a;
-  margin-top:28px; margin-bottom:12px;
-  border-bottom:2px solid var(--p-lav-mid); padding-bottom:8px;
-}
-.draft-container h3 { font-family:var(--font-display); font-size:17px; color:#6b4fa8; margin-top:16px; margin-bottom:8px; }
-.draft-container p  { margin:6px 0; font-size:15px; color:var(--ink-mid); }
-.coach-note {
-  background:var(--p-lemon); border-radius:10px; padding:8px 14px;
-  margin:8px 0; font-size:14px; color:#6b4a10; border-left:4px solid var(--p-lemon-deep);
-}
-
-/* ─── WRITING PROMPTS ─── */
-.writing-prompt-box {
-  background:linear-gradient(135deg,var(--p-mint),var(--p-sky));
-  border-radius:var(--radius); padding:18px;
-  border:2px solid var(--p-mint-mid); margin-top:14px;
-}
-.writing-prompt-box .wp-header { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
-.writing-prompt-box .wp-header span { font-size:22px; }
-.writing-prompt-box .wp-header strong { font-family:var(--font-display); font-size:16px; color:#1a6647; }
-.prompt-chip {
-  display:inline-block; background:#fff; border:1.5px solid var(--p-mint-mid);
-  border-radius:20px; padding:6px 14px; font-size:13px; color:#2a7a5a;
-  font-weight:700; margin:4px; cursor:pointer; font-family:var(--font-display);
-  transition:all 0.18s;
-}
-.prompt-chip:hover { background:var(--p-mint-mid); border-color:var(--p-mint-deep); }
-
-/* ─── WORD COUNT ─── */
-.word-count-bar {
-  display:flex; gap:12px; flex-wrap:wrap; margin-top:12px;
-}
-.wc-stat {
-  background:var(--p-lav); border-radius:10px; padding:8px 14px;
-  text-align:center; flex:1; min-width:80px;
-}
-.wc-stat .wc-num { font-family:var(--font-display); font-size:22px; font-weight:800; color:#6b4fa8; }
-.wc-stat .wc-label { font-size:11px; color:var(--ink-light); font-weight:700; }
-
-/* ─── SUMMARY BOX ─── */
-.summary-box {
-  background:linear-gradient(135deg,#f5f0ff,#ece8fb);
-  border-radius:var(--radius-sm); padding:18px;
-  font-size:14px; color:#4a357a; line-height:1.8; margin-bottom:16px;
-}
-.summary-box strong { color:#7b5ec4; }
-
-.ai-loading-dots { display:inline-flex;gap:4px; }
-.ai-loading-dots span { animation:dotPulse 1.2s ease-in-out infinite; font-size:10px; }
-.ai-loading-dots span:nth-child(2) { animation-delay:0.2s; }
-.ai-loading-dots span:nth-child(3) { animation-delay:0.4s; }
-@keyframes dotPulse { 0%,80%,100%{opacity:0.2;transform:scale(0.8)} 40%{opacity:1;transform:scale(1)} }
-
-/* Phase cards */
-.ai-phase-card {
-  background:#faf8ff; border-radius:14px;
-  border:2px solid var(--p-lav-mid); overflow:hidden;
-}
-.ai-phase-header {
-  display:flex; align-items:center; gap:12px;
-  background:var(--p-lav); padding:14px 18px;
-  border-bottom:2px solid var(--p-lav-mid);
-}
-.ai-phase-icon { font-size:26px; flex-shrink:0; }
-.ai-phase-title { font-family:var(--font-display); font-size:15px; font-weight:800; color:#4a357a; }
-.ai-phase-sub   { font-size:12px; color:var(--ink-light); margin-top:1px; }
-.ai-phase-status { margin-left:auto; flex-shrink:0; }
-.ai-phase-status.loading { display:flex; align-items:center; }
-.ai-phase-done { color:#52c29b; font-weight:800; font-size:13px; }
-.ai-phase-content { padding:16px 18px; }
-.ai-thinking { font-size:13px; color:var(--ink-light); font-style:italic; display:flex; align-items:center; gap:8px; }
-
-/* Question items */
-.ai-question-item {
-  background:#fff; border-radius:10px; padding:12px 14px;
-  margin-bottom:8px; border-left:4px solid #b07de8;
-}
-.ai-q-tag {
-  display:inline-block; background:#ece8fb; border-radius:6px;
-  padding:2px 8px; font-size:11px; font-weight:800; color:#7b5ec4; margin-bottom:6px;
-}
-.ai-q-text { font-size:14px; color:#4a357a; line-height:1.6; }
-.ai-all-good {
-  background:linear-gradient(135deg,var(--p-mint),#e8f9f0);
-  border-radius:10px; padding:16px; text-align:center;
-  border:2px solid var(--p-mint-mid);
-}
-
-/* Refined chapter display */
-.ai-refined-chapter {
-  background:#fff; border-radius:12px; padding:18px 20px;
-  margin-bottom:12px; border:2px solid var(--p-lav-mid);
-  animation:slideUp 0.3s ease;
-}
-.ai-refined-ch-header {
-  display:flex; align-items:center; gap:10px; margin-bottom:12px;
-  padding-bottom:10px; border-bottom:2px solid var(--p-lav);
-}
-.ai-refined-ch-num {
-  background:linear-gradient(135deg,#b07de8,#9b8de0); color:#fff;
-  border-radius:8px; padding:3px 12px; font-family:var(--font-display);
-  font-size:12px; font-weight:800; white-space:nowrap;
-}
-.ai-refined-ch-title { font-family:var(--font-display); font-size:15px; font-weight:800; color:#4a357a; }
-.ai-changes-list {
-  background:var(--p-lemon); border-radius:8px; padding:10px 14px;
-  margin-bottom:12px; border:1.5px solid var(--p-lemon-mid);
-}
-.ai-changes-label { font-size:12px; font-weight:800; color:#6b4a10; margin-bottom:4px; }
-.ai-change-item { font-size:12px; color:#7a5820; line-height:1.6; }
-.ai-refined-text {
-  font-size:14px; color:#3a3460; line-height:1.85;
-  background:#fdfcff; border-radius:8px; padding:14px;
-  border:1.5px solid #ede8f8; max-height:320px; overflow-y:auto;
-  white-space:pre-wrap;
-}
-
-/* ─── AI CO-AUTHOR SECTION ─── */
-.ai-coauthor-card {
-  margin-top:24px;
-  border-radius:var(--radius);
-  overflow:hidden;
-  border:2.5px solid #b07de855;
-  animation:slideUp 0.5s ease;
-}
-.ai-coauthor-header {
-  background:linear-gradient(135deg,#b07de8,#7ec8e3);
-  padding:20px 24px;
-  color:#fff;
-  display:flex;align-items:center;gap:14px;
-}
-.ai-coauthor-header .ai-icon { font-size:36px; }
-.ai-coauthor-header h3 { font-family:var(--font-display);font-size:20px;font-weight:800; }
-.ai-coauthor-header p { font-size:13px;opacity:0.9;margin-top:2px; }
-.ai-coauthor-body { background:#fff;padding:20px 24px; }
-.ai-coauthor-question {
-  font-family:var(--font-display);font-size:17px;font-weight:800;color:#4a357a;
-  margin-bottom:8px;
-}
-.ai-coauthor-subtitle {
-  font-size:13px;color:var(--ink-light);margin-bottom:18px;line-height:1.6;
-}
-.ai-coauthor-btns { display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px; }
-.ai-btn-yes {
-  flex:1;min-width:140px;padding:14px 20px;border-radius:14px;border:none;
-  background:linear-gradient(135deg,#b07de8,#9b8de0);color:#fff;
-  font-family:var(--font-display);font-size:15px;font-weight:800;
-  cursor:pointer;transition:all 0.2s;box-shadow:0 4px 14px rgba(176,125,232,0.35);
-}
-.ai-btn-yes:hover { transform:translateY(-2px);box-shadow:0 6px 20px rgba(176,125,232,0.45); }
-.ai-btn-no {
-  flex:1;min-width:140px;padding:14px 20px;border-radius:14px;
-  border:2px solid var(--p-lav-mid);background:var(--p-lav);color:#6b4fa8;
-  font-family:var(--font-display);font-size:15px;font-weight:800;
-  cursor:pointer;transition:all 0.2s;
-}
-.ai-btn-no:hover { background:var(--p-lav-mid); }
-.ai-reminder-alert {
-  background:linear-gradient(135deg,#fff9e6,#fff3cc);
-  border:2px solid #f0c832;border-radius:12px;
-  padding:14px 18px;margin-top:12px;
-  display:flex;gap:12px;align-items:flex-start;
-}
-.ai-reminder-alert .alert-icon { font-size:24px;flex-shrink:0; }
-.ai-reminder-alert .alert-text { font-size:13px;color:#6b4a10;line-height:1.6; }
-.ai-reminder-alert .alert-text strong { color:#7a4a00; }
-.ai-response-panel {
-  background:var(--p-lav);border-radius:12px;padding:16px 18px;margin-top:14px;
-  border:2px solid var(--p-lav-mid);animation:slideUp 0.4s ease;
-}
-.ai-response-panel h4 { font-family:var(--font-display);font-size:15px;color:#4a357a;margin-bottom:8px;font-weight:800; }
-.ai-response-panel p { font-size:13px;color:#5a5370;line-height:1.65; }
-.ai-response-panel .ai-tips { margin-top:10px;display:flex;flex-direction:column;gap:6px; }
-.ai-response-panel .ai-tip { background:#fff;border-radius:8px;padding:8px 12px;font-size:13px;color:#4a357a;display:flex;gap:8px;align-items:flex-start; }
-.ai-declined-panel {
-  background:linear-gradient(135deg,var(--p-mint),#e8f9f0);
-  border-radius:12px;padding:16px 18px;margin-top:14px;
-  border:2px solid var(--p-mint-mid);animation:slideUp 0.4s ease;
-}
-.ai-declined-panel h4 { font-family:var(--font-display);font-size:15px;color:#1a6647;margin-bottom:6px;font-weight:800; }
-.ai-declined-panel p { font-size:13px;color:#2a7a5a;line-height:1.6; }
-
-/* ─── COMPLETION BANNER ─── */
-.completion-banner {
-  text-align:center; padding:28px;
-  background:linear-gradient(135deg,#d4f5e9,#daf0fa);
-  border-radius:var(--radius); border:2px solid var(--p-mint-mid);
-  margin-top:16px; animation:slideUp 0.5s ease;
-}
-.completion-banner .icon { font-size:48px; margin-bottom:10px; }
-.completion-banner h3 { font-family:var(--font-display); font-size:24px; color:#1a6647; }
-.completion-banner p  { font-size:14px; color:#2a7a5a; margin-top:6px; }
-
-/* ─── GEN-MODE CARD (now: write-mode card) ─── */
-.gen-mode-card {
-  flex:1; min-width:170px; padding:18px; border-radius:var(--radius-sm);
-  border:2.5px solid var(--p-lav-mid); background:#fff;
-  cursor:pointer; text-align:center; transition:all 0.2s;
-}
-.gen-mode-card:hover   { border-color:var(--p-lav-deep); background:var(--p-lav); }
-.gen-mode-card.selected { border-color:#9b8de0; background:var(--p-lav); box-shadow:0 3px 12px rgba(155,141,224,0.2); }
-
-/* ─── NAV BAR ─── */
-.nav-bar {
-  position:fixed; bottom:0; left:0; right:0;
-  padding:12px 16px;
-  background:rgba(253,250,255,0.96);
-  backdrop-filter:blur(14px);
-  border-top:1.5px solid var(--p-lav-mid);
-  display:flex; justify-content:space-between; align-items:center;
-  z-index:100;
-}
-.nav-bar .inner { max-width:760px; margin:0 auto; width:100%; display:flex; justify-content:space-between; align-items:center; }
-.nav-btn {
-  padding:10px 24px; border-radius:12px; border:none;
-  font-family:var(--font-display); font-weight:800; font-size:15px;
-  cursor:pointer; transition:all 0.2s;
-}
-.nav-back { background:var(--p-lav); color:#6b4fa8; border:1.5px solid var(--p-lav-mid); }
-.nav-back:disabled { background:#f0eeff; color:#c0b8d8; cursor:default; border-color:transparent; }
-.nav-back:not(:disabled):hover { background:var(--p-lav-mid); }
-.nav-next {
-  background:linear-gradient(135deg,#b07de8,#9b8de0); color:#fff;
-  box-shadow:0 4px 14px rgba(176,125,232,0.35);
-}
-.nav-next:disabled { background:#ddd6f0; color:#a09ab8; box-shadow:none; cursor:default; }
-.nav-next:not(:disabled):hover { transform:translateY(-1px); box-shadow:0 6px 18px rgba(176,125,232,0.4); }
-.nav-step { font-size:13px; color:var(--ink-light); font-weight:700; }
-
-/* ─── TOAST ─── */
-.toast {
-  position:fixed; top:20px; left:50%; transform:translateX(-50%);
-  padding:12px 28px; border-radius:12px;
-  font-family:var(--font-display); font-size:14px; font-weight:800;
-  color:#fff; z-index:999;
-  animation:toastIn 0.35s ease, toastOut 0.35s ease 2.8s forwards;
-  pointer-events:none; white-space:nowrap;
-}
-.toast.success { background:linear-gradient(135deg,#52c29b,#3aab80); }
-.toast.error   { background:linear-gradient(135deg,#e87fa3,#d0547c); }
-.toast.info    { background:linear-gradient(135deg,#b07de8,#9b8de0); }
-
-/* ─── MODAL ─── */
-.modal-overlay {
-  position:fixed; top:0; left:0; right:0; bottom:0;
-  background:rgba(40,30,80,0.45); z-index:200;
-  display:flex; align-items:center; justify-content:center;
-  animation:fadeIn 0.2s ease;
-}
-.modal-box {
-  background:#fff; border-radius:var(--radius-lg); padding:28px;
-  max-width:430px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.18);
-  animation:slideUp 0.3s ease; border:2px solid var(--p-lav-mid);
-}
-.modal-box h3 { font-family:var(--font-display); font-size:20px; color:#4a357a; margin-bottom:10px; }
-.modal-box p  { font-size:14px; color:var(--ink-mid); margin-bottom:20px; line-height:1.6; }
-.modal-actions { display:flex; gap:10px; justify-content:flex-end; }
-.modal-actions button {
-  padding:8px 22px; border-radius:10px; border:none;
-  font-family:var(--font-display); font-weight:800; font-size:14px; cursor:pointer;
-}
-.modal-cancel  { background:var(--p-lav); color:#6b4fa8; }
-.modal-confirm { background:linear-gradient(135deg,#e87fa3,#d0547c); color:#fff; }
-
-/* ─── LOADING SPINNER ─── */
-.spinner {
-  display:inline-block; width:18px; height:18px;
-  border:3px solid rgba(255,255,255,0.35);
-  border-top-color:#fff;
-  border-radius:50%; animation:spin 0.65s linear infinite;
-  vertical-align:middle; margin-right:7px;
-}
-
-/* ─── UPLOAD DROP ZONE ─── */
-.upload-zone {
-  border:3px dashed var(--p-sky-deep); border-radius:var(--radius);
-  padding:32px; text-align:center; background:var(--p-sky);
-  cursor:pointer; transition:all 0.2s; margin-top:14px;
-}
-.upload-zone:hover, .upload-zone.drag-over {
-  background:var(--p-sky-mid); border-color:#5ab3d4;
-}
-.upload-zone .uz-icon { font-size:48px; margin-bottom:10px; }
-.upload-zone h3 { font-family:var(--font-display); font-size:20px; color:#0e4f73; font-weight:800; }
-.upload-zone p  { font-size:13px; color:#1c7aad; margin-top:4px; }
-.upload-zone-btn {
-  margin-top:14px; padding:10px 28px; border-radius:24px;
-  background:var(--p-sky-deep); color:#fff; border:none;
-  font-family:var(--font-display); font-size:15px; font-weight:800;
-  cursor:pointer; transition:all 0.2s;
-}
-.upload-zone-btn:hover { background:#5ab3d4; }
-
-/* ─── WRITING TIPS PANEL ─── */
-.tips-panel {
-  background:linear-gradient(135deg,var(--p-rose),var(--p-lemon));
-  border-radius:var(--radius); padding:16px;
-  border:2px solid var(--p-rose-mid); margin-top:14px;
-}
-.tips-panel h4 { font-family:var(--font-display); font-size:15px; color:#6a2040; margin-bottom:10px; font-weight:800; }
-.tip-item { display:flex; gap:8px; align-items:flex-start; margin-bottom:8px; font-size:13px; color:#5a2a3a; line-height:1.5; }
-.tip-item .tip-emoji { font-size:16px; flex-shrink:0; }
-
-/* ─── SCROLLBAR ─── */
-.draft-container::-webkit-scrollbar { width:6px; }
-.draft-container::-webkit-scrollbar-track { background:var(--p-lav); border-radius:3px; }
-.draft-container::-webkit-scrollbar-thumb { background:var(--p-lav-deep); border-radius:3px; }
-
-/* ─── FILE UPLOAD HIDDEN ─── */
-#fileInput { display:none; }
-
-/* ─── ANIMATIONS ─── */
-@keyframes fadeIn    { from{opacity:0} to{opacity:1} }
-@keyframes slideUp   { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
-@keyframes slideDown { from{opacity:0;transform:translateY(-12px)} to{opacity:1;transform:translateY(0)} }
-@keyframes floaty    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
-@keyframes shake     { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-9deg)} 75%{transform:rotate(9deg)} }
-@keyframes spin      { to{transform:rotate(360deg)} }
-@keyframes toastIn   { from{opacity:0;transform:translateX(-50%) translateY(-18px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
-@keyframes toastOut  { from{opacity:1} to{opacity:0} }
-@keyframes pulse     { 0%,100%{opacity:1} 50%{opacity:0.6} }
-
-@media (max-width:520px) {
-  .header h1 { font-size:28px; }
-  .toolbar button { padding:7px 12px; font-size:12px; }
-  .section-card { padding:18px; }
-  .bookshelf { gap:2px; }
-  .spine-label { font-size:7.5px; }
-  .nav-btn { padding:10px 16px; font-size:13px; }
-}
-
-.dmbtn-primary { background:linear-gradient(135deg,#6b4fa8,#9b6fd4); color:#fff; }
-.dmbtn-secondary { background:#eee; color:#444; }
 </style>
 </head>
 <body>
+<div class="rainbow-top"></div>
 
-<div class="blob blob-1"></div>
-<div class="blob blob-2"></div>
-<div class="blob blob-3"></div>
+<!-- BLOBS -->
+<svg class="blob tl" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.4,-32.6,90,-16.3,89.1,-.5C88.2,15.3,83.8,30.6,75.5,43.6C67.2,56.6,55,67.2,41.2,74.6C27.4,82,12,86.1,-2,85.3C-16,84.6,-32,79,-46.5,71.6C-61,64.2,-74,55,-81.2,42.4C-88.4,29.9,-89.8,14.9,-88.2,.9C-86.5,-13.2,-81.7,-26.4,-74.4,-38C-67,-49.7,-57,-59.9,-44.2,-67.5C-31.4,-75.2,-15.7,-80.4,.6,-81.3C16.9,-82.2,30.6,-83.6,44.7,-76.4Z" transform="translate(100 100)"/></svg>
+<svg class="blob br" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M39.5,-65.3C52.3,-59.7,64.5,-51.4,71.5,-39.8C78.5,-28.2,80.4,-14.1,79.8,-.3C79.1,13.5,75.9,27.1,69.4,39.4C62.9,51.8,53.1,62.9,40.8,70.3C28.5,77.8,14.2,81.6,.4,81C-13.4,80.4,-26.8,75.3,-39,68.1C-51.2,60.8,-62.3,51.3,-70.2,39.5C-78.1,27.7,-82.9,13.8,-83.1,-.2C-83.3,-14.1,-79,-28.2,-71.4,-39.8C-63.8,-51.4,-52.9,-60.3,-40.5,-66.1C-28.2,-71.9,-14.1,-74.6,-.3,-74.2C14.5,-73.7,26.7,-70.9,39.5,-65.3Z" transform="translate(100 100)"/></svg>
 
-<div id="toastContainer"></div>
-<div id="modalContainer"></div>
-<input type="file" id="fileInput" accept=".docx,.json,.storyforge">
+<div class="toast" id="toast"></div>
 
-<!-- HEADER -->
-<div class="header">
-  <div class="header-brand">YoungFoundry Presents</div>
-  <h1>✨ MyFirstChapter ✨</h1>
-  <p class="header-tagline">Your Book-Writing Studio for Young Authors!</p>
-  <span class="header-free-badge">🎁 100% FREE — No Account Needed</span>
-</div>
-
-<!-- TOOLBAR -->
-<div class="toolbar">
-  <button class="btn-save"   onclick="saveProject()">💾 Save Draft</button>
-  <button class="btn-load"   onclick="loadDraft()">📂 Load Draft</button>
-  <button class="btn-export" onclick="exportToWord()">📄 Export to Word</button>
-  <button class="btn-new"    onclick="confirmNewProject()">🆕 New Book</button>
-</div>
-
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="r">The Young</span> <span class="g">Foundry</span></div>
+    <span class="brand-sep">›</span>
+    <div class="brand-sub">✍️ MyFirstChapter</div>
+    <div class="tsp"></div>
+    <div class="topbar-btns">
+      <button class="btn ghost sm" onclick="showScreen('repository')">📂 My Docs</button>
+      <button class="btn ghost sm" onclick="window.location='TYF_Network.html'">🌐 TYF Network</button>
+      <button class="btn ghost sm" onclick="window.location='index.html'">← Home</button>
+    </div>
   </div>
 </div>
 
-<!-- WELCOME BACK BANNER -->
-<div id="welcomeBackBanner" style="display:none" class="welcome-back-banner">
-  <div class="wb-icon">👋</div>
-  <div class="wb-text">
-    <h3 id="welcomeBackTitle">Welcome back!</h3>
-    <p id="welcomeBackSub">Your draft has been loaded — pick up right where you left off!</p>
+<!-- ============================================================
+     SCREEN: LOGIN (no TYF session found)
+============================================================ -->
+<div id="screen-login" style="display:none">
+  <div style="min-height:80vh;display:grid;place-items:center;padding:24px;">
+    <div style="background:var(--paper);border:2px solid var(--line);border-radius:28px;padding:36px;max-width:400px;width:100%;box-shadow:var(--shadow);text-align:center;position:relative;overflow:hidden;">
+      <div style="height:4px;background:linear-gradient(90deg,var(--purple),var(--blue),var(--green));position:absolute;top:0;left:0;right:0;"></div>
+      <div style="font-size:3rem;margin-bottom:12px">✍️</div>
+      <div style="font-family:var(--head);font-size:24px;margin-bottom:6px">MyFirstChapter</div>
+      <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:24px">A narrative writing studio for young authors. Log in with your TYF Network identity to save and publish your work.</p>
+      <div class="field">
+        <label>Your Name (from TYF Network)</label>
+        <input type="text" id="login-name" placeholder="e.g. Arjun K." />
+      </div>
+      <div class="field">
+        <label>School ID</label>
+        <input type="text" id="login-sid" placeholder="SCH2026-..." />
+      </div>
+      <button class="btn purple" style="width:100%" onclick="mfcLogin()">Start Writing →</button>
+      <p style="margin-top:12px;font-size:12px;color:var(--muted);font-weight:700">New to TYF? <a href="TYF_Network.html" style="color:var(--blue);font-weight:900">Register on TYF Network first →</a></p>
+    </div>
   </div>
-  <button class="wb-close" onclick="document.getElementById('welcomeBackBanner').style.display='none'">✕</button>
 </div>
 
-<!-- SAVE REMINDER -->
-<div class="save-reminder" id="saveReminder" style="margin-top:6px">
-  <span>💡</span> Click <strong>💾 Save Draft</strong> to download your progress as a Word file. Load it back anytime with <strong>📂 Load Draft</strong>!
+<!-- ============================================================
+     SCREEN: MAIN WRITING STUDIO
+============================================================ -->
+<div id="screen-studio" style="display:none">
+  <div class="page">
+    <div class="two-col">
+
+      <!-- LEFT SIDEBAR -->
+      <div class="sidebar">
+
+        <!-- Story Info -->
+        <div class="sidebar-card">
+          <h4>📖 Your Story</h4>
+          <div class="field">
+            <label>Story Title</label>
+            <input type="text" id="story-title" placeholder="Give your story a title..." oninput="autoSave()" />
+          </div>
+          <div class="field">
+            <label>Genre</label>
+            <div class="genre-grid" id="genre-grid"></div>
+          </div>
+          <div class="field" style="margin-top:10px">
+            <label>📝 Book Blurb <span style="color:var(--muted);font-weight:600">(what's it about?)</span></label>
+            <textarea id="story-blurb" maxlength="600" placeholder="A short description readers will see before opening your story…" style="min-height:60px" oninput="autoSave()"></textarea>
+          </div>
+          <div class="field">
+            <label>💭 Why I Wrote This</label>
+            <textarea id="story-why" maxlength="400" placeholder="What inspired you? Why did this story matter to you?" style="min-height:60px" oninput="autoSave()"></textarea>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+            <span style="font-size:12px;font-weight:700;color:var(--muted)">Total words:</span>
+            <span id="total-words" style="font-family:var(--head);font-size:18px;color:var(--purple)">0</span>
+          </div>
+        </div>
+
+        <!-- Plot Dice -->
+        <div class="sidebar-card">
+          <h4>🎲 Plot Dice</h4>
+          <p style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:10px">Stuck? Roll for inspiration!</p>
+          <button class="dice-btn" onclick="rollDice()">🎲 Roll the Dice</button>
+          <div class="dice-result" id="dice-result">Hit the dice for a plot twist…</div>
+        </div>
+
+        <!-- Chapters -->
+        <div class="sidebar-card">
+          <h4>📑 Chapters</h4>
+          <div id="chapter-list"></div>
+          <button class="btn ghost sm" style="width:100%;margin-top:8px" onclick="addChapter()">+ Add Chapter</button>
+        </div>
+
+        <!-- User -->
+        <div class="sidebar-card" style="background:linear-gradient(135deg,var(--purple),var(--blue));border:none;color:#fff">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+            <div style="font-size:1.8rem" id="user-avatar-disp">✍️</div>
+            <div>
+              <div style="font-family:var(--head);font-size:15px" id="user-name-disp">Author</div>
+              <div style="font-size:11px;font-weight:700;opacity:.8" id="user-grade-disp">Grade —</div>
+            </div>
+          </div>
+          <button class="btn sm" style="width:100%;background:rgba(255,255,255,.2);color:#fff;border:2px solid rgba(255,255,255,.3)" onclick="showScreen('repository')">📂 My Docs</button>
+        </div>
+      </div>
+
+      <!-- MAIN WRITING AREA -->
+      <div>
+        <div id="studio-status-banner"></div>
+
+        <div class="writing-card">
+          <div class="writing-toolbar">
+            <button class="tb-btn" onclick="fmt('bold')" title="Bold"><b>B</b></button>
+            <button class="tb-btn" onclick="fmt('italic')" title="Italic"><i>I</i></button>
+            <button class="tb-btn" onclick="fmt('underline')" title="Underline"><u>U</u></button>
+            <div class="tb-sep"></div>
+            <button class="tb-btn" onclick="insertStarter('opening')" title="Opening hook">🌅 Hook</button>
+            <button class="tb-btn" onclick="insertStarter('conflict')" title="Add conflict">⚡ Conflict</button>
+            <button class="tb-btn" onclick="insertStarter('dialogue')" title="Add dialogue">💬 Dialogue</button>
+            <button class="tb-btn" onclick="insertStarter('resolution')" title="Resolution">🌟 Resolve</button>
+            <div class="tb-sep"></div>
+            <span class="word-count-bar">Chapter words: <span id="chapter-word-count" style="font-family:var(--head);color:var(--purple)">0</span></span>
+          </div>
+
+          <div id="chapter-editor" contenteditable="true"
+               placeholder="Begin your chapter here… let the words flow."
+               oninput="onEditorInput()"
+               spellcheck="true"></div>
+
+          <div class="editor-footer">
+            <div id="chapter-title-display" style="font-family:var(--head);font-size:15px;color:var(--purple)">Chapter 1</div>
+            <div class="tsp"></div>
+            <button class="btn ghost sm" onclick="saveCurrentChapter()">💾 Save Chapter</button>
+            <button class="btn purple sm" onclick="openPublishFlow()">🚀 Review &amp; Publish</button>
+          </div>
+        </div>
+
+        <!-- Writing Prompts -->
+        <div style="background:var(--paper);border:2px solid var(--line);border-radius:18px;padding:18px;margin-top:16px;">
+          <div style="font-family:var(--head);font-size:15px;margin-bottom:10px;color:var(--dark)">✨ Writing Prompts</div>
+          <div id="prompts-strip" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>
 
-<!-- PROGRESS BOOKSHELF -->
-<div class="bookshelf" id="bookshelf"></div>
+<!-- ============================================================
+     SCREEN: REPOSITORY (My Documents)
+============================================================ -->
+<div id="screen-repository" style="display:none">
+  <div class="page" style="max-width:860px;margin:0 auto;">
+    <button class="btn ghost sm" onclick="showScreen('studio')" style="margin-bottom:16px">← Back to Writing</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+      <div>
+        <div style="font-family:var(--head);font-size:26px;color:var(--dark)">📂 My Docs</div>
+        <p style="font-size:13px;color:var(--muted);font-weight:700;margin-top:3px">Your saved stories and chapters — safe in your TYF profile</p>
+      </div>
+      <button class="btn purple" onclick="startNewStory()">✍️ New Story</button>
+    </div>
+    <div style="background:#e3f2fd;border:2px solid #90caf9;border-radius:14px;padding:12px 16px;font-size:13px;font-weight:700;color:#1565C0;margin-bottom:20px;">
+      🔒 Your documents are saved to your TYF Network profile. To publish to the <strong>Books &amp; More</strong> community, your story passes AI review and — for students — parent approval first.
+    </div>
+    <div id="repository-list"></div>
+  </div>
+</div>
 
-<!-- BADGES -->
-<div class="badges" id="badgesBar"></div>
+<!-- ============================================================
+     MODAL: PUBLISH FLOW
+============================================================ -->
+<div class="modal-overlay" id="modal-publish">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-publish')">✕</button>
+    <h3>🚀 Review &amp; Publish</h3>
+    <p class="sub">Your story will be reviewed by AI, then sent for parent approval before going live in Books &amp; More.</p>
 
-<!-- MAIN CONTENT -->
-<div class="main" id="mainContent"></div>
+    <div style="background:var(--soft);border:2px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:16px;">
+      <div style="font-weight:900;font-size:14px;margin-bottom:4px" id="pub-story-name">Untitled Story</div>
+      <div style="font-size:12px;color:var(--muted);font-weight:700" id="pub-story-meta"></div>
+    </div>
 
-<!-- NAVIGATION -->
-<div class="nav-bar">
-  <div class="inner">
-    <button class="nav-btn nav-back" id="btnBack" onclick="prevStep()">← Back</button>
-    <span class="nav-step" id="navStepLabel">Step 1 of 8</span>
-    <button class="nav-btn nav-next" id="btnNext" onclick="nextStep()">Next →</button>
+    <!-- Step 1: AI Review -->
+    <div id="pub-step-ai">
+      <div style="background:#e3f2fd;border:2px solid #90caf9;border-radius:12px;padding:10px 14px;font-size:12px;font-weight:700;color:#1565C0;margin-bottom:12px">
+        🤖 AI review is required before you can submit. This checks your writing is safe and appropriate for the community.
+      </div>
+      <button class="btn blue" style="width:100%" id="run-ai-btn" onclick="runPublishAiReview()">🤖 Run AI Review</button>
+      <div class="ai-panel" id="pub-ai-panel"></div>
+    </div>
+
+    <!-- Step 2: Confirm & note (shown after AI passes) -->
+    <div id="pub-step-confirm" style="display:none;margin-top:14px">
+      <div class="field">
+        <label>Add a Note to Parent (optional)</label>
+        <textarea id="pub-parent-note" placeholder="Tell your parent what this story is about and why you wrote it…" style="min-height:70px"></textarea>
+      </div>
+      <div style="background:#fff8e1;border:2px solid #ffe082;border-radius:12px;padding:10px 14px;font-size:12px;font-weight:800;color:#E65100;margin-bottom:14px">
+        ⚠️ Once you submit, your story goes to your parent for approval. Are you sure it's your best work?
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn ghost" style="flex:1" onclick="closeModal('modal-publish')">← Go Back &amp; Edit</button>
+        <button class="btn green" style="flex:1" id="submit-publish-btn" onclick="submitForParentApproval()">
+          📤 Yes, Submit for Approval →
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 3: Published — share panel -->
+    <div id="pub-step-share" style="display:none;margin-top:14px">
+      <div style="background:#e8f5e9;border:2px solid #a5d6a7;border-radius:14px;padding:14px;text-align:center;margin-bottom:14px">
+        <div style="font-size:2rem;margin-bottom:6px">🏆</div>
+        <div style="font-weight:900;font-size:15px;color:#2E7D32;margin-bottom:4px">Your story is published!</div>
+        <div style="font-size:12px;font-weight:700;color:var(--muted)">Share it with anyone — they can read it without a TYF account.</div>
+      </div>
+      <div style="background:var(--soft);border-radius:12px;padding:10px 14px;font-family:monospace;font-size:12px;word-break:break-all;margin-bottom:12px" id="pub-share-link"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn ghost sm" onclick="copyStoryLink()">📋 Copy Link</button>
+        <button class="btn ghost sm" style="color:#25D366;border-color:#25D366" onclick="shareStoryWhatsApp()">📲 WhatsApp</button>
+        <button class="btn ghost sm" onclick="shareStoryEmail()">📧 Email</button>
+      </div>
+    </div>
+
+    <p style="text-align:center;font-size:11px;color:var(--muted);font-weight:700;margin-top:10px">
+      AI reviews first · Parent approves · Published to Books &amp; More · Shareable with anyone
+    </p>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: NEW STORY
+============================================================ -->
+<div class="modal-overlay" id="modal-new-story">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-new-story')">✕</button>
+    <h3>✍️ Start a New Story</h3>
+    <p class="sub">Your new story will be saved to your repository.</p>
+    <div class="field">
+      <label>Story Title</label>
+      <input type="text" id="ns-title" placeholder="My Amazing Story" />
+    </div>
+    <div class="field">
+      <label>Genre</label>
+      <select id="ns-genre">
+        <option value="">Choose genre...</option>
+        <option value="fantasy">🧙 Fantasy</option>
+        <option value="adventure">🗺️ Adventure</option>
+        <option value="mystery">🔍 Mystery</option>
+        <option value="scifi">🚀 Sci-Fi</option>
+        <option value="realistic">🌸 Realistic Fiction</option>
+        <option value="folklore">🏺 Folklore & Mythology</option>
+        <option value="humour">😂 Humour</option>
+        <option value="poem">📜 Poetry</option>
+      </select>
+    </div>
+    <button class="btn purple" style="width:100%" onclick="createNewStory()">Create Story →</button>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════
-// DATA & CONSTANTS
-// ═══════════════════════════════════════════
-const STEP_NAMES = ['Book Foundation','World Building','Characters','Story Arc','Chapter Plan','Writing Style','Author Identity','Write My Book!'];
-const BADGES = [
-  {label:'📖 Story Starter',   step:0},
-  {label:'🌍 World Builder',   step:1},
-  {label:'🧑‍🎨 Character Creator',step:2},
-  {label:'🌀 Plot Twister',    step:3},
-  {label:'📑 Chapter Champ',   step:4},
-  {label:'✍️ Style Guide',     step:5},
-  {label:'🏷️ Real Author',     step:6},
-  {label:'🏆 Story Complete!', step:7},
-];
-
-const GENRES = [
-  {id:'fantasy',   label:'🧙 Fantasy',       color:'#9b8de0'},
-  {id:'scifi',     label:'🚀 Sci-Fi',         color:'#7ec8e3'},
-  {id:'mystery',   label:'🔍 Mystery',        color:'#f4956a'},
-  {id:'adventure', label:'⚔️ Adventure',      color:'#52c29b'},
-  {id:'spooky',    label:'👻 Spooky',         color:'#d0547c'},
-  {id:'comedy',    label:'😂 Comedy',         color:'#f0c832'},
-  {id:'superhero', label:'🦸 Superhero',      color:'#b07de8'},
-  {id:'animals',   label:'🐾 Animal Tales',   color:'#f4956a'},
-];
-const TONES = [
-  {id:'funny',        label:'😄 Funny'},
-  {id:'serious',      label:'🎭 Serious'},
-  {id:'spooky',       label:'🌙 Spooky'},
-  {id:'heartwarming', label:'💛 Heartwarming'},
-  {id:'thrilling',    label:'⚡ Thrilling'},
-  {id:'mysterious',   label:'🕵️ Mysterious'},
-];
-const AGE_GROUPS = [
-  {id:'8-10',  label:'8–10 years'},
-  {id:'11-13', label:'11–13 years'},
-  {id:'14-15', label:'14–15 years'},
-];
-const CHAPTER_COUNTS = [
-  {id:'3',  label:'3 chapters (Short Story)'},
-  {id:'5',  label:'5 chapters (Novella)'},
-  {id:'8',  label:'8 chapters (Novel)'},
-  {id:'10', label:'10 chapters (Epic)'},
-];
-const WRITING_STYLES = [
-  {id:'action',      label:'🏃 Lots of Action'},
-  {id:'dialogue',    label:'💬 Dialogue Heavy'},
-  {id:'descriptive', label:'🎨 Rich Descriptions'},
-  {id:'emotional',   label:'💭 Deep Feelings'},
-  {id:'humorous',    label:'🤣 Comedy First'},
-  {id:'suspense',    label:'😱 Suspenseful'},
-];
-const PLOT_DICE = {
-  twists:[
-    "The villain is actually a friend in disguise!",
-    "The hero discovers a secret superpower!",
-    "The map was upside down the whole time!",
-    "A mysterious letter arrives from the future!",
-    "The treasure was inside the hero all along!",
-    "Two enemies must work together to survive!",
-    "Everything was a dream… or was it?",
-    "The sidekick turns out to be the real hero!",
-    "A hidden door opens to another world!",
-    "The villain's weakness is something totally ridiculous!",
-  ],
-  locations:[
-    "A floating city above the clouds",
-    "An underwater kingdom with glass domes",
-    "A forest where trees can talk",
-    "A school built inside a volcano",
-    "A spaceship the size of a planet",
-    "A library that goes on forever",
-    "A desert with rivers of gold",
-    "A cave system with glowing crystals",
-    "A village on the back of a giant turtle",
-    "An abandoned theme park at night",
-  ],
-  conflicts:[
-    "A race against time before the portal closes",
-    "Two best friends on opposite sides of a war",
-    "A riddle that could save or destroy everything",
-    "A storm that never ends unless someone is brave enough",
-    "A creature that feeds on fear",
-    "A competition where cheating is the only rule",
-    "A curse that makes everyone forget who they are",
-    "A stolen artifact that controls the weather",
-    "An invasion by tiny but powerful creatures",
-    "A secret that could tear the group apart",
-  ],
-};
-
-const WRITING_PROMPTS = {
-  opening: [
-    "It was the strangest morning of my life when...",
-    "Nobody believed me, but I swear I saw...",
-    "The door had been locked for 100 years — until today.",
-    "I found a note in my pocket that I didn't write.",
-    "The sky turned purple at exactly 3pm and everything changed.",
-  ],
-  action: [
-    "Suddenly, without warning, ...",
-    "With no time to think, I...",
-    "The chase was on! I sprinted towards...",
-    "Boom! The explosion sent everything flying...",
-    "There was only one way out...",
-  ],
-  feeling: [
-    "My heart was pounding so loud I thought...",
-    "For the first time, I felt completely...",
-    "I had never been so scared in my life, and yet...",
-    "A warm feeling washed over me when...",
-    "Something felt wrong. Very, very wrong.",
-  ],
-  description: [
-    "The place smelled like... and looked like...",
-    "Colors swirled everywhere — mostly...",
-    "It was bigger than anything I'd ever seen...",
-    "Every tiny detail was perfect, especially...",
-    "In the shadows, you could just make out...",
-  ],
-};
-
-// ═══════════════════════════════════════════
+// ============================================================
 // STATE
-// ═══════════════════════════════════════════
-let state = {
-  step: 0,
-  earnedBadges: [],
-  aiCoauthorChoice: null, // null | 'yes' | 'no'
-  data: {
-    title:'', genre:'', tone:'', ageGroup:'', theme:'', dedication:'',
-    worldName:'', worldDescription:'', locations:'', dangers:'', secrets:'', worldRules:'',
-    mainCharName:'', mainCharTraits:'', mainCharGoal:'', mainCharFear:'', mainCharWeakness:'',
-    supportingChars:'', villainName:'', villainMotivation:'',
-    beginning:'', incitingIncident:'', risingAction:'', midpointTwist:'', climax:'', ending:'',
-    chapterCount:'5', chapterOutlines:'',
-    writingStyles:[],
-    authorName:'', authorBio:'', authorAge:'',
-    plotDiceInserts:[],
-    chapters:[],  // [{title, body}]
-  },
-};
+// ============================================================
+let mfcUser = null;
+let currentStory = null;
+let currentChapterIdx = 0;
+let activeGenre = '';
 
-// ═══════════════════════════════════════════
-// HELPERS
-// ═══════════════════════════════════════════
-function $(id) { return document.getElementById(id); }
+// ============================================================
+// DATA — shares localStorage with TYF_Network
+// ============================================================
+function load(k, d){ try{ return JSON.parse(localStorage.getItem(k))||d; }catch{ return d; } }
+function save(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
 
-function toast(msg, type='success') {
-  const t = document.createElement('div');
-  t.className = 'toast ' + type;
-  t.textContent = msg;
-  $('toastContainer').appendChild(t);
-  setTimeout(() => t.remove(), 3400);
-}
+function getDocs(){ return load('mfc_docs', []); }
+function saveDocs(d){ save('mfc_docs', d); }
 
-function showModal(title, message, onConfirm) {
-  const m = document.createElement('div');
-  m.className = 'modal-overlay';
-  m.innerHTML = `<div class="modal-box"><h3>${title}</h3><p>${message}</p>
-    <div class="modal-actions">
-      <button class="modal-cancel" onclick="this.closest('.modal-overlay').remove()">Cancel</button>
-      <button class="modal-confirm" id="modalConfirmBtn">Yes, do it!</button>
-    </div></div>`;
-  $('modalContainer').appendChild(m);
-  m.querySelector('#modalConfirmBtn').onclick = () => { m.remove(); onConfirm(); };
-}
+// Also writes into TYF Network post queue when published
+function getTyfPosts(){ return load('yfs_posts', []); }
+function saveTyfPosts(p){ save('yfs_posts', p); }
+function getTyfAccounts(){ return load('yfs_accounts', []); }
 
-function esc(s) {
-  const d = document.createElement('div');
-  d.textContent = String(s||'');
-  return d.innerHTML;
-}
+// ============================================================
+// CONTENT DATA
+// ============================================================
+const GENRES = [
+  {id:'fantasy',  label:'Fantasy',   emoji:'🧙'},
+  {id:'adventure',label:'Adventure', emoji:'🗺️'},
+  {id:'mystery',  label:'Mystery',   emoji:'🔍'},
+  {id:'scifi',    label:'Sci-Fi',    emoji:'🚀'},
+  {id:'realistic',label:'Realistic', emoji:'🌸'},
+  {id:'folklore', label:'Folklore',  emoji:'🏺'},
+  {id:'humour',   label:'Humour',    emoji:'😂'},
+  {id:'poem',     label:'Poetry',    emoji:'📜'},
+];
 
-function upd(key, val) { state.data[key] = val; renderNav(); autoSave(); }
+const PLOT_DICE = [
+  '🌩️ A sudden storm traps your hero in an unexpected place.',
+  '🗝️ A locked door appears in a room that didn\'t have one yesterday.',
+  '👥 Two characters who hate each other must work together to survive.',
+  '📬 A letter arrives — but it\'s dated 50 years in the future.',
+  '🐾 An animal leads your hero somewhere dangerous.',
+  '🔦 The lights go out at exactly the wrong moment.',
+  '💰 Your hero finds a bag of money — but keeping it has consequences.',
+  '🪞 The mirror shows something that isn\'t there.',
+  '🎭 Someone is pretending to be someone they\'re not.',
+  '⏰ Your hero has only one hour to fix everything.',
+  '🌱 A forgotten seed grows into something that changes the story.',
+  '📸 An old photograph reveals a shocking truth.',
+  '🎵 A song triggers a memory that changes everything.',
+  '🚪 Behind the door is not what anyone expected.',
+  '✉️ A secret is accidentally overheard.',
+];
 
-// ─── Word count ───
-function wordCount(text) {
-  return (text||'').trim().split(/\s+/).filter(w=>w.length>0).length;
-}
-function totalWords() {
-  return state.data.chapters.reduce((sum,c) => sum + wordCount(c.body||''), 0);
-}
+const WRITING_PROMPTS = [
+  '"The door opened and everything changed."',
+  '"I never believed in magic until the day I—"',
+  '"The last person I expected to see was—"',
+  '"It started with a small lie. Just one."',
+  '"She found the map when she was cleaning out the attic."',
+  '"Everyone said the old house was empty. They were wrong."',
+  '"The robot looked at me and asked: \'What is a feeling?\'"',
+  '"On the day the sky turned green, nobody was prepared."',
+];
 
-// ═══════════════════════════════════════════
-// RENDER
-// ═══════════════════════════════════════════
-function render() {
-  renderBookshelf();
-  renderBadges();
-  renderStep();
-  renderNav();
-  autoSave();
-}
+const ADULT_KEYWORDS=['sex','nude','naked','porn','violence','kill','abuse','drug','alcohol'];
+const TRANS_CURSES=['bhenchod','madarchod','chutiya','gaandu','randi','punda','otha','dengu','pendejo','merde','scheisse','cazzo','blyad','suka'];
+const DEFAMATION=['worst teacher','bad school','hate my school','terrible school','bully teacher'];
 
-function renderBookshelf() {
-  let html = '';
-  STEP_NAMES.forEach((name, i) => {
-    const cls = i < state.step ? 'done' : i === state.step ? 'active' : 'future';
-    html += `<div class="book-spine" onclick="goToStep(${i})">
-      <div class="spine-bar ${cls}">${i < state.step ? '✓' : i+1}</div>
-      <div class="spine-label ${cls}">${name}</div>
-    </div>`;
-  });
-  $('bookshelf').innerHTML = html;
-}
-
-function renderBadges() {
-  let html = '';
-  BADGES.forEach((b,i) => {
-    const earned = state.earnedBadges.includes(i);
-    html += `<span class="badge ${earned?'earned':'locked'}">${b.label}</span>`;
-  });
-  $('badgesBar').innerHTML = html;
-}
-
-function renderNav() {
-  $('btnBack').disabled = state.step === 0;
-  $('navStepLabel').textContent = `Step ${state.step+1} of 8`;
-  if (state.step < 7) {
-    $('btnNext').style.display = '';
-    $('btnNext').disabled = !canAdvance();
-    $('btnNext').textContent = state.step === 6 ? 'Start Writing! ✍️' : 'Next →';
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+  // Check for public share view (no login needed)
+  const params = new URLSearchParams(window.location.search);
+  const viewId = params.get('view');
+  if (viewId) {
+    showPublicStoryView(viewId);
+    return;
+  }
+  // Try auto-login from TYF Network session
+  const tyfSession = load('mfc_session', null);
+  if (tyfSession) {
+    mfcUser = tyfSession;
+    initStudio();
   } else {
-    $('btnNext').style.display = 'none';
+    showScreen('login');
   }
-}
+  renderGenreGrid();
+  renderPrompts();
+});
 
-function canAdvance() {
-  const d = state.data;
-  switch(state.step) {
-    case 0: return d.title && d.genre && d.tone && d.ageGroup;
-    case 1: return d.worldName && d.worldDescription;
-    case 2: return d.mainCharName && d.mainCharGoal;
-    case 3: return d.beginning && d.climax && d.ending;
-    case 4: return true; // chapterCount always has a default of '5'; outlines are optional
-    case 5: return d.writingStyles && d.writingStyles.length > 0;
-    case 6: return d.authorName;
-    case 7: return true;
-    default: return false;
-  }
-}
-
-function nextStep() {
-  if (state.step < 7 && canAdvance()) {
-    if (!state.earnedBadges.includes(state.step)) state.earnedBadges.push(state.step);
-    // Init chapters array when entering writing step
-    if (state.step === 6) {
-      const count = parseInt(state.data.chapterCount) || 5;
-      if (state.data.chapters.length === 0) {
-        state.data.chapters = Array.from({length:count}, (_,i) => ({
-          title: `Chapter ${i+1}`,
-          body: '',
-        }));
-      }
-    }
-    state.step++;
-    render();
-    window.scrollTo({top:0, behavior:'smooth'});
-  }
-}
-function prevStep() {
-  if (state.step > 0) { state.step--; render(); window.scrollTo({top:0,behavior:'smooth'}); }
-}
-function goToStep(i) {
-  if (i <= Math.max(...state.earnedBadges, state.step)) { state.step = i; render(); }
-}
-
-// ═══════════════════════════════════════════
-// CHIPS / INPUTS
-// ═══════════════════════════════════════════
-function chipHTML(options, _sel, fieldKey, multi=false) {
-  return `<div class="chip-group">${options.map(o => {
-    const sel = multi ? (state.data[fieldKey]||[]).includes(o.id) : state.data[fieldKey] === o.id;
-    return `<button class="chip ${sel?'selected':''}" onclick="${multi ? `toggleMultiChip('${fieldKey}','${o.id}')` : `selectChip('${fieldKey}','${o.id}')`}">${o.label}</button>`;
-  }).join('')}</div>`;
-}
-function selectChip(field, val) { upd(field, val); render(); }
-function toggleMultiChip(field, val) {
-  const arr = state.data[field]||[];
-  if (arr.includes(val)) upd(field, arr.filter(v=>v!==val));
-  else if (arr.length < 3) upd(field, [...arr, val]);
-  render();
-}
-
-function inputHTML(field, placeholder, multiline=false, rows=2) {
-  const val = esc(state.data[field]||'');
-  if (multiline) return `<textarea rows="${rows}" placeholder="${placeholder}" oninput="upd('${field}',this.value)" onchange="upd('${field}',this.value)">${val}</textarea>`;
-  return `<input type="text" value="${val}" placeholder="${placeholder}" oninput="upd('${field}',this.value)" onchange="upd('${field}',this.value)">`;
-}
-
-function labelHTML(main, sub) {
-  return `<div class="label"><div class="label-main">${main}</div>${sub?`<div class="label-sub">${sub}</div>`:''}</div>`;
-}
-
-// ═══════════════════════════════════════════
-// PLOT DICE
-// ═══════════════════════════════════════════
-let diceCategory = 'twists';
-let diceResult = null;
-let diceRolling = false;
-
-function plotDiceHTML() {
-  return `<div class="dice-box">
-    <div class="dice-title"><span>🎲</span><strong>Plot Dice — Stuck? Roll for Ideas!</strong></div>
-    <div class="dice-cats">
-      ${Object.keys(PLOT_DICE).map(c => `<button class="dice-cat ${diceCategory===c?'active':'inactive'}" onclick="diceCategory='${c}';diceResult=null;render()">${c[0].toUpperCase()+c.slice(1)}</button>`).join('')}
-    </div>
-    <button class="dice-roll-btn ${diceRolling?'rolling':''}" onclick="rollDice()" ${diceRolling?'disabled':''}>
-      ${diceRolling ? '🎲 Rolling...' : '🎲 Roll the Dice!'}
-    </button>
-    ${diceResult ? `<div class="dice-result">💡 ${esc(diceResult)}<br><button class="dice-use-btn" onclick="useDiceResult()">✨ Use this in my story!</button></div>` : ''}
-  </div>`;
-}
-function rollDice() {
-  diceRolling = true; diceResult = null; render();
-  setTimeout(() => {
-    const opts = PLOT_DICE[diceCategory];
-    diceResult = opts[Math.floor(Math.random()*opts.length)];
-    diceRolling = false; render();
-  }, 700);
-}
-function useDiceResult() {
-  if (diceResult) {
-    state.data.plotDiceInserts.push(diceResult);
-    toast('Idea added to your story! 🎲');
-    diceResult = null; render();
-  }
-}
-
-// ═══════════════════════════════════════════
-// BOOK COVER
-// ═══════════════════════════════════════════
-function bookCoverHTML() {
-  const d = state.data;
-  const genre = GENRES.find(g=>g.id===d.genre);
-  const color = genre ? genre.color : '#9b8de0';
-  const emoji = genre ? genre.label.split(' ')[0] : '📖';
-  return `<div class="book-cover" style="background:linear-gradient(145deg,${color}cc,${color},#1e1840)">
-    <div>
-      <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;opacity:0.75;margin-bottom:12px">${genre?genre.label:'Fiction'}</div>
-      <div style="font-family:var(--font-display);font-size:${(d.title||'').length>20?'20px':'26px'};font-weight:800;line-height:1.25;text-shadow:0 2px 10px rgba(0,0,0,0.25)">${esc(d.title||'My Story')}</div>
-      ${d.theme?`<div style="font-size:12px;opacity:0.8;margin-top:8px;font-style:italic">A story about ${esc(d.theme)}</div>`:''}
-    </div>
-    <div style="text-align:center;font-size:48px;opacity:0.13">${emoji}</div>
-    <div>
-      <div style="width:36px;height:2px;background:rgba(255,255,255,0.5);margin-bottom:8px"></div>
-      <div style="font-family:var(--font-display);font-size:14px;font-weight:700">by ${esc(d.authorName||'A Young Author')}</div>
-      ${d.authorAge?`<div style="font-size:11px;opacity:0.7">Age ${esc(d.authorAge)}</div>`:''}
-    </div>
-  </div>`;
-}
-
-// ═══════════════════════════════════════════
-// WRITING PROMPTS
-// ═══════════════════════════════════════════
-function promptsHTML(targetChapter) {
-  const cats = Object.keys(WRITING_PROMPTS);
-  const cat = cats[Math.floor(Math.random()*cats.length)];
-  const prompts = WRITING_PROMPTS[cat];
-  return `<div class="writing-prompt-box">
-    <div class="wp-header"><span>💡</span><strong>Need a spark? Try one of these!</strong></div>
-    <div>${prompts.map(p => `<span class="prompt-chip" onclick="insertPrompt(${targetChapter},\`${p.replace(/`/g,"'")}\`)">${p}</span>`).join('')}</div>
-  </div>`;
-}
-function insertPrompt(chapterIndex, text) {
-  const el = document.getElementById('chapterBody-' + chapterIndex);
-  if (el) {
-    el.focus();
-    const sel = window.getSelection();
-    if (sel && sel.rangeCount) {
-      const range = sel.getRangeAt(0);
-      range.deleteContents();
-      const textNode = document.createTextNode(' ' + text + ' ');
-      range.insertNode(textNode);
-      range.setStartAfter(textNode);
-      range.collapse(true);
-      sel.removeAllRanges();
-      sel.addRange(range);
-    } else {
-      el.innerHTML += `<p>${text}</p>`;
-    }
-    onRteInput(chapterIndex);
-  }
-}
-
-// ═══════════════════════════════════════════
-// STEP RENDERING
-// ═══════════════════════════════════════════
-function renderStep() {
-  let html = '';
-  switch(state.step) {
-    case 0: html = renderStep0(); break;
-    case 1: html = renderStep1(); break;
-    case 2: html = renderStep2(); break;
-    case 3: html = renderStep3(); break;
-    case 4: html = renderStep4(); break;
-    case 5: html = renderStep5(); break;
-    case 6: html = renderStep6(); break;
-    case 7: html = renderStep7(); break;
-  }
-  $('mainContent').innerHTML = html;
-
-}
-
-function sectionWrap(icon, title, inner, accentColor) {
-  return `<div class="section-card" style="border-color:${accentColor||'transparent'}55">
-    <div class="section-header"><span>${icon}</span><h2>${title}</h2></div>${inner}</div>`;
-}
-
-function renderStep0() {
-  return sectionWrap('📖','Book Foundation',`
-    ${labelHTML('📝 Book Title','What will your book be called?')}
-    ${inputHTML('title','My Amazing Adventure...')}
-    ${labelHTML('🎭 Genre','Pick the type of story you want to write')}
-    ${chipHTML(GENRES,state.data.genre,'genre')}
-    ${labelHTML('🎨 Tone','What feeling should your story have?')}
-    ${chipHTML(TONES,state.data.tone,'tone')}
-    ${labelHTML('👦 Who is this book for?','Pick the age group')}
-    ${chipHTML(AGE_GROUPS,state.data.ageGroup,'ageGroup')}
-    ${labelHTML('💡 Theme','What is your story really about? (friendship, courage, growing up...)')}
-    ${inputHTML('theme','e.g., The power of friendship...')}
-    ${labelHTML('💝 Dedication','Who do you want to dedicate this book to?')}
-    ${inputHTML('dedication','For my best friend Alex, who always believed in dragons...')}
-    <div class="tips-panel" style="margin-top:16px">
-      <h4>✨ Great book ideas start here!</h4>
-      <div class="tip-item"><span class="tip-emoji">🌟</span><span>Your title should make someone curious — make them <em>want</em> to open the book!</span></div>
-      <div class="tip-item"><span class="tip-emoji">🎭</span><span>Genre tells readers what kind of adventure to expect.</span></div>
-      <div class="tip-item"><span class="tip-emoji">💾</span><span>Click <strong>Save Draft</strong> at the top to save your progress as a Word file — load it back anytime with 📂 Load Draft!</span></div>
-    </div>
-  `, '#b07de8');
-}
-
-function renderStep1() {
-  return sectionWrap('🌍','World Building',`
-    ${labelHTML('🏰 World Name','What is your story world called?')}
-    ${inputHTML('worldName','e.g., The Kingdom of Everlight...')}
-    ${labelHTML('🖼️ World Description','Describe your world! What does it look like, feel like, smell like?')}
-    ${inputHTML('worldDescription','A magical forest where trees glow at night and music floats in the air...',true,3)}
-    ${labelHTML('📍 Key Locations','What are the important places in your world?')}
-    ${inputHTML('locations','The Crystal Cave, The Whispering Bridge...',true,2)}
-    ${labelHTML('⚠️ Dangers','What dangers lurk in your world?')}
-    ${inputHTML('dangers','Shadow wolves that hunt at night, quicksand meadows...')}
-    ${labelHTML('🤫 Secrets','What hidden secrets does your world have?')}
-    ${inputHTML('secrets','A hidden underground city, a map that only appears at midnight...')}
-    ${labelHTML('📜 World Rules','What special rules or magic does your world have?')}
-    ${inputHTML('worldRules','Magic only works when you\'re truly happy...')}
-    ${plotDiceHTML()}
-  `, '#52c29b');
-}
-
-function renderStep2() {
-  return sectionWrap('🧑‍🎨','Characters',`
-    ${labelHTML('⭐ Main Character Name','Who is the star of your story?')}
-    ${inputHTML('mainCharName','e.g., Luna Stardust')}
-    ${labelHTML('🧠 Personality Traits','What are they like? (brave, shy, funny, smart...)')}
-    ${inputHTML('mainCharTraits','Brave but sometimes too stubborn, loves animals, secretly afraid of the dark...')}
-    ${labelHTML('🎯 Main Goal','What does your hero want more than anything?')}
-    ${inputHTML('mainCharGoal','To find their missing parents, to save the kingdom...')}
-    ${labelHTML('😨 Greatest Fear','What is their biggest fear?')}
-    ${inputHTML('mainCharFear','Being alone, the dark, losing their friends...')}
-    ${labelHTML('🔓 Weakness','What\'s their flaw? (Every great hero has one!)')}
-    ${inputHTML('mainCharWeakness','Too trusting of strangers, afraid to ask for help...')}
-    ${labelHTML('👥 Supporting Characters','Who else appears in the story? (friends, mentors, pets...)')}
-    ${inputHTML('supportingChars','Max the loyal dog, Professor Riddle the wise owl...',true,3)}
-    ${labelHTML('👹 Villain Name','Who or what is the villain?')}
-    ${inputHTML('villainName','Lord Shadowmere, The Storm Queen...')}
-    ${labelHTML('🎭 Villain\'s Motivation','Why is the villain doing bad things? (Good villains have reasons!)')}
-    ${inputHTML('villainMotivation','They were hurt as a child and want revenge, they\'re afraid of being forgotten...')}
-    <div class="tips-panel" style="margin-top:14px">
-      <h4>💡 Character Tips</h4>
-      <div class="tip-item"><span class="tip-emoji">🦸</span><span>The best heroes have both strengths AND weaknesses — that's what makes them relatable!</span></div>
-      <div class="tip-item"><span class="tip-emoji">👹</span><span>Great villains think they're doing the <em>right</em> thing. Give your villain a reason!</span></div>
-    </div>
-  `, '#7ec8e3');
-}
-
-function renderStep3() {
-  return sectionWrap('🌀','Story Arc',`
-    <div class="tip-box">✨ <strong>Think of your story like a roller coaster</strong> — it starts calm, builds up excitement, reaches a thrilling peak, then comes back down for a satisfying end!</div>
-    ${labelHTML('🌅 Beginning','How does your story start? Set the scene!')}
-    ${inputHTML('beginning','Luna discovers a glowing map under her bed on a rainy Tuesday morning...',true,2)}
-    ${labelHTML('💥 Inciting Incident','What BIG event kicks off the adventure?')}
-    ${inputHTML('incitingIncident','The map starts glowing and a swirling portal opens in the wardrobe...',true,2)}
-    ${labelHTML('📈 Rising Action','What challenges happen as the story builds?')}
-    ${inputHTML('risingAction','Luna must cross three dangerous lands, solve ancient riddles, and face her fears...',true,2)}
-    ${labelHTML('🔄 Midpoint Twist','What surprising thing happens in the middle?')}
-    ${inputHTML('midpointTwist','Luna discovers the villain is actually her long-lost brother...',true,2)}
-    ${labelHTML('🏔️ Climax','The biggest, most exciting moment of the whole story!')}
-    ${inputHTML('climax','Luna faces Lord Shadowmere in the Crystal Cave with only a candle and her wits...',true,2)}
-    ${labelHTML('🌈 Ending','How does everything wrap up? Is it happy? Bittersweet?')}
-    ${inputHTML('ending','The kingdom is saved, the curse is broken, and Luna finally gets home in time for dinner...',true,2)}
-    ${plotDiceHTML()}
-  `, '#f4956a');
-}
-
-function renderStep4() {
-  return sectionWrap('📑','Chapter Plan',`
-    ${labelHTML('📚 Number of Chapters','How long do you want your book to be?')}
-    ${chipHTML(CHAPTER_COUNTS,state.data.chapterCount,'chapterCount')}
-    ${labelHTML('📋 Chapter Outlines (Optional)','Write a brief plan for each chapter. This helps you when you start writing!')}
-    ${inputHTML('chapterOutlines','Chapter 1: Luna finds the glowing map\nChapter 2: The portal opens\nChapter 3: A new world\n...',true,7)}
-    <div class="tips-panel" style="margin-top:14px">
-      <h4>📝 Planning Tips</h4>
-      <div class="tip-item"><span class="tip-emoji">🗺️</span><span>An outline is like a map for your story — you don't have to follow it exactly, but it helps you know where you're going!</span></div>
-      <div class="tip-item"><span class="tip-emoji">⚡</span><span>Try to end each chapter with something exciting that makes readers want to keep reading!</span></div>
-    </div>
-  `, '#9b8de0');
-}
-
-function renderStep5() {
-  return sectionWrap('✍️','Writing Style',`
-    ${labelHTML('🎨 Writing Flavors','Pick the styles you want in your book (choose 1–3)')}
-    ${chipHTML(WRITING_STYLES,state.data.writingStyles,'writingStyles',true)}
-    ${(state.data.writingStyles||[]).length>=3?'<div style="font-size:12px;color:#f4956a;margin-top:8px;font-weight:700">✨ Max 3 styles! Tap one to deselect.</div>':''}
-    ${state.data.plotDiceInserts && state.data.plotDiceInserts.length>0 ? `
-      ${labelHTML('🎲 Your Plot Dice Ideas','These ideas will be added to your story!')}
-      <div style="display:flex;flex-direction:column;gap:6px">
-        ${state.data.plotDiceInserts.map((p,i)=>`
-          <div style="background:var(--p-lemon);padding:8px 12px;border-radius:10px;font-size:13px;color:#6b4a10;display:flex;justify-content:space-between;align-items:center">
-            <span>💡 ${esc(p)}</span>
-            <button onclick="state.data.plotDiceInserts.splice(${i},1);render()" style="background:none;border:none;color:#d0547c;cursor:pointer;font-size:18px;padding:0 4px;line-height:1">×</button>
-          </div>
-        `).join('')}
-      </div>` : ''}
-    <div class="tips-panel" style="margin-top:14px">
-      <h4>✍️ Style Tips</h4>
-      <div class="tip-item"><span class="tip-emoji">💬</span><span><strong>Dialogue</strong> makes characters feel real and alive — write how people actually talk!</span></div>
-      <div class="tip-item"><span class="tip-emoji">🎨</span><span><strong>Rich descriptions</strong> use all five senses — sight, sound, smell, taste, and touch.</span></div>
-    </div>
-  `, '#e87fa3');
-}
-
-function renderStep6() {
-  return sectionWrap('🏷️','Author Identity',`
-    <div style="background:linear-gradient(135deg,var(--p-mint),var(--p-sky));border-radius:12px;padding:14px;margin-bottom:16px;font-size:14px;color:#1a6647;border:1.5px solid var(--p-mint-mid);text-align:center;font-weight:700">✨ Every great book has an author page. This is YOURS! ✨</div>
-    ${labelHTML('✏️ Your Author Name','Your name (can be your real name or a fun pen name!)')}
-    ${inputHTML('authorName','e.g., Luna Wordsworth, Alex the Great...')}
-    ${labelHTML('🎂 Your Age','How old are you? (numbers only)')}
-    <input type="number" min="1" max="99" step="1" value="${esc(state.data.authorAge||'')}" placeholder="e.g., 11" oninput="if(this.value<1||isNaN(this.value))this.value='';upd('authorAge',this.value)" onchange="upd('authorAge',this.value)" style="width:100%;padding:10px 14px;border-radius:var(--radius-sm);border:2px solid #e5e0f5;font-family:var(--font-body);font-size:15px;color:var(--ink);background:#faf8ff;outline:none;transition:border-color 0.2s,box-shadow 0.2s">
-    ${labelHTML('📝 About You','Tell readers a little bit about yourself!')}
-    ${inputHTML('authorBio','I\'m a 5th grader who loves dragons, chocolate, and really long stories...',true,3)}
-    ${labelHTML('📕 Your Book Cover Preview','')}
-    ${bookCoverHTML()}
-  `, '#52c29b');
-}
-
-function renderStep7() {
-  const d = state.data;
-  const chapters = d.chapters || [];
-  const count = parseInt(d.chapterCount) || 5;
-  const total = totalWords();
-  const filled = chapters.filter(c => wordCount(c.body||'') > 0).length;
-  const done = filled >= count;
-
-  // Stats bar
-  const statsHTML = `<div class="word-count-bar">
-    <div class="wc-stat"><div class="wc-num">${total}</div><div class="wc-label">Total Words</div></div>
-    <div class="wc-stat"><div class="wc-num">${filled}/${count}</div><div class="wc-label">Chapters Written</div></div>
-    <div class="wc-stat"><div class="wc-num">${Math.round(total/Math.max(filled,1))}</div><div class="wc-label">Avg Words/Chapter</div></div>
-  </div>`;
-
-  // Summary
-  const summaryHTML = `<div class="summary-box">
-    <div style="font-weight:800;font-size:16px;margin-bottom:8px">📋 Your Story So Far</div>
-    <div><strong>Title:</strong> ${esc(d.title)}</div>
-    <div><strong>Genre:</strong> ${(GENRES.find(g=>g.id===d.genre)||{}).label||d.genre}</div>
-    <div><strong>World:</strong> ${esc(d.worldName)}</div>
-    <div><strong>Hero:</strong> ${esc(d.mainCharName)} — Goal: ${esc(d.mainCharGoal)}</div>
-    ${d.villainName?`<div><strong>Villain:</strong> ${esc(d.villainName)}</div>`:''}
-    <div><strong>Author:</strong> ${esc(d.authorName)}${d.authorAge?', age '+esc(d.authorAge):''}</div>
-  </div>`;
-
-  // Chapter editors
-  const chaptersHTML = chapters.map((ch,i) => {
-    const wc = wordCount(ch.body||'');
-    const pct = Math.min(100, Math.round(wc / 200 * 100));
-    const bodyHtml = ch.bodyHtml || (ch.body ? ch.body.split('\n').map(l=>`<p>${esc(l)||'<br>'}</p>`).join('') : '');
-    return `<div class="chapter-editor">
-      <div class="chapter-title-row">
-        <span class="chapter-num">Ch. ${i+1}</span>
-        <input class="chapter-title-input" type="text" value="${esc(ch.title)}"
-          placeholder="Chapter ${i+1} title..."
-          oninput="state.data.chapters[${i}].title=this.value"
-          onchange="state.data.chapters[${i}].title=this.value">
-        <span id="wcLabel-${i}" style="font-size:11px;color:var(--ink-light);font-weight:700;white-space:nowrap">${wc} words</span>
+function showPublicStoryView(shareId) {
+  const posts = getTyfPosts();
+  const post = posts.find(p => p.publicShareId === shareId);
+  const docs = getDocs();
+  const doc = docs.find(d => d.publicShareId === shareId);
+  const source = post || doc;
+  document.body.innerHTML = `
+    <div class="rainbow-top"></div>
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="brand"><span class="r">The Young</span> <span class="g">Foundry</span></div>
+        <span class="brand-sep">›</span>
+        <div class="brand-sub">✍️ MyFirstChapter</div>
+        <div class="tsp"></div>
+        <a href="TYF_Network.html" class="btn ghost sm" style="text-decoration:none">🌐 Join TYF Network</a>
       </div>
-      <div style="height:5px;background:var(--p-lav);border-radius:4px;margin-bottom:10px;overflow:hidden">
-        <div id="wcBar-${i}" style="height:100%;width:${pct}%;background:linear-gradient(90deg,#b07de8,#7ec8e3);border-radius:4px;transition:width 0.4s"></div>
-      </div>
-      ${rteToolbarHTML(i)}
-      <div id="chapterBody-${i}" class="chapter-rte"
-        contenteditable="true"
-        data-placeholder="Write chapter ${i+1} here... What happens? Who is there? What do they say and do?"
-        oninput="onRteInput(${i})">${bodyHtml}</div>
-      ${promptsHTML(i)}
+    </div>
+    <div style="max-width:720px;margin:0 auto;padding:32px 24px;">
+      ${source ? `
+        <div style="background:linear-gradient(135deg,var(--purple),var(--blue));border-radius:24px;padding:28px;color:#fff;margin-bottom:24px">
+          <div style="font-size:1.8rem;margin-bottom:8px">${source.genre||'📖'}</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:28px;margin-bottom:6px">${escHtml(source.title||post?.text?.match(/"([^"]+)"/)?.[1]||'Story')}</div>
+          <div style="font-size:13px;opacity:.85;font-weight:700">by ${escHtml(source.authorName||post?.authorName||'TYF Author')}</div>
+          ${source.blurb ? `<div style="font-size:14px;opacity:.9;font-weight:700;margin-top:10px;font-style:italic">"${escHtml(source.blurb)}"</div>` : ''}
+          ${source.whyWritten ? `<div style="font-size:12px;opacity:.8;font-weight:700;margin-top:6px">💭 ${escHtml(source.whyWritten)}</div>` : ''}
+        </div>
+        <div style="background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:28px 32px;box-shadow:var(--shadow);font-family:'Merriweather',Georgia,serif;font-size:15px;line-height:1.9;color:var(--ink);margin-bottom:20px">
+          ${source.chapters ? source.chapters.map((ch,i)=>`<h3 style="font-family:'Fredoka One',cursive;margin:20px 0 10px;color:var(--purple)">Chapter ${i+1}: ${escHtml(ch.title)}</h3><div>${ch.content}</div>`).join('') : `<div>${(post?.text||'').replace(/\n/g,'<br>')}</div>`}
+        </div>
+        <div style="background:var(--soft);border-radius:14px;padding:16px;text-align:center">
+          <p style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px">Enjoyed this story? Join The Young Foundry to write and share your own!</p>
+          <a href="TYF_Network.html" class="btn purple" style="text-decoration:none">Join TYF Network →</a>
+        </div>
+      ` : `
+        <div style="text-align:center;padding:48px 24px;color:var(--muted)">
+          <div style="font-size:3rem;margin-bottom:12px">🔍</div>
+          <p style="font-size:14px;font-weight:700">Story not found or not yet published.</p>
+          <a href="TYF_Network.html" class="btn ghost sm" style="text-decoration:none;margin-top:12px;display:inline-flex">← TYF Network</a>
+        </div>
+      `}
     </div>`;
-  }).join('');
-
-  const completionHTML = done ? `<div class="completion-banner">
-    <div class="icon">🎉</div>
-    <h3>You did it, ${esc(d.authorName)}! You're an Author!</h3>
-    <p>Every chapter is written! Click <strong>Export to Word</strong> above to get your finished book!</p>
-    <div style="margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-      <button onclick="saveProject()" style="padding:10px 22px;border-radius:12px;border:none;background:linear-gradient(135deg,#52c29b,#3aab80);color:#fff;font-family:var(--font-display);font-size:15px;font-weight:800;cursor:pointer">💾 Save My Draft</button>
-      <button onclick="exportToWord()" style="padding:10px 22px;border-radius:12px;border:none;background:linear-gradient(135deg,#f4956a,#e67050);color:#fff;font-family:var(--font-display);font-size:15px;font-weight:800;cursor:pointer">📄 Export to Word</button>
-    </div>
-  </div>` : '';
-
-  const aiCoauthorHTML = '';
-  return `<div class="section-card" style="border-color:#9b8de055">
-    <div class="section-header"><span>✍️</span><h2>Write My Book!</h2></div>
-    ${summaryHTML}
-    ${statsHTML}
-    <div style="height:16px"></div>
-    <div class="draft-write-area">
-      <h3>📝 Write Your Chapters</h3>
-      <p style="font-size:13px;color:var(--ink-light);margin-bottom:14px">Write each chapter below. Click a <strong>writing prompt</strong> if you get stuck — it'll add a starter sentence to help you! 💡</p>
-      ${chaptersHTML}
-    </div>
-    ${completionHTML}
-    ${aiCoauthorHTML}
-  </div>`;
 }
 
-// AI review not included in this version
-function fetchAISuggestions() {}
-
-// ═══════════════════════════════════════════
-// SAVE / LOAD  (localStorage — works in real browsers)
-// ═══════════════════════════════════════════
-const SF_KEY = 'storyforge_v2_draft';
-
-function saveProject() {
-  exportToWord(true); // embeds full state in .docx for reloading
+function mfcLogin() {
+  const name = document.getElementById('login-name').value.trim();
+  const sid  = document.getElementById('login-sid').value.trim();
+  if (!name || !sid) { toast('Please fill both fields'); return; }
+  // Try to find in TYF accounts
+  const accounts = getTyfAccounts();
+  let account = accounts.find(a => a.schoolId === sid && a.role === 'student');
+  if (!account) {
+    // Create lightweight session
+    account = { id:'mfc_'+Date.now(), name, schoolId:sid, role:'student', grade:null, foundryScore:0, avatar:null };
+  }
+  mfcUser = account;
+  save('mfc_session', mfcUser);
+  initStudio();
 }
 
-function loadDraft() {
-  const inp = document.createElement('input');
-  inp.type = 'file'; inp.accept = '.docx';
-  inp.onchange = async (e) => {
-    const file = e.target.files[0]; if (!file) return;
-    try {
-      if (typeof JSZip === 'undefined') { toast('Library loading — try again in a moment.', 'error'); return; }
-      const zip = await JSZip.loadAsync(await file.arrayBuffer());
-      const stateFile = zip.file('customXml/storyforge_state.xml');
-      if (!stateFile) { toast('This Word file has no StoryForge draft data. Use a file saved with 💾 Save Draft.', 'error'); return; }
-      const xmlText = await stateFile.async('string');
-      const match = xmlText.match(/<storyforge>([\s\S]*?)<\/storyforge>/);
-      if (!match) { toast('Could not read draft data from this file.', 'error'); return; }
-      const jsonStr = match[1].replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'");
-      const parsed = JSON.parse(jsonStr);
-      if (!parsed || parsed.app !== 'StoryForge') { toast("This doesn't look like a StoryForge file.", 'error'); return; }
-      applyDraftState(parsed.state);
-      toast("Draft loaded! Let's keep writing! 📂");
-    } catch(err) { console.error('Load error:', err); toast('Could not read file: ' + err.message, 'error'); }
+function initStudio() {
+  showScreen('studio');
+  document.getElementById('user-name-disp').textContent = mfcUser.name;
+  document.getElementById('user-grade-disp').textContent = mfcUser.grade ? 'Grade ' + mfcUser.grade : 'TYF Author';
+  if (mfcUser.avatar) document.getElementById('user-avatar-disp').textContent = mfcUser.avatar;
+  // Load most recent story or start blank
+  const docs = getDocs().filter(d => d.authorId === mfcUser.id);
+  if (docs.length > 0) {
+    loadStory(docs[0].id);
+  } else {
+    newBlankStory();
+  }
+}
+
+// ============================================================
+// SCREENS
+// ============================================================
+function showScreen(id) {
+  ['login','studio','repository'].forEach(s => {
+    document.getElementById('screen-'+s).style.display = 'none';
+  });
+  document.getElementById('screen-'+id).style.display = 'block';
+  window.scrollTo(0,0);
+  if (id === 'repository') renderRepository();
+}
+
+// ============================================================
+// STORY MANAGEMENT
+// ============================================================
+function newBlankStory() {
+  currentStory = {
+    id: 'story_' + Date.now(),
+    authorId: mfcUser.id,
+    authorName: mfcUser.name,
+    title: '',
+    genre: '',
+    blurb: '',
+    whyWritten: '',
+    chapters: [{ id: 'ch_1', title: 'Chapter 1', content: '', wordCount: 0 }],
+    totalWords: 0,
+    status: 'draft',          // draft | pending_ai | pending_parent | published
+    parentApproved: false,
+    aiStatus: null,
+    created: Date.now(),
+    updated: Date.now(),
   };
-  inp.click();
+  currentChapterIdx = 0;
+  renderChapterList();
+  loadChapterIntoEditor(0);
+  updateStatusBanner();
 }
 
-
-
-function applyDraftState(s) {
-  state.step             = s.step || 0;
-  state.earnedBadges     = s.earnedBadges || [];
-  state.aiCoauthorChoice = s.aiCoauthorChoice || null;
-  state.data             = { ...state.data, ...s.data };
-  if (!state.data.chapters) state.data.chapters = [];
-  const authorName = state.data.authorName || 'Young Author';
-  const title      = state.data.title || 'your story';
-  $('welcomeBackTitle').textContent = `Welcome back, ${authorName}! 👋`;
-  $('welcomeBackSub').textContent   = `"${title}" loaded — you're on Step ${state.step+1} of 8. Keep going!`;
-  $('welcomeBackBanner').style.display = 'flex';
-  render();
-  window.scrollTo({top:0, behavior:'smooth'});
+function startNewStory() {
+  openModal('modal-new-story');
 }
 
-function confirmNewProject() {
-  showModal('Start a Brand New Book?',
-    'This will clear everything you\'ve written. Make sure you\'ve clicked 💾 Save Draft first!',
-    () => {
-      state = {
-        step: 0, earnedBadges: [], aiCoauthorChoice: null,
-        data: {
-          title:'', genre:'', tone:'', ageGroup:'', theme:'', dedication:'',
-          worldName:'', worldDescription:'', locations:'', dangers:'', secrets:'', worldRules:'',
-          mainCharName:'', mainCharTraits:'', mainCharGoal:'', mainCharFear:'', mainCharWeakness:'',
-          supportingChars:'', villainName:'', villainMotivation:'',
-          beginning:'', incitingIncident:'', risingAction:'', midpointTwist:'', climax:'', ending:'',
-          chapterCount:'5', chapterOutlines:'', writingStyles:[], authorName:'', authorBio:'', authorAge:'',
-          plotDiceInserts:[], chapters:[],
-        },
-      };
-      if (typeof aiSuggestionsFetched !== 'undefined') aiSuggestionsFetched = false;
-      $('welcomeBackBanner').style.display = 'none';
-      toast('Fresh start! Time to write something amazing! 🆕');
-      render();
-      window.scrollTo({top:0, behavior:'smooth'});
-    }
-  );
+function createNewStory() {
+  const title = document.getElementById('ns-title').value.trim();
+  const genre = document.getElementById('ns-genre').value;
+  if (!title) { toast('Please give your story a title'); return; }
+  closeModal('modal-new-story');
+  saveCurrentChapter(); // save current work first
+  currentStory = {
+    id: 'story_' + Date.now(),
+    authorId: mfcUser.id,
+    authorName: mfcUser.name,
+    title,
+    genre,
+    blurb: '',
+    whyWritten: '',
+    chapters: [{ id: 'ch_1', title: 'Chapter 1', content: '', wordCount: 0 }],
+    totalWords: 0,
+    status: 'draft',
+    parentApproved: false,
+    aiStatus: null,
+    created: Date.now(),
+    updated: Date.now(),
+  };
+  currentChapterIdx = 0;
+  document.getElementById('story-title').value = title;
+  setGenre(genre);
+  renderChapterList();
+  loadChapterIntoEditor(0);
+  saveStoryToDocs();
+  showScreen('studio');
+  toast('✅ New story started!');
+}
+
+function loadStory(id) {
+  const docs = getDocs();
+  const doc = docs.find(d => d.id === id);
+  if (!doc) return;
+  currentStory = JSON.parse(JSON.stringify(doc));
+  currentChapterIdx = 0;
+  document.getElementById('story-title').value = currentStory.title || '';
+  setGenre(currentStory.genre || '');
+  if (document.getElementById('story-blurb')) document.getElementById('story-blurb').value = currentStory.blurb || '';
+  if (document.getElementById('story-why')) document.getElementById('story-why').value = currentStory.whyWritten || '';
+  renderChapterList();
+  loadChapterIntoEditor(0);
+  updateStatusBanner();
+  updateTotalWordCount();
+}
+
+function saveStoryToDocs() {
+  if (!currentStory) return;
+  currentStory.updated = Date.now();
+  const docs = getDocs();
+  const idx = docs.findIndex(d => d.id === currentStory.id);
+  if (idx >= 0) docs[idx] = currentStory;
+  else docs.unshift(currentStory);
+  saveDocs(docs);
 }
 
 function autoSave() {
-  try {
-    localStorage.setItem(SF_KEY, JSON.stringify({
-      version:'2.0', app:'StoryForge', savedAt: new Date().toISOString(),
-      state:{ step:state.step, earnedBadges:state.earnedBadges, aiCoauthorChoice:state.aiCoauthorChoice, data:state.data }
-    }));
-  } catch(e) {}
+  if (!currentStory) return;
+  currentStory.title = document.getElementById('story-title').value.trim();
+  currentStory.blurb = (document.getElementById('story-blurb')?.value || '').trim();
+  currentStory.whyWritten = (document.getElementById('story-why')?.value || '').trim();
+  saveStoryToDocs();
 }
 
-function autoLoad() {
-  try {
-    const saved = localStorage.getItem(SF_KEY);
-    if (!saved) return;
-    const parsed = JSON.parse(saved);
-    if (!parsed || parsed.app !== 'StoryForge') return;
-    const s = parsed.state;
-    if (s.step > 0 || (s.data && s.data.title)) {
-      state.step             = s.step || 0;
-      state.earnedBadges     = s.earnedBadges || [];
-      state.aiCoauthorChoice = s.aiCoauthorChoice || null;
-      state.data             = { ...state.data, ...s.data };
-      if (!state.data.chapters) state.data.chapters = [];
-      if (state.data.title) {
-        setTimeout(() => toast(`Auto-restored: "${state.data.title}" — click 💾 Save Draft to keep it!`, 'info'), 800);
-      }
-    }
-  } catch(e) {}
+// ============================================================
+// CHAPTER MANAGEMENT
+// ============================================================
+function addChapter() {
+  if (!currentStory) return;
+  saveCurrentChapter();
+  const num = currentStory.chapters.length + 1;
+  currentStory.chapters.push({ id: 'ch_'+Date.now(), title: 'Chapter '+num, content: '', wordCount: 0 });
+  currentChapterIdx = currentStory.chapters.length - 1;
+  renderChapterList();
+  loadChapterIntoEditor(currentChapterIdx);
+  saveStoryToDocs();
 }
 
-// ═══════════════════════════════════════════
-// EXPORT TO WORD  (pure JS — no external lib)
-// Builds a valid .docx (Office Open XML) zip
-// using only JSZip which loads reliably.
-// ═══════════════════════════════════════════
-function xmlEsc(s) {
-  return String(s||'')
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&apos;');
+function switchChapter(idx) {
+  saveCurrentChapter();
+  currentChapterIdx = idx;
+  renderChapterList();
+  loadChapterIntoEditor(idx);
 }
 
-function makePara(runs, opts={}) {
-  // opts: { heading, center, spaceBefore, spaceAfter, pageBreakBefore }
-  let pPr = '';
-  if (opts.heading) pPr += `<w:pStyle w:val="${opts.heading}"/>`;
-  if (opts.center)  pPr += `<w:jc w:val="center"/>`;
-  if (opts.spaceBefore || opts.spaceAfter) {
-    const b = opts.spaceBefore ? ` w:before="${opts.spaceBefore}"` : '';
-    const a = opts.spaceAfter  ? ` w:after="${opts.spaceAfter}"` : '';
-    pPr += `<w:spacing${b}${a} w:line="360" w:lineRule="auto"/>`;
-  }
-  if (opts.pageBreakBefore) pPr += `<w:pageBreakBefore/>`;
-  const pPrXml = pPr ? `<w:pPr>${pPr}</w:pPr>` : '';
-  return `<w:p>${pPrXml}${runs}</w:p>`;
+function loadChapterIntoEditor(idx) {
+  const ch = currentStory && currentStory.chapters[idx];
+  if (!ch) return;
+  const editor = document.getElementById('chapter-editor');
+  editor.innerHTML = ch.content || '';
+  document.getElementById('chapter-title-display').textContent = ch.title;
+  updateChapterWordCount();
 }
 
-function makeRun(text, opts={}) {
-  // opts: { bold, italic, size, color }
-  let rPr = '';
-  if (opts.bold)   rPr += `<w:b/><w:bCs/>`;
-  if (opts.italic) rPr += `<w:i/><w:iCs/>`;
-  if (opts.size)   rPr += `<w:sz w:val="${opts.size}"/><w:szCs w:val="${opts.size}"/>`;
-  if (opts.color)  rPr += `<w:color w:val="${opts.color}"/>`;
-  const rPrXml = rPr ? `<w:rPr>${rPr}</w:rPr>` : '';
-  // Split on newlines → use <w:br/> for line breaks within a run
-  const parts = xmlEsc(text).split('&#10;').join('</w:t><w:br/><w:t xml:space="preserve">');
-  return `<w:r>${rPrXml}<w:t xml:space="preserve">${parts}</w:t></w:r>`;
+function saveCurrentChapter() {
+  if (!currentStory) return;
+  const editor = document.getElementById('chapter-editor');
+  const ch = currentStory.chapters[currentChapterIdx];
+  if (!ch) return;
+  ch.content = editor.innerHTML;
+  ch.wordCount = countWords(editor.innerText || editor.textContent);
+  updateTotalWordCount();
+  saveStoryToDocs();
 }
 
-function pageBreakPara() {
-  return `<w:p><w:r><w:lastRenderedPageBreak/><w:br w:type="page"/></w:r></w:p>`;
+function renderChapterList() {
+  if (!currentStory) return;
+  document.getElementById('chapter-list').innerHTML = currentStory.chapters.map((ch, i) => `
+    <div class="chapter-item ${i===currentChapterIdx?'active':''}" onclick="switchChapter(${i})">
+      <div class="ch-num">${i+1}</div>
+      <div class="ch-info">
+        <div class="ch-title">${escHtml(ch.title)}</div>
+        <div class="ch-words">${ch.wordCount} words</div>
+      </div>
+    </div>`).join('');
 }
 
-// ─── HTML → OOXML converter (for rich text export) ───
-function htmlToDocxXml(html) {
-  const div = document.createElement('div');
-  div.innerHTML = html;
-  let xml = '';
-
-  function runProps(el) {
-    let rPr = '';
-    const style = el.style || {};
-    const tag = (el.tagName||'').toLowerCase();
-    if (tag==='b'||tag==='strong'||style.fontWeight==='bold'||style.fontWeight==='700'||style.fontWeight==='800') rPr += '<w:b/><w:bCs/>';
-    if (tag==='i'||tag==='em'||style.fontStyle==='italic') rPr += '<w:i/><w:iCs/>';
-    if (tag==='u'||style.textDecoration?.includes('underline')) rPr += '<w:u w:val="single"/>';
-    if (tag==='s'||tag==='strike'||style.textDecoration?.includes('line-through')) rPr += '<w:strike/>';
-    if (style.color && style.color !== 'inherit') {
-      const hex = colorToHex(style.color);
-      if (hex) rPr += `<w:color w:val="${hex}"/>`;
-    }
-    if (style.backgroundColor && style.backgroundColor !== 'transparent') {
-      const hex = colorToHex(style.backgroundColor);
-      if (hex) rPr += `<w:highlight w:val="yellow"/>`;
-    }
-    if (style.fontFamily) {
-      const f = style.fontFamily.replace(/['"]/g,'').split(',')[0].trim();
-      if (f) rPr += `<w:rFonts w:ascii="${xmlEsc(f)}" w:hAnsi="${xmlEsc(f)}"/>`;
-    }
-    if (style.fontSize) {
-      const pt = parseFloat(style.fontSize);
-      if (pt) rPr += `<w:sz w:val="${Math.round(pt*2)}"/><w:szCs w:val="${Math.round(pt*2)}"/>`;
-    }
-    return rPr ? `<w:rPr>${rPr}</w:rPr>` : '';
-  }
-
-  function nodeToRuns(node, inheritedRPr='') {
-    let runs = '';
-    node.childNodes.forEach(child => {
-      if (child.nodeType === 3) {
-        const txt = child.textContent;
-        if (txt) runs += `<w:r>${inheritedRPr}<w:t xml:space="preserve">${xmlEsc(txt)}</w:t></w:r>`;
-      } else if (child.nodeType === 1) {
-        const tag = child.tagName.toLowerCase();
-        if (tag === 'br') {
-          runs += `<w:r><w:br/></w:r>`;
-        } else if (tag === 'img') {
-          // Skip images in docx (would need base64 embedding)
-        } else {
-          const rp = runProps(child) || inheritedRPr;
-          runs += nodeToRuns(child, rp);
-        }
-      }
-    });
-    return runs;
-  }
-
-  function tableToDocx(table) {
-    let tXml = '<w:tbl><w:tblPr><w:tblW w:w="9360" w:type="dxa"/><w:tblBorders><w:top w:val="single" w:sz="4" w:color="D5CCF5"/><w:left w:val="single" w:sz="4" w:color="D5CCF5"/><w:bottom w:val="single" w:sz="4" w:color="D5CCF5"/><w:right w:val="single" w:sz="4" w:color="D5CCF5"/><w:insideH w:val="single" w:sz="4" w:color="D5CCF5"/><w:insideV w:val="single" w:sz="4" w:color="D5CCF5"/></w:tblBorders></w:tblPr>';
-    const rows = table.querySelectorAll('tr');
-    rows.forEach(row => {
-      tXml += '<w:tr>';
-      const cells = row.querySelectorAll('td,th');
-      const cw = Math.floor(9360 / (cells.length||1));
-      cells.forEach(cell => {
-        const isHeader = cell.tagName.toLowerCase() === 'th';
-        tXml += `<w:tc><w:tcPr><w:tcW w:w="${cw}" w:type="dxa"/>${isHeader ? '<w:shd w:val="clear" w:fill="ECE8FB"/>' : ''}</w:tcPr>`;
-        tXml += `<w:p><w:r>${isHeader ? '<w:rPr><w:b/></w:rPr>' : ''}<w:t xml:space="preserve">${xmlEsc(cell.innerText||'')}</w:t></w:r></w:p></w:tc>`;
-      });
-      tXml += '</w:tr>';
-    });
-    tXml += '</w:tbl><w:p/>';
-    return tXml;
-  }
-
-  function processNode(node) {
-    if (node.nodeType === 3) {
-      const txt = node.textContent.trim();
-      if (txt) xml += makePara(makeRun(txt, {size:24}), {spaceAfter:120});
-      return;
-    }
-    if (node.nodeType !== 1) return;
-    const tag = node.tagName.toLowerCase();
-
-    if (tag === 'table') { xml += tableToDocx(node); return; }
-    if (tag === 'hr') { xml += `<w:p><w:pPr><w:pBdr><w:top w:val="single" w:sz="6" w:color="D5CCF5"/></w:pBdr></w:pPr></w:p>`; return; }
-    if (tag === 'img') return; // skip
-
-    if (['ul','ol'].includes(tag)) {
-      const isOl = tag === 'ol';
-      node.querySelectorAll('li').forEach(li => {
-        const runs = nodeToRuns(li, '<w:rPr><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr>');
-        xml += `<w:p><w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="${isOl ? 2 : 1}"/></w:numPr></w:pPr>${runs}</w:p>`;
-      });
-      return;
-    }
-
-    let pStyle = '', fontSize = 24, bold = false, color = '2d2640';
-    if (tag==='h1') { pStyle='Heading1'; fontSize=40; bold=true; color='4A357A'; }
-    else if (tag==='h2') { pStyle='Heading2'; fontSize=32; bold=true; color='4A357A'; }
-    else if (tag==='h3') { pStyle='Heading3'; fontSize=28; bold=true; color='6B4FA8'; }
-    else if (tag==='blockquote') { color='64748B'; }
-
-    if (['p','h1','h2','h3','h4','h5','h6','div','blockquote','pre'].includes(tag)) {
-      const textAlign = node.style?.textAlign || '';
-      const runs = nodeToRuns(node) || makeRun('\u00A0', {size:fontSize});
-      let pPr = '';
-      if (pStyle) pPr += `<w:pStyle w:val="${pStyle}"/>`;
-      if (textAlign === 'center') pPr += '<w:jc w:val="center"/>';
-      else if (textAlign === 'right') pPr += '<w:jc w:val="right"/>';
-      else if (textAlign === 'justify') pPr += '<w:jc w:val="both"/>';
-      pPr += `<w:spacing w:after="120" w:line="360" w:lineRule="auto"/>`;
-      if (tag==='blockquote') pPr += '<w:ind w:left="720"/>';
-      xml += `<w:p><w:pPr>${pPr}</w:pPr>${runs}</w:p>`;
-      return;
-    }
-
-    // container — recurse
-    node.childNodes.forEach(processNode);
-  }
-
-  div.childNodes.forEach(processNode);
-  return xml || makePara(makeRun(' ', {size:24}), {spaceAfter:120});
+// ============================================================
+// EDITOR HELPERS
+// ============================================================
+function onEditorInput() {
+  updateChapterWordCount();
+  autoSave();
 }
 
-function colorToHex(color) {
-  if (!color) return null;
-  if (color.startsWith('#')) return color.slice(1).toUpperCase();
-  const m = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
-  if (m) return [m[1],m[2],m[3]].map(x=>parseInt(x).toString(16).padStart(2,'0')).join('').toUpperCase();
-  return null;
+function fmt(cmd) {
+  document.execCommand(cmd, false, null);
+  document.getElementById('chapter-editor').focus();
 }
 
-async function exportToWord(isDraftSave=false) {
-  const d = state.data;
-  const chapters = d.chapters || [];
-  const hasContent = chapters.some(c => wordCount(c.body||'') > 0 || (c.bodyHtml && c.bodyHtml.trim().length > 10));
-
-  if (!isDraftSave && !d.title && !hasContent) {
-    toast('Fill in your story details first! 📝', 'error');
-    return;
-  }
-
-  if (typeof JSZip === 'undefined') {
-    toast('Export library still loading — please try again in a moment.', 'error');
-    return;
-  }
-
-  const genreLabel = (GENRES.find(g=>g.id===d.genre)||{}).label || 'Fiction';
-  const authorLine = `by ${d.authorName||'A Young Author'}${d.authorAge ? ', age '+d.authorAge : ''}`;
-
-  // ── Build document body XML ──
-  let body = '';
-
-  // Title page
-  body += makePara(makeRun(d.title||'My Story', {bold:true, size:64, color:'4A357A'}), {center:true, spaceAfter:240});
-  body += makePara(makeRun(`A ${genreLabel} Story`, {italic:true, size:28, color:'9B8DE0'}), {center:true, spaceAfter:120});
-  body += makePara(makeRun(authorLine, {size:26, color:'64748B'}), {center:true, spaceAfter:480});
-
-  if (d.dedication) {
-    body += makePara('', {spaceBefore:480});
-    body += makePara(makeRun(d.dedication, {italic:true, size:24, color:'64748B'}), {center:true});
-  }
-
-  body += pageBreakPara();
-
-  // About the author
-  if (d.authorBio) {
-    body += makePara(makeRun('About the Author', {bold:true, size:36, color:'4A357A'}), {heading:'Heading1', spaceAfter:200});
-    body += makePara(makeRun(d.authorBio, {size:24}), {spaceAfter:400});
-    body += pageBreakPara();
-  }
-
-  // Chapters or story plan
-  if (hasContent) {
-    chapters.forEach((ch, i) => {
-      if (!ch.body && !ch.title && !ch.bodyHtml) return;
-      body += makePara(makeRun(ch.title || `Chapter ${i+1}`, {bold:true, size:40, color:'4A357A'}), {heading:'Heading1', spaceBefore:480, spaceAfter:200});
-      // Use rich HTML if available, else fall back to plain text
-      if (ch.bodyHtml) {
-        body += htmlToDocxXml(ch.bodyHtml);
-      } else {
-        const lines = (ch.body||'').split('\n');
-        lines.forEach(line => {
-          body += makePara(makeRun(line||' ', {size:24}), {spaceAfter:120});
-        });
-      }
-      if (i < chapters.length - 1) body += pageBreakPara();
-    });
-  } else {
-    body += makePara(makeRun('Story Plan', {bold:true, size:36, color:'4A357A'}), {heading:'Heading1', spaceAfter:200});
-    const fields = [
-      ['Genre', genreLabel],
-      ['Tone',  (TONES.find(t=>t.id===d.tone)||{}).label||d.tone],
-      ['Theme', d.theme],
-      ['World', d.worldName + (d.worldDescription ? ' — ' + d.worldDescription : '')],
-      ['Main Character', d.mainCharName + (d.mainCharGoal ? ' — Goal: ' + d.mainCharGoal : '')],
-      ['Villain', d.villainName],
-      ['Beginning', d.beginning],
-      ['Climax', d.climax],
-      ['Ending', d.ending],
-    ];
-    fields.forEach(([label, value]) => {
-      if (value) {
-        body += makePara(
-          makeRun(label+': ', {bold:true, size:24, color:'6B4FA8'}) +
-          makeRun(value, {size:24}),
-          {spaceAfter:100}
-        );
-      }
-    });
-  }
-
-  // ── Build full document.xml ──
-  const docXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas"
-  xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
-  xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
-  xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing">
-<w:body>
-${body}
-<w:sectPr>
-  <w:pgSz w:w="12240" w:h="15840"/>
-  <w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="720" w:footer="720" w:gutter="0"/>
-</w:sectPr>
-</w:body>
-</w:document>`;
-
-  // ── Styles ──
-  const stylesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
-  <w:docDefaults>
-    <w:rPrDefault><w:rPr>
-      <w:rFonts w:ascii="Georgia" w:hAnsi="Georgia" w:cs="Georgia"/>
-      <w:sz w:val="24"/><w:szCs w:val="24"/>
-    </w:rPr></w:rPrDefault>
-  </w:docDefaults>
-  <w:style w:type="paragraph" w:styleId="Normal">
-    <w:name w:val="Normal"/>
-    <w:pPr><w:spacing w:line="360" w:lineRule="auto"/></w:pPr>
-    <w:rPr><w:rFonts w:ascii="Georgia" w:hAnsi="Georgia"/><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr>
-  </w:style>
-  <w:style w:type="paragraph" w:styleId="Heading1">
-    <w:name w:val="heading 1"/>
-    <w:basedOn w:val="Normal"/>
-    <w:pPr><w:outlineLvl w:val="0"/><w:spacing w:before="480" w:after="240"/></w:pPr>
-    <w:rPr><w:b/><w:bCs/><w:rFonts w:ascii="Georgia" w:hAnsi="Georgia"/><w:sz w:val="40"/><w:szCs w:val="40"/><w:color w:val="4A357A"/></w:rPr>
-  </w:style>
-  <w:style w:type="paragraph" w:styleId="Heading2">
-    <w:name w:val="heading 2"/>
-    <w:basedOn w:val="Normal"/>
-    <w:pPr><w:outlineLvl w:val="1"/><w:spacing w:before="320" w:after="160"/></w:pPr>
-    <w:rPr><w:b/><w:bCs/><w:rFonts w:ascii="Georgia" w:hAnsi="Georgia"/><w:sz w:val="32"/><w:szCs w:val="32"/><w:color w:val="4A357A"/></w:rPr>
-  </w:style>
-  <w:style w:type="paragraph" w:styleId="Heading3">
-    <w:name w:val="heading 3"/>
-    <w:basedOn w:val="Normal"/>
-    <w:pPr><w:outlineLvl w:val="2"/><w:spacing w:before="240" w:after="120"/></w:pPr>
-    <w:rPr><w:b/><w:bCs/><w:rFonts w:ascii="Georgia" w:hAnsi="Georgia"/><w:sz w:val="28"/><w:szCs w:val="28"/><w:color w:val="6B4FA8"/></w:rPr>
-  </w:style>
-  <w:style w:type="paragraph" w:styleId="ListBullet">
-    <w:name w:val="List Bullet"/>
-    <w:basedOn w:val="Normal"/>
-    <w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr><w:spacing w:after="80"/></w:pPr>
-  </w:style>
-  <w:style w:type="paragraph" w:styleId="ListNumber">
-    <w:name w:val="List Number"/>
-    <w:basedOn w:val="Normal"/>
-    <w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="2"/></w:numPr><w:spacing w:after="80"/></w:pPr>
-  </w:style>
-</w:styles>`;
-
-  const numberingXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:numbering xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
-  <w:abstractNum w:abstractNumId="0">
-    <w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="bullet"/><w:lvlText w:val="•"/><w:lvlJc w:val="left"/><w:pPr><w:ind w:left="720" w:hanging="360"/></w:pPr></w:lvl>
-  </w:abstractNum>
-  <w:abstractNum w:abstractNumId="1">
-    <w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="decimal"/><w:lvlText w:val="%1."/><w:lvlJc w:val="left"/><w:pPr><w:ind w:left="720" w:hanging="360"/></w:pPr></w:lvl>
-  </w:abstractNum>
-  <w:num w:numId="1"><w:abstractNumId w:val="0"/></w:num>
-  <w:num w:numId="2"><w:abstractNumId w:val="1"/></w:num>
-</w:numbering>`;
-
-  // ── Relationships ──
-  const relsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
-  <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering" Target="numbering.xml"/>
-</Relationships>`;
-
-  const appRelsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
-</Relationships>`;
-
-  const contentTypesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
-  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
-  <Default Extension="xml"  ContentType="application/xml"/>
-  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
-  <Override PartName="/word/styles.xml"   ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
-  <Override PartName="/word/numbering.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"/>
-</Types>`;
-
-  // ── Assemble zip ──
-  try {
-    const zip = new JSZip();
-    zip.file('[Content_Types].xml', contentTypesXml);
-    zip.file('_rels/.rels', appRelsXml);
-    zip.file('word/document.xml', docXml);
-    zip.file('word/styles.xml', stylesXml);
-    zip.file('word/numbering.xml', numberingXml);
-    zip.file('word/_rels/document.xml.rels', relsXml);
-
-    // Embed full app state so the .docx can be reloaded as a draft
-    const statePayload = JSON.stringify({
-      version:'2.0', app:'StoryForge', savedAt: new Date().toISOString(),
-      state:{ step:state.step, earnedBadges:state.earnedBadges, aiCoauthorChoice:state.aiCoauthorChoice, data:state.data }
-    });
-    const stateXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><storyforge>${statePayload.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</storyforge>`;
-    zip.file('customXml/storyforge_state.xml', stateXml);
-
-    const blob = await zip.generateAsync({
-      type: 'blob',
-      mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      compression: 'DEFLATE'
-    });
-
-    const suffix = isDraftSave ? '_draft' : '';
-    const filename = (d.title||'MyStory').replace(/[^a-zA-Z0-9 ]/g,'').replace(/\s+/g,'_') + suffix + '.docx';
-
-    // Convert to base64 data URI — works inside artifact iframes where createObjectURL is blocked
-    const base64 = await new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
-    const a = document.createElement('a');
-    a.href = base64;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    toast(isDraftSave ? 'Draft saved as Word doc! 💾' : 'Word doc ready — check your Downloads! 📄');
-  } catch(err) {
-    console.error('Export error:', err);
-    toast('Export failed: ' + err.message, 'error');
-  }
-}
-
-// ═══════════════════════════════════════════
-// RICH TEXT EDITOR HELPERS
-// ═══════════════════════════════════════════
-function rteToolbarHTML(i) {
-  return `<div class="rte-toolbar" id="rteBar-${i}">
-    <!-- Font family -->
-    <div class="rte-group">
-      <select onchange="rteCmd('fontName',this.value,${i})" title="Font">
-        <option value="Nunito">Nunito</option>
-        <option value="Georgia">Georgia</option>
-        <option value="Arial">Arial</option>
-        <option value="Times New Roman">Times New Roman</option>
-        <option value="Courier New">Courier New</option>
-        <option value="Trebuchet MS">Trebuchet MS</option>
-        <option value="Verdana">Verdana</option>
-      </select>
-      <!-- Font size -->
-      <select onchange="rteCmd('fontSize',this.value,${i})" title="Size">
-        <option value="">Size</option>
-        <option value="1">8pt</option>
-        <option value="2">10pt</option>
-        <option value="3">12pt</option>
-        <option value="4">14pt</option>
-        <option value="5">18pt</option>
-        <option value="6">24pt</option>
-        <option value="7">36pt</option>
-      </select>
-    </div>
-    <div class="rte-sep"></div>
-    <!-- Basic formatting -->
-    <div class="rte-group">
-      <button class="rte-btn" onclick="rteCmd('bold',null,${i})" title="Bold"><b>B</b></button>
-      <button class="rte-btn" onclick="rteCmd('italic',null,${i})" title="Italic"><i>I</i></button>
-      <button class="rte-btn" onclick="rteCmd('underline',null,${i})" title="Underline"><u>U</u></button>
-      <button class="rte-btn" onclick="rteCmd('strikeThrough',null,${i})" title="Strikethrough"><s>S</s></button>
-    </div>
-    <div class="rte-sep"></div>
-    <!-- Color -->
-    <div class="rte-group">
-      <div class="rte-color-btn" title="Text colour"><input type="color" value="#2d2640" onchange="rteCmd('foreColor',this.value,${i})"></div>
-      <div class="rte-color-btn" title="Highlight colour" style="border-color:#fde99a"><input type="color" value="#fef8db" onchange="rteCmd('hiliteColor',this.value,${i})"></div>
-    </div>
-    <div class="rte-sep"></div>
-    <!-- Alignment -->
-    <div class="rte-group">
-      <button class="rte-btn" onclick="rteCmd('justifyLeft',null,${i})" title="Align Left">≡</button>
-      <button class="rte-btn" onclick="rteCmd('justifyCenter',null,${i})" title="Center">≡</button>
-      <button class="rte-btn" onclick="rteCmd('justifyRight',null,${i})" title="Align Right">≡</button>
-      <button class="rte-btn" onclick="rteCmd('justifyFull',null,${i})" title="Justify">≡</button>
-    </div>
-    <div class="rte-sep"></div>
-    <!-- Lists -->
-    <div class="rte-group">
-      <button class="rte-btn" onclick="rteCmd('insertUnorderedList',null,${i})" title="Bullet List">• ≡</button>
-      <button class="rte-btn" onclick="rteCmd('insertOrderedList',null,${i})" title="Numbered List">1 ≡</button>
-      <button class="rte-btn" onclick="rteCmd('outdent',null,${i})" title="Outdent">⇤</button>
-      <button class="rte-btn" onclick="rteCmd('indent',null,${i})" title="Indent">⇥</button>
-    </div>
-    <div class="rte-sep"></div>
-    <!-- Headings -->
-    <div class="rte-group">
-      <select onchange="rteBlock(this.value,${i})" title="Heading style">
-        <option value="p">Paragraph</option>
-        <option value="h1">Heading 1</option>
-        <option value="h2">Heading 2</option>
-        <option value="h3">Heading 3</option>
-        <option value="blockquote">Quote</option>
-      </select>
-    </div>
-    <div class="rte-sep"></div>
-    <!-- Insert -->
-    <div class="rte-group">
-      <button class="rte-btn" onclick="rteInsertTable(${i})" title="Insert Table" style="font-size:11px;width:auto;padding:0 7px">⊞ Table</button>
-      <button class="rte-btn" onclick="rteInsertImage(${i})" title="Insert Image" style="font-size:11px;width:auto;padding:0 7px">🖼 Image</button>
-      <button class="rte-btn" onclick="rteInsertHRule(${i})" title="Horizontal Rule" style="font-size:11px;width:auto;padding:0 7px">― Line</button>
-    </div>
-    <div class="rte-sep"></div>
-    <!-- Undo/Redo -->
-    <div class="rte-group">
-      <button class="rte-btn" onclick="rteCmd('undo',null,${i})" title="Undo">↩</button>
-      <button class="rte-btn" onclick="rteCmd('redo',null,${i})" title="Redo">↪</button>
-    </div>
-  </div>`;
-}
-
-function rteCmd(cmd, val, idx) {
-  const el = document.getElementById('chapterBody-' + idx);
-  if (!el) return;
-  el.focus();
-  document.execCommand(cmd, false, val);
-  onRteInput(idx);
-}
-
-function rteBlock(tag, idx) {
-  const el = document.getElementById('chapterBody-' + idx);
-  if (!el) return;
-  el.focus();
-  document.execCommand('formatBlock', false, tag);
-  onRteInput(idx);
-}
-
-function rteInsertTable(idx) {
-  const rows = prompt('How many rows?', '3');
-  const cols = prompt('How many columns?', '3');
-  if (!rows || !cols) return;
-  const r = parseInt(rows)||2, c = parseInt(cols)||2;
-  let html = '<table><thead><tr>' + Array(c).fill('<th>Header</th>').join('') + '</tr></thead><tbody>';
-  for(let i=0;i<r;i++) html += '<tr>' + Array(c).fill('<td>Cell</td>').join('') + '</tr>';
-  html += '</tbody></table><p><br></p>';
-  const el = document.getElementById('chapterBody-' + idx);
-  if (!el) return;
-  el.focus();
-  document.execCommand('insertHTML', false, html);
-  onRteInput(idx);
-}
-
-function rteInsertImage(idx) {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'image/*';
-  input.onchange = function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(ev) {
-      const el = document.getElementById('chapterBody-' + idx);
-      if (!el) return;
-      el.focus();
-      document.execCommand('insertHTML', false, `<img src="${ev.target.result}" alt="story image" style="max-width:100%;border-radius:8px;margin:6px 0"><p><br></p>`);
-      onRteInput(idx);
-    };
-    reader.readAsDataURL(file);
+function insertStarter(type) {
+  const starters = {
+    opening: '\n\n[Opening hook: Describe the scene — what does your hero see, hear, smell?]\n\n',
+    conflict: '\n\n[Conflict: Something goes wrong. What is it? How does your hero react?]\n\n',
+    dialogue: '\n\n"[Character A]," said [Character B], "[What do they say?]"\n\n',
+    resolution: '\n\n[Resolution: How does this chapter end? What changes for your hero?]\n\n',
   };
-  input.click();
+  const editor = document.getElementById('chapter-editor');
+  editor.focus();
+  document.execCommand('insertText', false, starters[type] || '');
 }
 
-function rteInsertHRule(idx) {
-  const el = document.getElementById('chapterBody-' + idx);
-  if (!el) return;
-  el.focus();
-  document.execCommand('insertHTML', false, '<hr style="border:none;border-top:2px solid #d5ccf5;margin:12px 0"><p><br></p>');
-  onRteInput(idx);
+function updateChapterWordCount() {
+  const editor = document.getElementById('chapter-editor');
+  const w = countWords(editor.innerText || editor.textContent || '');
+  document.getElementById('chapter-word-count').textContent = w;
 }
 
-function onRteInput(idx) {
-  const el = document.getElementById('chapterBody-' + idx);
-  if (!el) return;
-  const html = el.innerHTML;
-  const text = el.innerText || el.textContent || '';
-  state.data.chapters[idx].bodyHtml = html;
-  state.data.chapters[idx].body = text;
-  // Update word count live
-  const wc = wordCount(text);
-  const pct = Math.min(100, Math.round(wc / 200 * 100));
-  const wcLabel = document.getElementById('wcLabel-' + idx);
-  const wcBar   = document.getElementById('wcBar-' + idx);
-  if (wcLabel) wcLabel.textContent = wc + ' words';
-  if (wcBar)   wcBar.style.width = pct + '%';
+function updateTotalWordCount() {
+  if (!currentStory) return;
+  currentStory.totalWords = currentStory.chapters.reduce((s, ch) => s + (ch.wordCount||0), 0);
+  document.getElementById('total-words').textContent = currentStory.totalWords;
+}
+
+function countWords(text) {
+  return (text || '').trim().split(/\s+/).filter(w => w.length > 0).length;
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ============================================================
+// GENRE
+// ============================================================
+function renderGenreGrid() {
+  document.getElementById('genre-grid').innerHTML = GENRES.map(g => `
+    <button class="genre-btn ${activeGenre===g.id?'active':''}" onclick="setGenre('${g.id}')">
+      <span class="genre-emoji">${g.emoji}</span>${g.label}
+    </button>`).join('');
+}
+
+function setGenre(id) {
+  activeGenre = id;
+  if (currentStory) currentStory.genre = id;
+  renderGenreGrid();
   autoSave();
 }
 
-// Apply AI suggestion to a chapter's rich editor
-function applyAISuggestion(chapterIdx, aiIdx) {
-  const polishedText = (window._aiRefinedTexts && window._aiRefinedTexts[aiIdx]) || '';
-  if (!polishedText) { toast('No AI suggestion found for this chapter.', 'error'); return; }
-  if (!confirm('Apply AI\'s polished version to Chapter ' + (chapterIdx+1) + '? This will replace your current draft for that chapter. (Your original is auto-saved first!)')) return;
-  autoSave();
-  const htmlContent = polishedText.split('\n\n').map(para =>
-    para.trim() ? `<p>${para.trim().replace(/\n/g,'<br>')}</p>` : '<p><br></p>'
-  ).join('');
-  state.data.chapters[chapterIdx].bodyHtml = htmlContent;
-  state.data.chapters[chapterIdx].body = polishedText;
-  // Update the live editor if visible
-  const el = document.getElementById('chapterBody-' + chapterIdx);
-  if (el) { el.innerHTML = htmlContent; onRteInput(chapterIdx); }
-  // Show applied badge
-  const area = document.getElementById('aiApplyArea-' + aiIdx);
-  if (area) area.innerHTML = `<div class="ai-applied-badge">✅ AI suggestion applied to Chapter ${chapterIdx+1}! You can still edit it.</div>`;
-  toast('AI suggestion applied to Chapter ' + (chapterIdx+1) + '! ✨');
+// ============================================================
+// PLOT DICE
+// ============================================================
+function rollDice() {
+  const btn = document.querySelector('.dice-btn');
+  btn.textContent = '🎲 Rolling…';
+  setTimeout(() => {
+    const result = PLOT_DICE[Math.floor(Math.random() * PLOT_DICE.length)];
+    document.getElementById('dice-result').textContent = result;
+    btn.textContent = '🎲 Roll Again';
+  }, 400);
 }
 
-// ═══════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════
-autoLoad();
-render();
+// ============================================================
+// WRITING PROMPTS
+// ============================================================
+function renderPrompts() {
+  document.getElementById('prompts-strip').innerHTML = WRITING_PROMPTS.map(p => `
+    <button style="background:var(--soft);border:2px solid var(--line);border-radius:10px;padding:7px 12px;font-size:12px;font-weight:700;color:var(--dark);cursor:pointer;transition:.15s;font-style:italic;text-align:left"
+      onmouseover="this.style.borderColor='var(--purple)'"
+      onmouseout="this.style.borderColor='var(--line)'"
+      onclick="usePrompt(this.dataset.prompt)" data-prompt="${escHtml(p)}">${escHtml(p)}</button>`).join('');
+}
+
+function usePrompt(p) {
+  const editor = document.getElementById('chapter-editor');
+  editor.focus();
+  document.execCommand('insertText', false, p + ' ');
+}
+
+// ============================================================
+// STATUS BANNER
+// ============================================================
+function updateStatusBanner() {
+  if (!currentStory) return;
+  const el = document.getElementById('studio-status-banner');
+  const s = currentStory.status;
+  const map = {
+    draft:          {cls:'info',    icon:'📝', msg:'Draft — write freely. Use <strong>Review &amp; Publish</strong> when you\'re ready.'},
+    pending_ai:     {cls:'warn',    icon:'🤖', msg:'Waiting for AI review…'},
+    pending_parent: {cls:'pending', icon:'⏳', msg:'Waiting for parent approval before publishing to Books &amp; More.'},
+    published:      {cls:'success', icon:'🏆', msg:'Published to <strong>Books &amp; More</strong>! The community can now read your story.'},
+    rejected:       {cls:'warn',    icon:'✏️',  msg:'Parent requested revisions. Make your edits and resubmit.'},
+  };
+  const info = map[s] || map['draft'];
+  el.innerHTML = `<div class="status-banner ${info.cls}">${info.icon} ${info.msg}</div>`;
+}
+
+// ============================================================
+// AI REVIEW (client-side heuristics)
+// ============================================================
+function aiReviewStory(fullText) {
+  const lower = fullText.toLowerCase();
+  for (const w of ADULT_KEYWORDS)
+    if (lower.includes(w)) return {pass:false, severity:'block', reason:`Contains inappropriate content ("${w}"). Please revise before submitting.`};
+  for (const w of TRANS_CURSES)
+    if (lower.includes(w)) return {pass:false, severity:'block', reason:'Contains language that is not allowed on TYF Network.'};
+  for (const p of DEFAMATION)
+    if (lower.includes(p)) return {pass:false, severity:'block', reason:'Content appears to defame a school or teacher. Please revise.'};
+  if (/[^a-zA-Z0-9\s]{2,}/.test(fullText))
+    return {pass:false, severity:'warn', reason:'Contains unusual special characters. Please remove them.'};
+  const letters = fullText.replace(/[^a-zA-Z]/g,'').length;
+  if (fullText.replace(/\s/g,'').length > 30 && letters / fullText.replace(/\s/g,'').length < 0.4)
+    return {pass:false, severity:'warn', reason:'Content has too many numbers or symbols. Make sure it is real writing.'};
+  const words = countWords(fullText);
+  if (words < 30) return {pass:false, severity:'warn', reason:'Story is very short (fewer than 30 words). Add more content before publishing.'};
+  return {pass:true, severity:'ok', reason:`Great writing! ${words} words, no issues found. Ready for parent approval.`};
+}
+
+// ============================================================
+// PUBLISH FLOW
+// ============================================================
+function openPublishFlow() {
+  if (!mfcUser) { toast('Please log in first'); return; }
+  saveCurrentChapter();
+  if (!currentStory || !currentStory.title) { toast('Please give your story a title first'); return; }
+  const genre = GENRES.find(g => g.id === currentStory.genre);
+  document.getElementById('pub-story-name').textContent = currentStory.title;
+  document.getElementById('pub-story-meta').textContent =
+    `${genre ? genre.emoji+' '+genre.label : 'No genre'} · ${currentStory.totalWords} words · ${currentStory.chapters.length} chapter${currentStory.chapters.length!==1?'s':''}`;
+  // Reset steps
+  document.getElementById('pub-step-ai').style.display = 'block';
+  document.getElementById('pub-ai-panel').style.display = 'none';
+  document.getElementById('pub-step-confirm').style.display = 'none';
+  document.getElementById('pub-step-share').style.display = 'none';
+  document.getElementById('run-ai-btn').disabled = false;
+  openModal('modal-publish');
+  // If already published, jump straight to share panel
+  if (currentStory.status === 'published') showPublishedSharePanel();
+  else if (currentStory.status === 'pending_parent') {
+    document.getElementById('pub-step-ai').style.display = 'none';
+    document.getElementById('pub-step-share').innerHTML = `<div style="background:#f3e5f5;border:2px solid #ce93d8;border-radius:14px;padding:14px;text-align:center"><div style="font-size:2rem;margin-bottom:6px">⏳</div><div style="font-weight:900;font-size:15px;color:#6A1B9A;margin-bottom:4px">Waiting for parent approval</div><div style="font-size:12px;font-weight:700;color:var(--muted)">You'll get a notification here when they approve. Share links will unlock after publishing.</div></div>`;
+    document.getElementById('pub-step-share').style.display = 'block';
+  }
+}
+
+function runPublishAiReview() {
+  const fullText = currentStory.chapters.map(ch => {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = ch.content;
+    return tmp.innerText || tmp.textContent || '';
+  }).join('\n\n');
+  const result = aiReviewStory(fullText);
+  const panel = document.getElementById('pub-ai-panel');
+  panel.className = 'ai-panel ' + result.severity;
+  panel.style.display = 'block';
+  const icons = {ok:'✅',warn:'⚠️',block:'❌'};
+  const titles = {ok:'AI Review: Approved',warn:'AI Review: Needs Revision',block:'AI Review: Cannot Be Published'};
+  panel.innerHTML = `<div class="ai-title">${icons[result.severity]} ${titles[result.severity]}</div><div class="ai-msg">${result.reason}</div>`;
+  document.getElementById('run-ai-btn').disabled = true;
+  currentStory.aiStatus = result.severity === 'ok' ? 'approved' : 'flagged';
+  saveStoryToDocs();
+  if (result.pass) {
+    // Reveal confirm step
+    document.getElementById('pub-step-confirm').style.display = 'block';
+  }
+}
+
+function submitForParentApproval() {
+  if (!currentStory) return;
+  const parentNote = document.getElementById('pub-parent-note').value.trim();
+  const fullHtml = currentStory.chapters.map((ch, i) =>
+    `<strong>Chapter ${i+1}: ${ch.title}</strong>\n${ch.content}`).join('\n\n');
+  const tmp = document.createElement('div');
+  tmp.innerHTML = fullHtml;
+  const blurb = currentStory.blurb ? `\n\n📝 Blurb: ${currentStory.blurb}` : '';
+  const why = currentStory.whyWritten ? `\n\n💭 Why I wrote this: ${currentStory.whyWritten}` : '';
+  const fullText = `📖 "${escHtml(currentStory.title)}"${blurb}${why}\n\n${(tmp.innerText||tmp.textContent||'').slice(0,2000)}${(tmp.innerText||tmp.textContent||'').length>2000?'\n\n… [continued in My First Chapter]':''}`;
+  const genre = GENRES.find(g => g.id === currentStory.genre);
+  const postId = 'mfc_pub_' + currentStory.id;
+  const post = {
+    id: postId,
+    authorId: mfcUser.id,
+    authorName: mfcUser.name,
+    authorAvatar: mfcUser.avatar || null,
+    communityId: 'books-more',
+    text: fullText,
+    blurb: currentStory.blurb || '',
+    whyWritten: currentStory.whyWritten || '',
+    parentNote: parentNote || '',
+    imageB64: null,
+    timestamp: Date.now(),
+    aiStatus: 'approved',
+    parentApproved: false,
+    reactions: {loveIt:0,likeIt:0,canDoBetter:0,workToBetter:0,motivated:0,inspire:0,keepGoing:0},
+    reports: [],
+    isMentorTip: false,
+    isStoryPost: true,
+    storyId: currentStory.id,
+    publicShareId: 'share_' + currentStory.id,  // public permalink (no login needed)
+    genre: genre ? genre.emoji+' '+genre.label : '',
+  };
+  const posts = getTyfPosts().filter(p => p.storyId !== currentStory.id);
+  posts.unshift(post);
+  saveTyfPosts(posts);
+  currentStory.status = 'pending_parent';
+  currentStory.parentApproved = false;
+  currentStory.publicShareId = post.publicShareId;
+  saveStoryToDocs();
+  // Hide confirm, show pending message
+  document.getElementById('pub-step-confirm').style.display = 'none';
+  document.getElementById('pub-step-ai').style.display = 'none';
+  const shareDiv = document.getElementById('pub-step-share');
+  shareDiv.style.display = 'block';
+  shareDiv.innerHTML = `<div style="background:#f3e5f5;border:2px solid #ce93d8;border-radius:14px;padding:14px;text-align:center">
+    <div style="font-size:2rem;margin-bottom:6px">⏳</div>
+    <div style="font-weight:900;font-size:15px;color:#6A1B9A;margin-bottom:4px">Submitted for parent approval!</div>
+    <div style="font-size:12px;font-weight:700;color:var(--muted)">Once your parent approves, it will go live in Books &amp; More and you can share it with anyone.</div>
+  </div>`;
+  updateStatusBanner();
+  toast('📤 Submitted for parent approval!');
+}
+
+function showPublishedSharePanel() {
+  if (!currentStory || !currentStory.publicShareId) return;
+  const shareLink = `${window.location.origin}${window.location.pathname}?view=${currentStory.publicShareId}`;
+  const shareDiv = document.getElementById('pub-step-share');
+  document.getElementById('pub-step-ai').style.display = 'none';
+  document.getElementById('pub-step-confirm').style.display = 'none';
+  shareDiv.style.display = 'block';
+  shareDiv.innerHTML = `
+    <div style="background:#e8f5e9;border:2px solid #a5d6a7;border-radius:14px;padding:14px;text-align:center;margin-bottom:14px">
+      <div style="font-size:2rem;margin-bottom:6px">🏆</div>
+      <div style="font-weight:900;font-size:15px;color:#2E7D32;margin-bottom:4px">Your story is published!</div>
+      <div style="font-size:12px;font-weight:700;color:var(--muted)">Share it with anyone — no TYF account needed to read it.</div>
+    </div>
+    <div style="background:var(--soft);border-radius:12px;padding:10px 14px;font-family:monospace;font-size:12px;word-break:break-all;margin-bottom:12px" id="pub-share-link">${shareLink}</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn ghost sm" onclick="copyStoryLink('${shareLink}')">📋 Copy Link</button>
+      <button class="btn ghost sm" style="color:#25D366;border-color:#25D366" onclick="shareStoryWhatsApp('${shareLink}')">📲 WhatsApp</button>
+      <button class="btn ghost sm" onclick="shareStoryEmail('${shareLink}')">📧 Email</button>
+    </div>`;
+}
+
+function copyStoryLink(link) {
+  const url = link || (currentStory && currentStory.publicShareId ? `${window.location.origin}${window.location.pathname}?view=${currentStory.publicShareId}` : window.location.href);
+  navigator.clipboard.writeText(url).then(() => toast('📋 Link copied!')).catch(() => toast('Copy: ' + url));
+}
+
+function shareStoryWhatsApp(link) {
+  const url = link || window.location.href;
+  const text = encodeURIComponent(`Read my story "${currentStory?.title||'My Story'}" on The Young Foundry:\n\n${url}`);
+  window.open(`https://wa.me/?text=${text}`, '_blank');
+}
+
+function shareStoryEmail(link) {
+  const url = link || window.location.href;
+  const subject = encodeURIComponent(`Read my story: "${currentStory?.title||'My Story'}"`);
+  const body = encodeURIComponent(`Hi!\n\nI wrote a story on The Young Foundry and wanted to share it with you.\n\n📖 "${currentStory?.title||'My Story'}"\n\nRead it here: ${url}\n\nYou don't need an account to read it!`);
+  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+}
+
+// Watch for parent approval in TYF Network (poll localStorage every 5s)
+setInterval(() => {
+  if (!currentStory || currentStory.status !== 'pending_parent') return;
+  const posts = getTyfPosts();
+  const post = posts.find(p => p.storyId === currentStory.id);
+  if (post && post.parentApproved && currentStory.status !== 'published') {
+    currentStory.status = 'published';
+    currentStory.parentApproved = true;
+    currentStory.publicShareId = post.publicShareId;
+    saveStoryToDocs();
+    updateStatusBanner();
+    toast('🏆 Parent approved! Your story is now live in Books & More!');
+    // If publish modal is open, show share panel
+    if (document.getElementById('modal-publish').classList.contains('open')) {
+      showPublishedSharePanel();
+    }
+  }
+}, 5000);
+
+// ============================================================
+// REPOSITORY
+// ============================================================
+function renderRepository() {
+  const docs = getDocs().filter(d => d.authorId === mfcUser?.id);
+  const el = document.getElementById('repository-list');
+  if (!docs.length) {
+    el.innerHTML = `<div style="text-align:center;padding:48px 24px;color:var(--muted)"><span style="font-size:3rem;display:block;margin-bottom:12px">📁</span><p style="font-size:14px;font-weight:700">No stories saved yet. Start writing!</p></div>`;
+    return;
+  }
+  const statusMap = {
+    draft:          {label:'Draft',            cls:'muted'},
+    pending_parent: {label:'⏳ Pending Approval', cls:'yellow'},
+    published:      {label:'✅ Published',      cls:'green'},
+    rejected:       {label:'✏️ Needs Revision',  cls:'orange'},
+  };
+  el.innerHTML = docs.map(doc => {
+    const genre = GENRES.find(g => g.id === doc.genre);
+    const st = statusMap[doc.status] || statusMap['draft'];
+    return `<div class="doc-card">
+      <div class="doc-icon">${genre ? genre.emoji : '📄'}</div>
+      <div class="doc-info">
+        <div class="doc-title">${escHtml(doc.title || 'Untitled Story')}</div>
+        <div class="doc-meta">
+          ${genre ? genre.label+' · ' : ''}${doc.totalWords||0} words · ${doc.chapters.length} chapter${doc.chapters.length!==1?'s':''} · Updated ${timeAgo(doc.updated)}
+        </div>
+        <div style="margin-top:6px"><span class="badge ${st.cls}">${st.label}</span></div>
+        <div class="doc-actions">
+          <button class="btn ghost sm" onclick="loadAndEdit('${doc.id}')">✏️ Edit</button>
+          ${doc.status === 'draft' || doc.status === 'rejected' ? `<button class="btn purple sm" onclick="loadAndPublish('${doc.id}')">🚀 Publish</button>` : ''}
+          ${doc.status === 'published' ? `<span class="badge green">Live in Books &amp; More 🎉</span>` : ''}
+          <button class="btn red sm" onclick="deleteDoc('${doc.id}')">🗑️ Delete</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function loadAndEdit(id) {
+  loadStory(id);
+  showScreen('studio');
+}
+
+function loadAndPublish(id) {
+  loadStory(id);
+  showScreen('studio');
+  setTimeout(openPublishFlow, 200);
+}
+
+function deleteDoc(id) {
+  if (!confirm('Delete this story? This cannot be undone.')) return;
+  const docs = getDocs().filter(d => d.id !== id);
+  saveDocs(docs);
+  // Also remove pending post from TYF queue
+  const posts = getTyfPosts().filter(p => p.storyId !== id);
+  saveTyfPosts(posts);
+  renderRepository();
+  toast('Story deleted.');
+}
+
+// ============================================================
+// MODAL HELPERS
+// ============================================================
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', e => { if (e.target===m) m.classList.remove('open'); });
+  });
+});
+
+// ============================================================
+// UTILS
+// ============================================================
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+function timeAgo(ts) {
+  const d = Date.now() - ts;
+  if (d < 60000) return 'just now';
+  if (d < 3600000) return Math.floor(d/60000)+'m ago';
+  if (d < 86400000) return Math.floor(d/3600000)+'h ago';
+  return Math.floor(d/86400000)+'d ago';
+}
 </script>
 </body>
 </html>
