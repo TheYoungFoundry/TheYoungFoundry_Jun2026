@@ -2048,6 +2048,15 @@ function submitPost() {
   const posts = getPosts();
   posts.unshift(post);
   savePosts(posts);
+  // Notify parent on every child post
+  if (currentUser.role === 'student') {
+    const accts = getAccounts();
+    const childAcc = accts.find(a => a.id === currentUser.id);
+    if (childAcc && childAcc.parentEmail) {
+      addParentNotification(childAcc.parentEmail, 'post_published',
+        `${childAcc.name} just posted in ${comm ? comm.name : communityId}: "${text.slice(0,80)}${text.length>80?'…':''}"`);
+    }
+  }
   // Boost score
   const accounts = getAccounts();
   const me = accounts.find(a => a.id === currentUser.id);
@@ -2455,6 +2464,17 @@ function submitReport() {
   const flags = getFlags();
   flags.push({postId, reason, timestamp:Date.now(), reviewedBy:'ai', action:'pending', reporterId:currentUser.id});
   saveFlags(flags);
+  // Notify parent if the reported account belongs to a student
+  const rPosts = getPosts();
+  const rp = rPosts.find(p => p.id === postId);
+  if (rp) {
+    const rAccounts = getAccounts();
+    const reportedUser = rAccounts.find(a => a.id === rp.authorId);
+    if (reportedUser && reportedUser.parentEmail) {
+      addParentNotification(reportedUser.parentEmail, 'report',
+        `A post by ${reportedUser.name} has been reported (reason: ${reason}). Please review their recent activity on TYF Network.`);
+    }
+  }
   // Auto-check report count
   const postFlags = flags.filter(f => f.postId === postId);
   if (postFlags.length >= 3) {
@@ -2687,6 +2707,56 @@ function updateUserBaseCounter() {
     cnt.textContent = total || '—';
     el.style.display = 'block';
   }
+}
+
+// ============================================================
+// PARENT NOTIFICATIONS
+// ============================================================
+function getParentNotifs(email) { return load('yfs_pnotif_'+btoa(email||''), []); }
+function saveParentNotifs(email, n) { save('yfs_pnotif_'+btoa(email||''), n); }
+
+function addParentNotification(parentEmail, type, message) {
+  if (!parentEmail) return;
+  const notifs = getParentNotifs(parentEmail);
+  notifs.unshift({ id:'n_'+Date.now(), type, message, timestamp: Date.now(), read: false });
+  saveParentNotifs(parentEmail, notifs);
+}
+
+function renderParentNotifBell() {
+  if (!currentUser || currentUser.role !== 'parent') return;
+  const notifs = getParentNotifs(currentUser.email || '');
+  const unread = notifs.filter(n => !n.read).length;
+  const existing = document.getElementById('notif-bell');
+  if (existing) existing.remove();
+  const bell = document.createElement('div');
+  bell.id = 'notif-bell';
+  bell.style.cssText = 'position:fixed;bottom:60px;right:18px;z-index:200;cursor:pointer;';
+  bell.innerHTML = `<div style="background:var(--dark);color:#fff;border-radius:14px;padding:8px 14px;font-size:13px;font-weight:800;box-shadow:var(--shadow);display:flex;align-items:center;gap:8px" onclick="showParentNotifs()">
+    🔔 ${unread > 0 ? `<span style="background:var(--red);border-radius:999px;padding:2px 7px;font-size:11px">${unread}</span>` : ''}
+    Notifications
+  </div>`;
+  document.body.appendChild(bell);
+}
+
+function showParentNotifs() {
+  if (!currentUser || !currentUser.email) return;
+  const notifs = getParentNotifs(currentUser.email);
+  notifs.forEach(n => n.read = true);
+  saveParentNotifs(currentUser.email, notifs);
+  renderParentNotifBell();
+  if (!notifs.length) { toast('No notifications yet'); return; }
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(45,55,72,.55);backdrop-filter:blur(4px);z-index:500;display:grid;place-items:center;';
+  overlay.innerHTML = `<div style="background:#fff;border-radius:24px;padding:28px;max-width:480px;width:calc(100% - 32px);box-shadow:0 24px 64px -12px rgba(45,55,72,.4);max-height:80vh;overflow-y:auto;position:relative;">
+    <button onclick="this.closest('div[style]').remove()" style="position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;background:var(--soft);font-size:15px;display:grid;place-items:center;cursor:pointer;color:var(--muted);border:none">✕</button>
+    <div style="font-family:'Fredoka One',cursive;font-size:20px;margin-bottom:16px">🔔 Notifications</div>
+    ${notifs.map(n => `<div style="background:var(--soft);border-radius:14px;padding:12px 14px;margin-bottom:10px;font-size:13px;font-weight:700;color:var(--dark);line-height:1.5">
+      ${n.type==='account_created'?'👤':n.type==='post_published'?'📝':n.type==='report'?'🚩':'🔔'} ${n.message}
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">${timeAgo(n.timestamp)}</div>
+    </div>`).join('')}
+  </div>`;
+  overlay.addEventListener('click', e => { if (e.target===overlay) overlay.remove(); });
+  document.body.appendChild(overlay);
 }
 
 // Init seed data so feed isn't empty on first load
