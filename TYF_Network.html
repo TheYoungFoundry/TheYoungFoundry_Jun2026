@@ -515,7 +515,7 @@ input,textarea,select{font-family:var(--body);}
       <button onclick="showScreen('wall')" id="nav-wall" class="desktop-only">🧱 My Wall</button>
       <button onclick="showScreen('free-resources')" id="nav-free-resources" class="desktop-only">🎁 Free Resources</button>
       <button onclick="showScreen('profile')" id="nav-profile" class="desktop-only">👤 Profile</button>
-      <a href="myfirstchapter.html" class="btn ghost sm desktop-only" style="text-decoration:none" title="Go to My First Chapter">📖 Chapter</a>
+      <button onclick="openMFC()" class="btn ghost sm desktop-only" title="Go to My First Chapter">📖 Chapter</button>
       <button onclick="openPostModal()" class="btn green sm desktop-only">+ Post</button>
       <div class="avatar-chip" onclick="showScreen('profile')" id="topbar-avatar" style="display:none">
         <div class="av" id="topbar-av-circle">?</div>
@@ -689,12 +689,28 @@ input,textarea,select{font-family:var(--body);}
     <div class="sectlab">🎁 Free Resources</div>
     <p style="font-size:14px;color:var(--muted);font-weight:700;margin-bottom:24px">Free tools and activities from The Young Foundry — no signup needed for guests.</p>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px">
-      <div class="card" style="cursor:pointer" onclick="window.open('MyFirstChapter.html','_blank')">
+      <div class="card" style="cursor:pointer" onclick="openMFC()">
         <div class="card-body">
           <div style="font-size:2.5rem;margin-bottom:10px">✍️</div>
           <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--purple)">MyFirstChapter</div>
-          <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">A narrative writing studio. Pick a genre, roll plot dice, write chapters, and publish to Books & More.</p>
+          <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">A narrative writing studio. Pick a genre, roll plot dice, write chapters, and publish to Books &amp; More.</p>
           <span class="badge purple">Writing Studio</span>
+        </div>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="openTool('TeluguVelugu.html')">
+        <div class="card-body">
+          <div style="font-size:2.5rem;margin-bottom:10px">🇮🇳</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--teal)">Telugu Velugu</div>
+          <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">Learn Telugu letters, words, and stories in a fun interactive way. Perfect for beginners!</p>
+          <span class="badge" style="background:#e0f2f1;color:var(--teal)">Telugu Learning</span>
+        </div>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="openTool('math-quest.html')">
+        <div class="card-body">
+          <div style="font-size:2.5rem;margin-bottom:10px">🔢</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--orange)">Math Quest</div>
+          <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">Solve puzzles, beat challenges, and master maths through exciting quests and games!</p>
+          <span class="badge orange">Math Games</span>
         </div>
       </div>
       <div class="card">
@@ -2645,6 +2661,17 @@ function openPublicWall(userId) {
 // ============================================================
 // SHARE FUNCTIONS
 // ============================================================
+function openMFC() {
+  if (currentUser && currentUser.role === 'student')
+    localStorage.setItem('mfc_session', JSON.stringify(currentUser));
+  window.location.href = 'MyFirstChapter.html';
+}
+function openTool(url) {
+  if (currentUser && currentUser.role === 'student')
+    localStorage.setItem('mfc_session', JSON.stringify(currentUser));
+  window.location.href = url;
+}
+
 function shareWhatsApp(postId) {
   const post = getPosts().find(p => p.id === postId);
   if (!post) return;
