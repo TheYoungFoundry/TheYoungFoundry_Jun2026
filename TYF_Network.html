@@ -408,62 +408,80 @@ input,textarea,select{font-family:var(--body);}
 
       <!-- Register -->
       <div id="login-register" style="display:none">
-        <div style="background:var(--soft);border-radius:14px;padding:14px;margin-bottom:16px;font-size:13px;font-weight:700;color:var(--muted);">📋 Your parent will receive an approval request. Once approved, you can log in.</div>
-        <div class="field">
-          <label>Child's Full Name</label>
-          <input type="text" id="r-name" placeholder="Full name" />
-        </div>
-        <div class="field-row">
-          <div class="field">
-            <label>School ID</label>
-            <input type="text" id="r-schoolid" placeholder="SCH2026-..." />
-          </div>
-          <div class="field">
-            <label>Year of Birth</label>
-            <select id="r-yob">
-              <option value="">Year...</option>
-              <option>2008</option><option>2009</option><option>2010</option>
-              <option>2011</option><option>2012</option><option>2013</option>
-              <option>2014</option><option>2015</option><option>2016</option>
-              <option>2017</option><option>2018</option><option>2019</option><option>2020</option>
-            </select>
-          </div>
-        </div>
-        <div class="field">
-          <label>School Name</label>
-          <input type="text" id="r-school" placeholder="e.g. DPS Bangalore" />
-        </div>
-        <div class="field-row">
-          <div class="field">
-            <label>Current Grade</label>
-            <select id="r-grade">
-              <option value="">Grade...</option>
-              <option value="1">1</option><option value="2">2</option>
-              <option value="3">3</option><option value="4">4</option><option value="5">5</option>
-              <option value="6">6</option><option value="7">7</option>
-              <option value="8">8</option><option value="9">9</option>
-              <option value="10">10</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Grade Next Year</label>
-            <select id="r-nextgrade">
-              <option value="">Grade...</option>
-              <option value="1">1</option><option value="2">2</option>
-              <option value="3">3</option><option value="4">4</option><option value="5">5</option>
-              <option value="6">6</option><option value="7">7</option>
-              <option value="8">8</option><option value="9">9</option><option value="10">10</option>
-            </select>
-          </div>
-        </div>
-        <div class="field">
-          <label>Parent Email (for approval)</label>
-          <input type="email" id="r-pemail" placeholder="parent@email.com" />
-        </div>
-        <button class="btn green" style="width:100%" onclick="requestAccount()">Send Approval Request</button>
-        <div style="margin-top:12px;text-align:center;">
-          <button class="btn ghost sm" onclick="switchLoginTab('student')">← Back to Login</button>
-        </div>
+<div style="background:var(--soft);border-radius:14px;padding:14px;margin-bottom:16px;font-size:13px;font-weight:700;color:var(--muted);">📋 Fill in the details below. Your parent will receive an email with your login password to approve your account.</div>
+<div class="field">
+  <label>Child's Full Name</label>
+  <input type="text" id="r-name" placeholder="Full name" />
+</div>
+<div class="field">
+  <label>Username (displayed on posts)</label>
+  <input type="text" id="r-username" placeholder="e.g. curious_coder_42" />
+</div>
+<div class="field">
+  <label>Student Email</label>
+  <input type="email" id="r-email" placeholder="student@email.com" />
+</div>
+<div class="field-row">
+  <div class="field">
+    <label>School ID</label>
+    <input type="text" id="r-schoolid" placeholder="SCH2026-..." />
+  </div>
+  <div class="field">
+    <label>Year of Birth</label>
+    <select id="r-yob">
+      <option value="">Year...</option>
+      <option>2008</option><option>2009</option><option>2010</option>
+      <option>2011</option><option>2012</option><option>2013</option>
+      <option>2014</option><option>2015</option><option>2016</option>
+      <option>2017</option><option>2018</option><option>2019</option><option>2020</option>
+    </select>
+  </div>
+</div>
+<div class="field">
+  <label>School Name</label>
+  <input type="text" id="r-school" placeholder="e.g. DPS Bangalore" />
+</div>
+<div class="field-row">
+  <div class="field">
+    <label>Current Grade</label>
+    <select id="r-grade">
+      <option value="">Grade...</option>
+      <option value="1">1</option><option value="2">2</option>
+      <option value="3">3</option><option value="4">4</option>
+      <option value="5">5</option><option value="6">6</option>
+      <option value="7">7</option><option value="8">8</option>
+      <option value="9">9</option><option value="10">10</option>
+    </select>
+  </div>
+  <div class="field">
+    <label>Grade next year</label>
+    <select id="r-nextgrade">
+      <option value="">Next grade...</option>
+      <option value="2">2</option><option value="3">3</option>
+      <option value="4">4</option><option value="5">5</option>
+      <option value="6">6</option><option value="7">7</option>
+      <option value="8">8</option><option value="9">9</option>
+      <option value="10">10</option><option value="11">11</option>
+    </select>
+  </div>
+</div>
+<div class="field">
+  <label>Parent's Full Name</label>
+  <input type="text" id="r-parentname" placeholder="Parent's name" />
+</div>
+<div class="field">
+  <label>Parent Email (approval + notifications)</label>
+  <input type="email" id="r-pemail" placeholder="parent@email.com" />
+</div>
+<div id="r-password-box" style="display:none;background:var(--soft);border:2px solid var(--green);border-radius:12px;padding:12px 14px;margin-bottom:14px">
+  <div style="font-weight:900;font-size:13px;color:var(--green);margin-bottom:4px">✅ Account Ready — Password Generated</div>
+  <div style="font-size:12px;font-weight:700;color:var(--dark);margin-bottom:4px">Temporary password: <span id="r-gen-password" style="font-family:monospace;background:#fff;padding:2px 8px;border-radius:6px;border:1px solid var(--line)"></span></div>
+  <div style="font-size:11px;color:var(--muted);font-weight:700">Save this password. A notification has been sent to the parent email to approve the account.</div>
+</div>
+<button class="btn green" style="width:100%" id="r-submit-btn" onclick="requestAccount()">Generate Password &amp; Send to Parent →</button>
+<div style="margin-top:12px;text-align:center;">
+  <button class="btn ghost sm" onclick="switchLoginTab('student')">← Back to Login</button>
+</div>
       </div>
 
       <!-- Admin Login -->
@@ -495,6 +513,7 @@ input,textarea,select{font-family:var(--body);}
       <button onclick="showScreen('communities')" id="nav-communities" class="desktop-only">🌐 Communities</button>
       <button onclick="showScreen('quests')" id="nav-quests" class="desktop-only">🏆 Quests</button>
       <button onclick="showScreen('wall')" id="nav-wall" class="desktop-only">🧱 My Wall</button>
+      <button onclick="showScreen('free-resources')" id="nav-free-resources" class="desktop-only">🎁 Free Resources</button>
       <button onclick="showScreen('profile')" id="nav-profile" class="desktop-only">👤 Profile</button>
       <a href="myfirstchapter.html" class="btn ghost sm desktop-only" style="text-decoration:none" title="Go to My First Chapter">📖 Chapter</a>
       <button onclick="openPostModal()" class="btn green sm desktop-only">+ Post</button>
@@ -661,6 +680,64 @@ input,textarea,select{font-family:var(--body);}
       <div style="font-size:14px;opacity:.85;font-weight:700;">Complete quests, earn reactions, build your Foundry Score. The most-reacted submission becomes a Foundry Fellow!</div>
     </div>
     <div id="quests-list"></div>
+  </div>
+</div>
+
+<!-- SCREEN: FREE RESOURCES -->
+<div class="screen" id="screen-free-resources">
+  <div class="page-wrap">
+    <div class="sectlab">🎁 Free Resources</div>
+    <p style="font-size:14px;color:var(--muted);font-weight:700;margin-bottom:24px">Free tools and activities from The Young Foundry — no signup needed for guests.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px">
+      <div class="card" style="cursor:pointer" onclick="window.open('MyFirstChapter.html','_blank')">
+        <div class="card-body">
+          <div style="font-size:2.5rem;margin-bottom:10px">✍️</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--purple)">MyFirstChapter</div>
+          <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">A narrative writing studio. Pick a genre, roll plot dice, write chapters, and publish to Books & More.</p>
+          <span class="badge purple">Writing Studio</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div style="font-size:2.5rem;margin-bottom:10px">🎲</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--orange)">Story Starter Kit</div>
+          <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">20 plot twist cards, character builders, and scene starters to kick off any story.</p>
+          <span class="badge orange">Coming Soon</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div style="font-size:2.5rem;margin-bottom:10px">🔬</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--teal)">Science Journal</div>
+          <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">Document experiments, record observations, and share findings with the Science community.</p>
+          <span class="badge blue">Coming Soon</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div style="font-size:2.5rem;margin-bottom:10px">🎨</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--red)">Art Portfolio Builder</div>
+          <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">Upload and arrange your artwork into a shareable portfolio. Connects to Painting & Arts.</p>
+          <span class="badge red">Coming Soon</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div style="font-size:2.5rem;margin-bottom:10px">💻</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--blue)">Code Sandbox</div>
+          <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">A simple in-browser coding environment. Share your projects with the Coding community.</p>
+          <span class="badge blue">Coming Soon</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div style="font-size:2.5rem;margin-bottom:10px">🗣️</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--green)">Speech Prep Studio</div>
+          <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">Script writer and self-evaluation checklist for public speaking and debate preparation.</p>
+          <span class="badge green">Coming Soon</span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -913,6 +990,7 @@ function load(key, def) {
 function save(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
 
 const COMMUNITIES = [
+  {id:'books-more', name:'Books & More', emoji:'📚', cat:'creative', desc:'Young authors share original stories, book reviews, and literary work.', color:'#8B5CF6', members:[], creative:true, parent:false},
   {id:'tyf-events',name:'TYF Events Corner',emoji:'🗓️',cat:'tyf',desc:'Official TYF workshops, events, and programs.',color:'#E53935',members:[],creative:false,parent:false,official:true},
   {id:'tyf-news',name:'TYF News Corner',emoji:'📰',cat:'tyf',desc:'Important news and announcements for students and families.',color:'#1E88E5',members:[],creative:false,parent:false,official:true},
   {id:'literature',name:'Literature & Creativity',emoji:'📚',cat:'creative',desc:'Stories, poems, essays — express yourself through words.',color:'#8B5CF6',members:['demo'],creative:true,parent:false},
@@ -1148,24 +1226,45 @@ function promoteGrade(account) {
 
 function requestAccount() {
   const name = document.getElementById('r-name').value.trim();
+  const username = document.getElementById('r-username').value.trim();
+  const email = document.getElementById('r-email').value.trim();
   const schoolId = document.getElementById('r-schoolid').value.trim();
   const yob = document.getElementById('r-yob').value;
-  const schoolName = document.getElementById('r-school').value.trim();
+  const school = document.getElementById('r-school').value.trim();
   const grade = document.getElementById('r-grade').value;
   const nextGrade = document.getElementById('r-nextgrade').value;
+  const parentName = document.getElementById('r-parentname').value.trim();
   const pemail = document.getElementById('r-pemail').value.trim();
-  if (!name || !schoolId || !grade || !pemail || !schoolName || !yob || !nextGrade) { toast('Please fill all fields'); return; }
+  if (!name || !schoolId || !grade || !pemail || !email) { toast('Please fill all required fields'); return; }
   const accounts = getAccounts();
   if (accounts.find(a => a.schoolId === schoolId)) { toast('Account already exists with this School ID'); return; }
+  // Generate password
+  const pwd = 'TYF' + Math.random().toString(36).slice(2,6).toUpperCase() + Math.floor(10+Math.random()*90);
   const studentId = 'u_'+Date.now();
-  const pending = {id:studentId,name,grade:parseInt(grade),nextAcademicGrade:parseInt(nextGrade),yob:parseInt(yob),schoolName,lastGradeYear:new Date().getFullYear(),schoolId,role:'student',status:'pending',parentEmail:pemail,joined:Date.now(),foundryScore:0,isMentor:parseInt(grade)>=9,badges:[],joinedCommunities:[]};
+  const pending = {
+    id:studentId, name, username: username||name, email, grade:parseInt(grade),
+    nextGrade: nextGrade ? parseInt(nextGrade) : parseInt(grade)+1,
+    nextAcademicGrade: nextGrade ? parseInt(nextGrade) : parseInt(grade)+1,
+    birthYear: yob ? parseInt(yob) : null, yob: yob ? parseInt(yob) : null,
+    schoolId, schoolName: school, role:'student', status:'pending',
+    parentName, parentEmail:pemail, tempPassword:pwd,
+    joined:Date.now(), foundryScore:0, badges:[], joinedCommunities:[],
+    lastGradeYear: new Date().getFullYear(), isMentor: parseInt(grade)>=9,
+    profilePublic: true, avatar: null,
+  };
   accounts.push(pending);
   saveAccounts(accounts);
   // Auto-create school group + auto-join student
-  const g = ensureSchoolGroup(schoolName, studentId);
+  const g = ensureSchoolGroup(school, studentId);
   if (g) saveUserCommunities(studentId, [schoolGroupGroupId(g)]);
-  toast('✅ Request sent! Your parent will receive an approval notification.');
-  switchLoginTab('student');
+  // Store parent notification (simulates email)
+  addParentNotification(pemail, 'account_created', `New TYF Network account request for ${name} (Grade ${grade}, ${school||schoolId}). Temporary password: ${pwd}. Log in to TYF Network with your email to approve.`);
+  // Show password box
+  document.getElementById('r-gen-password').textContent = pwd;
+  document.getElementById('r-password-box').style.display = 'block';
+  document.getElementById('r-submit-btn').disabled = true;
+  document.getElementById('r-submit-btn').textContent = '✅ Sent!';
+  toast('✅ Password generated! Parent will be notified to approve your account.');
 }
 
 function logout() {
@@ -1192,6 +1291,7 @@ function enterApp() {
   if (currentUser.role === 'admin') { showScreen('mod'); renderModTab(); }
   else if (currentUser.role === 'parent') { showScreen('feed'); renderFeed(); renderParentSidebar(); }
   else { showScreen('feed'); renderFeed(); }
+  if (currentUser.role === 'parent') renderParentNotifBell();
 }
 
 // ============================================================
@@ -1213,6 +1313,7 @@ function showScreen(id) {
   else if (id==='proposals') renderProposals();
   else if (id==='parent-queue') renderParentQueue();
   else if (id==='mod') renderModTab();
+  else if (id==='free-resources') { /* no extra render needed */ }
 }
 
 // ============================================================

@@ -185,7 +185,7 @@ a{color:inherit;text-decoration:none;}
     <div class="brand-sub">✍️ MyFirstChapter</div>
     <div class="tsp"></div>
     <div class="topbar-btns">
-      <button class="btn ghost sm" onclick="showScreen('repository')">📁 My Repository</button>
+      <button class="btn ghost sm" onclick="showScreen('repository')">📂 My Docs</button>
       <button class="btn ghost sm" onclick="window.location='TYF_Network.html'">🌐 TYF Network</button>
       <button class="btn ghost sm" onclick="window.location='index.html'">← Home</button>
     </div>
@@ -237,6 +237,14 @@ a{color:inherit;text-decoration:none;}
             <label>Genre</label>
             <div class="genre-grid" id="genre-grid"></div>
           </div>
+          <div class="field" style="margin-top:10px">
+            <label>📝 Book Blurb <span style="color:var(--muted);font-weight:600">(what's it about?)</span></label>
+            <textarea id="story-blurb" maxlength="600" placeholder="A short description readers will see before opening your story…" style="min-height:60px" oninput="autoSave()"></textarea>
+          </div>
+          <div class="field">
+            <label>💭 Why I Wrote This</label>
+            <textarea id="story-why" maxlength="400" placeholder="What inspired you? Why did this story matter to you?" style="min-height:60px" oninput="autoSave()"></textarea>
+          </div>
           <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
             <span style="font-size:12px;font-weight:700;color:var(--muted)">Total words:</span>
             <span id="total-words" style="font-family:var(--head);font-size:18px;color:var(--purple)">0</span>
@@ -267,7 +275,7 @@ a{color:inherit;text-decoration:none;}
               <div style="font-size:11px;font-weight:700;opacity:.8" id="user-grade-disp">Grade —</div>
             </div>
           </div>
-          <button class="btn sm" style="width:100%;background:rgba(255,255,255,.2);color:#fff;border:2px solid rgba(255,255,255,.3)" onclick="showScreen('repository')">📁 My Repository</button>
+          <button class="btn sm" style="width:100%;background:rgba(255,255,255,.2);color:#fff;border:2px solid rgba(255,255,255,.3)" onclick="showScreen('repository')">📂 My Docs</button>
         </div>
       </div>
 
@@ -321,13 +329,13 @@ a{color:inherit;text-decoration:none;}
     <button class="btn ghost sm" onclick="showScreen('studio')" style="margin-bottom:16px">← Back to Writing</button>
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px">
       <div>
-        <div style="font-family:var(--head);font-size:26px;color:var(--dark)">📁 My Repository</div>
+        <div style="font-family:var(--head);font-size:26px;color:var(--dark)">📂 My Docs</div>
         <p style="font-size:13px;color:var(--muted);font-weight:700;margin-top:3px">Your saved stories and chapters — safe in your TYF profile</p>
       </div>
       <button class="btn purple" onclick="startNewStory()">✍️ New Story</button>
     </div>
     <div style="background:#e3f2fd;border:2px solid #90caf9;border-radius:14px;padding:12px 16px;font-size:13px;font-weight:700;color:#1565C0;margin-bottom:20px;">
-      🔒 Your documents are saved to your TYF Network profile. To publish to the <strong>Literature &amp; Creativity</strong> community, your story passes AI review and — for students — parent approval first.
+      🔒 Your documents are saved to your TYF Network profile. To publish to the <strong>Books &amp; More</strong> community, your story passes AI review and — for students — parent approval first.
     </div>
     <div id="repository-list"></div>
   </div>
@@ -340,7 +348,7 @@ a{color:inherit;text-decoration:none;}
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modal-publish')">✕</button>
     <h3>🚀 Review &amp; Publish</h3>
-    <p class="sub">Your story will be reviewed by AI, then sent for parent approval before going live in Literature &amp; Creativity.</p>
+    <p class="sub">Your story will be reviewed by AI, then sent for parent approval before going live in Books &amp; More.</p>
 
     <div style="background:var(--soft);border:2px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:16px;">
       <div style="font-weight:900;font-size:14px;margin-bottom:4px" id="pub-story-name">Untitled Story</div>
@@ -389,7 +397,7 @@ a{color:inherit;text-decoration:none;}
     </div>
 
     <p style="text-align:center;font-size:11px;color:var(--muted);font-weight:700;margin-top:10px">
-      AI reviews first · Parent approves · Published to Literature &amp; Creativity · Shareable with anyone
+      AI reviews first · Parent approves · Published to Books &amp; More · Shareable with anyone
     </p>
   </div>
 </div>
@@ -540,6 +548,8 @@ function showPublicStoryView(shareId) {
           <div style="font-size:1.8rem;margin-bottom:8px">${source.genre||'📖'}</div>
           <div style="font-family:'Fredoka One',cursive;font-size:28px;margin-bottom:6px">${escHtml(source.title||post?.text?.match(/"([^"]+)"/)?.[1]||'Story')}</div>
           <div style="font-size:13px;opacity:.85;font-weight:700">by ${escHtml(source.authorName||post?.authorName||'TYF Author')}</div>
+          ${source.blurb ? `<div style="font-size:14px;opacity:.9;font-weight:700;margin-top:10px;font-style:italic">"${escHtml(source.blurb)}"</div>` : ''}
+          ${source.whyWritten ? `<div style="font-size:12px;opacity:.8;font-weight:700;margin-top:6px">💭 ${escHtml(source.whyWritten)}</div>` : ''}
         </div>
         <div style="background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:28px 32px;box-shadow:var(--shadow);font-family:'Merriweather',Georgia,serif;font-size:15px;line-height:1.9;color:var(--ink);margin-bottom:20px">
           ${source.chapters ? source.chapters.map((ch,i)=>`<h3 style="font-family:'Fredoka One',cursive;margin:20px 0 10px;color:var(--purple)">Chapter ${i+1}: ${escHtml(ch.title)}</h3><div>${ch.content}</div>`).join('') : `<div>${(post?.text||'').replace(/\n/g,'<br>')}</div>`}
@@ -610,6 +620,8 @@ function newBlankStory() {
     authorName: mfcUser.name,
     title: '',
     genre: '',
+    blurb: '',
+    whyWritten: '',
     chapters: [{ id: 'ch_1', title: 'Chapter 1', content: '', wordCount: 0 }],
     totalWords: 0,
     status: 'draft',          // draft | pending_ai | pending_parent | published
@@ -640,6 +652,8 @@ function createNewStory() {
     authorName: mfcUser.name,
     title,
     genre,
+    blurb: '',
+    whyWritten: '',
     chapters: [{ id: 'ch_1', title: 'Chapter 1', content: '', wordCount: 0 }],
     totalWords: 0,
     status: 'draft',
@@ -666,6 +680,8 @@ function loadStory(id) {
   currentChapterIdx = 0;
   document.getElementById('story-title').value = currentStory.title || '';
   setGenre(currentStory.genre || '');
+  if (document.getElementById('story-blurb')) document.getElementById('story-blurb').value = currentStory.blurb || '';
+  if (document.getElementById('story-why')) document.getElementById('story-why').value = currentStory.whyWritten || '';
   renderChapterList();
   loadChapterIntoEditor(0);
   updateStatusBanner();
@@ -685,6 +701,8 @@ function saveStoryToDocs() {
 function autoSave() {
   if (!currentStory) return;
   currentStory.title = document.getElementById('story-title').value.trim();
+  currentStory.blurb = (document.getElementById('story-blurb')?.value || '').trim();
+  currentStory.whyWritten = (document.getElementById('story-why')?.value || '').trim();
   saveStoryToDocs();
 }
 
@@ -843,8 +861,8 @@ function updateStatusBanner() {
   const map = {
     draft:          {cls:'info',    icon:'📝', msg:'Draft — write freely. Use <strong>Review &amp; Publish</strong> when you\'re ready.'},
     pending_ai:     {cls:'warn',    icon:'🤖', msg:'Waiting for AI review…'},
-    pending_parent: {cls:'pending', icon:'⏳', msg:'Waiting for parent approval before publishing to Literature &amp; Creativity.'},
-    published:      {cls:'success', icon:'🏆', msg:'Published to <strong>Literature &amp; Creativity</strong>! The community can now read your story.'},
+    pending_parent: {cls:'pending', icon:'⏳', msg:'Waiting for parent approval before publishing to Books &amp; More.'},
+    published:      {cls:'success', icon:'🏆', msg:'Published to <strong>Books &amp; More</strong>! The community can now read your story.'},
     rejected:       {cls:'warn',    icon:'✏️',  msg:'Parent requested revisions. Make your edits and resubmit.'},
   };
   const info = map[s] || map['draft'];
@@ -928,7 +946,9 @@ function submitForParentApproval() {
     `<strong>Chapter ${i+1}: ${ch.title}</strong>\n${ch.content}`).join('\n\n');
   const tmp = document.createElement('div');
   tmp.innerHTML = fullHtml;
-  const fullText = `📖 "${escHtml(currentStory.title)}"\n\n${(tmp.innerText||tmp.textContent||'').slice(0,2000)}${(tmp.innerText||tmp.textContent||'').length>2000?'\n\n… [continued in My First Chapter]':''}`;
+  const blurb = currentStory.blurb ? `\n\n📝 Blurb: ${currentStory.blurb}` : '';
+  const why = currentStory.whyWritten ? `\n\n💭 Why I wrote this: ${currentStory.whyWritten}` : '';
+  const fullText = `📖 "${escHtml(currentStory.title)}"${blurb}${why}\n\n${(tmp.innerText||tmp.textContent||'').slice(0,2000)}${(tmp.innerText||tmp.textContent||'').length>2000?'\n\n… [continued in My First Chapter]':''}`;
   const genre = GENRES.find(g => g.id === currentStory.genre);
   const postId = 'mfc_pub_' + currentStory.id;
   const post = {
@@ -936,8 +956,10 @@ function submitForParentApproval() {
     authorId: mfcUser.id,
     authorName: mfcUser.name,
     authorAvatar: mfcUser.avatar || null,
-    communityId: 'literature',
+    communityId: 'books-more',
     text: fullText,
+    blurb: currentStory.blurb || '',
+    whyWritten: currentStory.whyWritten || '',
     parentNote: parentNote || '',
     imageB64: null,
     timestamp: Date.now(),
@@ -966,7 +988,7 @@ function submitForParentApproval() {
   shareDiv.innerHTML = `<div style="background:#f3e5f5;border:2px solid #ce93d8;border-radius:14px;padding:14px;text-align:center">
     <div style="font-size:2rem;margin-bottom:6px">⏳</div>
     <div style="font-weight:900;font-size:15px;color:#6A1B9A;margin-bottom:4px">Submitted for parent approval!</div>
-    <div style="font-size:12px;font-weight:700;color:var(--muted)">Once your parent approves, it will go live in Literature &amp; Creativity and you can share it with anyone.</div>
+    <div style="font-size:12px;font-weight:700;color:var(--muted)">Once your parent approves, it will go live in Books &amp; More and you can share it with anyone.</div>
   </div>`;
   updateStatusBanner();
   toast('📤 Submitted for parent approval!');
@@ -1022,7 +1044,7 @@ setInterval(() => {
     currentStory.publicShareId = post.publicShareId;
     saveStoryToDocs();
     updateStatusBanner();
-    toast('🏆 Parent approved! Your story is now live in Literature & Creativity!');
+    toast('🏆 Parent approved! Your story is now live in Books & More!');
     // If publish modal is open, show share panel
     if (document.getElementById('modal-publish').classList.contains('open')) {
       showPublishedSharePanel();
@@ -1060,7 +1082,7 @@ function renderRepository() {
         <div class="doc-actions">
           <button class="btn ghost sm" onclick="loadAndEdit('${doc.id}')">✏️ Edit</button>
           ${doc.status === 'draft' || doc.status === 'rejected' ? `<button class="btn purple sm" onclick="loadAndPublish('${doc.id}')">🚀 Publish</button>` : ''}
-          ${doc.status === 'published' ? `<span class="badge green">Live in Literature &amp; Creativity 🎉</span>` : ''}
+          ${doc.status === 'published' ? `<span class="badge green">Live in Books &amp; More 🎉</span>` : ''}
           <button class="btn red sm" onclick="deleteDoc('${doc.id}')">🗑️ Delete</button>
         </div>
       </div>
