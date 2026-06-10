@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TYF Network — The Young Foundry Community</title>
+<title>AlphaVerse — powered by TYF Network</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -35,16 +35,26 @@ input,textarea,select{font-family:var(--body);}
 .topbar-inner{max-width:1280px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:12px;}
 .brand{font-family:var(--head);font-size:22px;cursor:pointer;white-space:nowrap;flex-shrink:0;}
 .brand .r{color:var(--red);}.brand .g{color:var(--green);}.brand .b{color:var(--blue);}
+.login-brand .r{color:var(--red);}.login-brand .b{color:var(--blue);}
 .tspacer{flex:1;}
 .topbar-nav{display:flex;align-items:center;gap:6px;}
 .topbar-nav button{font-weight:800;font-size:13px;color:var(--muted);padding:7px 14px;border-radius:999px;transition:.15s;}
 .topbar-nav button:hover,.topbar-nav button.active{color:var(--dark);background:var(--soft);}
 .topbar-nav button.cta{background:var(--green);color:#fff;padding:8px 16px;}
 .topbar-nav button.cta:hover{background:#388E3C;}
-.avatar-chip{display:flex;align-items:center;gap:8px;background:var(--soft);border:2px solid var(--line);border-radius:999px;padding:5px 12px 5px 5px;cursor:pointer;transition:.15s;}
+.avatar-chip{position:relative;display:flex;align-items:center;gap:8px;background:var(--soft);border:2px solid var(--line);border-radius:999px;padding:5px 12px 5px 5px;cursor:pointer;transition:.15s;user-select:none;}
 .avatar-chip:hover{border-color:var(--blue);}
-.av{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-family:var(--head);font-size:14px;color:#fff;flex-shrink:0;}
+.av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:var(--head);font-size:13px;font-weight:900;color:#fff;flex-shrink:0;letter-spacing:.5px;}
 .av-name{font-size:13px;font-weight:800;color:var(--dark);}
+.av-caret{font-size:10px;color:var(--muted);margin-left:2px;}
+.av-dropdown{position:absolute;top:calc(100% + 8px);right:0;min-width:180px;background:#fff;border:2px solid var(--line);border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.12);z-index:9999;overflow:hidden;display:none;}
+.av-dropdown.open{display:block;animation:fadeIn .15s ease;}
+.av-dropdown-header{padding:12px 16px 8px;border-bottom:1px solid var(--line);font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.av-dropdown a,.av-dropdown button.av-item{display:flex;align-items:center;gap:10px;width:100%;padding:10px 16px;font-size:13px;font-weight:800;color:var(--dark);background:none;border:none;cursor:pointer;text-align:left;transition:.12s;text-decoration:none;}
+.av-dropdown a:hover,.av-dropdown button.av-item:hover{background:var(--soft);}
+.av-dropdown .av-item-danger{color:var(--red);}
+.av-dropdown .av-item-danger:hover{background:#ffebee;}
+.av-dropdown-sep{height:1px;background:var(--line);margin:4px 0;}
 
 /* SCREENS */
 .screen{display:none;min-height:calc(100vh - 60px);}
@@ -350,7 +360,8 @@ input,textarea,select{font-family:var(--body);}
 <div class="screen active" id="screen-login">
   <div class="login-wrap">
     <div class="login-card">
-      <div class="login-brand"><span class="r">The Young</span> <span class="g">Foundry</span> <span class="b">Network</span></div>
+      <div class="login-brand" style="font-size:36px;letter-spacing:-1px"><span class="r">Alpha</span><span class="b">Verse</span></div>
+      <div style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:-4px;margin-bottom:6px">Powered by TYF Network</div>
       <div class="login-tagline">A safe space where young minds connect, create & grow 🚀</div>
       <div class="rainbow-bar"></div>
 
@@ -363,33 +374,22 @@ input,textarea,select{font-family:var(--body);}
       <!-- Student Login -->
       <div id="login-student">
         <div class="field">
-          <label>School ID</label>
-          <input type="text" id="s-schoolid" placeholder="e.g. SCH2026-4A-042" />
+          <label>Username</label>
+          <input type="text" id="s-username" placeholder="Your username" autocomplete="username" />
         </div>
         <div class="field">
-          <label>Display Name</label>
-          <input type="text" id="s-name" placeholder="Your first name" />
+          <label>Password</label>
+          <input type="password" id="s-password" placeholder="Your account password" autocomplete="current-password" />
         </div>
-        <div class="field">
-          <label>Grade</label>
-          <select id="s-grade">
-            <option value="">Select grade...</option>
-            <option value="1">Grade 1</option>
-            <option value="2">Grade 2</option>
-            <option value="3">Grade 3</option>
-            <option value="4">Grade 4</option>
-            <option value="5">Grade 5</option>
-            <option value="6">Grade 6</option>
-            <option value="7">Grade 7</option>
-            <option value="8">Grade 8</option>
-            <option value="9">Grade 9</option>
-            <option value="10">Grade 10</option>
-          </select>
+        <button class="btn green" style="width:100%" onclick="studentLogin()">Sign In →</button>
+        <div style="margin-top:14px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+          <button class="btn ghost sm" onclick="switchLoginTab('register')">📋 Request New Account</button>
+          <button class="btn ghost sm" onclick="openForgotPassword()">🔑 Forgot Password</button>
+          <button class="btn ghost sm" onclick="openForgotUsername()">🪪 Forgot Username</button>
         </div>
-        <button class="btn green" style="width:100%" onclick="studentLogin()">Enter Network →</button>
-        <p style="text-align:center;margin-top:12px;font-size:12px;color:var(--muted);font-weight:700;">New? Your parent must approve your account first.</p>
-        <div style="margin-top:12px;text-align:center;">
-          <button class="btn ghost sm" onclick="switchLoginTab('register')">Request New Account</button>
+        <div style="margin-top:16px;border-top:2px dashed var(--line);padding-top:14px;text-align:center">
+          <p style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:8px">🧪 For testing only</p>
+          <button class="btn ghost sm" onclick="demoLogin()" style="background:#fff3e0;border-color:#ffb74d;color:#e65100;font-weight:800">⚡ Quick Demo Login</button>
         </div>
       </div>
 
@@ -421,21 +421,9 @@ input,textarea,select{font-family:var(--body);}
   <label>Student Email</label>
   <input type="email" id="r-email" placeholder="student@email.com" />
 </div>
-<div class="field-row">
-  <div class="field">
-    <label>School ID</label>
-    <input type="text" id="r-schoolid" placeholder="SCH2026-..." />
-  </div>
-  <div class="field">
-    <label>Year of Birth</label>
-    <select id="r-yob">
-      <option value="">Year...</option>
-      <option>2008</option><option>2009</option><option>2010</option>
-      <option>2011</option><option>2012</option><option>2013</option>
-      <option>2014</option><option>2015</option><option>2016</option>
-      <option>2017</option><option>2018</option><option>2019</option><option>2020</option>
-    </select>
-  </div>
+<div class="field">
+  <label>Date of Birth</label>
+  <input type="date" id="r-dob" min="2008-01-01" max="2019-12-31" style="width:100%;padding:10px 14px;border:2px solid var(--line);border-radius:12px;font-size:14px;font-weight:700;outline:none;" />
 </div>
 <div class="field">
   <label>School Name</label>
@@ -474,9 +462,18 @@ input,textarea,select{font-family:var(--body);}
   <input type="email" id="r-pemail" placeholder="parent@email.com" />
 </div>
 <div id="r-password-box" style="display:none;background:var(--soft);border:2px solid var(--green);border-radius:12px;padding:12px 14px;margin-bottom:14px">
-  <div style="font-weight:900;font-size:13px;color:var(--green);margin-bottom:4px">✅ Account Ready — Password Generated</div>
-  <div style="font-size:12px;font-weight:700;color:var(--dark);margin-bottom:4px">Temporary password: <span id="r-gen-password" style="font-family:monospace;background:#fff;padding:2px 8px;border-radius:6px;border:1px solid var(--line)"></span></div>
-  <div style="font-size:11px;color:var(--muted);font-weight:700">Save this password. A notification has been sent to the parent email to approve the account.</div>
+  <div style="font-weight:900;font-size:13px;color:var(--green);margin-bottom:8px">✅ Account Ready!</div>
+  <div style="font-size:12px;font-weight:800;color:var(--dark);margin-bottom:4px">🪪 Your User ID (used to log in):</div>
+  <div style="font-family:monospace;font-size:16px;font-weight:900;background:#fff;padding:6px 10px;border-radius:8px;border:1px solid var(--green);margin-bottom:8px;letter-spacing:1px" id="r-gen-username"></div>
+  <div style="font-size:12px;font-weight:800;color:var(--dark);margin-bottom:4px">🔐 Temporary Password:</div>
+  <div style="font-family:monospace;font-size:16px;font-weight:900;background:#fff;padding:6px 10px;border-radius:8px;border:1px solid var(--green);margin-bottom:8px;letter-spacing:2px" id="r-gen-password"></div>
+  <div style="font-size:11px;color:var(--muted);font-weight:700">📝 Save your User ID and password! You can change your User ID later in Profile → Settings. Parent notification sent.</div>
+</div>
+<div class="field" style="margin-bottom:14px">
+  <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-weight:700;font-size:13px;color:var(--dark)">
+    <input type="checkbox" id="r-consent" style="width:auto;min-width:16px;height:16px;margin-top:2px;cursor:pointer" />
+    <span>I am the parent/guardian and I agree to the <button onclick="openPrivacyPolicy()" style="color:var(--blue);font-weight:900;background:none;border:none;cursor:pointer;font-size:inherit;padding:0;text-decoration:underline">Privacy Policy</button> and <button onclick="openTerms()" style="color:var(--blue);font-weight:900;background:none;border:none;cursor:pointer;font-size:inherit;padding:0;text-decoration:underline">Terms of Use</button>. I consent to my child's account being created on TYF Network and understand I am responsible for monitoring their activity.</span>
+  </label>
 </div>
 <button class="btn green" style="width:100%" id="r-submit-btn" onclick="requestAccount()">Generate Password &amp; Send to Parent →</button>
 <div style="margin-top:12px;text-align:center;">
@@ -506,20 +503,34 @@ input,textarea,select{font-family:var(--body);}
 ============================================================ -->
 <div class="topbar" id="main-topbar" style="display:none">
   <div class="topbar-inner">
-    <div class="brand" onclick="showScreen('feed')"><span class="r">TYF</span> <span class="g">Network</span></div>
+    <div class="brand" onclick="showScreen('feed')"><span class="r">Alpha</span><span class="b">Verse</span></div>
     <div class="tspacer"></div>
+    <div id="topbar-search-wrap" style="display:none;flex:0 1 260px;">
+      <input id="topbar-search" type="text" placeholder="🔍 Search posts, communities..." 
+        style="width:100%;padding:8px 14px;border:2px solid var(--line);border-radius:999px;font-size:13px;font-weight:700;outline:none;transition:.15s;"
+        oninput="liveSearch(this.value)" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--line)'" />
+    </div>
     <div class="topbar-nav">
       <button onclick="showScreen('feed')" id="nav-feed" class="desktop-only">🏠 Feed</button>
       <button onclick="showScreen('communities')" id="nav-communities" class="desktop-only">🌐 Communities</button>
       <button onclick="showScreen('quests')" id="nav-quests" class="desktop-only">🏆 Quests</button>
       <button onclick="showScreen('wall')" id="nav-wall" class="desktop-only">🧱 My Wall</button>
       <button onclick="showScreen('free-resources')" id="nav-free-resources" class="desktop-only">🎁 Free Resources</button>
-      <button onclick="showScreen('profile')" id="nav-profile" class="desktop-only">👤 Profile</button>
-      <button onclick="openMFC()" class="btn ghost sm desktop-only" title="Go to My First Chapter">📖 Chapter</button>
+      <a href="MyFirstChapter.html" class="btn ghost sm desktop-only" style="text-decoration:none" title="Go to My First Chapter">📖 Chapter</a>
       <button onclick="openPostModal()" class="btn green sm desktop-only">+ Post</button>
-      <div class="avatar-chip" onclick="showScreen('profile')" id="topbar-avatar" style="display:none">
+      <div class="avatar-chip" id="topbar-avatar" style="display:none" onclick="toggleAvDropdown(event)">
         <div class="av" id="topbar-av-circle">?</div>
         <span class="av-name" id="topbar-av-name">User</span>
+        <span class="av-caret">▾</span>
+        <div class="av-dropdown" id="av-dropdown">
+          <div class="av-dropdown-header" id="av-dropdown-fullname">My Account</div>
+          <button class="av-item" onclick="closeAvDropdown();showScreen('profile')">👤 Profile</button>
+          <button class="av-item" onclick="closeAvDropdown();openChangePassword()">🔑 Change Password</button>
+          <div class="av-dropdown-sep"></div>
+          <button class="av-item" onclick="closeAvDropdown();openHelp()">❓ Help</button>
+          <div class="av-dropdown-sep"></div>
+          <button class="av-item av-item-danger" onclick="closeAvDropdown();logout()">⏏ Sign Out</button>
+        </div>
       </div>
     </div>
   </div>
@@ -582,7 +593,7 @@ input,textarea,select{font-family:var(--body);}
           <h4>👥 Suggested Communities</h4>
           <div id="suggested-communities"></div>
         </div>
-        <div class="mfc-banner" onclick="window.location='myfirstchapter.html'">
+        <div class="mfc-banner" onclick="window.location='MyFirstChapter.html'">
           <span style="font-size:2rem">📖</span>
           <div class="mfc-banner-text">
             <h4>My First Chapter</h4>
@@ -689,15 +700,15 @@ input,textarea,select{font-family:var(--body);}
     <div class="sectlab">🎁 Free Resources</div>
     <p style="font-size:14px;color:var(--muted);font-weight:700;margin-bottom:24px">Free tools and activities from The Young Foundry — no signup needed for guests.</p>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px">
-      <div class="card" style="cursor:pointer" onclick="openMFC()">
+      <div class="card" style="cursor:pointer" onclick="window.open('MyFirstChapter.html','_blank')">
         <div class="card-body">
           <div style="font-size:2.5rem;margin-bottom:10px">✍️</div>
           <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--purple)">MyFirstChapter</div>
-          <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">A narrative writing studio. Pick a genre, roll plot dice, write chapters, and publish to Books &amp; More.</p>
+          <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">A narrative writing studio. Pick a genre, roll plot dice, write chapters, and publish to Books & More.</p>
           <span class="badge purple">Writing Studio</span>
         </div>
       </div>
-      <div class="card" style="cursor:pointer" onclick="openTool('telugu-learning/index.html')">
+      <div class="card" style="cursor:pointer" onclick="window.open('telugu-learning/index.html','_blank')">
         <div class="card-body">
           <div style="font-size:2.5rem;margin-bottom:10px">🇮🇳</div>
           <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--teal)">Telugu Velugu</div>
@@ -705,7 +716,7 @@ input,textarea,select{font-family:var(--body);}
           <span class="badge" style="background:#e0f2f1;color:var(--teal)">Telugu Learning</span>
         </div>
       </div>
-      <div class="card" style="cursor:pointer" onclick="openTool('math-quest/index.html')">
+      <div class="card" style="cursor:pointer" onclick="window.open('math-quest/index.html','_blank')">
         <div class="card-body">
           <div style="font-size:2.5rem;margin-bottom:10px">🔢</div>
           <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--orange)">Math Quest</div>
@@ -770,7 +781,7 @@ input,textarea,select{font-family:var(--body);}
 </div>
 
 <!-- USER BASE COUNTER -->
-<div id="ub-counter">👥 <span id="ub-count">0</span> members in TYF Network</div>
+<div id="ub-counter">👥 <span id="ub-count">0</span> members in AlphaVerse</div>
 
 <!-- ============================================================
      SCREEN: PROFILE
@@ -787,8 +798,6 @@ input,textarea,select{font-family:var(--body);}
         <button class="tab" onclick="switchProfileTab('portfolio')">🔗 Portfolio</button>
       </div>
       <div id="profile-tab-content"></div>
-      <div class="sep"></div>
-      <button class="btn ghost sm" onclick="logout()">Sign Out</button>
     </div>
   </div>
 </div>
@@ -799,9 +808,14 @@ input,textarea,select{font-family:var(--body);}
 <div class="screen" id="screen-parent-queue">
   <div class="page-wrap" style="max-width:720px;margin:0 auto;">
     <button class="btn ghost sm" onclick="showScreen('feed')" style="margin-bottom:16px">← Back</button>
-    <div class="sectlab">⏳ Pending Approval Queue</div>
-    <p style="font-size:14px;color:var(--muted);font-weight:700;margin-bottom:20px">Review your child's creative posts before they go live. AI has already pre-screened these.</p>
-    <div id="parent-queue-list"></div>
+    <div class="sectlab">👨‍👩‍👧 Parent Dashboard</div>
+    <div class="tabs">
+      <button class="tab active" onclick="switchParentTab('pending')">⏳ Pending Approval</button>
+      <button class="tab" onclick="switchParentTab('activity')">📋 All Activity</button>
+      <button class="tab" onclick="switchParentTab('communities')">🌐 Communities</button>
+      <button class="tab" onclick="switchParentTab('controls')">🔒 Parental Controls</button>
+    </div>
+    <div id="parent-tab-content"></div>
   </div>
 </div>
 
@@ -823,8 +837,8 @@ input,textarea,select{font-family:var(--body);}
 <!-- FOOTER -->
 <div class="site-footer" id="main-footer" style="display:none">
   <div class="rainbow-bar" style="max-width:200px;margin:0 auto 14px"></div>
-  <button onclick="openComingSoon()">💡 What's Coming to TYF Network →</button>
-  <div style="font-size:12px;color:var(--muted);font-weight:700;margin-top:10px">TYF Network · A safe space for young minds 🚀</div>
+  <button onclick="openComingSoon()">💡 What's Coming to AlphaVerse →</button>
+  <div style="font-size:12px;color:var(--muted);font-weight:700;margin-top:10px">AlphaVerse · A safe space for young minds 🚀 · <button onclick="openPrivacyPolicy()" style="color:var(--blue);font-weight:800;background:none;border:none;cursor:pointer;font-size:inherit">Privacy Policy</button> · <button onclick="openTerms()" style="color:var(--blue);font-weight:800;background:none;border:none;cursor:pointer;font-size:inherit">Terms of Use</button></div>
 </div>
 
 <!-- ============================================================
@@ -853,12 +867,12 @@ input,textarea,select{font-family:var(--body);}
         <input type="checkbox" id="is-mentor-tip" /> Post as Mentor Tip (visible to younger grades)
       </label>
     </div>
-    <button class="btn blue" style="width:100%;margin-bottom:10px" onclick="runAiReview()">🤖 Run AI Review</button>
+    <button class="btn blue" style="width:100%;margin-bottom:10px" onclick="runAiReview()">🔍 Run Content Check</button>
     <div class="ai-panel" id="ai-review-panel"></div>
     <div style="margin-top:12px;">
       <button class="btn green" style="width:100%" id="submit-post-btn" disabled onclick="submitPost()">Submit Post →</button>
     </div>
-    <p style="text-align:center;font-size:11px;color:var(--muted);font-weight:700;margin-top:8px;">AI reviews first · Parent approves creative posts · Community sees it after</p>
+    <p style="text-align:center;font-size:11px;color:var(--muted);font-weight:700;margin-top:8px;">Content check first · Parent approves creative posts · Community sees it after</p>
   </div>
 </div>
 
@@ -955,7 +969,7 @@ input,textarea,select{font-family:var(--body);}
 <div class="modal-overlay" id="modal-coming">
   <div class="modal" style="max-width:640px">
     <button class="modal-close" onclick="closeModal('modal-coming')">✕</button>
-    <h3>💡 What's Coming to TYF Network</h3>
+    <h3>💡 What's Coming to AlphaVerse</h3>
     <p class="sub">A peek at features we're building for students & families</p>
     <div class="coming-grid" id="coming-grid"></div>
   </div>
@@ -1177,19 +1191,48 @@ function switchLoginTab(tab) {
   if (map[tab] !== null && tabs[map[tab]]) tabs[map[tab]].classList.add('active');
 }
 
-function studentLogin() {
-  const schoolId = document.getElementById('s-schoolid').value.trim();
-  const name = document.getElementById('s-name').value.trim();
-  const grade = document.getElementById('s-grade').value;
-  if (!schoolId || !name || !grade) { toast('Please fill all fields'); return; }
+function demoLogin() {
+  // Creates/reuses a demo student account and logs straight in — for testing only
   const accounts = getAccounts();
-  let account = accounts.find(a => a.schoolId === schoolId && a.role === 'student');
-  if (!account) {
-    account = {id:'u_'+Date.now(),name,grade:parseInt(grade),nextAcademicGrade:parseInt(grade)+1,schoolName:'',lastGradeYear:new Date().getFullYear(),schoolId,role:'student',status:'active',parentId:null,joined:Date.now(),foundryScore:0,isMentor:parseInt(grade)>=9,badges:[],joinedCommunities:['coding','city-bulletin']};
-    accounts.push(account);
+  let demo = accounts.find(a => a.username === 'demo_student');
+  if (!demo) {
+    demo = {
+      id: 'demo_001', name: 'Demo Student', username: 'demo_student',
+      email: 'demo@tyf.test', grade: 6, nextAcademicGrade: 7,
+      nextGrade: 7, birthYear: 2013, yob: 2013, schoolId: 'DEMO-001',
+      schoolName: 'Demo School', role: 'student', status: 'active',
+      parentName: 'Demo Parent', parentEmail: 'parent@tyf.test',
+      tempPassword: 'Demo@123', joined: Date.now(), foundryScore: 50,
+      badges: [], joinedCommunities: [], lastGradeYear: new Date().getFullYear(),
+      isMentor: false, profilePublic: true, avatar: '🤖',
+      username: 'demo_student', aboutMe: 'This is a demo account for testing.',
+    };
+    accounts.push(demo);
     saveAccounts(accounts);
   }
+  currentUser = { id: demo.id, name: demo.name, username: demo.username,
+    role: 'student', grade: demo.grade, avatar: demo.avatar || '🤖',
+    foundryScore: demo.foundryScore || 0 };
+  enterApp();
+  toast('⚡ Logged in as Demo Student (testing mode)');
+}
+
+function studentLogin() {
+  const username = document.getElementById('s-username').value.trim();
+  const password = document.getElementById('s-password').value;
+  if (!username || !password) { toast('Please enter your username and password'); return; }
+  const accounts = getAccounts();
+  const account = accounts.find(a =>
+    (a.username === username || a.name === username ||
+     (a.name && a.name.toLowerCase() === username.toLowerCase()) ||
+     (a.username && a.username.toLowerCase() === username.toLowerCase())) &&
+    a.role === 'student'
+  );
+  if (!account) { toast('⚠️ No account found with that username. Please register first.'); return; }
+  if (account.status === 'pending') { toast('⏳ Your account is awaiting parent approval. Ask your parent to check their email.'); return; }
+  if (account.tempPassword && account.tempPassword !== password) { toast('❌ Incorrect password. Check the password your parent received by email.'); return; }
   if (account.status === 'suspended') { toast('⚠️ Your account is suspended. Contact admin.'); return; }
+  if (account.status === 'frozen') { toast('❄️ Your account has been temporarily paused by your parent. Please ask them to unfreeze it in the Parent Portal.'); return; }
   // Auto grade promotion on login
   promoteGrade(account);
   // Ensure school group membership
@@ -1221,9 +1264,14 @@ function parentLogin() {
   enterApp();
 }
 
-function adminLogin() {
+async function adminLogin() {
   const key = document.getElementById('a-key').value;
-  if (key !== 'tyfadmin2026') { toast('Invalid admin key'); return; }
+  // Key is stored as a SHA-256 hash — never visible in plain text
+  const ADMIN_HASH = '83f0b87d2ce8f48ecb577561c3deed604dc00808d62f3b7c7a371717d45db03b';
+  const encoded = new TextEncoder().encode(key);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', encoded);
+  const hashHex = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2,'0')).join('');
+  if (hashHex !== ADMIN_HASH) { toast('Invalid admin key'); return; }
   currentUser = {id:'admin',name:'Admin',role:'admin',status:'active',grade:null,foundryScore:999,isMentor:false,badges:['admin'],joinedCommunities:[]};
   enterApp();
 }
@@ -1242,26 +1290,34 @@ function promoteGrade(account) {
 
 function requestAccount() {
   const name = document.getElementById('r-name').value.trim();
-  const username = document.getElementById('r-username').value.trim();
+  const rawUsername = document.getElementById('r-username').value.trim();
+  const accounts = getAccounts();
+  // Auto-generate username if not provided; ensure uniqueness
+  let username = rawUsername || (name.toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,10) + Math.floor(100+Math.random()*900));
+  while (accounts.find(a => a.username === username)) {
+    username = username.replace(/\d+$/, '') + Math.floor(100+Math.random()*900);
+  }
+  const finalUsername = username;
   const email = document.getElementById('r-email').value.trim();
-  const schoolId = document.getElementById('r-schoolid').value.trim();
-  const yob = document.getElementById('r-yob').value;
+  const schoolId = 'AV-' + Date.now().toString(36).toUpperCase(); // auto-generated
+  const dob = document.getElementById('r-dob').value; // YYYY-MM-DD
+  const yob = dob ? parseInt(dob.split('-')[0]) : null;
   const school = document.getElementById('r-school').value.trim();
   const grade = document.getElementById('r-grade').value;
   const nextGrade = document.getElementById('r-nextgrade').value;
   const parentName = document.getElementById('r-parentname').value.trim();
   const pemail = document.getElementById('r-pemail').value.trim();
-  if (!name || !schoolId || !grade || !pemail || !email) { toast('Please fill all required fields'); return; }
-  const accounts = getAccounts();
-  if (accounts.find(a => a.schoolId === schoolId)) { toast('Account already exists with this School ID'); return; }
+  if (!name || !grade || !pemail || !email) { toast('Please fill all required fields'); return; }
+  if (!document.getElementById('r-consent').checked) { toast('⚠️ Please read and agree to the Privacy Policy to continue'); return; }
+  if (accounts.find(a => a.email === email && a.role === 'student')) { toast('An account with this email already exists'); return; }
   // Generate password
   const pwd = 'TYF' + Math.random().toString(36).slice(2,6).toUpperCase() + Math.floor(10+Math.random()*90);
   const studentId = 'u_'+Date.now();
   const pending = {
-    id:studentId, name, username: username||name, email, grade:parseInt(grade),
+    id:studentId, name, username: finalUsername, email, grade:parseInt(grade),
     nextGrade: nextGrade ? parseInt(nextGrade) : parseInt(grade)+1,
     nextAcademicGrade: nextGrade ? parseInt(nextGrade) : parseInt(grade)+1,
-    birthYear: yob ? parseInt(yob) : null, yob: yob ? parseInt(yob) : null,
+    birthYear: yob, yob: yob, dob: dob || null,
     schoolId, schoolName: school, role:'student', status:'pending',
     parentName, parentEmail:pemail, tempPassword:pwd,
     joined:Date.now(), foundryScore:0, badges:[], joinedCommunities:[],
@@ -1276,6 +1332,7 @@ function requestAccount() {
   // Store parent notification (simulates email)
   addParentNotification(pemail, 'account_created', `New TYF Network account request for ${name} (Grade ${grade}, ${school||schoolId}). Temporary password: ${pwd}. Log in to TYF Network with your email to approve.`);
   // Show password box
+  document.getElementById('r-gen-username').textContent = finalUsername;
   document.getElementById('r-gen-password').textContent = pwd;
   document.getElementById('r-password-box').style.display = 'block';
   document.getElementById('r-submit-btn').disabled = true;
@@ -1283,31 +1340,380 @@ function requestAccount() {
   toast('✅ Password generated! Parent will be notified to approve your account.');
 }
 
+function checkGradeUp() {
+  if (!currentUser || currentUser.role !== 'student') return;
+  const accounts = getAccounts();
+  const me = accounts.find(a => a.id === currentUser.id);
+  if (!me) return;
+  const today = new Date();
+  // Grade-up runs every June
+  if (today.getMonth() !== 5) return; // 5 = June
+  const lastUp = localStorage.getItem('gradeup_' + currentUser.id);
+  if (lastUp === String(today.getFullYear())) return;
+  if (!me.nextGrade) return;
+  me.grade = me.nextGrade;
+  me.nextGrade = String(parseInt(me.nextGrade) + 1);
+  currentUser.grade = me.grade;
+  saveAccounts(accounts);
+  localStorage.setItem('gradeup_' + currentUser.id, today.getFullYear());
+  // Award badge + points
+  const pts = me.foundryPoints || 0;
+  me.foundryPoints = pts + 25;
+  saveAccounts(accounts);
+  setTimeout(function() {
+    const el = document.createElement('div');
+    el.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px';
+    el.innerHTML = '<div style="background:#fff;border-radius:28px;padding:32px;max-width:360px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)">'
+      + '<div style="font-size:64px;margin-bottom:12px">🎉</div>'
+      + '<div style="font-family:var(--head);font-size:28px;color:var(--green);margin-bottom:8px">Level Up!</div>'
+      + '<div style="font-size:16px;font-weight:800;margin-bottom:6px">Welcome to Grade ' + me.grade + '!</div>'
+      + '<div style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:20px">+25 Foundry Points awarded 🏅 Scholar Badge unlocked!</div>'
+      + '<button onclick="this.parentNode.parentNode.remove()" style="background:var(--green);color:#fff;border:none;border-radius:999px;padding:12px 28px;font-size:15px;font-weight:900;cursor:pointer">Awesome! 🚀</button>'
+      + '</div>';
+    document.body.appendChild(el);
+  }, 800);
+}
+
+function checkBirthday() {
+  if (!currentUser) return;
+  const accounts = getAccounts();
+  const me = accounts.find(a => a.id === currentUser.id);
+  if (!me || !me.dob) return;
+  const today = new Date();
+  const parts = me.dob.split('-');
+  const mm = parseInt(parts[1]), dd = parseInt(parts[2]);
+  if (mm === today.getMonth() + 1 && dd === today.getDate()) {
+    const age = today.getFullYear() - parseInt(parts[0]);
+    const key = 'bday_' + currentUser.id + '_' + today.getFullYear();
+    if (localStorage.getItem(key)) return;
+    localStorage.setItem(key, '1');
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.innerHTML = `<div style="position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;display:flex;align-items:center;justify-content:center" onclick="this.remove()"><div style="background:#fff;border-radius:28px;padding:36px 32px;max-width:360px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.25)" onclick="event.stopPropagation()"><div style="font-size:4rem;margin-bottom:8px">🎂</div><div style="font-family:var(--head);font-size:26px;color:var(--purple);margin-bottom:6px">Happy Birthday, ${escHtml(me.name)}!</div><div style="font-size:15px;font-weight:700;color:var(--muted);margin-bottom:18px">You're ${age} today! 🎉 The whole AlphaVerse community is cheering for you!</div><div style="font-size:2rem;margin-bottom:20px">🎈 🥳 🎁 ✨ 🎊</div><button class="btn green" onclick="this.closest('[style*=fixed]').remove()" style="width:100%">Thanks! Let's go 🚀</button></div></div>`;
+      document.body.appendChild(el);
+    }, 1200);
+  }
+}
+
+function toggleAvDropdown(e) {
+  e.stopPropagation();
+  const dd = document.getElementById('av-dropdown');
+  dd.classList.toggle('open');
+}
+function closeAvDropdown() {
+  const dd = document.getElementById('av-dropdown');
+  if (dd) dd.classList.remove('open');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#topbar-avatar')) closeAvDropdown();
+});
+
+// ── AlphaBot navigation helper ───────────────────────────────────────────
+function helpNav(action) {
+  document.getElementById('help-modal-wrap') && document.getElementById('help-modal-wrap').remove();
+  if (action === 'post')        { openPostModal(); }
+  else if (action === 'communities') { showScreen('communities'); }
+  else if (action === 'quests')      { showScreen('quests'); }
+  else if (action === 'wall')        { showScreen('wall'); if(typeof renderWall==='function') renderWall(); }
+  else if (action === 'feed')        { showScreen('feed'); }
+  else if (action === 'profile')     { showScreen('profile'); if(typeof switchProfileTab==='function') switchProfileTab('about'); }
+  else if (action === 'badges')      { showScreen('profile'); if(typeof switchProfileTab==='function') switchProfileTab('badges'); }
+  else if (action === 'password')    { openChangePassword(); }
+  else if (action === 'search')      { const s=document.getElementById('topbar-search'); if(s) s.focus(); }
+}
+
+function abBtn(label, action) {
+  return '<button onclick="helpNav(\'' + action + '\')" style="display:inline-flex;align-items:center;gap:5px;margin-top:9px;padding:6px 14px;border-radius:999px;border:2px solid var(--blue);background:var(--soft);color:var(--blue);font-size:12px;font-weight:800;cursor:pointer">' + label + ' →</button>';
+}
+
+function abChips(items) {
+  return '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:9px">' +
+    items.map(function(s) {
+      return '<button onclick="alphabotAsk(\'' + s.replace(/\'/g,"\\'") + '\')" style="font-size:11px;font-weight:800;padding:4px 10px;border-radius:999px;border:2px solid var(--line);color:var(--muted);background:#fff;cursor:pointer">' + s + '</button>';
+    }).join('') + '</div>';
+}
+
+// ── AlphaBot knowledge base ────────────────────────────────────────────────
+const ALPHABOT_KB = [
+  { keys:['post','create post','share','write','how to post','make a post'],
+    ans: function() { return '✍️ <b>How to Post:</b><br>1️⃣ Click the green <b>+ Post</b> button in the topbar<br>2️⃣ Type your idea or question<br>3️⃣ Optionally add an image/video link<br>4️⃣ Choose a community<br>5️⃣ Hit <b>Submit</b>!<br><br>🔒 Under 14? Your parent approves it first.' + abBtn('📝 Open Post Editor', 'post') + abChips(['What happens after I post?','How do I earn points?','What are communities?']); }
+  },
+  { keys:['avatar','change avatar','pick avatar','comic avatar','emoji'],
+    ans: function() { return '🎭 <b>Change Your Avatar:</b><br>Go to <b>Profile → About</b> tab. You\'ll see a row of fun emoji avatars — click any one to set it! It updates in the topbar instantly.' + abBtn('🎭 Go to Profile', 'profile') + abChips(['How do I earn badges?','What is Foundry Score?']); }
+  },
+  { keys:['forgot password','forgot my password','lost password'],
+    ans: function() { return '🔑 <b>Forgot Password?</b><br>On the login screen, click <b>"Forgot Password"</b> and enter your username. Recovery details go to your parent\'s email.' + abChips(['How do I change my username?','How do I sign out?']); }
+  },
+  { keys:['password','change password','reset password'],
+    ans: function() { return '🔑 <b>Change Password:</b><br>Click your <b>avatar chip</b> (top-right) → <b>Change Password</b>.<br><br>⚠️ Your parent\'s email gets an approval request. The password only changes once they approve.' + abBtn('🔑 Change Password', 'password') + abChips(['I forgot my password','How do I sign out?']); }
+  },
+  { keys:['grade','class','level up','advance grade'],
+    ans: function() { return '📚 <b>Grade / Class:</b><br>Your grade is set at registration and <b>auto-updates every June</b>. When it advances you get a 🎉 <b>Level Up</b> celebration, a Scholar Badge, and +25 Foundry Points!' + abBtn('👤 View my Profile', 'profile') + abChips(['What are badges?','What is Foundry Score?']); }
+  },
+  { keys:['user id','username','login id','change username'],
+    ans: function() { return '🪪 <b>Your User ID:</b><br>This is what you use to log in. Change it in <b>Profile → About</b>.<br><br>Rules: 3–30 chars, letters/numbers/underscores only, must be unique!' + abBtn('⚙️ Go to Profile', 'profile') + abChips(['I forgot my password','How do I sign out?']); }
+  },
+  { keys:['community','communities','join','group'],
+    ans: function() { return '🌐 <b>Communities:</b><br>AlphaVerse has groups for Coding, Art, Science, Books, Sports and more!<br><br>1️⃣ Click <b>Communities</b> in the topbar<br>2️⃣ Browse and click any group<br>3️⃣ Hit <b>Join</b> to become a member!' + abBtn('🌐 Browse Communities', 'communities') + abChips(['How do I post in a community?','What are badges?']); }
+  },
+  { keys:['badge','badges','earn badge','achievement'],
+    ans: function() { return '🏅 <b>Badges:</b><br>Earn badges by being active!<br>• ✍️ Post your first post<br>• 💬 React to 5 posts<br>• 🌐 Join 3 communities<br>• 🎂 Log in on your birthday<br>• 📚 Level up your grade<br><br>See all your badges in <b>Profile → Badges</b>!' + abBtn('🏅 See my Badges', 'badges') + abChips(['What is Foundry Score?','How do I level up?']); }
+  },
+  { keys:['foundry score','points','score','xp','level'],
+    ans: function() { return '⚡ <b>Foundry Score:</b><br>Earn points by:<br>• Posting → +10 pts<br>• Getting reactions → +2 pts each<br>• Joining communities → +5 pts<br>• Grade advance → +25 pts<br><br><b>Levels:</b> Seedling → Sprout → Explorer → Builder → Innovator → Creator → Changemaker → Foundry Fellow 🏆' + abBtn('👤 Check my Score', 'profile') + abChips(['What are badges?','What is Mentor Bridge?']); }
+  },
+  { keys:['quest','quests','challenge','weekly'],
+    ans: function() { return '🏆 <b>Quests:</b><br>Every week there\'s a new challenge — photography, writing, science, and more!<br><br>Submit your entry to earn <b>bonus Foundry Points</b> and get featured on the feed!' + abBtn('🏆 Go to Quests', 'quests') + abChips(['What is Foundry Score?','How do I post?']); }
+  },
+  { keys:['wall','my wall'],
+    ans: function() { return '🧱 <b>My Wall:</b><br>Your personal space! It shows your posts, reactions received, and your Foundry journey. Other students can visit too!' + abBtn('🧱 Go to My Wall', 'wall') + abChips(['What is Foundry Score?','How do I post?']); }
+  },
+  { keys:['reaction','react','like','love'],
+    ans: function() { return '💬 <b>Reactions:</b><br>You\'ll see 7 special reactions on every post:<br>❤️ Love It &nbsp; 👍 Like It &nbsp; 💪 Motivated<br>✨ Inspire &nbsp; 🌱 Keep Going<br>🔧 Can Do Better &nbsp; 📈 Work to Better<br><br>Each reaction you receive adds to your Foundry Score!' + abBtn('🏠 Go to Feed', 'feed') + abChips(['What is Foundry Score?','How do I post?']); }
+  },
+  { keys:['report','flag','unsafe','inappropriate','bully'],
+    ans: function() { return '🛡️ <b>Report Content:</b><br>See something unsafe?<br><br>1️⃣ Click the 🚩 flag icon on any post<br>2️⃣ Choose a reason<br>3️⃣ Our team reviews it quickly<br><br>📧 Or email: <b>support@alphaverse.in</b><br><br>Reports are confidential. You\'re safe here.' + abChips(['What are the rules?','How do I sign out?']); }
+  },
+  { keys:['parent','parents','approval','approve'],
+    ans: function() { return '👪 <b>Parents:</b><br>Parents use the <b>Parent tab</b> on the login screen.<br><br>Parents can:<br>• ✅ Approve your posts<br>• 🔑 Approve password changes<br>• 👁️ View your activity<br>• 🗑️ Request account deletion' + abChips(['How does post approval work?','Change password']); }
+  },
+  { keys:['search','find','look up'],
+    ans: function() { return '🔍 <b>Search:</b><br>Use the search bar at the top to find posts, communities, and users by keyword.' + abBtn('🔍 Focus Search', 'search') + abChips(['How do I join a community?','How do I post?']); }
+  },
+  { keys:['sign out','logout','log out','signout'],
+    ans: function() { return '⏏ <b>Sign Out:</b><br>Click your <b>avatar chip</b> in the top-right corner, then select <b>Sign Out</b> from the dropdown.' + abChips(['How do I sign back in?','Change password']); }
+  },
+  { keys:['mentor','mentor bridge'],
+    ans: function() { return '🧭 <b>Mentor Bridge:</b><br>Reach <b>Grade 9</b> or earn <b>100+ Foundry Points</b> to unlock Mentor Bridge!<br><br>As a Mentor you can guide younger students, post Mentor Tips, and earn the Mentor badge 🏅' + abBtn('⚡ Check my Score', 'profile') + abChips(['What is Foundry Score?','What are badges?']); }
+  },
+  { keys:['delete account','remove account','erase'],
+    ans: function() { return '🗑️ <b>Delete Account:</b><br>Go to <b>Profile → About</b> and scroll to the <b>Danger Zone</b>.<br><br>⚠️ This permanently deletes your account and all posts. Cannot be undone.' + abBtn('👤 Go to Profile', 'profile') + abChips(['How do I sign out?']); }
+  },
+  { keys:['birthday','bday','born'],
+    ans: function() { return '🎂 <b>Birthday:</b><br>If you added your Date of Birth at registration, AlphaVerse surprises you on your birthday with a celebration pop-up and a birthday badge when you log in! 🎉🎈' + abChips(['How do I earn badges?','What are quests?']); }
+  },
+  { keys:['hello','hi','hey','hiya','howdy','help','guide','start'],
+    ans: function() { return '👋 Hey there! I\'m <b>AlphaBot</b> 🤖<br>I can guide you through AlphaVerse and take you anywhere on the platform!<br><br>What would you like to explore?' + abChips(['How do I post?','What are communities?','How do I earn badges?','What is Foundry Score?','How do quests work?','Change my avatar']); }
+  },
+  { keys:['who are you','what are you','what is alphabot'],
+    ans: function() { return '🤖 I\'m <b>AlphaBot</b> — AlphaVerse\'s interactive guide!<br><br>I can answer questions, navigate you to any section, and help you earn more Foundry Points. Just ask me anything!' + abChips(['How do I post?','What are badges?','What is Foundry Score?']); }
+  },
+  { keys:['thank','thanks','awesome','cool','great','amazing'],
+    ans: function() { return '😊 You\'re welcome! Happy to help.<br>Anything else you\'d like to explore on AlphaVerse?' + abChips(['Show me quests','Browse communities','What are badges?']); }
+  },
+];
+
+function alphabotReply(msg) {
+  var q = msg.toLowerCase();
+  for (var i = 0; i < ALPHABOT_KB.length; i++) {
+    var item = ALPHABOT_KB[i];
+    if (item.keys.some(function(k){ return q.includes(k); })) {
+      return typeof item.ans === 'function' ? item.ans() : item.ans;
+    }
+  }
+  return '🤔 Hmm, I\'m not sure about that one!<br>Try asking about:' + abChips(['How do I post?','Earn badges','Join communities','Change password','What are quests?','What is Foundry Score?']);
+}
+
+function openHelp() {
+  if (document.getElementById('help-modal-wrap')) return;
+  var el = document.createElement('div');
+  el.id = 'help-modal-wrap';
+  var suggestions = ['How do I post?','What are communities?','Earn badges','What is Foundry Score?','How do quests work?','Change my avatar'];
+  var chips = suggestions.map(function(s){
+    return '<button onclick="alphabotAsk(\'' + s.replace(/\'/g,"\\'") + '\')" style="font-size:11px;font-weight:800;padding:5px 11px;border-radius:999px;border:2px solid var(--blue);color:var(--blue);background:#fff;cursor:pointer;transition:.15s">' + s + '</button>';
+  }).join('');
+  el.innerHTML =
+    '<div style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;display:flex;align-items:center;justify-content:center;padding:16px" onclick="document.getElementById(\'help-modal-wrap\').remove()">'
+    + '<div style="background:#fff;border-radius:24px;width:100%;max-width:430px;max-height:92vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.25);overflow:hidden" onclick="event.stopPropagation()">'
+    + '<div style="background:linear-gradient(135deg,#1565C0,#6A1B9A);padding:14px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0">'
+    + '<div style="width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:22px">🤖</div>'
+    + '<div><div style="font-family:var(--head);font-size:18px;color:#fff">AlphaBot</div>'
+    + '<div style="font-size:11px;color:rgba(255,255,255,.75);font-weight:700">Your interactive AlphaVerse guide!</div></div>'
+    + '<button onclick="document.getElementById(\'help-modal-wrap\').remove()" style="margin-left:auto;background:rgba(255,255,255,.2);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:grid;place-items:center">&#x2715;</button>'
+    + '</div>'
+    + '<div id="alphabot-messages" style="flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:12px;min-height:240px;max-height:360px;background:#f8f9fa">'
+    + '<div><div style="display:flex;align-items:flex-end;gap:8px">'
+    + '<div style="width:28px;height:28px;border-radius:50%;background:#1565C0;display:grid;place-items:center;font-size:14px;flex-shrink:0">🤖</div>'
+    + '<div style="background:#fff;border:2px solid var(--line);border-radius:16px 16px 16px 4px;padding:10px 14px;font-size:13px;font-weight:700;color:var(--dark);max-width:88%;line-height:1.6">'
+    + '👋 Hi! I\'m <b>AlphaBot</b> — I can guide you through AlphaVerse and take you anywhere!<br><br>What do you want to explore? 👇'
+    + '</div></div></div>'
+    + '</div>'
+    + '<div style="padding:8px 14px 6px;border-top:1px solid var(--line);display:flex;gap:6px;flex-wrap:wrap;background:#fff;flex-shrink:0">'
+    + chips
+    + '</div>'
+    + '<div style="padding:10px 14px;border-top:1px solid var(--line);display:flex;gap:8px;background:#fff;flex-shrink:0">'
+    + '<input id="alphabot-input" type="text" placeholder="Ask me anything about AlphaVerse…" onkeydown="if(event.key===\'Enter\')alphabotSend()" style="flex:1;padding:10px 14px;border:2px solid var(--line);border-radius:999px;font-size:13px;font-weight:700;outline:none;transition:.15s" onfocus="this.style.borderColor=\'#1565C0\'" onblur="this.style.borderColor=\'var(--line)\'" />'
+    + '<button onclick="alphabotSend()" style="width:40px;height:40px;border-radius:50%;background:#1565C0;border:none;color:#fff;font-size:18px;cursor:pointer;display:grid;place-items:center;flex-shrink:0">&#x27A4;</button>'
+    + '</div></div></div>';
+  document.body.appendChild(el);
+  document.getElementById('alphabot-input').focus();
+}
+
+function alphabotAsk(q) {
+  alphabotAddMsg(q, 'user');
+  var box = document.getElementById('alphabot-messages');
+  if (box) {
+    var typing = document.createElement('div');
+    typing.id = 'ab-typing';
+    typing.innerHTML = '<div style="display:flex;align-items:flex-end;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:#1565C0;display:grid;place-items:center;font-size:14px;flex-shrink:0">🤖</div><div style="background:#fff;border:2px solid var(--line);border-radius:16px 16px 16px 4px;padding:10px 14px;font-size:13px;color:var(--muted);font-weight:700">typing…</div></div>';
+    box.appendChild(typing);
+    box.scrollTop = box.scrollHeight;
+  }
+  setTimeout(function() {
+    var t = document.getElementById('ab-typing');
+    if (t) t.remove();
+    alphabotAddMsg(alphabotReply(q), 'bot');
+  }, 500);
+}
+
+function alphabotSend() {
+  var inp = document.getElementById('alphabot-input');
+  var q = inp.value.trim();
+  if (!q) return;
+  inp.value = '';
+  alphabotAsk(q);
+}
+
+function alphabotAddMsg(text, role) {
+  var box = document.getElementById('alphabot-messages');
+  if (!box) return;
+  var div = document.createElement('div');
+  if (role === 'user') {
+    div.innerHTML = '<div style="display:flex;justify-content:flex-end"><div style="background:#1565C0;color:#fff;border-radius:16px 16px 4px 16px;padding:10px 14px;font-size:13px;font-weight:700;max-width:85%;line-height:1.5">' + escHtml(text) + '</div></div>';
+  } else {
+    div.innerHTML = '<div style="display:flex;align-items:flex-end;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:#1565C0;display:grid;place-items:center;font-size:14px;flex-shrink:0">🤖</div><div style="background:#fff;border:2px solid var(--line);border-radius:16px 16px 16px 4px;padding:10px 14px;font-size:13px;font-weight:700;color:var(--dark);max-width:88%;line-height:1.6">' + text + '</div></div>';
+  }
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
+function openChangePassword() {
+  if (!currentUser || currentUser.role !== 'student') return;
+  const accounts = getAccounts();
+  const me = accounts.find(a => a.id === currentUser.id);
+  const el = document.createElement('div');
+  el.id = 'chpwd-modal-wrap';
+  el.innerHTML = `<div style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;display:flex;align-items:center;justify-content:center;padding:16px" onclick="document.getElementById('chpwd-modal-wrap').remove()"><div style="background:#fff;border-radius:24px;padding:28px;max-width:380px;width:100%;box-shadow:0 16px 48px rgba(0,0,0,.2)" onclick="event.stopPropagation()">
+    <h3 style="font-family:var(--head);margin-bottom:6px">🔑 Change Password</h3>
+    <div style="background:#fff8e1;border:2px solid #ffe082;border-radius:12px;padding:12px;font-size:12px;font-weight:700;color:#f57f17;margin-bottom:16px">
+      🔒 For your safety, a password change request will be sent to your parent's email for approval. Your password will only change once they approve.
+    </div>
+    <div class="field" style="margin-bottom:12px">
+      <label style="font-size:13px;font-weight:800">Current Password</label>
+      <input type="password" id="cp-current" placeholder="Enter current password" style="width:100%;padding:10px 14px;border:2px solid var(--line);border-radius:12px;font-size:14px;font-weight:700;outline:none;box-sizing:border-box" />
+    </div>
+    <div class="field" style="margin-bottom:12px">
+      <label style="font-size:13px;font-weight:800">New Password</label>
+      <input type="password" id="cp-new" placeholder="At least 8 characters" style="width:100%;padding:10px 14px;border:2px solid var(--line);border-radius:12px;font-size:14px;font-weight:700;outline:none;box-sizing:border-box" />
+    </div>
+    <div class="field" style="margin-bottom:16px">
+      <label style="font-size:13px;font-weight:800">Confirm New Password</label>
+      <input type="password" id="cp-confirm" placeholder="Repeat new password" style="width:100%;padding:10px 14px;border:2px solid var(--line);border-radius:12px;font-size:14px;font-weight:700;outline:none;box-sizing:border-box" />
+    </div>
+    <div id="cp-err" style="color:var(--red);font-size:12px;font-weight:700;margin-bottom:10px"></div>
+    <button class="btn green" style="width:100%" onclick="submitChangePassword()">Send to Parent for Approval →</button>
+    <button class="btn ghost sm" style="width:100%;margin-top:8px" onclick="document.getElementById('chpwd-modal-wrap').remove()">Cancel</button>
+  </div></div>`;
+  document.body.appendChild(el);
+}
+
+function submitChangePassword() {
+  const accounts = getAccounts();
+  const me = accounts.find(a => a.id === currentUser.id);
+  if (!me) return;
+  const current = document.getElementById('cp-current').value;
+  const newPwd = document.getElementById('cp-new').value;
+  const confirm = document.getElementById('cp-confirm').value;
+  const errEl = document.getElementById('cp-err');
+  errEl.textContent = '';
+  if (!current || !newPwd || !confirm) { errEl.textContent = 'Please fill all fields.'; return; }
+  if (me.tempPassword && me.tempPassword !== current) { errEl.textContent = '❌ Current password is incorrect.'; return; }
+  if (newPwd.length < 8) { errEl.textContent = '❌ New password must be at least 8 characters.'; return; }
+  if (newPwd !== confirm) { errEl.textContent = '❌ Passwords do not match.'; return; }
+  // Store pending password change — requires parent approval
+  me.pendingPassword = newPwd;
+  saveAccounts(accounts);
+  // Notify parent
+  addParentNotification(me.parentEmail, 'password_change',
+    `Your child ${me.name} has requested a password change on AlphaVerse. Log in to the Parent Portal to approve or reject this request.`);
+  document.getElementById('chpwd-modal-wrap').remove();
+  toast('✅ Request sent to parent for approval! Password will update once they approve.');
+}
+
+function quickSetAvatar(emoji) {
+  const accounts = getAccounts();
+  const me = accounts.find(a => a.id === currentUser.id);
+  if (!me) return;
+  me.avatar = emoji;
+  currentUser.avatar = emoji;
+  saveAccounts(accounts);
+  const av = document.getElementById('topbar-av-circle');
+  if (av) { av.textContent = emoji; av.style.fontSize = '20px'; }
+  toast('Avatar updated! ' + emoji);
+  document.getElementById('help-modal-wrap')?.remove();
+}
+
 function logout() {
   currentUser = null;
   document.getElementById('main-topbar').style.display = 'none';
   document.getElementById('main-footer').style.display = 'none';
+  document.getElementById('topbar-search-wrap').style.display = 'none';
+  const _ch = document.getElementById('topbar-avatar'); if (_ch) _ch.style.display = 'none';
+  clearSessionTimeout();
   showScreen('login');
+}
+
+function deleteMyAccount() {
+  if (!currentUser) return;
+  const confirmed = confirm('Are you absolutely sure? This will permanently delete your account and ALL your posts. This cannot be undone.');
+  if (!confirmed) return;
+  // Remove account
+  const accounts = getAccounts().filter(a => a.id !== currentUser.id);
+  saveAccounts(accounts);
+  // Remove posts
+  const posts = getPosts().filter(p => p.authorId !== currentUser.id);
+  savePosts(posts);
+  // Remove reactions
+  const rxns = getReactions().filter(r => r.userId !== currentUser.id);
+  saveReactions(rxns);
+  // Remove community memberships
+  try { localStorage.removeItem('yfs_ucm_' + currentUser.id); } catch(e) {}
+  toast('✅ Your account has been permanently deleted. Goodbye!');
+  setTimeout(() => logout(), 2000);
 }
 
 function enterApp() {
   document.getElementById('main-topbar').style.display = 'block';
   document.getElementById('main-footer').style.display = 'block';
+  document.getElementById('topbar-search-wrap').style.display = 'block';
   const av = document.getElementById('topbar-av-circle');
   const avName = document.getElementById('topbar-av-name');
   const chip = document.getElementById('topbar-avatar');
+
   // Show avatar emoji or initial
   const accounts = getAccounts();
   const meAcc = accounts.find(a => a.id === currentUser.id) || currentUser;
-  if (meAcc.avatar) { av.textContent = meAcc.avatar; av.style.background = avatarColor(currentUser.name); }
-  else { av.textContent = currentUser.name.charAt(0).toUpperCase(); av.style.background = avatarColor(currentUser.name); }
+  if (meAcc.avatar && !meAcc.avatar.match(/^[A-Z]{1,2}$/)) {
+    av.textContent = meAcc.avatar; av.style.fontSize = '20px';
+  } else {
+    const parts = currentUser.name.trim().split(/\s+/);
+    const initials = parts.length >= 2
+      ? (parts[0][0] + parts[parts.length-1][0]).toUpperCase()
+      : parts[0].slice(0,2).toUpperCase();
+    av.textContent = initials; av.style.fontSize = '13px';
+  }
+  av.style.background = avatarColor(currentUser.name);
   avName.textContent = currentUser.name.split(' ')[0];
+  const fullNameEl = document.getElementById('av-dropdown-fullname');
+  if (fullNameEl) fullNameEl.textContent = currentUser.name;
   chip.style.display = 'flex';
   updateUserBaseCounter();
+  resetSessionTimeout();
   if (currentUser.role === 'admin') { showScreen('mod'); renderModTab(); }
   else if (currentUser.role === 'parent') { showScreen('feed'); renderFeed(); renderParentSidebar(); }
   else { showScreen('feed'); renderFeed(); }
   if (currentUser.role === 'parent') renderParentNotifBell();
+  if (currentUser.role === 'student') checkGradeUp(); checkBirthday();
 }
 
 // ============================================================
@@ -1332,14 +1738,52 @@ function showScreen(id) {
   else if (id==='free-resources') { /* no extra render needed */ }
 }
 
+
+// ============================================================
+// SEARCH
+// ============================================================
+function liveSearch(query) {
+  const q = query.trim().toLowerCase();
+  if (!q) { showScreen('feed'); return; }
+  // Show feed screen and override its content with results
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-feed').classList.add('active');
+  const container = document.getElementById('feed-posts');
+  // Search posts
+  const matchedPosts = getPosts()
+    .filter(p => p.parentApproved && p.aiStatus === 'approved')
+    .filter(p => p.text.toLowerCase().includes(q) || p.authorName.toLowerCase().includes(q));
+  // Search communities
+  const matchedComms = COMMUNITIES.filter(c =>
+    c.name.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q)
+  );
+  let html = `<div style="background:var(--soft);border-radius:16px;padding:14px 18px;margin-bottom:16px;font-weight:800;font-size:14px;color:var(--dark)">
+    🔍 Results for "<em>${escHtml(query)}</em>" — ${matchedPosts.length} post${matchedPosts.length!==1?'s':''}, ${matchedComms.length} communit${matchedComms.length!==1?'ies':'y'}
+    <button class="btn ghost sm" style="margin-left:12px" onclick="document.getElementById('topbar-search').value='';showScreen('feed')">✕ Clear</button>
+  </div>`;
+  if (matchedComms.length) {
+    html += `<div class="sectlab" style="font-size:15px;margin-bottom:10px">🌐 Communities</div>
+      <div class="comm-grid" style="margin-bottom:20px">${matchedComms.map(c => renderCommCard(c)).join('')}</div>`;
+  }
+  if (matchedPosts.length) {
+    html += `<div class="sectlab" style="font-size:15px;margin-bottom:10px">📝 Posts</div>` +
+      matchedPosts.slice(0,20).map(p => renderPostCard(p)).join('');
+  }
+  if (!matchedPosts.length && !matchedComms.length) {
+    html += `<div class="empty"><span class="empty-icon">🔍</span><p>No results found for "${escHtml(query)}"</p></div>`;
+  }
+  container.innerHTML = html;
+}
+
 // ============================================================
 // FEED
 // ============================================================
 function switchFeedTab(tab) {
   activeFeedTab = tab;
+  feedPage = 1;
   document.querySelectorAll('#screen-feed .tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('#screen-feed .tab')[['all','mine','trending','city'].indexOf(tab)].classList.add('active');
-  renderPosts();
+  renderPosts(true);
 }
 
 function renderFeed() {
@@ -1361,7 +1805,11 @@ function renderParentSidebar() {
   else sidebar.style.display = 'none';
 }
 
-function renderPosts() {
+let feedPage = 1;
+const FEED_PAGE_SIZE = 10;
+
+function renderPosts(reset) {
+  if (reset) feedPage = 1;
   const container = document.getElementById('feed-posts');
   let posts = getPosts().filter(p => p.parentApproved && p.aiStatus === 'approved');
   if (activeFeedTab === 'mine' && currentUser) {
@@ -1378,7 +1826,15 @@ function renderPosts() {
     container.innerHTML = `<div class="empty"><span class="empty-icon">🌱</span><p>No posts yet. Be the first to share something!</p></div>`;
     return;
   }
-  container.innerHTML = posts.map(p => renderPostCard(p)).join('');
+  const slice = posts.slice(0, feedPage * FEED_PAGE_SIZE);
+  const hasMore = slice.length < posts.length;
+  container.innerHTML = slice.map(p => renderPostCard(p)).join('') +
+    (hasMore ? `<div style="text-align:center;padding:20px 0;"><button class="btn ghost" onclick="loadMorePosts()">Load More Posts ↓</button></div>` : '');
+}
+
+function loadMorePosts() {
+  feedPage++;
+  renderPosts();
 }
 
 function renderPostCard(post) {
@@ -1392,6 +1848,8 @@ function renderPostCard(post) {
   ).join('');
   const reportBtn = currentUser && currentUser.id !== post.authorId
     ? `<button class="rxn-btn" onclick="openReportModal('${post.id}')" style="margin-left:auto;color:var(--red)">🚩 Report</button>` : '';
+  const editBtn = currentUser && currentUser.id === post.authorId && !post.parentApproved
+    ? `<button class="rxn-btn" onclick="editPost('${post.id}')" style="color:var(--blue)">✏️ Edit</button>` : '';
   const repostLabel = post.isRepost ? `<span class="badge muted" style="margin-left:8px">🔁 Reposted from ${escHtml(post.originalAuthor||'')}</span>` : '';
   const avHtml = renderAvatarCircle(post.authorName, post.authorAvatar, 'post-av');
   return `<div class="post-card" id="post-${post.id}">
@@ -1404,7 +1862,7 @@ function renderPostCard(post) {
     </div>
     <div class="post-body">${escHtml(post.text)}</div>
     ${img}
-    <div class="reactions">${rxns}${reportBtn}</div>
+    <div class="reactions">${rxns}${reportBtn}${editBtn}</div>
     <div class="share-bar">
       <button class="share-btn wa" data-tip="Share on WhatsApp" onclick="shareWhatsApp('${post.id}')">📲 WhatsApp</button>
       <button class="share-btn em" data-tip="Share via Email" onclick="shareEmail('${post.id}')">📧 Email</button>
@@ -1990,13 +2448,18 @@ function openPostModal(communityId, isMentor) {
 
 function previewImage(input) {
   if (input.files && input.files[0]) {
+    const file = input.files[0];
+    const MAX_SIZE = 300 * 1024; // 300 KB
+    if (file.size > MAX_SIZE) {
+      toast('⚠️ Image is large (' + (file.size/1024/1024).toFixed(1) + ' MB). On a real server images would be compressed. Using a smaller image is recommended.');
+    }
     const reader = new FileReader();
     reader.onload = e => {
       const preview = document.getElementById('post-image-preview');
       preview.src = e.target.result;
       preview.style.display = 'block';
     };
-    reader.readAsDataURL(input.files[0]);
+    reader.readAsDataURL(file);
   }
 }
 
@@ -2031,9 +2494,34 @@ function runAiReview() {
   panel.className = 'ai-panel ' + result.severity;
   panel.style.display = 'block';
   const icons = {ok:'✅',warn:'⚠️',block:'❌'};
-  const titles = {ok:'AI Review: Approved',warn:'AI Review: Needs a Revision',block:'AI Review: Cannot Be Posted'};
+  const titles = {ok:'Content Check: Approved ✅',warn:'Content Check: Needs a Revision ⚠️',block:'Content Check: Cannot Be Posted ❌'};
   panel.innerHTML = `<div class="ai-panel-title">${icons[result.severity]} ${titles[result.severity]}</div><div class="ai-panel-msg">${result.reason}</div>`;
   document.getElementById('submit-post-btn').disabled = !result.pass;
+}
+
+
+function editPost(postId) {
+  const post = getPosts().find(p => p.id === postId);
+  if (!post) return;
+  // Open post modal pre-filled
+  openPostModal(post.communityId, post.isMentorTip);
+  document.getElementById('post-text').value = post.text;
+  document.getElementById('submit-post-btn').disabled = false;
+  document.getElementById('submit-post-btn').textContent = '💾 Save Edit →';
+  document.getElementById('submit-post-btn').onclick = () => {
+    const newText = document.getElementById('post-text').value.trim();
+    const v = validateText(newText);
+    if (!v.ok) { toast('⚠️ '+v.reason); return; }
+    const posts = getPosts();
+    const p = posts.find(x => x.id === postId);
+    if (p) { p.text = newText; p.aiStatus = 'approved'; savePosts(posts); }
+    closeModal('modal-post');
+    // Reset button
+    document.getElementById('submit-post-btn').textContent = 'Submit Post →';
+    document.getElementById('submit-post-btn').onclick = submitPost;
+    toast('✅ Post updated!');
+    renderFeed();
+  };
 }
 
 function submitPost() {
@@ -2085,34 +2573,107 @@ function submitPost() {
 }
 
 // ============================================================
-// PARENT APPROVAL QUEUE
+// PARENT APPROVAL QUEUE & DASHBOARD
 // ============================================================
+let activeParentTab = 'pending';
+
+function switchParentTab(tab) {
+  activeParentTab = tab;
+  document.querySelectorAll('#screen-parent-queue .tab').forEach(t => t.classList.remove('active'));
+  const idx = ['pending','activity','communities','controls'].indexOf(tab);
+  const tabs = document.querySelectorAll('#screen-parent-queue .tab');
+  if (tabs[idx]) tabs[idx].classList.add('active');
+  renderParentTabContent();
+}
+
 function renderParentQueue() {
-  const posts = getPosts();
-  const pending = posts.filter(p => !p.parentApproved && p.aiStatus === 'approved');
-  const el = document.getElementById('parent-queue-list');
-  if (pending.length === 0) {
-    el.innerHTML = `<div class="empty"><span class="empty-icon">✅</span><p>No posts pending approval. All clear!</p></div>`;
-    return;
-  }
-  el.innerHTML = pending.map(p => {
-    const comm = COMMUNITIES.find(c => c.id === p.communityId);
-    return `<div class="pending-item">
-      <div class="pi-header">
-        <div class="post-av" style="background:${avatarColor(p.authorName)};width:36px;height:36px;font-size:16px">${p.authorName.charAt(0)}</div>
-        <div>
-          <div style="font-weight:900;font-size:13px">${p.authorName}</div>
-          <div style="font-size:12px;color:var(--muted);font-weight:700">${comm?comm.emoji+' '+comm.name:p.communityId} · ${timeAgo(p.timestamp)}</div>
+  activeParentTab = 'pending';
+  renderParentTabContent();
+}
+
+function renderParentTabContent() {
+  const el = document.getElementById('parent-tab-content');
+  const allPosts = getPosts();
+
+  if (activeParentTab === 'pending') {
+    const pending = allPosts.filter(p => !p.parentApproved && p.aiStatus === 'approved');
+    if (pending.length === 0) {
+      el.innerHTML = `<div class="empty"><span class="empty-icon">✅</span><p>No posts pending approval. All clear!</p></div>`;
+      return;
+    }
+    el.innerHTML = `<p style="font-size:14px;color:var(--muted);font-weight:700;margin-bottom:16px">Review your child's creative posts before they go live. Automated content check has already pre-screened these.</p>` +
+      pending.map(p => {
+        const comm = COMMUNITIES.find(c => c.id === p.communityId);
+        return `<div class="pending-item">
+          <div class="pi-header">
+            <div class="post-av" style="background:${avatarColor(p.authorName)};width:36px;height:36px;font-size:16px">${p.authorName.charAt(0)}</div>
+            <div>
+              <div style="font-weight:900;font-size:13px">${p.authorName}</div>
+              <div style="font-size:12px;color:var(--muted);font-weight:700">${comm?comm.emoji+' '+comm.name:p.communityId} · ${timeAgo(p.timestamp)}</div>
+            </div>
+            <span class="badge yellow" style="margin-left:auto">⏳ Pending</span>
+          </div>
+          <div class="pi-text">${escHtml(p.text)}</div>
+          <div class="pi-actions">
+            <button class="btn green sm" onclick="approvePost('${p.id}')">✅ Approve</button>
+            <button class="btn red sm" onclick="rejectPost('${p.id}')">❌ Reject</button>
+          </div>
+        </div>`;
+      }).join('');
+
+  } else if (activeParentTab === 'activity') {
+    // All posts by any children linked to parents in the system (or all students for prototype)
+    const accounts = getAccounts();
+    const studentAccounts = accounts.filter(a => a.role === 'student' && a.status === 'active');
+    if (!studentAccounts.length) { el.innerHTML = `<div class="empty"><span class="empty-icon">📋</span><p>No child accounts found.</p></div>`; return; }
+    let html = '';
+    studentAccounts.forEach(child => {
+      const childPosts = allPosts.filter(p => p.authorId === child.id).slice(0, 10);
+      const flags = getFlags().filter(f => childPosts.some(p => p.id === f.postId));
+      html += `<div class="card" style="margin-bottom:16px"><div class="card-body">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <div class="av" style="background:${avatarColor(child.name)}">${child.name.charAt(0)}</div>
+          <div>
+            <div style="font-weight:900;font-size:14px">${escHtml(child.name)}</div>
+            <div style="font-size:12px;color:var(--muted);font-weight:700">Grade ${child.grade} · ${childPosts.length} posts · ${flags.length > 0 ? '<span style="color:var(--red)">⚠️ '+flags.length+' report(s)</span>' : '✅ No reports'}</div>
+          </div>
         </div>
-        <span class="badge yellow" style="margin-left:auto">⏳ Pending</span>
-      </div>
-      <div class="pi-text">${escHtml(p.text)}</div>
-      <div class="pi-actions">
-        <button class="btn green sm" onclick="approvePost('${p.id}')">✅ Approve</button>
-        <button class="btn red sm" onclick="rejectPost('${p.id}')">❌ Reject</button>
-      </div>
-    </div>`;
-  }).join('');
+        ${childPosts.length ? childPosts.slice(0,3).map(p => {
+          const comm = COMMUNITIES.find(c => c.id === p.communityId);
+          return `<div style="background:var(--soft);border-radius:12px;padding:10px 12px;margin-bottom:8px;font-size:13px;">
+            <span class="badge ${p.parentApproved ? 'green' : 'orange'}" style="margin-bottom:4px">${p.parentApproved ? '✅ Live' : '⏳ Pending'}</span>
+            <span style="font-size:11px;color:var(--muted);font-weight:700;margin-left:6px">${comm?comm.emoji+' '+comm.name:''} · ${timeAgo(p.timestamp)}</span>
+            <div style="font-weight:700;margin-top:4px">${escHtml(p.text.slice(0,120))}${p.text.length>120?'…':''}</div>
+          </div>`;
+        }).join('') : '<p style="font-size:13px;color:var(--muted);font-weight:700">No posts yet.</p>'}
+      </div></div>`;
+    });
+    el.innerHTML = html;
+
+  } else if (activeParentTab === 'controls') {
+    renderParentalControls(el);
+    return;
+
+  } else if (activeParentTab === 'communities') {
+    const accounts = getAccounts();
+    const studentAccounts = accounts.filter(a => a.role === 'student' && a.status === 'active');
+    if (!studentAccounts.length) { el.innerHTML = `<div class="empty"><span class="empty-icon">🌐</span><p>No child accounts found.</p></div>`; return; }
+    let html = '';
+    studentAccounts.forEach(child => {
+      const joined = getUserCommunities(child.id);
+      const comms = joined.map(cid => COMMUNITIES.find(c => c.id === cid)).filter(Boolean);
+      html += `<div class="card" style="margin-bottom:16px"><div class="card-body">
+        <div style="font-weight:900;font-size:14px;margin-bottom:10px">
+          <div class="av" style="background:${avatarColor(child.name)};display:inline-grid;margin-right:8px">${child.name.charAt(0)}</div>
+          ${escHtml(child.name)} — ${comms.length} communit${comms.length!==1?'ies':'y'}
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          ${comms.length ? comms.map(c => `<span class="badge blue">${c.emoji} ${c.name}</span>`).join('') : '<span style="font-size:13px;color:var(--muted);font-weight:700">No communities joined yet.</span>'}
+        </div>
+      </div></div>`;
+    });
+    el.innerHTML = html;
+  }
 }
 
 function approvePost(id) {
@@ -2299,6 +2860,15 @@ function renderProfileTab() {
         ${PRESET_AVATARS.map(av => `<button onclick="selectAvatar('${av}')" style="font-size:2rem;padding:8px;border-radius:14px;border:3px solid ${(me.avatar||PRESET_AVATARS[0])===av?'var(--blue)':'var(--line)'};background:${(me.avatar||PRESET_AVATARS[0])===av?'var(--soft)':'#fff'};cursor:pointer;transition:.15s" title="Select avatar">${av}</button>`).join('')}
       </div>
       <div class="field">
+        <label>🪪 Your User ID <span style="color:var(--muted);font-weight:700">(used to log in — must be unique)</span></label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input type="text" id="username-input" value="${escHtml(me.username||me.name)}" placeholder="your_user_id" style="flex:1;font-family:monospace;font-size:14px;letter-spacing:1px" maxlength="30" />
+          <button class="btn blue sm" onclick="saveUsername()">Change</button>
+        </div>
+        <div class="val-err" id="username-err"></div>
+        <p style="font-size:11px;color:var(--muted);font-weight:700;margin-top:4px">Only letters, numbers, and underscores. 3–30 characters.</p>
+      </div>
+      <div class="field">
         <label>About Me <span style="color:var(--muted);font-weight:700">(max 200 chars)</span></label>
         <textarea id="about-me-input" maxlength="200" placeholder="Tell the community about yourself — your hobbies, what excites you...">${escHtml(me.aboutMe||'')}</textarea>
         <div class="val-err" id="about-err"></div>
@@ -2322,6 +2892,11 @@ function renderProfileTab() {
         🔒 Your email address is always kept private and never visible to other users.
       </div>
       <button class="btn green" onclick="saveAboutMe()">Save Profile →</button>
+      <div style="margin-top:24px;background:#ffebee;border:2px solid #ef9a9a;border-radius:16px;padding:16px;">
+        <div style="font-weight:900;font-size:14px;color:var(--red);margin-bottom:6px">⚠️ Danger Zone</div>
+        <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">Permanently delete your account and all your posts. This cannot be undone. Parents/guardians can request this at any time as required by the DPDP Act 2023.</p>
+        <button class="btn red sm" onclick="deleteMyAccount()">🗑️ Delete My Account</button>
+      </div>
     </div></div>`;
   } else if (activeProfileTab === 'posts') {
     const posts = getPosts().filter(p => p.authorId === currentUser.id);
@@ -2508,6 +3083,200 @@ function submitReport() {
 // ============================================================
 // MODAL HELPERS
 // ============================================================
+function openPrivacyPolicy() { openModal('modal-privacy'); }
+function openForgotPassword() {
+  document.getElementById('fp-username').value = '';
+  document.getElementById('fp-result').style.display = 'none';
+  openModal('modal-forgot');
+}
+
+function lookupPassword() {
+  const username = document.getElementById('fp-username').value.trim();
+  if (!username) { toast('Please enter your username'); return; }
+  const account = getAccounts().find(a => (a.username === username || a.name === username) && a.role === 'student');
+  const el = document.getElementById('fp-result');
+  el.style.display = 'block';
+  if (!account) {
+    el.style.background = '#ffebee'; el.style.borderColor = '#ef9a9a';
+    el.innerHTML = '❌ No account found with that username. Please check and try again.';
+    return;
+  }
+  if (account.status === 'pending') {
+    el.style.background = '#fff8e1'; el.style.borderColor = 'var(--yellow)';
+    el.innerHTML = '⏳ This account is still awaiting parent approval. Please ask your parent to approve first.';
+    return;
+  }
+  el.style.background = '#e8f5e9'; el.style.borderColor = '#a5d6a7';
+  el.innerHTML = `✅ Account found for <strong>${escHtml(account.name)}</strong> (Grade ${account.grade})<br>
+    Password: <span style="font-family:monospace;background:#fff;padding:2px 8px;border-radius:6px;border:1px solid var(--line);font-size:14px">${escHtml(account.tempPassword||'—')}</span><br>
+    <span style="font-size:11px;color:var(--muted);margin-top:4px;display:block">📧 This was also sent to your parent's email when the account was created.</span>`;
+}
+
+function openForgotUsername() {
+  document.getElementById('fu-email').value = '';
+  document.getElementById('fu-result').style.display = 'none';
+  openModal('modal-forgot-username');
+}
+
+function lookupUsername() {
+  var email = document.getElementById('fu-email').value.trim().toLowerCase();
+  if (!email) { toast('Please enter an email address'); return; }
+  var accounts = getAccounts();
+  var account = accounts.find(function(a) {
+    return a.role === 'student' && (
+      (a.email && a.email.toLowerCase() === email) ||
+      (a.parentEmail && a.parentEmail.toLowerCase() === email)
+    );
+  });
+  var el = document.getElementById('fu-result');
+  el.style.display = 'block';
+  if (!account) {
+    el.style.background = '#ffebee'; el.style.borderColor = '#ef9a9a';
+    el.innerHTML = '❌ No account found with that email. Please check and try again, or use the email entered during registration.';
+    return;
+  }
+  el.style.background = '#e8f5e9'; el.style.borderColor = '#a5d6a7';
+  el.innerHTML = '✅ Account found for <strong>' + escHtml(account.name) + '</strong><br>'
+    + '🪪 Username: <span style="font-family:monospace;background:#fff;padding:2px 8px;border-radius:6px;border:1px solid var(--line);font-size:14px">' + escHtml(account.username) + '</span><br>'
+    + '<span style="font-size:11px;color:var(--muted);margin-top:4px;display:block">Use this username to sign in. 📧 It was also sent to your parent\'s email during registration.</span>';
+}
+
+// ── Parental Controls ────────────────────────────────────────────────────
+function getParentalControls(childId) {
+  var stored = localStorage.getItem('pc_' + childId);
+  if (stored) { try { return JSON.parse(stored); } catch(e) {} }
+  return { approvalMode: 'all', screenTimeMins: 0, blockedCommunities: [], freeze: false, contentFilter: true };
+}
+function saveParentalControls(childId, settings) {
+  localStorage.setItem('pc_' + childId, JSON.stringify(settings));
+}
+
+function renderParentalControls(el) {
+  var accounts = getAccounts();
+  var students = accounts.filter(function(a){ return a.role === 'student'; });
+  if (!students.length) {
+    el.innerHTML = '<div class="empty"><span class="empty-icon">👶</span><p>No child accounts found.</p></div>';
+    return;
+  }
+  var html = '<div style="margin-bottom:16px;background:#e8f5e9;border:2px solid #a5d6a7;border-radius:14px;padding:14px;font-size:13px;font-weight:700;color:#2e7d32">🔒 <b>Parental Controls</b> let you manage each child\'s experience. Changes take effect immediately.</div>';
+
+  students.forEach(function(child) {
+    var pc = getParentalControls(child.id);
+    var today = new Date().toDateString();
+    var usedMins = parseInt(localStorage.getItem('st_' + child.id + '_' + today) || '0');
+
+    // community checkboxes
+    var commsOpts = COMMUNITIES.map(function(c) {
+      var blocked = pc.blockedCommunities && pc.blockedCommunities.includes(c.id);
+      return '<label style="display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:10px;background:' + (blocked ? '#ffebee' : 'var(--soft)') + ';margin-bottom:6px;cursor:pointer;font-size:13px;font-weight:700">'
+        + '<input type="checkbox" ' + (blocked ? 'checked' : '') + ' onchange="toggleBlockCommunity(\'' + child.id + '\',\'' + c.id + '\',this.checked)" style="width:auto;cursor:pointer" />'
+        + (blocked ? '🚫' : c.emoji) + ' ' + c.name + (blocked ? ' <span style="color:var(--red);font-size:11px;margin-left:4px">(blocked)</span>' : '')
+        + '</label>';
+    }).join('');
+
+    // toggle helper
+    function tog(val, onColor) {
+      return '<label style="position:relative;display:inline-block;width:44px;height:24px;cursor:pointer;flex-shrink:0">'
+        + '<span style="position:absolute;inset:0;background:' + (val ? onColor : 'var(--line)') + ';border-radius:999px;transition:.3s;pointer-events:none"></span>'
+        + '<span style="position:absolute;top:3px;left:' + (val ? '23px' : '3px') + ';width:18px;height:18px;background:#fff;border-radius:50%;transition:.3s;pointer-events:none"></span>';
+    }
+
+    html += '<div class="card" style="margin-bottom:20px"><div class="card-body">'
+      // header
+      + '<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">'
+      + '<div class="av" style="background:' + avatarColor(child.name) + ';width:40px;height:40px;font-size:18px">' + child.name.charAt(0) + '</div>'
+      + '<div><div style="font-weight:900;font-size:15px">' + escHtml(child.name) + '</div>'
+      + '<div style="font-size:12px;color:var(--muted);font-weight:700">Grade ' + child.grade + ' · @' + escHtml(child.username) + '</div></div>'
+      + '<span class="badge ' + (pc.freeze ? 'red' : 'green') + '" style="margin-left:auto">' + (pc.freeze ? '❄️ Frozen' : '✅ Active') + '</span>'
+      + '</div>'
+
+      // ── Account Freeze ──
+      + '<div style="background:' + (pc.freeze ? '#ffebee' : 'var(--soft)') + ';border-radius:12px;padding:12px 14px;margin-bottom:12px">'
+      + '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px">'
+      + '<div><div style="font-weight:900;font-size:13px">❄️ Account Freeze</div>'
+      + '<div style="font-size:11px;color:var(--muted);font-weight:700">Temporarily block login without deleting the account</div></div>'
+      + tog(pc.freeze, 'var(--red)')
+      + '<input type="checkbox" ' + (pc.freeze ? 'checked' : '') + ' onchange="togglePCFreeze(\'' + child.id + '\',this.checked)" style="opacity:0;position:absolute;width:44px;height:24px;cursor:pointer;margin:0" />'
+      + '</label></div></div>'
+
+      // ── Post Approval Mode ──
+      + '<div style="background:var(--soft);border-radius:12px;padding:12px 14px;margin-bottom:12px">'
+      + '<div style="font-weight:900;font-size:13px;margin-bottom:8px">✅ Post Approval Mode</div>'
+      + '<div style="display:flex;gap:8px;flex-wrap:wrap">'
+      + ['all','flagged','none'].map(function(v) {
+          var label = v==='all' ? 'All posts' : v==='flagged' ? 'Only flagged' : 'Auto-approve';
+          var icon  = v==='all' ? '✅' : v==='flagged' ? '⚠️' : '🚀';
+          var clr   = v==='all' ? 'var(--green)' : v==='flagged' ? 'var(--orange)' : 'var(--blue)';
+          var bg    = v==='all' ? '#e8f5e9' : v==='flagged' ? '#fff8e1' : '#e3f2fd';
+          var on    = pc.approvalMode === v;
+          return '<label style="flex:1;min-width:100px;display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:10px;border:2px solid '+(on?clr:'var(--line)')+';background:'+(on?bg:'#fff')+';cursor:pointer;font-size:12px;font-weight:800">'
+            + '<input type="radio" name="am_' + child.id + '" value="' + v + '" ' + (on?'checked':'') + ' onchange="savePCSetting(\'' + child.id + '\',\'approvalMode\',\'' + v + '\')" style="width:auto;cursor:pointer" /> ' + icon + ' ' + label + '</label>';
+        }).join('')
+      + '</div></div>'
+
+      // ── Screen Time ──
+      + '<div style="background:var(--soft);border-radius:12px;padding:12px 14px;margin-bottom:12px">'
+      + '<div style="font-weight:900;font-size:13px;margin-bottom:4px">⏱️ Daily Screen Time Limit</div>'
+      + '<div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:10px">Set 0 for no limit &nbsp;·&nbsp; Today\'s usage: <b>' + usedMins + ' min</b>' + (pc.screenTimeMins ? ' of ' + pc.screenTimeMins + ' min limit' : '') + '</div>'
+      + '<div style="display:flex;align-items:center;gap:10px">'
+      + '<input type="range" min="0" max="180" step="15" value="' + (pc.screenTimeMins||0) + '" oninput="this.nextElementSibling.textContent=this.value==0?\'No limit\':this.value+\' min\'" onchange="savePCSetting(\'' + child.id + '\',\'screenTimeMins\',parseInt(this.value))" style="flex:1;cursor:pointer" />'
+      + '<span style="font-weight:900;font-size:13px;min-width:65px;text-align:right">' + (pc.screenTimeMins ? pc.screenTimeMins + ' min' : 'No limit') + '</span>'
+      + '</div></div>'
+
+      // ── Content Filter ──
+      + '<div style="background:var(--soft);border-radius:12px;padding:12px 14px;margin-bottom:12px">'
+      + '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px">'
+      + '<div><div style="font-weight:900;font-size:13px">🛡️ Strict Content Filter</div>'
+      + '<div style="font-size:11px;color:var(--muted);font-weight:700">Extra sensitive AI screening for younger children</div></div>'
+      + tog(pc.contentFilter, 'var(--green)')
+      + '<input type="checkbox" ' + (pc.contentFilter ? 'checked' : '') + ' onchange="savePCSetting(\'' + child.id + '\',\'contentFilter\',this.checked)" style="opacity:0;position:absolute;width:44px;height:24px;cursor:pointer;margin:0" />'
+      + '</label></div></div>'
+
+      // ── Community Blocklist ──
+      + '<div style="background:var(--soft);border-radius:12px;padding:12px 14px">'
+      + '<div style="font-weight:900;font-size:13px;margin-bottom:4px">🌐 Community Access</div>'
+      + '<div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:10px">✔ = blocked from this community</div>'
+      + commsOpts + '</div>'
+
+      + '</div></div>';
+  });
+  el.innerHTML = html;
+}
+
+function savePCSetting(childId, key, value) {
+  var pc = getParentalControls(childId);
+  pc[key] = value;
+  saveParentalControls(childId, pc);
+  toast('✅ Setting saved!');
+}
+
+function togglePCFreeze(childId, frozen) {
+  var pc = getParentalControls(childId);
+  pc.freeze = frozen;
+  saveParentalControls(childId, pc);
+  var accounts = getAccounts();
+  var child = accounts.find(function(a){ return a.id === childId; });
+  if (child) { child.status = frozen ? 'frozen' : 'active'; saveAccounts(accounts); }
+  toast(frozen ? '❄️ Account frozen — child cannot log in' : '✅ Account unfrozen');
+  renderParentTabContent();
+}
+
+function toggleBlockCommunity(childId, commId, blocked) {
+  var pc = getParentalControls(childId);
+  if (!pc.blockedCommunities) pc.blockedCommunities = [];
+  if (blocked) {
+    if (!pc.blockedCommunities.includes(commId)) pc.blockedCommunities.push(commId);
+  } else {
+    pc.blockedCommunities = pc.blockedCommunities.filter(function(c){ return c !== commId; });
+  }
+  saveParentalControls(childId, pc);
+  toast(blocked ? '🚫 Community blocked for this child' : '✅ Community unblocked');
+}
+
+function openTerms() { openModal('modal-terms'); }
+
+
+
 function openComingSoon() {
   document.getElementById('coming-grid').innerHTML = COMING_SOON.map(c =>
     `<div class="coming-item"><span class="ci-emoji">${c.emoji}</span><div><div class="ci-title">${c.title}</div><div class="ci-desc">${c.desc}</div></div></div>`
@@ -2563,13 +3332,36 @@ function selectAvatar(av) {
   if (!currentUser) return;
   const accounts = getAccounts();
   const me = accounts.find(a => a.id === currentUser.id);
-  if (me) { me.avatar = av; saveAccounts(accounts); }
+  if (me) { me.avatar = av; currentUser.avatar = av; saveAccounts(accounts); }
+  // Update topbar avatar circle immediately
+  const avEl = document.getElementById('topbar-av-circle');
+  if (avEl) { avEl.textContent = av; avEl.style.fontSize = '20px'; }
   renderProfile();
+  toast('Avatar updated! ' + av);
 }
 
 // ============================================================
 // ABOUT ME / PROFILE EDITING
 // ============================================================
+function saveUsername() {
+  const newUsername = document.getElementById('username-input').value.trim();
+  const errEl = document.getElementById('username-err');
+  errEl.textContent = '';
+  if (!newUsername) { errEl.textContent = 'Username cannot be empty.'; return; }
+  if (!/^[a-zA-Z0-9_]{3,30}$/.test(newUsername)) {
+    errEl.textContent = 'Only letters, numbers, underscores. 3–30 characters.'; return;
+  }
+  const accounts = getAccounts();
+  const taken = accounts.find(a => a.username === newUsername && a.id !== currentUser.id);
+  if (taken) { errEl.textContent = '⚠️ This User ID is already taken. Try another.'; return; }
+  const me = accounts.find(a => a.id === currentUser.id);
+  if (!me) return;
+  me.username = newUsername;
+  currentUser.username = newUsername;
+  saveAccounts(accounts);
+  toast('✅ User ID updated! Use "' + newUsername + '" to log in next time.');
+}
+
 function saveAboutMe() {
   if (!currentUser) return;
   const aboutRaw = document.getElementById('about-me-input').value.trim();
@@ -2661,17 +3453,6 @@ function openPublicWall(userId) {
 // ============================================================
 // SHARE FUNCTIONS
 // ============================================================
-function openMFC() {
-  if (currentUser && currentUser.role === 'student')
-    localStorage.setItem('mfc_session', JSON.stringify(currentUser));
-  window.location.href = 'MyFirstChapter.html';
-}
-function openTool(url) {
-  if (currentUser && currentUser.role === 'student')
-    localStorage.setItem('mfc_session', JSON.stringify(currentUser));
-  window.location.href = url;
-}
-
 function shareWhatsApp(postId) {
   const post = getPosts().find(p => p.id === postId);
   if (!post) return;
@@ -2749,6 +3530,27 @@ function addParentNotification(parentEmail, type, message) {
   saveParentNotifs(parentEmail, notifs);
 }
 
+function approvePasswordChange(accountId) {
+  const accounts = getAccounts();
+  const acc = accounts.find(a => a.id === accountId);
+  if (!acc || !acc.pendingPassword) { toast('No pending request'); return; }
+  acc.tempPassword = acc.pendingPassword;
+  delete acc.pendingPassword;
+  saveAccounts(accounts);
+  toast('✅ Password changed for ' + acc.name);
+  renderParentSidebar();
+}
+
+function rejectPasswordChange(accountId) {
+  const accounts = getAccounts();
+  const acc = accounts.find(a => a.id === accountId);
+  if (!acc) return;
+  delete acc.pendingPassword;
+  saveAccounts(accounts);
+  toast('Password change request rejected.');
+  renderParentSidebar();
+}
+
 function renderParentNotifBell() {
   if (!currentUser || currentUser.role !== 'parent') return;
   const notifs = getParentNotifs(currentUser.email || '');
@@ -2787,7 +3589,105 @@ function showParentNotifs() {
 }
 
 // Init seed data so feed isn't empty on first load
+
+// ============================================================
+// SESSION TIMEOUT — auto logout after 30 min idle
+// ============================================================
+let _sessionTimer = null;
+const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
+
+function resetSessionTimeout() {
+  if (!currentUser) return;
+  clearTimeout(_sessionTimer);
+  _sessionTimer = setTimeout(() => {
+    if (currentUser) { toast('⏰ Session expired. Please log in again.'); setTimeout(() => logout(), 1500); }
+  }, SESSION_TIMEOUT_MS);
+}
+
+function clearSessionTimeout() { clearTimeout(_sessionTimer); _sessionTimer = null; }
+
+['click','keypress','mousemove','touchstart'].forEach(ev =>
+  document.addEventListener(ev, () => { if (currentUser) resetSessionTimeout(); }, {passive:true})
+);
+
 if (!localStorage.getItem('yfs_posts')) savePosts(getSeedPosts());
 </script>
+
+<!-- MODAL: PRIVACY POLICY -->
+<div class="modal-overlay" id="modal-privacy">
+  <div class="modal" style="max-width:580px">
+    <button class="modal-close" onclick="closeModal('modal-privacy')">✕</button>
+    <h3>🔒 Privacy Policy</h3>
+    <p class="sub">TYF Network — The Young Foundry · Effective June 2026</p>
+    <div style="font-size:13px;font-weight:700;color:var(--ink);line-height:1.7;max-height:55vh;overflow-y:auto;padding-right:4px">
+      <p style="margin-bottom:12px"><strong>Who we are:</strong> TYF Network is a safe learning community for students aged 7–14, operated by The Young Foundry. We comply with India's Digital Personal Data Protection (DPDP) Act 2023.</p>
+      <p style="margin-bottom:12px"><strong>Data we collect:</strong> Child's name, User ID, school name, grade, date of birth, and parent email. We do not collect phone numbers, addresses, or government IDs.</p>
+      <p style="margin-bottom:12px"><strong>How we use it:</strong> Solely to operate the platform. We never sell, share, or use your data for advertising.</p>
+      <p style="margin-bottom:12px"><strong>Parental consent:</strong> A parent or guardian must approve every child account before it is activated. Parents can reject or remove any post.</p>
+      <p style="margin-bottom:12px"><strong>Content moderation:</strong> All posts pass through an automated content check before a parent sees them. Parents approve all creative posts before they go live.</p>
+      <p style="margin-bottom:12px"><strong>Right to erasure (DPDP Act s.12):</strong> A parent or guardian may request full deletion of their child's account and all associated data at any time using the "Delete My Account" button in the Profile page, or by contacting the Grievance Officer below.</p>
+      <p style="margin-bottom:12px"><strong>Data security:</strong> Passwords are never stored in plain text. All connections use HTTPS.</p>
+      <p style="margin-bottom:12px"><strong>Grievance Officer:</strong> For any data-related concerns, email <a href="mailto:privacy@youngfoundry.in" style="color:var(--blue)">privacy@youngfoundry.in</a>. We respond within 48 hours.</p>
+      <p style="margin-bottom:0;color:var(--muted)">This policy may be updated. Changes will be communicated via the parent email on file.</p>
+    </div>
+    <div style="margin-top:16px">
+      <button class="btn green" onclick="closeModal('modal-privacy')">I Understand →</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL: FORGOT PASSWORD -->
+<div class="modal-overlay" id="modal-forgot">
+  <div class="modal" style="max-width:420px">
+    <button class="modal-close" onclick="closeModal('modal-forgot')">✕</button>
+    <h3>🔑 Forgot Password</h3>
+    <p class="sub">Enter your username and we'll show the password saved for your account.</p>
+    <div class="field">
+      <label>Username</label>
+      <input type="text" id="fp-username" placeholder="Your username" />
+    </div>
+    <div id="fp-result" style="display:none;background:var(--soft);border:2px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px;font-size:13px;font-weight:700;"></div>
+    <button class="btn blue" style="width:100%" onclick="lookupPassword()">Find My Password →</button>
+    <p style="text-align:center;margin-top:12px;font-size:12px;color:var(--muted);font-weight:700;">📧 Your parent's email also received this password when the account was created.</p>
+  </div>
+</div>
+
+<!-- MODAL: FORGOT USERNAME -->
+<div class="modal-overlay" id="modal-forgot-username">
+  <div class="modal" style="max-width:420px">
+    <button class="modal-close" onclick="closeModal('modal-forgot-username')">✕</button>
+    <h3>🪪 Forgot Username</h3>
+    <p class="sub">Enter the email used during registration and we'll find your username.</p>
+    <div class="field">
+      <label>Email Address</label>
+      <input type="email" id="fu-email" placeholder="Student or parent email" />
+    </div>
+    <div id="fu-result" style="display:none;border:2px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px;font-size:13px;font-weight:700;line-height:1.8"></div>
+    <button class="btn blue" style="width:100%" onclick="lookupUsername()">Find My Username →</button>
+    <p style="text-align:center;margin-top:12px;font-size:12px;color:var(--muted);font-weight:700;">📧 Use the email address entered when the account was first created.</p>
+  </div>
+</div>
+
+<!-- MODAL: TERMS OF USE -->
+<div class="modal-overlay" id="modal-terms">
+  <div class="modal" style="max-width:560px">
+    <button class="modal-close" onclick="closeModal('modal-terms')">✕</button>
+    <h3>📜 Terms of Use</h3>
+    <p class="sub">TYF Network · Last updated June 2026</p>
+    <div style="font-size:13px;font-weight:700;color:var(--ink);line-height:1.7;max-height:55vh;overflow-y:auto;padding-right:4px">
+      <p style="margin-bottom:12px"><strong>Who can use TYF Network:</strong> Students aged 7–14 with a parent-approved account. Parents/guardians must complete the registration and approval process.</p>
+      <p style="margin-bottom:12px"><strong>What you can post:</strong> Your own creative work, learning experiences, summer camp stories, projects, and ideas. All posts must be original and kind.</p>
+      <p style="margin-bottom:12px"><strong>What is not allowed:</strong> Abusive language, bullying, copying others' work without credit, sharing personal contact details (phone, address), adult content, or defamatory statements about teachers or schools.</p>
+      <p style="margin-bottom:12px"><strong>Content moderation:</strong> All posts pass through an automated content check. Creative posts require parent approval before going live. Posts reported by 3+ users are automatically hidden pending admin review.</p>
+      <p style="margin-bottom:12px"><strong>Parent responsibility:</strong> Parents who register a child account take full responsibility for monitoring their child's activity on the platform.</p>
+      <p style="margin-bottom:12px"><strong>Account suspension:</strong> Violations may result in post removal or account suspension without notice. Serious violations are reported to the platform's Grievance Officer.</p>
+      <p style="margin-bottom:12px"><strong>Grievance:</strong> Email <a href="mailto:privacy@youngfoundry.in" style="color:var(--blue)">privacy@youngfoundry.in</a> for any concerns.</p>
+      <p style="color:var(--muted)">By using TYF Network you agree to these terms. They may be updated with notice via the parent email on file.</p>
+    </div>
+    <div style="margin-top:16px"><button class="btn green" onclick="closeModal('modal-terms')">I Agree →</button></div>
+  </div>
+</div>
+
 </body>
 </html>
