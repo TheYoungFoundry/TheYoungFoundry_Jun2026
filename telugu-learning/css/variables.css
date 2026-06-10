@@ -1,0 +1,32 @@
+:root {
+  --red:    #E53935;
+  --green:  #43A047;
+  --blue:   #1E88E5;
+  --orange: #F97316;
+  --purple: #8B5CF6;
+  --yellow: #FDD835;
+  --navy:   #0F1D32;
+  --navy2:  #1F4E79;
+  --gold:   #D4A828;
+  --gold2:  #F5C842;
+  --bg:     #eef1f5;
+  --card:   #ffffff;
+  --text:   #2d3748;
+  --ink:    #2d3748;
+  --muted:  #7b8694;
+  --line:   #eceef1;
+  --soft:   #eef1f5;
+  --paper:  #ffffff;
+  --radius: 24px;
+  --radius-btn: 999px;
+  --shadow-card: 0 6px 16px -8px rgba(45,55,72,.25);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}

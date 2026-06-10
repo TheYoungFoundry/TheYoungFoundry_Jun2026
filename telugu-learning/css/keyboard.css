@@ -1,0 +1,121 @@
+.tel-keyboard {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: linear-gradient(180deg, #142035, #0F1D32);
+  padding: 10px 10px 18px;
+  z-index: 200;
+  box-shadow: 0 -6px 24px rgba(0,0,0,.45);
+  display: none;
+  max-height: 60vh;
+  overflow-y: auto;
+  border-top: 2px solid var(--gold);
+}
+.tel-keyboard.show { display: block; }
+
+.kb-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.kb-header-title { font-family: 'Fredoka One', cursive; font-size: .95rem; color: var(--gold); letter-spacing: .5px; }
+.kb-close {
+  padding: 4px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(212,168,40,.4);
+  background: rgba(212,168,40,.1);
+  color: var(--gold);
+  font-size: .82rem;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+}
+
+.kb-tabs {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+}
+.kb-tabs::-webkit-scrollbar { height: 3px; }
+.kb-tabs::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+.kb-tab {
+  padding: 6px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(212,168,40,.25);
+  background: rgba(255,255,255,.05);
+  color: rgba(255,255,255,.65);
+  font-size: .8rem;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: .15s;
+}
+.kb-tab.active { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+
+.kb-section { display: none; }
+.kb-section.active { display: block; }
+.kb-group-label {
+  font-size: .68rem;
+  color: rgba(212,168,40,.65);
+  font-weight: 700;
+  margin: 6px 0 4px;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+}
+.kb-row { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 6px; }
+
+.kb-btn {
+  padding: 8px 7px;
+  min-width: 38px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.08);
+  color: #f8fafc;
+  font-size: 1.2rem;
+  cursor: pointer;
+  text-align: center;
+  transition: .12s;
+  line-height: 1.2;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.kb-btn:hover  { background: rgba(212,168,40,.3); border-color: rgba(212,168,40,.6); }
+.kb-btn:active { background: var(--gold); color: var(--navy); transform: scale(.93); }
+
+.kb-btn.vowel  { border-color: rgba(30,136,229,.35);  background: rgba(30,136,229,.1);  color: #93c5fd; }
+.kb-btn.matra  { border-color: rgba(67,160,71,.35);   background: rgba(67,160,71,.1);   color: #86efac; position: relative; }
+.kb-btn.matra::before { content: 'క'; font-size: .55rem; position: absolute; top: 2px; left: 4px; color: rgba(134,239,172,.5); }
+.kb-btn.vatt   { border-color: rgba(139,92,246,.35);  background: rgba(139,92,246,.1);  color: #c4b5fd; }
+.kb-btn.spec   { border-color: rgba(249,115,22,.35);  background: rgba(249,115,22,.1);  color: #fed7aa; }
+
+.kb-actions { display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap; }
+.kb-action {
+  padding: 9px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color: #e5e7eb;
+  font-size: .88rem;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: .15s;
+}
+.kb-action.space    { flex: 1; background: rgba(255,255,255,.1); }
+.kb-action.back     { border-color: rgba(229,57,53,.35); background: rgba(229,57,53,.12); color: #fca5a5; }
+.kb-action.submit-kb{ border-color: rgba(67,160,71,.4);  background: rgba(67,160,71,.15);  color: #86efac; }
+.kb-action:hover    { opacity: .85; }
+
+.kb-current {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,.06);
+  border-radius: 8px;
+  padding: 6px 12px;
+  margin-bottom: 8px;
+  border: 1px solid rgba(212,168,40,.2);
+}
+.kb-current-text  { flex: 1; color: #fff; font-size: 1rem; font-weight: 600; letter-spacing: .5px; min-height: 20px; word-break: break-all; }
+.kb-current-label { font-size: .72rem; color: rgba(212,168,40,.7); white-space: nowrap; }

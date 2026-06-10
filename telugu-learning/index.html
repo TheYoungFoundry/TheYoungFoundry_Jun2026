@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telugu Velugu — The Young Foundry</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/keyboard.css">
+<link rel="stylesheet" href="css/session.css">
+<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/story.css">
+<link rel="stylesheet" href="css/animations.css">
+<style>
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Nunito', sans-serif; background: #f0f4f8; color: #1a1a2e; min-height: 100vh; }
+
+/* ── Topbar ── */
+.topbar {
+  background: linear-gradient(135deg, #0F1D32, #1F4E79);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 3px 12px rgba(0,0,0,.35);
+}
+.topbar-logo { font-family: 'Fredoka One', cursive; font-size: 1.4rem; color: #D4A828; text-decoration: none; }
+.topbar-sub { color: rgba(255,255,255,.55); font-size: .85rem; }
+#backBtn {
+  margin-left: auto;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.25);
+  color: #fff;
+  padding: 7px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: .85rem;
+  display: none;
+}
+
+/* ── Screens ── */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ══════════════════════════════════════
+   HOME SCREEN
+══════════════════════════════════════ */
+#screenSetup { min-height: calc(100vh - 54px); }
+
+.home-hero {
+  background: linear-gradient(135deg, #0F1D32, #1F4E79);
+  padding: 40px 24px 32px;
+  text-align: center;
+  color: #fff;
+}
+.home-hero .big-letter { font-size: 4rem; display: block; margin-bottom: 6px; }
+.home-hero h1 { font-family: 'Fredoka One', cursive; font-size: 2.6rem; color: #D4A828; }
+.home-hero p  { color: rgba(255,255,255,.7); margin-top: 8px; font-size: 1rem; }
+
+/* ─── Grade Selection View ─── */
+#gradePickView { padding: 32px 20px; max-width: 900px; margin: 0 auto; }
+#gradePickView h2 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.5rem;
+  color: #0F1D32;
+  text-align: center;
+  margin-bottom: 24px;
+}
+.grade-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+@media (max-width: 600px) { .grade-cards-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.grade-big-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 28px 16px 22px;
+  text-align: center;
+  cursor: pointer;
+  border: 3px solid #eceef1;
+  box-shadow: 0 6px 16px -8px rgba(45,55,72,.25);
+  transition: transform .18s, border-color .18s, box-shadow .18s;
+  user-select: none;
+}
+.grade-big-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -8px rgba(45,55,72,.35);
+  border-color: #43A047;
+}
+.grade-big-card .g-num {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2.8rem;
+  line-height: 1;
+}
+.grade-big-card .g-label {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.05rem;
+  color: #0F1D32;
+  margin-top: 8px;
+}
+.grade-big-card .g-level {
+  font-size: .75rem;
+  font-weight: 700;
+  padding: 3px 12px;
+  border-radius: 12px;
+  margin-top: 8px;
+  display: inline-block;
+}
+.grade-big-card .g-desc {
+  font-size: .72rem;
+  color: #6B7280;
+  margin-top: 5px;
+  line-height: 1.4;
+}
+.grade-big-card .g-topics {
+  font-size: .75rem;
+  color: #9CA3AF;
+  margin-top: 4px;
+  font-weight: 700;
+}
+
+/* Grade colour themes */
+.g1 { --gc: #22c55e; --gcl: #dcfce7; --gct: #166534; }
+.g2 { --gc: #3b82f6; --gcl: #dbeafe; --gct: #1d4ed8; }
+.g3 { --gc: #f59e0b; --gcl: #fef3c7; --gct: #92400e; }
+.g4 { --gc: #a855f7; --gcl: #f3e8ff; --gct: #6b21a8; }
+.g5 { --gc: #ef4444; --gcl: #fee2e2; --gct: #991b1b; }
+.g6 { --gc: #0ea5e9; --gcl: #e0f2fe; --gct: #0369a1; }
+
+.grade-big-card { border-color: #e5e7eb; }
+.grade-big-card:hover { border-color: var(--gc); }
+.grade-big-card .g-num  { color: var(--gc); }
+.grade-big-card .g-level { background: var(--gcl); color: var(--gct); }
+.grade-big-card.active  { border-color: var(--gc); background: var(--gcl); }
+
+/* ─── Topic Hub View ─── */
+#topicHubView { display: none; padding: 0 0 48px; }
+
+.hub-topbar {
+  background: #fff;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  border-bottom: 2px solid #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
+.hub-back-btn {
+  background: #f3f4f6;
+  border: 2px solid #e5e7eb;
+  color: #374151;
+  padding: 9px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'Fredoka One', cursive;
+  font-size: .95rem;
+  transition: .15s;
+  white-space: nowrap;
+}
+.hub-back-btn:hover { background: #e5e7eb; }
+.hub-grade-badge {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.25rem;
+  color: #0F1D32;
+}
+.hub-grade-sublabel { font-size: .82rem; color: #6B7280; }
+
+.hub-right { margin-left: auto; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.dur-mini { display: flex; align-items: center; gap: 6px; }
+.dur-mini span { font-size: .8rem; color: #6B7280; font-weight: 700; white-space: nowrap; }
+.dur-mini-btn {
+  padding: 6px 12px;
+  border-radius: 16px;
+  border: 2px solid #e5e7eb;
+  background: #fff;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: .82rem;
+  cursor: pointer;
+  transition: .15s;
+}
+.dur-mini-btn.sel { background: #F97316; border-color: #F97316; color: #fff; }
+.dur-btn {
+  padding: 8px 16px;
+  border-radius: 16px;
+  border: 2px solid #e5e7eb;
+  background: #fff;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: .85rem;
+  cursor: pointer;
+  transition: .15s;
+  color: #374151;
+}
+.dur-btn:hover { border-color: #D4A828; background: #fffbea; }
+.dur-btn.sel { background: #0F1D32; border-color: #0F1D32; color: #D4A828; }
+.mixed-btn {
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #0F1D32, #1F4E79);
+  color: #D4A828;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
+  border: none;
+  border-radius: 22px;
+  cursor: pointer;
+  box-shadow: 0 3px 14px rgba(15,29,50,.25);
+  transition: .18s;
+  white-space: nowrap;
+}
+.mixed-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(15,29,50,.35); }
+
+/* Topic cards */
+.topic-grid-wrap { max-width: 1200px; margin: 0 auto; padding: 24px 20px; }
+.topic-grid-wrap h3 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  color: #6B7280;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 14px;
+}
+@media (max-width: 500px) { .topic-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.tcard {
+  background: #fff;
+  border-radius: 18px;
+  padding: 20px 12px 14px;
+  text-align: center;
+  border: 2px solid #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  transition: transform .18s, border-color .18s, box-shadow .18s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+.tcard:hover { transform: translateY(-3px); border-color: #D4A828; box-shadow: 0 6px 20px rgba(0,0,0,.1); }
+.tcard-em   { font-size: 2.4rem; line-height: 1; }
+.tcard-tel  { font-family: 'Fredoka One', cursive; font-size: .95rem; color: #0F1D32; line-height: 1.2; }
+.tcard-eng  { font-size: .72rem; color: #6B7280; font-weight: 700; }
+.tcard-lvl  { font-size: .68rem; font-weight: 700; padding: 2px 10px; border-radius: 10px; margin-top: 2px; }
+.lvl-beg { background: #dcfce7; color: #166534; }
+.lvl-int { background: #fef3c7; color: #92400e; }
+.lvl-adv { background: #f3e8ff; color: #6b21a8; }
+.tcard-btns { display: flex; gap: 6px; margin-top: 8px; width: 100%; }
+.btn-l, .btn-p {
+  flex: 1;
+  padding: 8px 4px;
+  border-radius: 10px;
+  border: 2px solid;
+  font-family: 'Fredoka One', cursive;
+  font-size: .8rem;
+  cursor: pointer;
+  transition: .15s;
+  white-space: nowrap;
+}
+.btn-l { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
+.btn-l:hover { background: #3b82f6; border-color: #3b82f6; color: #fff; }
+.btn-p { background: #fef9c3; border-color: #D4A828; color: #92400e; }
+.btn-p:hover { background: #D4A828; border-color: #D4A828; color: #0F1D32; }
+
+/* Story / Dashboard footer strip */
+/* ── Speak / TTS buttons ── */
+.speak-btn {
+  position:absolute; top:6px; right:6px;
+  background:none; border:none; cursor:pointer; font-size:.9rem;
+  opacity:.5; transition:.15s; padding:2px 4px;
+}
+.speak-btn:hover { opacity:1; }
+.vc { position:relative; }
+.speak-btn-sm {
+  background:none; border:none; cursor:pointer; font-size:.7rem;
+  opacity:.5; vertical-align:middle; padding:0 2px; transition:.15s;
+}
+.speak-btn-sm:hover { opacity:1; }
+
+/* ── Activity Hub ── */
+.activity-hub { max-width:1200px; margin:0 auto; padding:0 20px 32px; display:none; }
+.activity-hub.visible { display:block; }
+.activity-hub-head { margin-bottom:14px; }
+.activity-hub-head h3 { font-family:'Fredoka One',cursive; font-size:1.15rem; color:#0F1D32; margin:0 0 4px; }
+.activity-hub-head p  { font-size:.8rem; color:#6B7280; margin:0; }
+.activity-cards-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:10px; }
+.act-card {
+  background:#fff; border:2px solid #eceef1; border-radius:20px;
+  padding:14px 8px 12px; text-align:center; cursor:pointer;
+  transition:.18s; user-select:none; overflow:hidden;
+}
+.act-card-name {
+  font-family:'Fredoka One',cursive; font-size:.78rem; color:#2d3748;
+  line-height:1.2; word-break:break-word;
+}
+.act-card:hover { border-color:#43A047; transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.1); }
+.act-card-icon { font-size:1.8rem; margin-bottom:6px; }
+.act-card-desc { font-size:.68rem; color:#6B7280; margin-top:3px; }
+
+/* ── Consonant drill-down ── */
+.cons-grid { display:flex; flex-wrap:wrap; gap:8px; padding:6px 0; }
+.cons-btn {
+  width:50px; height:50px; border:2px solid #e5e7eb; border-radius:12px;
+  background:#fff; font-family:'Fredoka One',cursive; font-size:1.2rem;
+  color:#0F1D32; cursor:pointer; transition:.15s;
+}
+.cons-btn:hover { border-color:#D4A828; background:#fffbea; }
+.gun-table { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; padding:4px 0; }
+.gun-cell { background:#f8fafc; border:2px solid #e5e7eb; border-radius:12px; padding:10px 6px; text-align:center; }
+.gun-form { font-family:'Fredoka One',cursive; font-size:1.4rem; color:#0F1D32; }
+.gun-word { font-size:.68rem; color:#6B7280; margin-top:3px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+#lm-gun-back {
+  padding:7px 14px; border:2px solid #e5e7eb; border-radius:10px;
+  background:#fff; cursor:pointer; font-weight:700; font-size:.85rem; margin-bottom:12px;
+  transition:.15s;
+}
+#lm-gun-back:hover { border-color:#D4A828; }
+
+.hub-footer-strip {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.footer-card {
+  flex: 1;
+  min-width: 220px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 2px solid #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
+  cursor: pointer;
+  transition: .18s;
+}
+.footer-card:hover { border-color: #D4A828; box-shadow: 0 4px 18px rgba(0,0,0,.1); }
+.footer-card.story { background: linear-gradient(135deg,#fef3c7,#fde68a); border-color: #D4A828; }
+.footer-card-icon { font-size: 2rem; }
+.footer-card-title { font-family: 'Fredoka One', cursive; font-size: 1rem; color: #0F1D32; }
+.footer-card-sub   { font-size: .75rem; color: #6B7280; margin-top: 2px; }
+.footer-card-arrow { margin-left: auto; font-size: 1.3rem; }
+
+/* ══════════════════════════════════════
+   LEARN MODAL
+══════════════════════════════════════ */
+.lm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.65);
+  z-index: 400;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20px 14px;
+  overflow-y: auto;
+}
+.lm-box {
+  background: #fff;
+  border-radius: 22px;
+  width: 100%;
+  max-width: 860px;
+  box-shadow: 0 12px 48px rgba(0,0,0,.28);
+  overflow: hidden;
+  margin: auto;
+}
+.lm-head {
+  background: linear-gradient(135deg, #0F1D32, #1F4E79);
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.lm-head h3 { font-family: 'Fredoka One', cursive; font-size: 1.3rem; color: #D4A828; }
+.lm-close {
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.3);
+  color: #fff;
+  padding: 7px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: .85rem;
+  flex-shrink: 0;
+}
+.lm-close:hover { background: rgba(255,255,255,.28); }
+.lm-grid {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
+  max-height: 68vh;
+  overflow-y: auto;
+}
+@media (max-width: 480px) { .lm-grid { grid-template-columns: repeat(2,1fr); } }
+.vc {
+  background: #f8fafc;
+  border: 2px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 14px 10px;
+  text-align: center;
+  transition: .18s;
+}
+.vc:hover { border-color: #D4A828; background: #fffbea; transform: scale(1.02); }
+.vc-em  { font-size: 1.6rem; margin-bottom: 5px; }
+.vc-tel { font-family: 'Fredoka One', cursive; font-size: 1rem; color: #0F1D32; }
+.vc-eng { font-size: .75rem; color: #6B7280; font-weight: 700; margin-top: 3px; }
+.lm-msg { grid-column: 1/-1; text-align: center; padding: 40px; color: #6B7280; font-size: 1rem; }
+
+/* ══════════════════════════════════════
+   SESSION / RESULTS / DASHBOARD / STORY
+   (no changes — preserved from session.css / layout)
+══════════════════════════════════════ */
+.session-top {
+  background: linear-gradient(135deg, #0F1D32, #1F4E79);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.q-container { max-width: 780px; margin: 28px auto; padding: 0 18px; }
+.q-container.kb-open { padding-bottom: 62vh; }
+.results-wrap { max-width: 560px; margin: 0 auto; padding: 40px 20px; text-align: center; }
+.results-card { background: #fff; border-radius: 24px; padding: 36px; box-shadow: 0 8px 40px rgba(0,0,0,.1); }
+.dashboard-wrap { max-width: 900px; margin: 0 auto; padding: 24px 18px; }
+.story-reader { max-width: 760px; margin: 0 auto; padding: 0 18px 40px; }
+.comp-wrap { max-width: 680px; margin: 0 auto; padding: 24px 18px; }
+
+/* modal (add child) */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 200; display: none; align-items: center; justify-content: center; }
+.modal-overlay.show { display: flex; }
+.modal { background: #fff; border-radius: 20px; padding: 28px; max-width: 380px; width: 90%; box-shadow: 0 8px 40px rgba(0,0,0,.2); }
+.modal h3 { font-family: 'Fredoka One', cursive; font-size: 1.3rem; color: #0F1D32; margin-bottom: 16px; }
+.modal input { width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 1rem; font-family: 'Nunito'; outline: none; margin-bottom: 12px; }
+.modal input:focus { border-color: #1E88E5; }
+.modal-actions { display: flex; gap: 10px; }
+
+/* confetti */
+.confetti-area { position: fixed; inset: 0; pointer-events: none; z-index: 999; overflow: hidden; }
+.confetti-piece { position: absolute; width: 10px; height: 10px; border-radius: 2px; animation: confettiFall 3s ease-in forwards; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topbar">
+  <a href="index.html" class="topbar-logo">🌱 The Young Foundry</a>
+  <span class="topbar-sub">/ Telugu Velugu</span>
+  <button id="backBtn">← Exit Session</button>
+</nav>
+
+<!-- ═══════════════════════════════════════
+     SCREEN 1: HOME
+═══════════════════════════════════════ -->
+<div class="screen active" id="screenSetup">
+
+  <div class="home-hero">
+    <span class="big-letter">అ</span>
+    <h1>Telugu Velugu</h1>
+    <p>తెలుగు నేర్చుకోవడం ఆనందంగా చేద్దాం! &nbsp;|&nbsp; Fun Telugu Learning for Grades 1–6</p>
+  </div>
+
+  <!-- Grade Pick View -->
+  <div id="gradePickView">
+    <h2>👆 తరగతి ఎంచుకోండి — Choose Your Grade</h2>
+    <div class="grade-cards-grid" id="gradeCardsGrid"></div>
+  </div>
+
+  <!-- Topic Hub View (hidden until grade clicked) -->
+  <div id="topicHubView">
+
+    <div class="hub-topbar">
+      <button class="hub-back-btn" id="hubBackBtn">← All Grades</button>
+      <div>
+        <div class="hub-grade-badge" id="hubGradeBadge"></div>
+        <div class="hub-grade-sublabel" id="hubGradeDesc"></div>
+      </div>
+      <div class="hub-right">
+        <div class="dur-mini">
+          <span>⏱️ Session:</span>
+          <div id="durGrid"></div>
+        </div>
+        <button class="mixed-btn" id="mixedBtn">🚀 Mixed Practice — All Topics</button>
+      </div>
+    </div>
+
+    <div class="topic-grid-wrap">
+      <div class="topic-grid" id="topicGrid"></div>
+    </div>
+
+    <div class="activity-hub" id="activityHub">
+      <div class="activity-hub-head">
+        <h3>🎯 పద్ధతి ఎంచుకోండి — Choose an Activity</h3>
+        <p>Practice a specific activity type across all topics for your grade</p>
+      </div>
+      <div class="activity-cards-row" id="activityCardsRow"></div>
+    </div>
+
+    <div class="hub-footer-strip">
+      <div class="footer-card story" id="navStory">
+        <span class="footer-card-icon">📖</span>
+        <div>
+          <div class="footer-card-title">కథలు చదవండి!</div>
+          <div class="footer-card-sub">Dynamic Story Builder · Grades 1–6</div>
+        </div>
+        <span class="footer-card-arrow">→</span>
+      </div>
+      <div class="footer-card" id="navDashboard">
+        <span class="footer-card-icon">📊</span>
+        <div>
+          <div class="footer-card-title">Parent Dashboard</div>
+          <div class="footer-card-sub">Track progress · Manage children</div>
+        </div>
+        <span class="footer-card-arrow">→</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Learn Modal -->
+<div class="lm-overlay" id="learnModal" style="display:none">
+  <div class="lm-box">
+    <div class="lm-head">
+      <h3 id="learnTitle">Vocabulary</h3>
+      <button class="lm-close" id="learnClose">✕ Close</button>
+    </div>
+    <div class="lm-grid" id="learnGrid"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SCREEN 2: SESSION
+═══════════════════════════════════════ -->
+<div class="screen" id="screenSession">
+  <div class="session-top">
+    <div class="timer-wrap">
+      <svg class="timer-svg" width="60" height="60" viewBox="0 0 60 60">
+        <circle class="timer-bg"   cx="30" cy="30" r="26"/>
+        <circle class="timer-ring" id="timerRing" cx="30" cy="30" r="26" stroke-dasharray="163.4" stroke-dashoffset="0"/>
+      </svg>
+      <div class="timer-text" id="timerDisplay">--</div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="session-stats">
+      <div class="stat-chip">Q: <span id="qCounter">1</span></div>
+      <div class="stat-chip">✓ <span id="scoreDisplay">0</span></div>
+      <div class="stat-chip">✗ <span id="wrongDisplay">0</span></div>
+    </div>
+  </div>
+  <div class="q-container">
+    <div class="q-card" id="questionCard"></div>
+    <button class="ai-hint-btn" id="aiHintBtn">✨ Hint chahiye? (AI)</button>
+    <div class="ai-hint-text" id="aiHintText"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SCREEN 3: RESULTS
+═══════════════════════════════════════ -->
+<div class="screen" id="screenResults">
+  <div class="confetti-area" id="confettiArea"></div>
+  <div class="results-wrap">
+    <div class="results-card">
+      <div class="score-circle" id="scoreCircle">0%</div>
+      <h2 id="resultTitle">బాగా చేసారు!</h2>
+      <p id="resultMsg"></p>
+      <div class="result-breakdown">
+        <div class="rb-item"><div class="rb-val" id="rb_correct">0</div><div class="rb-lbl">✓ Correct</div></div>
+        <div class="rb-item"><div class="rb-val" id="rb_wrong">0</div><div class="rb-lbl">✗ Wrong</div></div>
+        <div class="rb-item"><div class="rb-val" id="rb_total">0</div><div class="rb-lbl">Total</div></div>
+      </div>
+      <div class="topic-badges" id="topicBadges"></div>
+      <div class="results-actions">
+        <button class="btn-primary"   id="tryAgainBtn">🔄 ఇంకోసారి</button>
+        <button class="btn-secondary" id="goHomeBtn">🏠 Home</button>
+        <button class="btn-outline"   id="downloadProgressBtn">⬇️ Download</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SCREEN 4: PARENT DASHBOARD
+═══════════════════════════════════════ -->
+<div class="screen" id="screenDash">
+  <div class="dashboard-wrap">
+    <div class="dashboard-header">
+      <h2>📊 Parent Dashboard</h2>
+      <div class="child-selector" id="childSelector"></div>
+    </div>
+    <div class="stats-grid" id="dashStats"></div>
+    <div class="sessions-list" id="dashSessions"></div>
+  </div>
+</div>
+
+<!-- Add child modal -->
+<div class="modal-overlay" id="addChildModal">
+  <div class="modal">
+    <h3>👶 పిల్లల పేరు జోడించండి</h3>
+    <input type="text" id="childNameInput" placeholder="Child's name (e.g. Arjun)" maxlength="30">
+    <div class="modal-actions">
+      <button class="btn-primary"  id="addChildBtn"   style="flex:1">Add</button>
+      <button class="btn-outline"  id="closeModalBtn" style="flex:1">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- TELUGU KEYBOARD -->
+<div class="tel-keyboard" id="teluguKeyboard">
+  <div class="kb-header">
+    <span class="kb-header-title">⌨️ తెలుగు కీబోర్డ్</span>
+    <button class="kb-close" id="kbCloseBtn">▼ దాచు</button>
+  </div>
+  <div class="kb-current">
+    <span class="kb-current-label">Input:</span>
+    <span class="kb-current-text" id="kbCurrentText"></span>
+  </div>
+  <div class="kb-tabs">
+    <button class="kb-tab active" data-tab="vowels">అచ్చులు</button>
+    <button class="kb-tab" data-tab="consonants">వ్యంజనాలు</button>
+    <button class="kb-tab" data-tab="matras">గుణింత గుర్తులు</button>
+    <button class="kb-tab" data-tab="vatthulu">వత్తులు</button>
+    <button class="kb-tab" data-tab="specials">విశేషాలు</button>
+  </div>
+  <div class="kb-section active" id="kb-vowels">
+    <div class="kb-group-label">అచ్చులు — Vowels</div>
+    <div class="kb-row" id="kbr-vowels"></div>
+  </div>
+  <div class="kb-section" id="kb-consonants">
+    <div id="kbr-consonants"></div>
+  </div>
+  <div class="kb-section" id="kb-matras">
+    <div class="kb-group-label">గుణింత గుర్తులు — Vowel Matras</div>
+    <div class="kb-row" id="kbr-matras"></div>
+    <div class="kb-group-label" style="margin-top:8px">ఉదాహరణలు — Examples</div>
+    <div class="kb-row" id="kbr-matra-examples"></div>
+  </div>
+  <div class="kb-section" id="kb-vatthulu">
+    <div class="kb-group-label">వత్తులు — Half Consonants</div>
+    <div class="kb-row" id="kbr-vatthulu"></div>
+    <div class="kb-group-label" style="margin-top:8px">సంయుక్తాక్షరాలు — Common Conjuncts</div>
+    <div class="kb-row" id="kbr-conjuncts"></div>
+  </div>
+  <div class="kb-section" id="kb-specials">
+    <div class="kb-group-label">అంకెలు — Telugu Numerals</div>
+    <div class="kb-row" id="kbr-numerals"></div>
+    <div class="kb-group-label" style="margin-top:8px">ద్విత్వాక్షరాలు — Geminated Consonants</div>
+    <div class="kb-row" id="kbr-dwithva"></div>
+    <div class="kb-group-label" style="margin-top:8px">ఇతరాలు — Others</div>
+    <div class="kb-row" id="kbr-others"></div>
+  </div>
+  <div class="kb-actions">
+    <button class="kb-action back"      id="kbBackspaceBtn">⌫ చెరిపేయి</button>
+    <button class="kb-action space"     id="kbSpaceBtn">___ అంతరం (Space)</button>
+    <button class="kb-action submit-kb" id="kbSubmitBtn">✓ సమర్పించు</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SCREENS 5-A/B/C: STORY
+═══════════════════════════════════════ -->
+<div class="screen" id="screenStorySetup">
+  <div class="home-hero" style="padding:24px">
+    <span style="font-size:2.5rem">📖</span>
+    <h1 style="font-size:2rem;margin:6px 0">కథలు చదవండి!</h1>
+    <p>Read stories · Learn words · Build imagination</p>
+  </div>
+  <div style="max-width:900px;margin:0 auto;padding:24px 18px">
+    <div class="story-grade-reminder" id="storyGradeReminder"></div>
+    <div style="background:#fff;border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.07)">
+      <h3 style="font-family:'Fredoka One',cursive;font-size:1.1rem;color:#0F1D32;margin-bottom:4px">🎭 కథ అంశం ఎంచుకోండి (Choose a Theme)</h3>
+      <p style="color:#6B7280;font-size:.82rem;margin-bottom:14px">ఒక అంశం ఎంచుకోండి లేదా "Surprise Me!" నొక్కండి</p>
+      <div class="story-themes" id="storyThemeGrid"></div>
+    </div>
+    <div style="background:#fff;border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.07)">
+      <h3 style="font-family:'Fredoka One',cursive;font-size:1.1rem;color:#0F1D32;margin-bottom:14px">🦸 పాత్ర ఎంచుకోండి (Choose a Character)</h3>
+      <div id="storyCharPick" style="display:flex;flex-wrap:wrap;gap:10px"></div>
+    </div>
+    <div style="background:#fff;border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 2px 10px rgba(0,0,0,.07)">
+      <h3 style="font-family:'Fredoka One',cursive;font-size:1.1rem;color:#0F1D32;margin-bottom:14px">✨ కథను వ్యక్తిగతం చేయండి (Personalize)</h3>
+      <div class="story-setup-row">
+        <label>👦 పేరు</label>
+        <input class="story-input" id="storyChildNameInput" placeholder="Enter child's name (optional)" maxlength="20">
+      </div>
+      <div style="margin-top:14px">
+        <label style="font-size:.9rem;font-weight:700;color:#374151;display:block;margin-bottom:8px">📏 కథ పొడవు (Story Length)</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap" id="storyLengthPick">
+          <button class="dur-btn sel" data-len="short">⚡ Short</button>
+          <button class="dur-btn" data-len="medium">📖 Medium</button>
+          <button class="dur-btn" data-len="long">📚 Long</button>
+        </div>
+      </div>
+    </div>
+    <button class="gen-story-btn" id="generateStoryBtn">📖 కథ ప్రారంభించండి → Generate Story</button>
+    <div class="journal-list" id="storyJournalBox" style="display:none">
+      <h3>📚 నా కథల జర్నల్ (My Story Journal)</h3>
+      <div id="storyJournalList"></div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="screenStoryRead">
+  <div class="session-top" style="flex-wrap:wrap;gap:10px">
+    <div style="flex:1;min-width:160px">
+      <div style="color:rgba(255,255,255,.6);font-size:.8rem;margin-bottom:3px">Reading progress</div>
+      <div class="reading-progress-bar"><div class="reading-progress-fill" id="readingProgressFill" style="width:0%"></div></div>
+    </div>
+    <div class="session-stats">
+      <div class="stat-chip">Words: <span id="wordsReadCount">0</span></div>
+      <div class="stat-chip">⏱️ <span id="readingTimer">0:00</span></div>
+    </div>
+    <button id="finishReadingBtn" style="padding:7px 16px;border-radius:14px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;cursor:pointer;font-family:'Nunito';font-weight:700;font-size:.85rem">✓ Finish Reading</button>
+  </div>
+  <div class="story-reader" id="storyReaderContainer"></div>
+</div>
+
+<div class="screen" id="screenStoryComp">
+  <div class="comp-wrap">
+    <div class="comp-header">
+      <h2>🧠 అవగాహన పరీక్ష</h2>
+      <p>Story Comprehension — answer based on what you read</p>
+    </div>
+    <div id="compQuestionsContainer"></div>
+    <div id="compResultsContainer" style="display:none"></div>
+    <div style="text-align:center;margin-top:20px;padding-bottom:30px">
+      <button class="btn-outline" id="compThemeMenuBtn" style="margin-right:10px">📚 Theme Menu</button>
+      <button class="btn-outline" id="compHomeBtn">🏠 Home</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
