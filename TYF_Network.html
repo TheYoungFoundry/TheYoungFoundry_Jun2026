@@ -18,8 +18,2776 @@
   --shadow:0 14px 34px -16px rgba(45,55,72,.28);
   --shadow-sm:0 6px 16px -8px rgba(45,55,72,.25);
 }
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0;}
+html,body{font-family:var(--body);color:var(--ink);background:var(--light);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+h1,h2,h3,h4{font-family:var(--head);font-weight:400;letter-spacing:.2px;}
+a{color:inherit;text-decoration:none;}
+button{font-family:var(--body);cursor:pointer;border:none;background:none;}
+input,textarea,select{font-family:var(--body);}
+
+/* BLOBS */
+.blob{position:fixed;z-index:0;opacity:.06;pointer-events:none;}
+.blob.tl{top:-60px;left:-60px;width:380px;color:var(--red);}
+.blob.br{bottom:-80px;right:-80px;width:420px;color:var(--green);}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:100;background:rgba(248,249,250,.95);backdrop-filter:blur(12px);border-bottom:2px solid var(--line);}
+.topbar-inner{max-width:1280px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:12px;}
+.brand{font-family:var(--head);font-size:22px;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.brand .r{color:var(--red);}.brand .g{color:var(--green);}.brand .b{color:var(--blue);}
+.tspacer{flex:1;}
+.topbar-nav{display:flex;align-items:center;gap:6px;}
+.topbar-nav button{font-weight:800;font-size:13px;color:var(--muted);padding:7px 14px;border-radius:999px;transition:.15s;}
+.topbar-nav button:hover,.topbar-nav button.active{color:var(--dark);background:var(--soft);}
+.topbar-nav button.cta{background:var(--green);color:#fff;padding:8px 16px;}
+.topbar-nav button.cta:hover{background:#388E3C;}
+.avatar-chip{display:flex;align-items:center;gap:8px;background:var(--soft);border:2px solid var(--line);border-radius:999px;padding:5px 12px 5px 5px;cursor:pointer;transition:.15s;}
+.avatar-chip:hover{border-color:var(--blue);}
+.av{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-family:var(--head);font-size:14px;color:#fff;flex-shrink:0;}
+.av-name{font-size:13px;font-weight:800;color:var(--dark);}
+
+/* SCREENS */
+.screen{display:none;min-height:calc(100vh - 60px);}
+.screen.active{display:block;}
+
+/* LAYOUT */
+.page-wrap{max-width:1280px;margin:0 auto;padding:24px;}
+.two-col{display:grid;grid-template-columns:280px 1fr;gap:24px;align-items:start;}
+.three-col{display:grid;grid-template-columns:240px 1fr 300px;gap:24px;align-items:start;}
+
+/* CARDS */
+.card{background:var(--paper);border:2px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:var(--shadow-sm);transition:.2s;}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow);}
+.card-body{padding:20px;}
+
+/* BTN */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 22px;border-radius:999px;font-family:var(--body);font-weight:900;font-size:14px;cursor:pointer;border:none;transition:all .2s;}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 16px -4px rgba(0,0,0,.12);}
+.btn.green{background:var(--green);color:#fff;}
+.btn.blue{background:var(--blue);color:#fff;}
+.btn.red{background:var(--red);color:#fff;}
+.btn.orange{background:var(--orange);color:#fff;}
+.btn.purple{background:var(--purple);color:#fff;}
+.btn.ghost{background:#fff;border:2px solid var(--line);color:var(--dark);}
+.btn.ghost:hover{border-color:var(--blue);}
+.btn.sm{padding:7px 14px;font-size:12px;}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none;}
+
+/* FORM */
+.field{margin-bottom:16px;}
+.field label{display:block;font-weight:800;font-size:13px;color:var(--dark);margin-bottom:6px;}
+.field input,.field textarea,.field select{width:100%;padding:11px 14px;border:2px solid var(--line);border-radius:14px;font-size:14px;font-weight:700;color:var(--ink);background:#fff;outline:none;transition:border-color .15s;}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--blue);}
+.field textarea{resize:vertical;min-height:100px;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* BADGE */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:900;letter-spacing:.3px;}
+.badge.green{background:#e8f5e9;color:var(--green);}
+.badge.blue{background:#e3f2fd;color:var(--blue);}
+.badge.orange{background:#fff3e0;color:var(--orange);}
+.badge.red{background:#ffebee;color:var(--red);}
+.badge.purple{background:#f3e5f5;color:var(--purple);}
+.badge.yellow{background:#fffde7;color:#F57F17;}
+.badge.muted{background:var(--soft);color:var(--muted);}
+
+/* TABS */
+.tabs{display:flex;gap:4px;background:var(--soft);border-radius:16px;padding:4px;margin-bottom:20px;}
+.tab{flex:1;padding:9px;border-radius:12px;font-weight:800;font-size:13px;color:var(--muted);cursor:pointer;text-align:center;transition:.15s;border:none;background:none;}
+.tab.active{background:#fff;color:var(--dark);box-shadow:var(--shadow-sm);}
+
+/* SECTION LABEL */
+.sectlab{font-family:var(--head);font-size:20px;color:var(--dark);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+
+/* SIDEBAR CARD */
+.sidebar-card{background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--shadow-sm);margin-bottom:16px;}
+.sidebar-card h4{font-family:var(--head);font-size:16px;margin-bottom:12px;color:var(--dark);}
+
+/* POST CARD */
+.post-card{background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--shadow-sm);margin-bottom:16px;transition:.2s;}
+.post-card:hover{border-color:var(--line);box-shadow:var(--shadow);}
+.post-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.post-av{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-family:var(--head);font-size:18px;color:#fff;flex-shrink:0;}
+.post-meta{flex:1;}
+.post-author{font-weight:900;font-size:14px;color:var(--dark);}
+.post-sub{font-size:12px;color:var(--muted);font-weight:700;margin-top:2px;}
+.post-community-tag{font-size:11px;font-weight:900;padding:2px 8px;border-radius:999px;margin-left:6px;}
+.post-body{font-size:14px;font-weight:700;color:var(--ink);line-height:1.65;margin-bottom:14px;}
+.post-image{width:100%;border-radius:14px;max-height:280px;object-fit:cover;margin-bottom:14px;display:block;}
+.post-pending{background:#fff8e1;border:2px solid var(--yellow);border-radius:12px;padding:10px 14px;font-size:13px;font-weight:800;color:#E65100;margin-bottom:12px;}
+.reactions{display:flex;gap:6px;flex-wrap:wrap;padding-top:12px;border-top:2px solid var(--soft);}
+.rxn-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;border:2px solid var(--line);background:#fff;font-size:13px;font-weight:800;color:var(--muted);cursor:pointer;transition:.15s;}
+.rxn-btn:hover{border-color:var(--blue);color:var(--blue);transform:scale(1.05);}
+.rxn-btn.reacted{background:var(--soft);border-color:var(--blue);color:var(--blue);}
+.rxn-count{font-size:12px;font-weight:900;}
+
+/* COMMUNITY CARD */
+.comm-card{background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--shadow-sm);transition:.2s;cursor:pointer;}
+.comm-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--blue);}
+.comm-emoji{font-size:2.2rem;margin-bottom:8px;display:block;}
+.comm-name{font-family:var(--head);font-size:17px;margin-bottom:4px;}
+.comm-desc{font-size:12px;color:var(--muted);font-weight:700;line-height:1.5;margin-bottom:10px;}
+.comm-footer{display:flex;align-items:center;justify-content:space-between;}
+.comm-members{font-size:12px;font-weight:900;color:var(--muted);}
+
+/* COMMUNITY GRID */
+.comm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
+
+/* PROFILE */
+.profile-hero{background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:24px;padding:30px;color:#fff;margin-bottom:20px;position:relative;overflow:hidden;}
+.profile-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.08);}
+.profile-av{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.25);display:grid;place-items:center;font-family:var(--head);font-size:28px;margin-bottom:12px;border:3px solid rgba(255,255,255,.4);}
+.profile-name{font-family:var(--head);font-size:24px;margin-bottom:4px;}
+.profile-sub{font-size:13px;opacity:.8;font-weight:700;}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;}
+.pstat{text-align:center;background:rgba(255,255,255,.12);border-radius:14px;padding:10px;}
+.pstat-num{font-family:var(--head);font-size:22px;}
+.pstat-label{font-size:11px;font-weight:700;opacity:.8;margin-top:2px;}
+
+/* SCORE RING */
+.score-ring{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--yellow),var(--orange));border-radius:16px;padding:10px 16px;color:#fff;margin-top:12px;}
+.score-val{font-family:var(--head);font-size:28px;}
+.score-label{font-size:12px;font-weight:900;opacity:.9;}
+
+/* AI REVIEW */
+.ai-panel{border-radius:16px;padding:14px 16px;margin-top:12px;display:none;}
+.ai-panel.ok{background:#e8f5e9;border:2px solid #a5d6a7;}
+.ai-panel.warn{background:#fff8e1;border:2px solid #ffe082;}
+.ai-panel.block{background:#ffebee;border:2px solid #ef9a9a;}
+.ai-panel-title{font-weight:900;font-size:14px;margin-bottom:4px;}
+.ai-panel.ok .ai-panel-title{color:#2E7D32;}
+.ai-panel.warn .ai-panel-title{color:#E65100;}
+.ai-panel.block .ai-panel-title{color:#C62828;}
+.ai-panel-msg{font-size:13px;font-weight:700;color:var(--muted);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(45,55,72,.55);backdrop-filter:blur(4px);z-index:500;display:none;place-items:center;}
+.modal-overlay.open{display:grid;}
+.modal{background:#fff;border-radius:24px;padding:30px;max-width:480px;width:calc(100% - 40px);box-shadow:0 24px 64px -12px rgba(45,55,72,.4);position:relative;max-height:90vh;overflow-y:auto;}
+.modal-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;background:var(--soft);border:none;cursor:pointer;font-size:16px;display:grid;place-items:center;color:var(--muted);}
+.modal-close:hover{background:var(--line);}
+.modal h3{font-family:var(--head);font-size:22px;margin-bottom:6px;}
+.modal p.sub{font-size:13px;color:var(--muted);font-weight:700;margin-bottom:20px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;z-index:600;background:var(--dark);color:#fff;padding:12px 20px;border-radius:14px;font-size:13px;font-weight:800;box-shadow:var(--shadow);opacity:0;transform:translateY(10px);transition:.3s;pointer-events:none;}
+.toast.show{opacity:1;transform:none;}
+
+/* PROPOSAL CARD */
+.proposal-card{background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px;display:flex;align-items:center;gap:14px;}
+.prop-votes{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;}
+.prop-vote-btn{width:32px;height:32px;border-radius:10px;border:2px solid var(--line);background:#fff;font-size:16px;cursor:pointer;display:grid;place-items:center;transition:.15s;}
+.prop-vote-btn:hover{border-color:var(--blue);}
+.prop-vote-btn.up:hover{background:#e8f5e9;border-color:var(--green);}
+.prop-vote-btn.down:hover{background:#ffebee;border-color:var(--red);}
+.prop-score{font-family:var(--head);font-size:18px;color:var(--dark);}
+.prop-info{flex:1;}
+.prop-name{font-weight:900;font-size:15px;color:var(--dark);margin-bottom:3px;}
+.prop-desc{font-size:12px;color:var(--muted);font-weight:700;}
+
+/* MOD LOG */
+.mod-row{background:var(--paper);border:2px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;}
+.mod-icon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:18px;flex-shrink:0;}
+.mod-info{flex:1;}
+.mod-title{font-weight:900;font-size:13px;color:var(--dark);}
+.mod-sub{font-size:12px;color:var(--muted);font-weight:700;margin-top:2px;}
+
+/* PENDING QUEUE */
+.pending-item{background:var(--paper);border:2px solid var(--yellow);border-radius:16px;padding:16px;margin-bottom:12px;}
+.pending-item .pi-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.pending-item .pi-text{font-size:14px;font-weight:700;color:var(--ink);line-height:1.6;margin-bottom:12px;}
+.pending-item .pi-actions{display:flex;gap:8px;}
+
+/* MENTOR BADGE */
+.mentor-tag{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,var(--orange),var(--yellow));color:#fff;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:900;}
+
+/* QUEST CARD */
+.quest-card{background:linear-gradient(135deg,var(--blue),var(--teal));border-radius:20px;padding:20px;color:#fff;margin-bottom:16px;position:relative;overflow:hidden;}
+.quest-card::after{content:'🏆';position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:3rem;opacity:.3;}
+.quest-title{font-family:var(--head);font-size:18px;margin-bottom:4px;}
+.quest-desc{font-size:13px;opacity:.85;font-weight:700;margin-bottom:12px;}
+.quest-meta{font-size:12px;font-weight:900;opacity:.7;}
+
+/* FOUNDRY FELLOW */
+.fellow-banner{background:linear-gradient(135deg,var(--yellow),var(--orange));border-radius:20px;padding:18px;margin-bottom:16px;display:flex;align-items:center;gap:14px;}
+.fellow-icon{font-size:2.5rem;}
+.fellow-text h4{font-family:var(--head);font-size:16px;color:#fff;margin-bottom:3px;}
+.fellow-text p{font-size:12px;color:rgba(255,255,255,.85);font-weight:700;}
+
+/* SEPARATOR */
+.sep{height:2px;background:var(--soft);border-radius:999px;margin:20px 0;}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:48px 24px;color:var(--muted);}
+.empty .empty-icon{font-size:3rem;margin-bottom:12px;display:block;}
+.empty p{font-size:14px;font-weight:700;}
+
+/* LOGIN SCREEN */
+.login-wrap{min-height:100vh;display:grid;place-items:center;padding:24px;background:var(--light);}
+.login-card{background:var(--paper);border:2px solid var(--line);border-radius:30px;padding:40px;max-width:460px;width:100%;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+.login-card::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--blue),var(--purple));}
+.login-brand{font-family:var(--head);font-size:28px;margin-bottom:4px;}
+.login-tagline{font-size:14px;color:var(--muted);font-weight:700;margin-bottom:28px;}
+.login-tabs{display:flex;gap:4px;background:var(--soft);border-radius:14px;padding:4px;margin-bottom:24px;}
+.login-tab{flex:1;padding:9px;border-radius:10px;font-weight:800;font-size:13px;color:var(--muted);cursor:pointer;text-align:center;transition:.15s;border:none;background:none;}
+.login-tab.active{background:#fff;color:var(--dark);box-shadow:var(--shadow-sm);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .three-col{grid-template-columns:1fr;}
+  .two-col{grid-template-columns:1fr;}
+  .field-row{grid-template-columns:1fr;}
+  .comm-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));}
+}
+@media(max-width:560px){
+  .topbar-nav .desktop-only{display:none;}
+  .page-wrap{padding:16px;}
+  .profile-stats{grid-template-columns:repeat(3,1fr);}
+}
+
+/* NOTIFICATION DOT */
+.notif-dot{width:8px;height:8px;background:var(--red);border-radius:50%;display:inline-block;margin-left:4px;vertical-align:middle;}
+
+/* CHAT (parent communities) */
+.chat-bubble{background:var(--soft);border-radius:16px 16px 16px 4px;padding:10px 14px;margin-bottom:10px;max-width:85%;}
+.chat-bubble.mine{background:var(--blue);color:#fff;border-radius:16px 16px 4px 16px;margin-left:auto;}
+.chat-author{font-size:11px;font-weight:900;color:var(--muted);margin-bottom:3px;}
+.chat-text{font-size:13px;font-weight:700;line-height:1.5;}
+.chat-input-row{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:2px solid var(--line);}
+.chat-input-row input{flex:1;padding:10px 14px;border:2px solid var(--line);border-radius:999px;font-size:13px;font-weight:700;outline:none;}
+.chat-input-row input:focus{border-color:var(--blue);}
+
+/* RAINBOW BAR */
+.rainbow-bar{height:4px;background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--blue),var(--purple));border-radius:999px;margin-bottom:20px;}
+
+/* REACTION TOOLTIPS */
+[data-tip]{position:relative;}
+[data-tip]::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(4px);background:var(--dark);color:#fff;font-size:11px;font-weight:800;padding:6px 10px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;transition:.18s;z-index:50;box-shadow:var(--shadow-sm);}
+[data-tip]::before{content:'';position:absolute;bottom:calc(100% + 2px);left:50%;transform:translateX(-50%) translateY(4px);border:5px solid transparent;border-top-color:var(--dark);opacity:0;pointer-events:none;transition:.18s;z-index:50;}
+[data-tip]:hover::after,[data-tip]:hover::before{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* INLINE VALIDATION ERROR */
+.val-err{display:none;background:#ffebee;border:2px solid #ef9a9a;border-radius:12px;padding:8px 12px;font-size:12px;font-weight:800;color:#C62828;margin-top:8px;}
+.val-err.show{display:block;}
+
+/* THREAD / FORUM */
+.thread-row{background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:12px;display:flex;gap:14px;align-items:flex-start;transition:.15s;cursor:pointer;}
+.thread-row:hover{border-color:var(--blue);box-shadow:var(--shadow-sm);}
+.vote-col{display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;}
+.vote-btn{width:30px;height:28px;border-radius:8px;border:2px solid var(--line);background:#fff;font-size:14px;cursor:pointer;display:grid;place-items:center;transition:.15s;color:var(--muted);}
+.vote-btn:hover{border-color:var(--blue);}
+.vote-btn.up.on{background:#e8f5e9;border-color:var(--green);color:var(--green);}
+.vote-btn.down.on{background:#ffebee;border-color:var(--red);color:var(--red);}
+.vote-score{font-family:var(--head);font-size:16px;color:var(--dark);}
+.thread-main{flex:1;min-width:0;}
+.thread-title{font-weight:900;font-size:15px;color:var(--dark);margin-bottom:4px;}
+.thread-sub{font-size:12px;color:var(--muted);font-weight:700;}
+.thread-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.thread-tag{font-size:10px;font-weight:900;padding:2px 8px;border-radius:999px;background:var(--soft);color:var(--muted);}
+.comment-box{background:var(--paper);border:2px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;gap:12px;}
+.comment-body{flex:1;}
+.comment-author{font-weight:900;font-size:13px;color:var(--dark);}
+.comment-text{font-size:13px;font-weight:700;color:var(--ink);line-height:1.55;margin-top:4px;}
+
+/* GRADE BAND ROW */
+.gradeband-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.gradeband-btn{padding:7px 14px;border-radius:999px;border:2px solid var(--line);background:#fff;font-weight:800;font-size:12px;color:var(--muted);cursor:pointer;transition:.15s;}
+.gradeband-btn:hover{border-color:var(--teal);}
+.gradeband-btn.active{background:var(--teal);color:#fff;border-color:var(--teal);}
+
+/* SUGGESTIONS COMING SOON */
+.coming-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
+.coming-item{background:var(--paper);border:2px dashed var(--line);border-radius:16px;padding:16px;display:flex;gap:10px;align-items:flex-start;}
+.coming-item .ci-emoji{font-size:1.6rem;}
+
+/* SHARE BAR */
+.share-bar{display:flex;gap:6px;flex-wrap:wrap;padding-top:10px;border-top:2px solid var(--soft);}
+.share-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:999px;border:2px solid var(--line);background:#fff;font-size:12px;font-weight:800;color:var(--muted);cursor:pointer;transition:.15s;}
+.share-btn:hover{transform:scale(1.05);}
+.share-btn.wa:hover{border-color:#25D366;color:#25D366;}
+.share-btn.em:hover{border-color:var(--blue);color:var(--blue);}
+.share-btn.rp:hover{border-color:var(--purple);color:var(--purple);}
+
+/* USER BASE COUNTER */
+#ub-counter{position:fixed;bottom:18px;right:18px;z-index:200;background:rgba(45,55,72,.88);backdrop-filter:blur(8px);color:#fff;padding:8px 14px;border-radius:14px;font-size:12px;font-weight:800;display:none;box-shadow:var(--shadow-sm);pointer-events:none;}
+
+/* WALL */
+.wall-privacy-toggle{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;border:2px solid rgba(255,255,255,.3);background:rgba(255,255,255,.15);color:#fff;font-weight:900;font-size:12px;cursor:pointer;transition:.15s;}
+.wall-privacy-toggle:hover{background:rgba(255,255,255,.25);}
+
+/* NO PHOTO NOTE */
+.no-photo-note{background:#e3f2fd;border:2px solid #90caf9;border-radius:12px;padding:10px 14px;font-size:12px;font-weight:700;color:#1565C0;margin-bottom:14px;}
+
+/* MFC BANNER */
+.mfc-banner{background:linear-gradient(135deg,var(--orange),var(--yellow));border-radius:16px;padding:14px 16px;margin-bottom:12px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:.15s;}
+.mfc-banner:hover{transform:translateY(-2px);box-shadow:var(--shadow);}
+.mfc-banner-text h4{font-family:var(--head);font-size:14px;color:#fff;margin-bottom:2px;}
+.mfc-banner-text p{font-size:11px;font-weight:700;color:rgba(255,255,255,.85);}
+.coming-item .ci-title{font-weight:900;font-size:13px;color:var(--dark);}
+.coming-item .ci-desc{font-size:11px;color:var(--muted);font-weight:700;margin-top:2px;line-height:1.45;}
+
+/* FOOTER */
+.site-footer{max-width:1280px;margin:0 auto;padding:20px 24px 40px;text-align:center;}
+.site-footer button{font-weight:800;font-size:13px;color:var(--blue);background:none;border:none;cursor:pointer;}
 </style>
 </head>
 <body>
+
+<!-- BACKGROUND BLOBS -->
+<svg class="blob tl" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <path fill="currentColor" d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,79.6,-45.8C87.4,-32.6,90,-16.3,89.1,-.5C88.2,15.3,83.8,30.6,75.5,43.6C67.2,56.6,55,67.2,41.2,74.6C27.4,82,12,86.1,-2,85.3C-16,84.6,-32,79,-46.5,71.6C-61,64.2,-74,55,-81.2,42.4C-88.4,29.9,-89.8,14.9,-88.2,.9C-86.5,-13.2,-81.7,-26.4,-74.4,-38C-67,-49.7,-57,-59.9,-44.2,-67.5C-31.4,-75.2,-15.7,-80.4,.6,-81.3C16.9,-82.2,30.6,-83.6,44.7,-76.4Z" transform="translate(100 100)"/>
+</svg>
+<svg class="blob br" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <path fill="currentColor" d="M39.5,-65.3C52.3,-59.7,64.5,-51.4,71.5,-39.8C78.5,-28.2,80.4,-14.1,79.8,-.3C79.1,13.5,75.9,27.1,69.4,39.4C62.9,51.8,53.1,62.9,40.8,70.3C28.5,77.8,14.2,81.6,.4,81C-13.4,80.4,-26.8,75.3,-39,68.1C-51.2,60.8,-62.3,51.3,-70.2,39.5C-78.1,27.7,-82.9,13.8,-83.1,-.2C-83.3,-14.1,-79,-28.2,-71.4,-39.8C-63.8,-51.4,-52.9,-60.3,-40.5,-66.1C-28.2,-71.9,-14.1,-74.6,-.3,-74.2C14.5,-73.7,26.7,-70.9,39.5,-65.3Z" transform="translate(100 100)"/>
+</svg>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ============================================================
+     SCREEN: LOGIN
+============================================================ -->
+<div class="screen active" id="screen-login">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-brand"><span class="r">The Young</span> <span class="g">Foundry</span> <span class="b">Network</span></div>
+      <div class="login-tagline">A safe space where young minds connect, create & grow 🚀</div>
+      <div class="rainbow-bar"></div>
+
+      <div class="login-tabs">
+        <button class="login-tab active" onclick="switchLoginTab('student')">👧 Student</button>
+        <button class="login-tab" onclick="switchLoginTab('parent')">👨‍👩‍👧 Parent</button>
+        <button class="login-tab" onclick="switchLoginTab('admin')">🛡️ Admin</button>
+      </div>
+
+      <!-- Student Login -->
+      <div id="login-student">
+        <div class="field">
+          <label>School ID</label>
+          <input type="text" id="s-schoolid" placeholder="e.g. SCH2026-4A-042" />
+        </div>
+        <div class="field">
+          <label>Display Name</label>
+          <input type="text" id="s-name" placeholder="Your first name" />
+        </div>
+        <div class="field">
+          <label>Grade</label>
+          <select id="s-grade">
+            <option value="">Select grade...</option>
+            <option value="1">Grade 1</option>
+            <option value="2">Grade 2</option>
+            <option value="3">Grade 3</option>
+            <option value="4">Grade 4</option>
+            <option value="5">Grade 5</option>
+            <option value="6">Grade 6</option>
+            <option value="7">Grade 7</option>
+            <option value="8">Grade 8</option>
+            <option value="9">Grade 9</option>
+            <option value="10">Grade 10</option>
+          </select>
+        </div>
+        <button class="btn green" style="width:100%" onclick="studentLogin()">Enter Network →</button>
+        <p style="text-align:center;margin-top:12px;font-size:12px;color:var(--muted);font-weight:700;">New? Your parent must approve your account first.</p>
+        <div style="margin-top:12px;text-align:center;">
+          <button class="btn ghost sm" onclick="switchLoginTab('register')">Request New Account</button>
+        </div>
+      </div>
+
+      <!-- Parent Login -->
+      <div id="login-parent" style="display:none">
+        <div class="field">
+          <label>Parent Name</label>
+          <input type="text" id="p-name" placeholder="Your full name" />
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input type="email" id="p-email" placeholder="your@email.com" />
+        </div>
+        <button class="btn purple" style="width:100%" onclick="parentLogin()">Parent Portal →</button>
+      </div>
+
+      <!-- Register -->
+      <div id="login-register" style="display:none">
+<div style="background:var(--soft);border-radius:14px;padding:14px;margin-bottom:16px;font-size:13px;font-weight:700;color:var(--muted);">📋 Fill in the details below. Your parent will receive an email with your login password to approve your account.</div>
+<div class="field">
+  <label>Child's Full Name</label>
+  <input type="text" id="r-name" placeholder="Full name" />
+</div>
+<div class="field">
+  <label>Username (displayed on posts)</label>
+  <input type="text" id="r-username" placeholder="e.g. curious_coder_42" />
+</div>
+<div class="field">
+  <label>Student Email</label>
+  <input type="email" id="r-email" placeholder="student@email.com" />
+</div>
+<div class="field-row">
+  <div class="field">
+    <label>School ID</label>
+    <input type="text" id="r-schoolid" placeholder="SCH2026-..." />
+  </div>
+  <div class="field">
+    <label>Year of Birth</label>
+    <select id="r-yob">
+      <option value="">Year...</option>
+      <option>2008</option><option>2009</option><option>2010</option>
+      <option>2011</option><option>2012</option><option>2013</option>
+      <option>2014</option><option>2015</option><option>2016</option>
+      <option>2017</option><option>2018</option><option>2019</option><option>2020</option>
+    </select>
+  </div>
+</div>
+<div class="field">
+  <label>School Name</label>
+  <input type="text" id="r-school" placeholder="e.g. DPS Bangalore" />
+</div>
+<div class="field-row">
+  <div class="field">
+    <label>Current Grade</label>
+    <select id="r-grade">
+      <option value="">Grade...</option>
+      <option value="1">1</option><option value="2">2</option>
+      <option value="3">3</option><option value="4">4</option>
+      <option value="5">5</option><option value="6">6</option>
+      <option value="7">7</option><option value="8">8</option>
+      <option value="9">9</option><option value="10">10</option>
+    </select>
+  </div>
+  <div class="field">
+    <label>Grade next year</label>
+    <select id="r-nextgrade">
+      <option value="">Next grade...</option>
+      <option value="2">2</option><option value="3">3</option>
+      <option value="4">4</option><option value="5">5</option>
+      <option value="6">6</option><option value="7">7</option>
+      <option value="8">8</option><option value="9">9</option>
+      <option value="10">10</option><option value="11">11</option>
+    </select>
+  </div>
+</div>
+<div class="field">
+  <label>Parent's Full Name</label>
+  <input type="text" id="r-parentname" placeholder="Parent's name" />
+</div>
+<div class="field">
+  <label>Parent Email (approval + notifications)</label>
+  <input type="email" id="r-pemail" placeholder="parent@email.com" />
+</div>
+<div id="r-password-box" style="display:none;background:var(--soft);border:2px solid var(--green);border-radius:12px;padding:12px 14px;margin-bottom:14px">
+  <div style="font-weight:900;font-size:13px;color:var(--green);margin-bottom:4px">✅ Account Ready — Password Generated</div>
+  <div style="font-size:12px;font-weight:700;color:var(--dark);margin-bottom:4px">Temporary password: <span id="r-gen-password" style="font-family:monospace;background:#fff;padding:2px 8px;border-radius:6px;border:1px solid var(--line)"></span></div>
+  <div style="font-size:11px;color:var(--muted);font-weight:700">Save this password. A notification has been sent to the parent email to approve the account.</div>
+</div>
+<button class="btn green" style="width:100%" id="r-submit-btn" onclick="requestAccount()">Generate Password &amp; Send to Parent →</button>
+<div style="margin-top:12px;text-align:center;">
+  <button class="btn ghost sm" onclick="switchLoginTab('student')">← Back to Login</button>
+</div>
+      </div>
+
+      <!-- Admin Login -->
+      <div id="login-admin" style="display:none">
+        <div class="field">
+          <label>Admin Key</label>
+          <input type="password" id="a-key" placeholder="Enter admin key" />
+        </div>
+        <button class="btn red" style="width:100%" onclick="adminLogin()">Admin Access →</button>
+      </div>
+
+      <div class="sep"></div>
+      <div style="text-align:center;font-size:12px;color:var(--muted);font-weight:700;">
+        🔒 Safe platform for Grades 4–10 · Parent-approved accounts only · AI-moderated content
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TOPBAR (shown after login)
+============================================================ -->
+<div class="topbar" id="main-topbar" style="display:none">
+  <div class="topbar-inner">
+    <div class="brand" onclick="showScreen('feed')"><span class="r">TYF</span> <span class="g">Network</span></div>
+    <div class="tspacer"></div>
+    <div class="topbar-nav">
+      <button onclick="showScreen('feed')" id="nav-feed" class="desktop-only">🏠 Feed</button>
+      <button onclick="showScreen('communities')" id="nav-communities" class="desktop-only">🌐 Communities</button>
+      <button onclick="showScreen('quests')" id="nav-quests" class="desktop-only">🏆 Quests</button>
+      <button onclick="showScreen('wall')" id="nav-wall" class="desktop-only">🧱 My Wall</button>
+      <button onclick="showScreen('free-resources')" id="nav-free-resources" class="desktop-only">🎁 Free Resources</button>
+      <button onclick="showScreen('profile')" id="nav-profile" class="desktop-only">👤 Profile</button>
+      <button onclick="openMFC()" class="btn ghost sm desktop-only" title="Go to My First Chapter">📖 Chapter</button>
+      <button onclick="openPostModal()" class="btn green sm desktop-only">+ Post</button>
+      <div class="avatar-chip" onclick="showScreen('profile')" id="topbar-avatar" style="display:none">
+        <div class="av" id="topbar-av-circle">?</div>
+        <span class="av-name" id="topbar-av-name">User</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN: FEED
+============================================================ -->
+<div class="screen" id="screen-feed">
+  <div class="page-wrap">
+    <div class="three-col">
+      <!-- LEFT SIDEBAR -->
+      <div>
+        <div class="sidebar-card">
+          <h4>My Communities</h4>
+          <div id="my-communities-list"></div>
+          <button class="btn ghost sm" style="width:100%;margin-top:8px" onclick="showScreen('communities')">Browse All →</button>
+        </div>
+        <div class="sidebar-card">
+          <h4>🏙️ City Quest</h4>
+          <div class="quest-card">
+            <div class="quest-title">This Week's Quest</div>
+            <div class="quest-desc" id="active-quest-desc">Photograph something that represents your neighborhood</div>
+            <div class="quest-meta" id="active-quest-deadline">Ends Sunday · 📸 Photography</div>
+          </div>
+          <button class="btn orange sm" style="width:100%" onclick="openPostModal('city-bulletin')">Submit Entry →</button>
+        </div>
+        <div class="sidebar-card" id="pending-approval-sidebar" style="display:none">
+          <h4>⏳ Pending Approval <span class="notif-dot"></span></h4>
+          <p style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:10px">Posts waiting for your child to review</p>
+          <button class="btn yellow sm" style="width:100%;background:var(--yellow);color:var(--dark)" onclick="showScreen('parent-queue')">Review Queue →</button>
+        </div>
+      </div>
+
+      <!-- MAIN FEED -->
+      <div>
+        <div class="tabs">
+          <button class="tab active" onclick="switchFeedTab('all')">🌐 All</button>
+          <button class="tab" onclick="switchFeedTab('mine')">✨ My Communities</button>
+          <button class="tab" onclick="switchFeedTab('trending')">🔥 Trending</button>
+          <button class="tab" onclick="switchFeedTab('city')">🏙️ City Board</button>
+        </div>
+        <div id="feed-posts"></div>
+      </div>
+
+      <!-- RIGHT SIDEBAR -->
+      <div>
+        <div id="foundry-fellow-banner" style="display:none"></div>
+        <div class="sidebar-card">
+          <h4>🌟 Foundry Score</h4>
+          <div id="score-display"></div>
+          <p style="font-size:12px;color:var(--muted);font-weight:700;margin-top:8px">Earn points by posting, inspiring others & mentoring</p>
+        </div>
+        <div class="sidebar-card" id="mentor-sidebar" style="display:none">
+          <h4>🎓 Mentor Bridge</h4>
+          <p style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:10px">You're a Mentor! Share tips with younger grades.</p>
+          <button class="btn orange sm" style="width:100%" onclick="openPostModal(null, true)">Post a Tip →</button>
+        </div>
+        <div class="sidebar-card">
+          <h4>👥 Suggested Communities</h4>
+          <div id="suggested-communities"></div>
+        </div>
+        <div class="mfc-banner" onclick="window.location='myfirstchapter.html'">
+          <span style="font-size:2rem">📖</span>
+          <div class="mfc-banner-text">
+            <h4>My First Chapter</h4>
+            <p>Document your learning journey from day one!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN: COMMUNITIES
+============================================================ -->
+<div class="screen" id="screen-communities">
+  <div class="page-wrap">
+    <div class="two-col">
+      <div>
+        <div class="sidebar-card">
+          <h4>🏷️ Filter</h4>
+          <div style="display:flex;flex-direction:column;gap:6px;" id="comm-filter-list"></div>
+        </div>
+        <div class="sidebar-card">
+          <h4>💡 Suggest a Community</h4>
+          <p style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:10px">Have an idea? Propose it and get votes!</p>
+          <button class="btn blue sm" style="width:100%" onclick="openSuggestModal()">+ Suggest →</button>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <div class="sectlab" style="margin:0">🌐 All Communities</div>
+          <button class="btn ghost sm" onclick="showScreen('proposals')">🗳️ Proposals (<span id="proposal-count">0</span>)</button>
+        </div>
+        <div class="comm-grid" id="all-communities-grid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN: COMMUNITY DETAIL
+============================================================ -->
+<div class="screen" id="screen-community-detail">
+  <div class="page-wrap">
+    <button class="btn ghost sm" onclick="showScreen('communities')" style="margin-bottom:16px">← Back</button>
+    <div id="comm-detail-header" style="border-radius:20px;padding:24px;margin-bottom:20px;color:#fff;position:relative;overflow:hidden;">
+      <div style="position:relative;z-index:1;">
+        <div id="comm-detail-emoji" style="font-size:3rem;margin-bottom:8px;display:block;"></div>
+        <div id="comm-detail-name" style="font-family:'Fredoka One',cursive;font-size:28px;margin-bottom:4px;"></div>
+        <div id="comm-detail-desc" style="font-size:14px;opacity:.85;font-weight:700;margin-bottom:12px;"></div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <span id="comm-detail-members" style="font-size:13px;font-weight:900;opacity:.8;"></span>
+          <button class="btn sm" id="comm-join-btn" onclick="toggleJoinCommunity()" style="background:rgba(255,255,255,.2);color:#fff;border:2px solid rgba(255,255,255,.3);"></button>
+          <span id="comm-parent-badge" class="badge" style="display:none;background:rgba(255,255,255,.2);color:#fff;"></span>
+        </div>
+      </div>
+    </div>
+    <div class="two-col" id="comm-detail-layout">
+      <div id="comm-detail-sidebar"></div>
+      <div id="comm-detail-posts"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN: PROPOSALS
+============================================================ -->
+<div class="screen" id="screen-proposals">
+  <div class="page-wrap">
+    <button class="btn ghost sm" onclick="showScreen('communities')" style="margin-bottom:16px">← Back to Communities</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div class="sectlab" style="margin:0">🗳️ Community Proposals</div>
+      <button class="btn blue sm" onclick="openSuggestModal()">+ Suggest a Community</button>
+    </div>
+    <div style="background:#e3f2fd;border:2px solid #90caf9;border-radius:14px;padding:14px;margin-bottom:20px;font-size:13px;font-weight:700;color:#1565C0;">
+      💡 Vote on community ideas! Top 3 proposals will be reviewed by admins for creation. Proposers earn a <strong>Founder</strong> badge if their community is created.
+    </div>
+    <div id="proposals-list"></div>
+    <div id="top-proposals-admin" style="display:none">
+      <div class="sep"></div>
+      <div class="sectlab">🏆 Top 3 — Admin Review</div>
+      <div id="top3-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN: QUESTS
+============================================================ -->
+<div class="screen" id="screen-quests">
+  <div class="page-wrap">
+    <div class="sectlab">🏆 City Quests</div>
+    <div style="background:linear-gradient(135deg,var(--blue),var(--teal));border-radius:20px;padding:24px;color:#fff;margin-bottom:24px;">
+      <div style="font-family:'Fredoka One',cursive;font-size:22px;margin-bottom:6px;">Weekly Community Challenges</div>
+      <div style="font-size:14px;opacity:.85;font-weight:700;">Complete quests, earn reactions, build your Foundry Score. The most-reacted submission becomes a Foundry Fellow!</div>
+    </div>
+    <div id="quests-list"></div>
+  </div>
+</div>
+
+<!-- SCREEN: FREE RESOURCES -->
+<div class="screen" id="screen-free-resources">
+  <div class="page-wrap">
+    <div class="sectlab">🎁 Free Resources</div>
+    <p style="font-size:14px;color:var(--muted);font-weight:700;margin-bottom:24px">Free tools and activities from The Young Foundry — no signup needed for guests.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px">
+      <div class="card" style="cursor:pointer" onclick="openMFC()">
+        <div class="card-body">
+          <div style="font-size:2.5rem;margin-bottom:10px">✍️</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--purple)">MyFirstChapter</div>
+          <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">A narrative writing studio. Pick a genre, roll plot dice, write chapters, and publish to Books &amp; More.</p>
+          <span class="badge purple">Writing Studio</span>
+        </div>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="openTool('telugu-learning/index.html')">
+        <div class="card-body">
+          <div style="font-size:2.5rem;margin-bottom:10px">🇮🇳</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--teal)">Telugu Velugu</div>
+          <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">Learn Telugu letters, words, and stories in a fun interactive way. Perfect for beginners!</p>
+          <span class="badge" style="background:#e0f2f1;color:var(--teal)">Telugu Learning</span>
+        </div>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="openTool('math-quest/index.html')">
+        <div class="card-body">
+          <div style="font-size:2.5rem;margin-bottom:10px">🔢</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--orange)">Math Quest</div>
+          <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">Solve puzzles, beat challenges, and master maths through exciting quests and games!</p>
+          <span class="badge orange">Math Games</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div style="font-size:2.5rem;margin-bottom:10px">🎲</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--orange)">Story Starter Kit</div>
+          <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">20 plot twist cards, character builders, and scene starters to kick off any story.</p>
+          <span class="badge orange">Coming Soon</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div style="font-size:2.5rem;margin-bottom:10px">🔬</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--teal)">Science Journal</div>
+          <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">Document experiments, record observations, and share findings with the Science community.</p>
+          <span class="badge blue">Coming Soon</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div style="font-size:2.5rem;margin-bottom:10px">🎨</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--red)">Art Portfolio Builder</div>
+          <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">Upload and arrange your artwork into a shareable portfolio. Connects to Painting & Arts.</p>
+          <span class="badge red">Coming Soon</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div style="font-size:2.5rem;margin-bottom:10px">💻</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--blue)">Code Sandbox</div>
+          <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">A simple in-browser coding environment. Share your projects with the Coding community.</p>
+          <span class="badge blue">Coming Soon</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div style="font-size:2.5rem;margin-bottom:10px">🗣️</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--green)">Speech Prep Studio</div>
+          <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">Script writer and self-evaluation checklist for public speaking and debate preparation.</p>
+          <span class="badge green">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN: MY WALL
+============================================================ -->
+<div class="screen" id="screen-wall">
+  <div class="page-wrap">
+    <div style="max-width:720px;margin:0 auto;">
+      <div id="wall-header-block"></div>
+      <div id="wall-posts-block"></div>
+    </div>
+  </div>
+</div>
+
+<!-- USER BASE COUNTER -->
+<div id="ub-counter">👥 <span id="ub-count">0</span> members in TYF Network</div>
+
+<!-- ============================================================
+     SCREEN: PROFILE
+============================================================ -->
+<div class="screen" id="screen-profile">
+  <div class="page-wrap">
+    <div style="max-width:720px;margin:0 auto;">
+      <div id="profile-hero-block"></div>
+      <div class="tabs">
+        <button class="tab active" onclick="switchProfileTab('about')">👤 About</button>
+        <button class="tab" onclick="switchProfileTab('posts')">📝 Posts</button>
+        <button class="tab" onclick="switchProfileTab('communities')">🌐 Communities</button>
+        <button class="tab" onclick="switchProfileTab('badges')">🏅 Badges</button>
+        <button class="tab" onclick="switchProfileTab('portfolio')">🔗 Portfolio</button>
+      </div>
+      <div id="profile-tab-content"></div>
+      <div class="sep"></div>
+      <button class="btn ghost sm" onclick="logout()">Sign Out</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN: PARENT QUEUE
+============================================================ -->
+<div class="screen" id="screen-parent-queue">
+  <div class="page-wrap" style="max-width:720px;margin:0 auto;">
+    <button class="btn ghost sm" onclick="showScreen('feed')" style="margin-bottom:16px">← Back</button>
+    <div class="sectlab">⏳ Pending Approval Queue</div>
+    <p style="font-size:14px;color:var(--muted);font-weight:700;margin-bottom:20px">Review your child's creative posts before they go live. AI has already pre-screened these.</p>
+    <div id="parent-queue-list"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN: MOD LOG
+============================================================ -->
+<div class="screen" id="screen-mod">
+  <div class="page-wrap">
+    <div class="sectlab">🛡️ Moderation Dashboard</div>
+    <div class="tabs">
+      <button class="tab active" onclick="switchModTab('flags')">🚩 Flagged Posts</button>
+      <button class="tab" onclick="switchModTab('accounts')">👤 Accounts</button>
+      <button class="tab" onclick="switchModTab('proposals')">💡 Top Proposals</button>
+    </div>
+    <div id="mod-tab-content"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="site-footer" id="main-footer" style="display:none">
+  <div class="rainbow-bar" style="max-width:200px;margin:0 auto 14px"></div>
+  <button onclick="openComingSoon()">💡 What's Coming to TYF Network →</button>
+  <div style="font-size:12px;color:var(--muted);font-weight:700;margin-top:10px">TYF Network · A safe space for young minds 🚀</div>
+</div>
+
+<!-- ============================================================
+     MODAL: NEW POST
+============================================================ -->
+<div class="modal-overlay" id="modal-post">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-post')">✕</button>
+    <h3>✍️ New Post</h3>
+    <p class="sub">Share your work with the community</p>
+    <div class="field">
+      <label>Community</label>
+      <select id="post-community"></select>
+    </div>
+    <div class="field">
+      <label>What's on your mind?</label>
+      <textarea id="post-text" placeholder="Share your creation, idea, or story..." oninput="resetAiPanel()"></textarea>
+    </div>
+    <div class="field">
+      <label>Attach Image (optional)</label>
+      <input type="file" id="post-image" accept="image/*" onchange="previewImage(this)" style="border:none;padding:0;" />
+      <img id="post-image-preview" style="display:none;width:100%;border-radius:12px;margin-top:8px;max-height:200px;object-fit:cover;" />
+    </div>
+    <div id="mentor-tip-toggle" style="display:none">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:800;font-size:13px;margin-bottom:12px">
+        <input type="checkbox" id="is-mentor-tip" /> Post as Mentor Tip (visible to younger grades)
+      </label>
+    </div>
+    <button class="btn blue" style="width:100%;margin-bottom:10px" onclick="runAiReview()">🤖 Run AI Review</button>
+    <div class="ai-panel" id="ai-review-panel"></div>
+    <div style="margin-top:12px;">
+      <button class="btn green" style="width:100%" id="submit-post-btn" disabled onclick="submitPost()">Submit Post →</button>
+    </div>
+    <p style="text-align:center;font-size:11px;color:var(--muted);font-weight:700;margin-top:8px;">AI reviews first · Parent approves creative posts · Community sees it after</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: SUGGEST COMMUNITY
+============================================================ -->
+<div class="modal-overlay" id="modal-suggest">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-suggest')">✕</button>
+    <h3>💡 Suggest a Community</h3>
+    <p class="sub">Get +10 to your Foundry Score if it gets created!</p>
+    <div class="field">
+      <label>Community Name</label>
+      <input type="text" id="suggest-name" placeholder="e.g. Astronomy & Space" />
+    </div>
+    <div class="field">
+      <label>Emoji Icon</label>
+      <input type="text" id="suggest-emoji" placeholder="🔭" maxlength="2" />
+    </div>
+    <div class="field">
+      <label>Description (why does this community matter?)</label>
+      <textarea id="suggest-desc" placeholder="Describe what kids will share and learn..." style="min-height:80px;"></textarea>
+    </div>
+    <button class="btn blue" style="width:100%" onclick="submitProposal()">Submit Proposal →</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN: THREAD DETAIL
+============================================================ -->
+<div class="screen" id="screen-thread">
+  <div class="page-wrap" style="max-width:760px;margin:0 auto;">
+    <button class="btn ghost sm" id="thread-back-btn" style="margin-bottom:16px">← Back</button>
+    <div id="thread-detail-content"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: NEW THREAD
+============================================================ -->
+<div class="modal-overlay" id="modal-thread">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-thread')">✕</button>
+    <h3>🧵 New Thread</h3>
+    <p class="sub" id="thread-modal-sub">Start a discussion</p>
+    <div class="field">
+      <label>Title</label>
+      <input type="text" id="thread-title" placeholder="A clear, friendly title" oninput="clearVal('thread-title-err')" />
+      <div class="val-err" id="thread-title-err"></div>
+    </div>
+    <div class="field">
+      <label>Body</label>
+      <textarea id="thread-body" placeholder="Share your thoughts, questions or updates..." oninput="clearVal('thread-body-err')"></textarea>
+      <div class="val-err" id="thread-body-err"></div>
+    </div>
+    <button class="btn green" style="width:100%" onclick="submitThread()">Post Thread →</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: SUGGEST SUBJECT GROUP
+============================================================ -->
+<div class="modal-overlay" id="modal-subject">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-subject')">✕</button>
+    <h3>📘 Suggest a Subject Group</h3>
+    <p class="sub">Propose a subject community for a grade band</p>
+    <div class="field">
+      <label>Subject Name</label>
+      <input type="text" id="subj-name" placeholder="e.g. Algebra Basics" oninput="clearVal('subj-name-err')" />
+      <div class="val-err" id="subj-name-err"></div>
+    </div>
+    <div class="field">
+      <label>Emoji Icon</label>
+      <input type="text" id="subj-emoji" placeholder="🔢" maxlength="2" />
+    </div>
+    <div class="field">
+      <label>Grade Band</label>
+      <select id="subj-band">
+        <option value="g3">Grade 3 & Below</option>
+        <option value="g45">Grade 4–5</option>
+        <option value="g67">Grade 6–7</option>
+        <option value="g89">Grade 8–9</option>
+        <option value="g9plus">Grade 9+</option>
+      </select>
+    </div>
+    <button class="btn teal" style="width:100%;background:var(--teal);color:#fff" onclick="submitSubjectProposal()">Submit Suggestion →</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: WHAT'S COMING
+============================================================ -->
+<div class="modal-overlay" id="modal-coming">
+  <div class="modal" style="max-width:640px">
+    <button class="modal-close" onclick="closeModal('modal-coming')">✕</button>
+    <h3>💡 What's Coming to TYF Network</h3>
+    <p class="sub">A peek at features we're building for students & families</p>
+    <div class="coming-grid" id="coming-grid"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: REPORT POST
+============================================================ -->
+<div class="modal-overlay" id="modal-report">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-report')">✕</button>
+    <h3>🚩 Report Post</h3>
+    <p class="sub">Help keep TYF Network safe. Reports are reviewed by AI and admins.</p>
+    <div class="field">
+      <label>Reason</label>
+      <select id="report-reason">
+        <option value="inappropriate">Inappropriate content</option>
+        <option value="bullying">Bullying or hurtful</option>
+        <option value="defamation">Defaming school/teacher/student</option>
+        <option value="spam">Spam or copied content</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <input type="hidden" id="report-post-id" />
+    <button class="btn red" style="width:100%" onclick="submitReport()">Submit Report</button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+let currentUser = null;
+let activeFeedTab = 'all';
+let activeCommFilter = 'all';
+let currentCommunityId = null;
+let activeProfileTab = 'posts';
+let activeModTab = 'flags';
+let pendingPostCommunity = null;
+let pendingPostMentor = false;
+
+// ============================================================
+// DATA LAYER
+// ============================================================
+function load(key, def) {
+  try { return JSON.parse(localStorage.getItem(key)) || def; } catch { return def; }
+}
+function save(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+const COMMUNITIES = [
+  {id:'books-more', name:'Books & More', emoji:'📚', cat:'creative', desc:'Young authors share original stories, book reviews, and literary work.', color:'#8B5CF6', members:[], creative:true, parent:false},
+  {id:'tyf-events',name:'TYF Events Corner',emoji:'🗓️',cat:'tyf',desc:'Official TYF workshops, events, and programs.',color:'#E53935',members:[],creative:false,parent:false,official:true},
+  {id:'tyf-news',name:'TYF News Corner',emoji:'📰',cat:'tyf',desc:'Important news and announcements for students and families.',color:'#1E88E5',members:[],creative:false,parent:false,official:true},
+  {id:'literature',name:'Literature & Creativity',emoji:'📚',cat:'creative',desc:'Stories, poems, essays — express yourself through words.',color:'#8B5CF6',members:['demo'],creative:true,parent:false},
+  {id:'photography',name:'Photography',emoji:'📷',cat:'creative',desc:'Share your best shots. Every frame tells a story.',color:'#1E88E5',members:['demo'],creative:true,parent:false},
+  {id:'painting',name:'Painting & Arts',emoji:'🎨',cat:'creative',desc:'Paintings, sketches, digital art — your canvas, your rules.',color:'#E53935',members:['demo'],creative:true,parent:false},
+  {id:'music',name:'Music & Performing Arts',emoji:'🎵',cat:'creative',desc:'Songs, performances, compositions — let the music play.',color:'#E91E63',members:[],creative:true,parent:false},
+  {id:'speaking',name:'Public Speaking',emoji:'🎤',cat:'creative',desc:'Speeches, debates, presentations — find your voice.',color:'#F97316',members:[],creative:true,parent:false},
+  {id:'filmmaking',name:'Filmmaking & Animation',emoji:'🎬',cat:'creative',desc:'Short films, animations, storyboards — lights, camera, action!',color:'#7B1FA2',members:[],creative:true,parent:false},
+  {id:'environment',name:'Environment & Nature',emoji:'🌱',cat:'creative',desc:'Eco projects, nature photos, sustainability ideas.',color:'#2E7D32',members:[],creative:true,parent:false},
+  {id:'robotics',name:'Robotics',emoji:'🤖',cat:'stem',desc:'Build bots, code circuits, engineer the future.',color:'#00897B',members:[],creative:false,parent:false},
+  {id:'coding',name:'Coding',emoji:'💻',cat:'stem',desc:'Projects, scripts, apps — coders of all skill levels welcome.',color:'#1E88E5',members:[],creative:false,parent:false},
+  {id:'science',name:'Science Experiments',emoji:'🧪',cat:'stem',desc:'Experiments, discoveries, science fair projects.',color:'#43A047',members:[],creative:false,parent:false},
+  {id:'chess',name:'Chess & Strategy',emoji:'♟️',cat:'stem',desc:'Games, puzzles, tournament results, strategy tips.',color:'#5D4037',members:[],creative:false,parent:false},
+  {id:'sports',name:'Sports & Fitness',emoji:'🏃',cat:'stem',desc:'Game highlights, training tips, team spirit.',color:'#F97316',members:[],creative:false,parent:false},
+  {id:'subj-math',name:'Mathematics',emoji:'🔢',cat:'subject',gradeBand:'g45',desc:'Numbers, problem-solving and math help.',color:'#1565C0',members:[],creative:false,parent:false,subject:true},
+  {id:'subj-english',name:'English',emoji:'📖',cat:'subject',gradeBand:'g3',desc:'Reading, grammar and writing skills.',color:'#8B5CF6',members:[],creative:false,parent:false,subject:true},
+  {id:'subj-genscience',name:'General Science',emoji:'🔬',cat:'subject',gradeBand:'g67',desc:'Everyday science explained.',color:'#43A047',members:[],creative:false,parent:false,subject:true},
+  {id:'subj-history',name:'History',emoji:'🏛️',cat:'subject',gradeBand:'g67',desc:'Stories from the past.',color:'#6D4C41',members:[],creative:false,parent:false,subject:true},
+  {id:'subj-geography',name:'Geography',emoji:'🌍',cat:'subject',gradeBand:'g89',desc:'Maps, places and our planet.',color:'#00897B',members:[],creative:false,parent:false,subject:true},
+  {id:'subj-computer',name:'Computer Basics',emoji:'🖥️',cat:'subject',gradeBand:'g3',desc:'Getting started with computers.',color:'#F97316',members:[],creative:false,parent:false,subject:true},
+  {id:'city-bulletin',name:'City Bulletin Board',emoji:'🏙️',cat:'general',desc:'Local events, city quests, neighborhood activities.',color:'#0288D1',members:[],creative:false,parent:false},
+  {id:'parents-corner',name:"Parents' Corner",emoji:'👨‍👩‍👧',cat:'parentschool',desc:'School updates, tips, community discussions for parents.',color:'#5E35B1',members:[],creative:false,parent:true,forum:true},
+];
+
+const GRADE_BANDS = [
+  {key:'g3',label:'Grade 3 & Below'},
+  {key:'g45',label:'Grade 4–5'},
+  {key:'g67',label:'Grade 6–7'},
+  {key:'g89',label:'Grade 8–9'},
+  {key:'g9plus',label:'Grade 9+'},
+];
+let activeGradeBand = 'g45';
+
+const COMING_SOON = [
+  {emoji:'🙊',title:'Anonymous Q&A',desc:'A safe space for shy students to ask questions anonymously.'},
+  {emoji:'🤝',title:'Study Buddy Matching',desc:'Get matched with a study partner in your grade & subject.'},
+  {emoji:'📋',title:'Peer Tutoring Board',desc:'Grade 9-10 students help younger grades via a request board.'},
+  {emoji:'📜',title:'Digital Certificates',desc:'Downloadable PDF achievement certificates.'},
+  {emoji:'📧',title:'Weekly Parent Digest',desc:'Email summary of your child\'s week on TYF.'},
+  {emoji:'🗓️',title:'School Event Calendar',desc:'Integrated calendar of school events.'},
+  {emoji:'🎓',title:'College Prep Hub',desc:'High-school & college prep resources for Grade 9-10.'},
+  {emoji:'🧩',title:'Collaborative Project Board',desc:'Team up with peers on quests and projects.'},
+  {emoji:'🏆',title:'Teacher Recognition Wall',desc:'Parents nominate and celebrate great teachers.'},
+  {emoji:'🌐',title:'Multilingual Interface',desc:'Use TYF in Tamil, Hindi, Kannada or Telugu.'},
+];
+
+const QUESTS = [
+  {id:'q1',title:'Neighborhood Lens',desc:'Photograph something that represents your neighborhood — a street, a face, a texture.',community:'photography',deadline:'This Sunday',reward:50,active:true},
+  {id:'q2',title:'Short Story Sprint',desc:'Write a 200-word story that starts with: "The door opened and everything changed."',community:'literature',deadline:'Next Friday',reward:40,active:true},
+  {id:'q3',title:'Mini Robot Design',desc:'Draw or build a mini robot that solves one everyday problem. Document with photos.',community:'robotics',deadline:'In 2 weeks',reward:60,active:false},
+  {id:'q4',title:'Green Corner',desc:'Find an environmental problem near your home and propose a kid-sized solution.',community:'environment',deadline:'This Saturday',reward:45,active:true},
+];
+
+const ADULT_KEYWORDS = ['sex','nude','naked','porn','violence','kill','hate','abuse','drug','alcohol','curse','damn','hell','stupid','idiot'];
+const DEFAMATION_TRIGGERS = ['worst teacher','bad school','hate my school','terrible school','worst principal','bully teacher','worst class'];
+const NEGATIVE_WORDS = ['hate','worst','terrible','bad','awful','stupid','idiot','trash','garbage','useless','fake'];
+
+function getAccounts() { return load('yfs_accounts', []); }
+function saveAccounts(a) { save('yfs_accounts', a); }
+function getPosts() { return load('yfs_posts', getSeedPosts()); }
+function savePosts(p) { save('yfs_posts', p); }
+function getReactions() { return load('yfs_reactions', []); }
+function saveReactions(r) { save('yfs_reactions', r); }
+function getFlags() { return load('yfs_flags', []); }
+function saveFlags(f) { save('yfs_flags', f); }
+function getProposals() { return load('yfs_proposals', []); }
+function saveProposals(p) { save('yfs_proposals', p); }
+function getProposalVotes() { return load('yfs_pvotes', []); }
+function saveProposalVotes(v) { save('yfs_pvotes', v); }
+function getUserCommunities(uid) { return load('yfs_joined_'+uid, []); }
+function saveUserCommunities(uid, c) { save('yfs_joined_'+uid, c); }
+function getThreads() { return load('yfs_threads', getSeedThreads()); }
+function saveThreads(t) { save('yfs_threads', t); }
+function getComments() { return load('yfs_comments', []); }
+function saveComments(c) { save('yfs_comments', c); }
+function getTVotes() { return load('yfs_tvotes', []); }
+function saveTVotes(v) { save('yfs_tvotes', v); }
+function getCVotes() { return load('yfs_cvotes', []); }
+function saveCVotes(v) { save('yfs_cvotes', v); }
+function getSchoolGroups() { return load('yfs_school_groups', []); }
+function saveSchoolGroups(g) { save('yfs_school_groups', g); }
+function getSubjProposals() { return load('yfs_subj_proposals', []); }
+function saveSubjProposals(p) { save('yfs_subj_proposals', p); }
+
+function getSeedThreads() {
+  return [
+    {id:'t_seed1',groupId:'parents-corner',title:'Tips for screen-time balance?',authorId:'seed-parent1',authorName:'Sunita P.',text:'How does everyone manage screen time at home with online learning? Looking for practical routines that worked for you.',timestamp:Date.now()-3600000*6,score:4,pinned:false,tags:['advice','wellbeing']},
+    {id:'t_seed2',groupId:'parents-corner',title:'Great science fair resources',authorId:'seed-parent2',authorName:'Raj K.',text:'Sharing a few free science-fair project ideas that my son loved. Happy to compile a list if others are interested!',timestamp:Date.now()-3600000*22,score:7,pinned:false,tags:['resources','science']},
+  ];
+}
+
+// ============================================================
+// TEXT VALIDATION (applies to all text inputs)
+// ============================================================
+function validateText(text) {
+  if (/[^a-zA-Z0-9\s]{2,}/.test(text))
+    return {ok:false, reason:'Contains invalid special characters (2+ in a row)'};
+  const letters = text.replace(/[^a-zA-Z]/g,'').length;
+  if (text.replace(/\s/g,'').length > 6 && letters / text.replace(/\s/g,'').length < 0.4)
+    return {ok:false, reason:'Text appears to be junk (too many numbers/symbols)'};
+  if (/[bcdfghjklmnpqrstvwxyz]{5,}/i.test(text))
+    return {ok:false, reason:'Unreadable text detected'};
+  const lower = text.toLowerCase().replace(/[^a-z0-9\s]/g,' ');
+  const TRANS_CURSES = [
+    'bhenchod','behenchod','madarchod','maderchod','chutiya','chutia',
+    'gaandu','gandu','randi','harami','bhosdi','bhosda','lund','gaand',
+    'punda','otha','thevidiya','thevdiya','poolai','sootha','sunni','koothi',
+    'dengu','pooku','lanja','gudda','bokka','modda',
+    'thika','sule','nin amma','myru','mondan','thendi',
+    'khankir','magi choda','maagi',
+    'puta','pendejo','cabron','verga','chinga','cono','polla','joder','mierda','culo','gilipolla',
+    'merde','connard','salope','foutre','encule','fils de pute',
+    'caralho','foda','buceta','porra',
+    'scheisse','ficken','arsch','wichser','hurensohn',
+    'kuss','kos om','zabbi','sharmouta',
+    'blyad','suka','pizda','khuy','nahui',
+    'orospu','amk',
+    'cazzo','minchia','vaffanculo','stronzo','puttana',
+    'wtf','fck','fuk','fuq','sh1t','b1tch','a55',
+  ];
+  for (const w of TRANS_CURSES)
+    if (lower.includes(w)) return {ok:false, reason:'Contains inappropriate language'};
+  return {ok:true};
+}
+
+function schoolKey(name) { return name.trim().toLowerCase().replace(/\s+/g,' '); }
+
+function ensureSchoolGroup(schoolName, studentId) {
+  if (!schoolName) return null;
+  const key = schoolKey(schoolName);
+  const groups = getSchoolGroups();
+  let g = groups.find(x => x.schoolKey === key);
+  if (!g) {
+    g = {id:'sg_'+Date.now(), schoolName:schoolName.trim(), schoolKey:key, memberIds:[]};
+    groups.push(g);
+  }
+  if (studentId && !g.memberIds.includes(studentId)) g.memberIds.push(studentId);
+  saveSchoolGroups(groups);
+  return g;
+}
+
+function schoolGroupGroupId(g) { return 'school:'+g.id; }
+
+function getSeedPosts() {
+  return [
+    {id:'seed1',authorId:'seed-maya',authorName:'Maya S.',communityId:'literature',text:'I wrote my first poem about the monsoon! "The rain taps on my window like a friend who knows I need a hug." — still editing but I love where it\'s going 🌧️',imageB64:null,timestamp:Date.now()-3600000*2,aiStatus:'approved',parentApproved:true,reactions:{loveIt:8,likeIt:5,canDoBetter:1,workToBetter:0,motivated:6,inspire:4,keepGoing:3},reports:[],isMentorTip:false},
+    {id:'seed2',authorId:'seed-arjun',authorName:'Arjun K.',communityId:'coding',text:'Finished my first Python project — a quiz game! It asks 10 questions about Indian geography and tracks your score. Built it in 3 evenings. Code on GitHub 🐍💻',imageB64:null,timestamp:Date.now()-3600000*5,aiStatus:'approved',parentApproved:true,reactions:{loveIt:12,likeIt:9,canDoBetter:2,workToBetter:0,motivated:10,inspire:7,keepGoing:5},reports:[],isMentorTip:false},
+    {id:'seed3',authorId:'seed-priya',authorName:'Priya M.',communityId:'photography',text:'Submitted this for the Neighborhood Lens quest 📸 This is the old banyan tree at the end of our street — it\'s been there longer than my grandparents!',imageB64:null,timestamp:Date.now()-3600000*8,aiStatus:'approved',parentApproved:true,reactions:{loveIt:15,likeIt:7,canDoBetter:0,workToBetter:0,motivated:4,inspire:11,keepGoing:6},reports:[],isMentorTip:false},
+    {id:'seed4',authorId:'seed-rishi',authorName:'Rishi T.',communityId:'robotics',text:'Our team built a line-following robot using Arduino and two IR sensors. Took 4 weekends! It can now navigate a figure-8 path without falling off. 🤖⚡',imageB64:null,timestamp:Date.now()-3600000*12,aiStatus:'approved',parentApproved:true,reactions:{loveIt:18,likeIt:11,canDoBetter:1,workToBetter:0,motivated:14,inspire:9,keepGoing:8},reports:[],isMentorTip:false},
+    {id:'seed5',authorId:'seed-ananya',authorName:'Ananya R.',communityId:'painting',text:'Tried watercolor for the first time this week! I know the edges are messy but I actually love how it blurs. Painting the view from my terrace 🎨🌇',imageB64:null,timestamp:Date.now()-3600000*20,aiStatus:'approved',parentApproved:true,reactions:{loveIt:10,likeIt:8,canDoBetter:3,workToBetter:1,motivated:5,inspire:6,keepGoing:7},reports:[],isMentorTip:false},
+    {id:'seed6',authorId:'seed-mentor',authorName:'Dev P.',communityId:'coding',text:'💡 Mentor Tip: When you\'re stuck on a bug, don\'t stare at the code — explain it out loud like you\'re teaching a 5-year-old. You\'ll find the bug 80% of the time. This is called Rubber Duck Debugging! 🦆',imageB64:null,timestamp:Date.now()-3600000*30,aiStatus:'approved',parentApproved:true,reactions:{loveIt:22,likeIt:15,canDoBetter:0,workToBetter:0,motivated:18,inspire:13,keepGoing:9},reports:[],isMentorTip:true},
+  ];
+}
+
+// ============================================================
+// AUTH
+// ============================================================
+function switchLoginTab(tab) {
+  ['student','parent','admin','register'].forEach(t => {
+    const el = document.getElementById('login-'+t);
+    if (el) el.style.display = 'none';
+  });
+  document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
+  const show = document.getElementById('login-'+tab);
+  if (show) show.style.display = 'block';
+  const tabs = document.querySelectorAll('.login-tab');
+  const map = {student:0,parent:1,admin:2,register:null};
+  if (map[tab] !== null && tabs[map[tab]]) tabs[map[tab]].classList.add('active');
+}
+
+function studentLogin() {
+  const schoolId = document.getElementById('s-schoolid').value.trim();
+  const name = document.getElementById('s-name').value.trim();
+  const grade = document.getElementById('s-grade').value;
+  if (!schoolId || !name || !grade) { toast('Please fill all fields'); return; }
+  const accounts = getAccounts();
+  let account = accounts.find(a => a.schoolId === schoolId && a.role === 'student');
+  if (!account) {
+    account = {id:'u_'+Date.now(),name,grade:parseInt(grade),nextAcademicGrade:parseInt(grade)+1,schoolName:'',lastGradeYear:new Date().getFullYear(),schoolId,role:'student',status:'active',parentId:null,joined:Date.now(),foundryScore:0,isMentor:parseInt(grade)>=9,badges:[],joinedCommunities:['coding','city-bulletin']};
+    accounts.push(account);
+    saveAccounts(accounts);
+  }
+  if (account.status === 'suspended') { toast('⚠️ Your account is suspended. Contact admin.'); return; }
+  // Auto grade promotion on login
+  promoteGrade(account);
+  // Ensure school group membership
+  if (account.schoolName) {
+    const g = ensureSchoolGroup(account.schoolName, account.id);
+    if (g) {
+      const joined = getUserCommunities(account.id);
+      const gid = schoolGroupGroupId(g);
+      if (!joined.includes(gid)) { joined.push(gid); saveUserCommunities(account.id, joined); }
+    }
+  }
+  saveAccounts(accounts);
+  currentUser = account;
+  enterApp();
+}
+
+function parentLogin() {
+  const name = document.getElementById('p-name').value.trim();
+  const email = document.getElementById('p-email').value.trim();
+  if (!name || !email) { toast('Please fill all fields'); return; }
+  const accounts = getAccounts();
+  let account = accounts.find(a => a.email === email && a.role === 'parent');
+  if (!account) {
+    account = {id:'p_'+Date.now(),name,email,role:'parent',status:'active',joined:Date.now(),foundryScore:0,badges:[],children:[]};
+    accounts.push(account);
+    saveAccounts(accounts);
+  }
+  currentUser = account;
+  enterApp();
+}
+
+function adminLogin() {
+  const key = document.getElementById('a-key').value;
+  if (key !== 'tyfadmin2026') { toast('Invalid admin key'); return; }
+  currentUser = {id:'admin',name:'Admin',role:'admin',status:'active',grade:null,foundryScore:999,isMentor:false,badges:['admin'],joinedCommunities:[]};
+  enterApp();
+}
+
+function promoteGrade(account) {
+  if (account.role !== 'student' || !account.nextAcademicGrade) return;
+  const now = new Date();
+  const yr = now.getFullYear();
+  if (now.getMonth() >= 5 && (account.lastGradeYear || 0) < yr) {
+    account.grade = account.nextAcademicGrade;
+    account.nextAcademicGrade = account.grade + 1;
+    account.lastGradeYear = yr;
+    account.isMentor = account.grade >= 9;
+  }
+}
+
+function requestAccount() {
+  const name = document.getElementById('r-name').value.trim();
+  const username = document.getElementById('r-username').value.trim();
+  const email = document.getElementById('r-email').value.trim();
+  const schoolId = document.getElementById('r-schoolid').value.trim();
+  const yob = document.getElementById('r-yob').value;
+  const school = document.getElementById('r-school').value.trim();
+  const grade = document.getElementById('r-grade').value;
+  const nextGrade = document.getElementById('r-nextgrade').value;
+  const parentName = document.getElementById('r-parentname').value.trim();
+  const pemail = document.getElementById('r-pemail').value.trim();
+  if (!name || !schoolId || !grade || !pemail || !email) { toast('Please fill all required fields'); return; }
+  const accounts = getAccounts();
+  if (accounts.find(a => a.schoolId === schoolId)) { toast('Account already exists with this School ID'); return; }
+  // Generate password
+  const pwd = 'TYF' + Math.random().toString(36).slice(2,6).toUpperCase() + Math.floor(10+Math.random()*90);
+  const studentId = 'u_'+Date.now();
+  const pending = {
+    id:studentId, name, username: username||name, email, grade:parseInt(grade),
+    nextGrade: nextGrade ? parseInt(nextGrade) : parseInt(grade)+1,
+    nextAcademicGrade: nextGrade ? parseInt(nextGrade) : parseInt(grade)+1,
+    birthYear: yob ? parseInt(yob) : null, yob: yob ? parseInt(yob) : null,
+    schoolId, schoolName: school, role:'student', status:'pending',
+    parentName, parentEmail:pemail, tempPassword:pwd,
+    joined:Date.now(), foundryScore:0, badges:[], joinedCommunities:[],
+    lastGradeYear: new Date().getFullYear(), isMentor: parseInt(grade)>=9,
+    profilePublic: true, avatar: null,
+  };
+  accounts.push(pending);
+  saveAccounts(accounts);
+  // Auto-create school group + auto-join student
+  const g = ensureSchoolGroup(school, studentId);
+  if (g) saveUserCommunities(studentId, [schoolGroupGroupId(g)]);
+  // Store parent notification (simulates email)
+  addParentNotification(pemail, 'account_created', `New TYF Network account request for ${name} (Grade ${grade}, ${school||schoolId}). Temporary password: ${pwd}. Log in to TYF Network with your email to approve.`);
+  // Show password box
+  document.getElementById('r-gen-password').textContent = pwd;
+  document.getElementById('r-password-box').style.display = 'block';
+  document.getElementById('r-submit-btn').disabled = true;
+  document.getElementById('r-submit-btn').textContent = '✅ Sent!';
+  toast('✅ Password generated! Parent will be notified to approve your account.');
+}
+
+function logout() {
+  currentUser = null;
+  document.getElementById('main-topbar').style.display = 'none';
+  document.getElementById('main-footer').style.display = 'none';
+  showScreen('login');
+}
+
+function enterApp() {
+  document.getElementById('main-topbar').style.display = 'block';
+  document.getElementById('main-footer').style.display = 'block';
+  const av = document.getElementById('topbar-av-circle');
+  const avName = document.getElementById('topbar-av-name');
+  const chip = document.getElementById('topbar-avatar');
+  // Show avatar emoji or initial
+  const accounts = getAccounts();
+  const meAcc = accounts.find(a => a.id === currentUser.id) || currentUser;
+  if (meAcc.avatar) { av.textContent = meAcc.avatar; av.style.background = avatarColor(currentUser.name); }
+  else { av.textContent = currentUser.name.charAt(0).toUpperCase(); av.style.background = avatarColor(currentUser.name); }
+  avName.textContent = currentUser.name.split(' ')[0];
+  chip.style.display = 'flex';
+  updateUserBaseCounter();
+  if (currentUser.role === 'admin') { showScreen('mod'); renderModTab(); }
+  else if (currentUser.role === 'parent') { showScreen('feed'); renderFeed(); renderParentSidebar(); }
+  else { showScreen('feed'); renderFeed(); }
+  if (currentUser.role === 'parent') renderParentNotifBell();
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const sc = document.getElementById('screen-'+id);
+  if (sc) sc.classList.add('active');
+  document.querySelectorAll('.topbar-nav button[id^="nav-"]').forEach(b => b.classList.remove('active'));
+  const nb = document.getElementById('nav-'+id);
+  if (nb) nb.classList.add('active');
+  window.scrollTo(0,0);
+  if (id==='feed') renderFeed();
+  else if (id==='communities') renderCommunities();
+  else if (id==='quests') renderQuests();
+  else if (id==='profile') { activeProfileTab='about'; renderProfile(); }
+  else if (id==='wall') renderWall();
+  else if (id==='proposals') renderProposals();
+  else if (id==='parent-queue') renderParentQueue();
+  else if (id==='mod') renderModTab();
+  else if (id==='free-resources') { /* no extra render needed */ }
+}
+
+// ============================================================
+// FEED
+// ============================================================
+function switchFeedTab(tab) {
+  activeFeedTab = tab;
+  document.querySelectorAll('#screen-feed .tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#screen-feed .tab')[['all','mine','trending','city'].indexOf(tab)].classList.add('active');
+  renderPosts();
+}
+
+function renderFeed() {
+  renderMySidebarCommunities();
+  renderSuggestedCommunities();
+  renderScoreDisplay();
+  renderFoundryFellow();
+  renderPosts();
+  if (currentUser && currentUser.isMentor) document.getElementById('mentor-sidebar').style.display = 'block';
+  renderParentSidebar();
+}
+
+function renderParentSidebar() {
+  if (!currentUser || currentUser.role !== 'parent') return;
+  const posts = getPosts();
+  const pending = posts.filter(p => !p.parentApproved && p.aiStatus === 'approved');
+  const sidebar = document.getElementById('pending-approval-sidebar');
+  if (pending.length > 0) sidebar.style.display = 'block';
+  else sidebar.style.display = 'none';
+}
+
+function renderPosts() {
+  const container = document.getElementById('feed-posts');
+  let posts = getPosts().filter(p => p.parentApproved && p.aiStatus === 'approved');
+  if (activeFeedTab === 'mine' && currentUser) {
+    const joined = getUserCommunities(currentUser.id);
+    posts = posts.filter(p => joined.includes(p.communityId));
+  } else if (activeFeedTab === 'trending') {
+    posts = posts.sort((a,b) => totalReactions(b) - totalReactions(a));
+  } else if (activeFeedTab === 'city') {
+    posts = posts.filter(p => p.communityId === 'city-bulletin');
+  } else {
+    posts = posts.sort((a,b) => b.timestamp - a.timestamp);
+  }
+  if (posts.length === 0) {
+    container.innerHTML = `<div class="empty"><span class="empty-icon">🌱</span><p>No posts yet. Be the first to share something!</p></div>`;
+    return;
+  }
+  container.innerHTML = posts.map(p => renderPostCard(p)).join('');
+}
+
+function renderPostCard(post) {
+  const comm = COMMUNITIES.find(c => c.id === post.communityId) || {name:'Community',emoji:'🌐',color:'#1E88E5'};
+  const mentorTag = post.isMentorTip ? `<span class="mentor-tag">🎓 Mentor Tip</span>` : '';
+  const img = post.imageB64 ? `<img src="${post.imageB64}" class="post-image" alt="post image"/>` : '';
+  const rxns = REACTIONS.map(r =>
+    `<button class="rxn-btn ${hasReacted(post.id,r.key)?'reacted':''}" data-tip="${r.tip}" onclick="react('${post.id}','${r.key}')">
+      ${r.emoji} <span class="rxn-count">${post.reactions[r.key]||0}</span>
+    </button>`
+  ).join('');
+  const reportBtn = currentUser && currentUser.id !== post.authorId
+    ? `<button class="rxn-btn" onclick="openReportModal('${post.id}')" style="margin-left:auto;color:var(--red)">🚩 Report</button>` : '';
+  const repostLabel = post.isRepost ? `<span class="badge muted" style="margin-left:8px">🔁 Reposted from ${escHtml(post.originalAuthor||'')}</span>` : '';
+  const avHtml = renderAvatarCircle(post.authorName, post.authorAvatar, 'post-av');
+  return `<div class="post-card" id="post-${post.id}">
+    <div class="post-header">
+      ${avHtml}
+      <div class="post-meta">
+        <div class="post-author" style="cursor:pointer" onclick="openPublicWall('${post.authorId}')">${escHtml(post.authorName)} ${mentorTag}${repostLabel}</div>
+        <div class="post-sub">${timeAgo(post.timestamp)} · <span style="display:inline-flex;align-items:center;gap:3px;">${comm.emoji} ${comm.name}</span></div>
+      </div>
+    </div>
+    <div class="post-body">${escHtml(post.text)}</div>
+    ${img}
+    <div class="reactions">${rxns}${reportBtn}</div>
+    <div class="share-bar">
+      <button class="share-btn wa" data-tip="Share on WhatsApp" onclick="shareWhatsApp('${post.id}')">📲 WhatsApp</button>
+      <button class="share-btn em" data-tip="Share via Email" onclick="shareEmail('${post.id}')">📧 Email</button>
+      <button class="share-btn rp" data-tip="Repost to My Wall" onclick="repostToWall('${post.id}')">🔁 My Wall</button>
+    </div>
+  </div>`;
+}
+
+const REACTIONS = [
+  {key:'loveIt',emoji:'❤️',label:'Love It',tip:'Love It — This is amazing!'},
+  {key:'likeIt',emoji:'👍',label:'Like It',tip:'Like It — Good work!'},
+  {key:'canDoBetter',emoji:'💪',label:'Can Do Better',tip:'Can Do Better — I believe in you!'},
+  {key:'workToBetter',emoji:'🔧',label:'Work To Do Better',tip:'Work To Do Better — Keep improving!'},
+  {key:'motivated',emoji:'🔥',label:'I\'m Motivated',tip:'I\'m Motivated — You fired me up!'},
+  {key:'inspire',emoji:'✨',label:'You Inspire Me',tip:'You Inspire Me — Truly inspiring!'},
+  {key:'keepGoing',emoji:'🌟',label:'Keep Going',tip:'Keep Going — Don\'t stop now!'},
+];
+
+function totalReactions(post) {
+  return Object.values(post.reactions).reduce((a,b) => a+(b||0), 0);
+}
+
+function hasReacted(postId, key) {
+  if (!currentUser) return false;
+  return getReactions().some(r => r.postId === postId && r.userId === currentUser.id && r.type === key);
+}
+
+function react(postId, key) {
+  if (!currentUser) { toast('Please log in to react'); return; }
+  const rxns = getReactions();
+  const existing = rxns.find(r => r.postId === postId && r.userId === currentUser.id && r.type === key);
+  const posts = getPosts();
+  const post = posts.find(p => p.id === postId);
+  if (!post) return;
+  if (existing) {
+    const idx = rxns.indexOf(existing);
+    rxns.splice(idx, 1);
+    post.reactions[key] = Math.max(0, (post.reactions[key]||0) - 1);
+  } else {
+    rxns.push({postId, userId: currentUser.id, type: key});
+    post.reactions[key] = (post.reactions[key]||0) + 1;
+    // Boost author's foundry score
+    const accounts = getAccounts();
+    const author = accounts.find(a => a.id === post.authorId);
+    if (author && ['inspire','loveIt','motivated'].includes(key)) {
+      author.foundryScore = (author.foundryScore||0) + 2;
+      saveAccounts(accounts);
+    }
+    // Boost current user score
+    const cu = accounts.find(a => a.id === currentUser.id);
+    if (cu) { cu.foundryScore = (cu.foundryScore||0) + 1; saveAccounts(accounts); }
+  }
+  saveReactions(rxns);
+  savePosts(posts);
+  renderPosts();
+  renderScoreDisplay();
+}
+
+function renderMySidebarCommunities() {
+  if (!currentUser) return;
+  const joined = getUserCommunities(currentUser.id);
+  const list = document.getElementById('my-communities-list');
+  if (!joined.length) { list.innerHTML = `<p style="font-size:12px;color:var(--muted);font-weight:700">Not in any communities yet.</p>`; return; }
+  list.innerHTML = joined.slice(0,5).map(cid => {
+    const c = COMMUNITIES.find(x => x.id === cid);
+    if (!c) return '';
+    return `<div onclick="openCommunity('${c.id}')" style="display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:12px;cursor:pointer;transition:.15s;" onmouseover="this.style.background='var(--soft)'" onmouseout="this.style.background='none'">
+      <span style="font-size:1.3rem">${c.emoji}</span>
+      <span style="font-weight:800;font-size:13px">${c.name}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderSuggestedCommunities() {
+  if (!currentUser) return;
+  const joined = getUserCommunities(currentUser.id);
+  const suggestions = COMMUNITIES.filter(c => !joined.includes(c.id) && !c.parent).slice(0,3);
+  const el = document.getElementById('suggested-communities');
+  el.innerHTML = suggestions.map(c => `
+    <div style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:12px;border:2px solid var(--line);margin-bottom:8px;cursor:pointer" onclick="joinCommunity('${c.id}')">
+      <span style="font-size:1.4rem">${c.emoji}</span>
+      <div style="flex:1"><div style="font-weight:900;font-size:13px">${c.name}</div></div>
+      <button class="btn green sm" style="padding:4px 10px;font-size:11px">Join</button>
+    </div>`).join('');
+}
+
+function renderScoreDisplay() {
+  if (!currentUser) return;
+  const accounts = getAccounts();
+  const me = accounts.find(a => a.id === currentUser.id) || currentUser;
+  const score = me.foundryScore || 0;
+  document.getElementById('score-display').innerHTML = `
+    <div class="score-ring">
+      <div>
+        <div class="score-val">${score}</div>
+        <div class="score-label">Foundry Points</div>
+      </div>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:var(--muted);font-weight:700">${scoreLabel(score)}</div>`;
+}
+
+function scoreLabel(s) {
+  if (s < 20) return '🌱 Seedling — keep posting!';
+  if (s < 60) return '🌿 Grower — you\'re finding your voice';
+  if (s < 120) return '🌳 Builder — the community knows you';
+  if (s < 200) return '⭐ Maker — real impact!';
+  return '🏆 Foundry Fellow — you inspire others!';
+}
+
+function renderFoundryFellow() {
+  const posts = getPosts().filter(p => p.parentApproved && p.aiStatus === 'approved');
+  if (!posts.length) return;
+  const top = posts.reduce((best, p) => totalReactions(p) > totalReactions(best) ? p : best, posts[0]);
+  const el = document.getElementById('foundry-fellow-banner');
+  el.style.display = 'block';
+  el.innerHTML = `<div class="fellow-banner">
+    <div class="fellow-icon">🏅</div>
+    <div class="fellow-text">
+      <h4>Foundry Fellow This Month</h4>
+      <p>${top.authorName} · ${totalReactions(top)} reactions</p>
+    </div>
+  </div>`;
+}
+
+// ============================================================
+// COMMUNITIES
+// ============================================================
+const COMM_CATS = [
+  {key:'all',label:'All'},
+  {key:'tyf',label:'TYF Official'},
+  {key:'creative',label:'Creativity'},
+  {key:'stem',label:'STEM'},
+  {key:'subject',label:'School Subjects'},
+  {key:'general',label:'General'},
+  {key:'parentschool',label:'Parents & School'},
+];
+
+function renderCommunities() {
+  const grid = document.getElementById('all-communities-grid');
+  const filter = document.getElementById('comm-filter-list');
+  filter.innerHTML = COMM_CATS.map(c => `<button onclick="filterComms('${c.key}')" class="btn ${activeCommFilter===c.key?'blue':'ghost'} sm" style="text-align:left">${c.label}</button>`).join('');
+
+  let comms;
+  if (activeCommFilter === 'all') comms = COMMUNITIES.filter(c => c.cat !== 'subject' || c.gradeBand === activeGradeBand);
+  else if (activeCommFilter === 'subject') comms = COMMUNITIES.filter(c => c.cat === 'subject' && bandMatches(c.gradeBand, activeGradeBand));
+  else comms = COMMUNITIES.filter(c => c.cat === activeCommFilter);
+
+  // Grade-band sub-filter row (only for School Subjects)
+  let bandRow = '';
+  let suggestBtn = '';
+  if (activeCommFilter === 'subject') {
+    bandRow = `<div class="gradeband-row">${GRADE_BANDS.map(b => `<button class="gradeband-btn ${activeGradeBand===b.key?'active':''}" onclick="setGradeBand('${b.key}')">${b.label}</button>`).join('')}</div>`;
+    suggestBtn = `<div style="margin-bottom:16px"><button class="btn sm" style="background:var(--teal);color:#fff" onclick="openModal('modal-subject')">+ Suggest Subject Group</button></div>`;
+  }
+
+  let cards = comms.map(c => renderCommCard(c)).join('');
+
+  // School groups appear under Parents & School
+  let schoolCards = '';
+  if (activeCommFilter === 'parentschool' || activeCommFilter === 'all') {
+    schoolCards = getSchoolGroups().map(g => renderSchoolGroupCard(g)).join('');
+  }
+
+  grid.innerHTML = bandRow + suggestBtn + cards + schoolCards;
+  document.getElementById('proposal-count').textContent = getProposals().length;
+}
+
+function bandMatches(b, active) { return b === active; }
+
+function renderCommCard(c) {
+  const joined = currentUser ? getUserCommunities(currentUser.id) : [];
+  const isJoined = joined.includes(c.id);
+  return `<div class="comm-card" onclick="openCommunity('${c.id}')">
+    <span class="comm-emoji">${c.emoji}</span>
+    <div class="comm-name" style="color:${c.color}">${c.name}${c.official?' <span class="badge red" style="font-size:9px">OFFICIAL</span>':''}</div>
+    <div class="comm-desc">${c.desc}</div>
+    <div class="comm-footer">
+      <span class="comm-members">👥 ${c.members.length + (isJoined?1:0)} members</span>
+      <span class="badge ${isJoined?'green':'muted'}">${isJoined?'✓ Joined':'+ Join'}</span>
+    </div>
+  </div>`;
+}
+
+function renderSchoolGroupCard(g) {
+  const joined = currentUser ? getUserCommunities(currentUser.id) : [];
+  const gid = schoolGroupGroupId(g);
+  const isJoined = joined.includes(gid);
+  return `<div class="comm-card" onclick="openSchoolGroup('${g.id}')">
+    <span class="comm-emoji">🏫</span>
+    <div class="comm-name" style="color:#5E35B1">${escHtml(g.schoolName)}</div>
+    <div class="comm-desc">School community group · thread-based discussions for students & parents.</div>
+    <div class="comm-footer">
+      <span class="comm-members">👥 ${g.memberIds.length} members</span>
+      <span class="badge ${isJoined?'green':'muted'}">${isJoined?'✓ Joined':'+ Join'}</span>
+    </div>
+  </div>`;
+}
+
+function setGradeBand(b) { activeGradeBand = b; renderCommunities(); }
+
+function filterComms(cat) {
+  activeCommFilter = cat;
+  renderCommunities();
+}
+
+function openCommunity(id) {
+  currentCommunityId = id;
+  const comm = COMMUNITIES.find(c => c.id === id);
+  if (!comm) return;
+  const joined = currentUser ? getUserCommunities(currentUser.id) : [];
+  const isJoined = joined.includes(id);
+  const header = document.getElementById('comm-detail-header');
+  header.style.background = `linear-gradient(135deg,${comm.color},${comm.color}cc)`;
+  document.getElementById('comm-detail-emoji').textContent = comm.emoji;
+  document.getElementById('comm-detail-name').textContent = comm.name;
+  document.getElementById('comm-detail-desc').textContent = comm.desc;
+  document.getElementById('comm-detail-members').textContent = `👥 ${comm.members.length + (isJoined?1:0)} members`;
+  const joinBtn = document.getElementById('comm-join-btn');
+  joinBtn.textContent = isJoined ? '✓ Joined' : '+ Join Community';
+  const parentBadge = document.getElementById('comm-parent-badge');
+  if (comm.creative && (!currentUser || currentUser.role === 'student')) {
+    parentBadge.style.display = 'inline-flex';
+    parentBadge.textContent = '⏳ Posts need parent approval';
+  } else parentBadge.style.display = 'none';
+  renderCommDetailContent(comm, isJoined);
+  showScreen('community-detail');
+}
+
+function renderCommDetailContent(comm, isJoined) {
+  const sidebar = document.getElementById('comm-detail-sidebar');
+  const postsEl = document.getElementById('comm-detail-posts');
+  // Forum-style community (Parents' Corner)
+  if (comm.forum) {
+    sidebar.innerHTML = `
+      <div class="sidebar-card">
+        <h4>About</h4>
+        <p style="font-size:13px;color:var(--muted);font-weight:700;line-height:1.6">${comm.desc}</p>
+        <div class="badge purple" style="margin-top:10px">🧵 Thread-based forum</div>
+      </div>
+      <button class="btn green" style="width:100%" onclick="openThreadModal('${comm.id}')">+ New Thread</button>`;
+    renderThreadList(comm.id, postsEl, comm);
+    return;
+  }
+  const posts = getPosts().filter(p => p.communityId === comm.id && p.parentApproved && p.aiStatus === 'approved');
+  sidebar.innerHTML = `
+    <div class="sidebar-card">
+      <h4>About</h4>
+      <p style="font-size:13px;color:var(--muted);font-weight:700;line-height:1.6">${comm.desc}</p>
+      ${comm.creative ? '<div class="badge orange" style="margin-top:10px">✏️ Creative Community — parent approval required</div>' : ''}
+    </div>
+    ${isJoined ? `<button class="btn green" style="width:100%" onclick="openPostModal('${comm.id}')">+ Post to ${comm.name}</button>` : ''}
+  `;
+  if (posts.length === 0) {
+    postsEl.innerHTML = `<div class="empty"><span class="empty-icon">${comm.emoji}</span><p>No posts yet in ${comm.name}. Be the first!</p></div>`;
+  } else {
+    postsEl.innerHTML = posts.sort((a,b) => b.timestamp - a.timestamp).map(p => renderPostCard(p)).join('');
+  }
+}
+
+// ============================================================
+// SCHOOL GROUPS (forum-based)
+// ============================================================
+function openSchoolGroup(sgId) {
+  const g = getSchoolGroups().find(x => x.id === sgId);
+  if (!g) return;
+  const gid = schoolGroupGroupId(g);
+  currentCommunityId = gid;
+  const joined = currentUser ? getUserCommunities(currentUser.id) : [];
+  const isJoined = joined.includes(gid);
+  const header = document.getElementById('comm-detail-header');
+  header.style.background = 'linear-gradient(135deg,#5E35B1,#5E35B1cc)';
+  document.getElementById('comm-detail-emoji').textContent = '🏫';
+  document.getElementById('comm-detail-name').textContent = g.schoolName;
+  document.getElementById('comm-detail-desc').textContent = 'School community group — thread-based discussions for students & parents.';
+  document.getElementById('comm-detail-members').textContent = `👥 ${g.memberIds.length} members`;
+  const joinBtn = document.getElementById('comm-join-btn');
+  joinBtn.textContent = isJoined ? '✓ Joined' : '+ Join Group';
+  document.getElementById('comm-parent-badge').style.display = 'none';
+  const sidebar = document.getElementById('comm-detail-sidebar');
+  const postsEl = document.getElementById('comm-detail-posts');
+  sidebar.innerHTML = `
+    <div class="sidebar-card">
+      <h4>About</h4>
+      <p style="font-size:13px;color:var(--muted);font-weight:700;line-height:1.6">Auto-created community for <strong>${escHtml(g.schoolName)}</strong>. Students and parents can start threads.</p>
+      <div class="badge purple" style="margin-top:10px">🧵 Thread-based forum</div>
+    </div>
+    <button class="btn green" style="width:100%" onclick="openThreadModal('${gid}')">+ New Thread</button>`;
+  renderThreadList(gid, postsEl, {name:g.schoolName, emoji:'🏫'});
+  showScreen('community-detail');
+}
+
+// ============================================================
+// THREADS / FORUM
+// ============================================================
+function threadScore(t) { return t.score || 0; }
+
+function renderThreadList(groupId, el, ctx) {
+  const threads = getThreads().filter(t => t.groupId === groupId)
+    .sort((a,b) => (b.pinned?1:0)-(a.pinned?1:0) || threadScore(b)-threadScore(a) || b.timestamp-a.timestamp);
+  if (!threads.length) {
+    el.innerHTML = `<div class="empty"><span class="empty-icon">${ctx.emoji}</span><p>No threads yet in ${ctx.name}. Start the first discussion!</p></div>`;
+    return;
+  }
+  el.innerHTML = threads.map(t => renderThreadRow(t)).join('');
+}
+
+function renderThreadRow(t) {
+  const myVote = getMyTVote(t.id);
+  const replies = getComments().filter(c => c.threadId === t.id).length;
+  const tags = (t.tags||[]).map(tag => `<span class="thread-tag">#${tag}</span>`).join('');
+  return `<div class="thread-row" onclick="openThread('${t.id}')">
+    <div class="vote-col" onclick="event.stopPropagation()">
+      <button class="vote-btn up ${myVote===1?'on':''}" onclick="voteThread('${t.id}',1)">▲</button>
+      <div class="vote-score">${threadScore(t)}</div>
+      <button class="vote-btn down ${myVote===-1?'on':''}" onclick="voteThread('${t.id}',-1)">▼</button>
+    </div>
+    <div class="thread-main">
+      <div class="thread-title">${t.pinned?'📌 ':''}${escHtml(t.title)}</div>
+      <div class="thread-sub">by ${escHtml(t.authorName)} · ${timeAgo(t.timestamp)} · 💬 ${replies} ${replies===1?'reply':'replies'}</div>
+      <div class="thread-tags">${tags}</div>
+    </div>
+  </div>`;
+}
+
+function getMyTVote(tid) {
+  if (!currentUser) return 0;
+  const v = getTVotes().find(x => x.id === tid && x.userId === currentUser.id);
+  return v ? v.dir : 0;
+}
+function getMyCVote(cid) {
+  if (!currentUser) return 0;
+  const v = getCVotes().find(x => x.id === cid && x.userId === currentUser.id);
+  return v ? v.dir : 0;
+}
+
+function voteThread(tid, dir) {
+  if (!currentUser) { toast('Please log in to vote'); return; }
+  const votes = getTVotes();
+  const threads = getThreads();
+  const t = threads.find(x => x.id === tid);
+  if (!t) return;
+  const existing = votes.find(v => v.id === tid && v.userId === currentUser.id);
+  if (existing) {
+    if (existing.dir === dir) { // toggle off
+      t.score -= dir;
+      votes.splice(votes.indexOf(existing),1);
+    } else { // switch
+      t.score += 2*dir;
+      existing.dir = dir;
+    }
+  } else {
+    t.score = (t.score||0) + dir;
+    votes.push({id:tid, userId:currentUser.id, dir});
+  }
+  saveTVotes(votes); saveThreads(threads);
+  if (document.getElementById('screen-thread').classList.contains('active')) openThread(tid);
+  else renderThreadList(t.groupId, document.getElementById('comm-detail-posts'), {name:'',emoji:'🧵'});
+}
+
+function voteComment(cid, dir) {
+  if (!currentUser) { toast('Please log in to vote'); return; }
+  const votes = getCVotes();
+  const comments = getComments();
+  const c = comments.find(x => x.id === cid);
+  if (!c) return;
+  const existing = votes.find(v => v.id === cid && v.userId === currentUser.id);
+  if (existing) {
+    if (existing.dir === dir) { c.score -= dir; votes.splice(votes.indexOf(existing),1); }
+    else { c.score += 2*dir; existing.dir = dir; }
+  } else {
+    c.score = (c.score||0) + dir;
+    votes.push({id:cid, userId:currentUser.id, dir});
+  }
+  saveCVotes(votes); saveComments(comments);
+  openThread(c.threadId);
+}
+
+let currentThreadId = null;
+let currentThreadGroupId = null;
+
+function openThread(tid) {
+  const t = getThreads().find(x => x.id === tid);
+  if (!t) return;
+  currentThreadId = tid;
+  currentThreadGroupId = t.groupId;
+  const myVote = getMyTVote(tid);
+  const comments = getComments().filter(c => c.threadId === tid).sort((a,b)=> (b.score||0)-(a.score||0) || a.timestamp-b.timestamp);
+  const tags = (t.tags||[]).map(tag => `<span class="thread-tag">#${tag}</span>`).join('');
+  const commentsHtml = comments.length ? comments.map(c => {
+    const cv = getMyCVote(c.id);
+    return `<div class="comment-box">
+      <div class="vote-col">
+        <button class="vote-btn up ${cv===1?'on':''}" onclick="voteComment('${c.id}',1)">▲</button>
+        <div class="vote-score">${c.score||0}</div>
+        <button class="vote-btn down ${cv===-1?'on':''}" onclick="voteComment('${c.id}',-1)">▼</button>
+      </div>
+      <div class="comment-body">
+        <div class="comment-author">${escHtml(c.authorName)} <span style="font-weight:700;color:var(--muted);font-size:11px">· ${timeAgo(c.timestamp)}</span></div>
+        <div class="comment-text">${escHtml(c.text)}</div>
+      </div>
+    </div>`;
+  }).join('') : `<p style="color:var(--muted);font-weight:700;font-size:13px;padding:8px 0">No comments yet. Be the first to reply!</p>`;
+
+  document.getElementById('thread-detail-content').innerHTML = `
+    <div class="post-card">
+      <div class="post-header">
+        <div class="post-av" style="background:${avatarColor(t.authorName)}">${t.authorName.charAt(0)}</div>
+        <div class="post-meta">
+          <div class="post-author">${escHtml(t.authorName)}</div>
+          <div class="post-sub">${timeAgo(t.timestamp)}</div>
+        </div>
+        <div class="vote-col">
+          <button class="vote-btn up ${myVote===1?'on':''}" onclick="voteThread('${t.id}',1)">▲</button>
+          <div class="vote-score">${threadScore(t)}</div>
+          <button class="vote-btn down ${myVote===-1?'on':''}" onclick="voteThread('${t.id}',-1)">▼</button>
+        </div>
+      </div>
+      <h3 style="font-size:20px;margin-bottom:8px">${t.pinned?'📌 ':''}${escHtml(t.title)}</h3>
+      <div class="post-body">${escHtml(t.text)}</div>
+      <div class="thread-tags">${tags}</div>
+    </div>
+    <div class="sectlab" style="font-size:16px;margin:18px 0 12px">💬 Comments (${comments.length})</div>
+    <div class="card" style="margin-bottom:16px"><div class="card-body">
+      <div class="field" style="margin-bottom:8px">
+        <textarea id="comment-input" placeholder="Share a friendly reply..." style="min-height:70px" oninput="clearVal('comment-err')"></textarea>
+        <div class="val-err" id="comment-err"></div>
+      </div>
+      <button class="btn green sm" onclick="submitComment()">Post Comment →</button>
+    </div></div>
+    ${commentsHtml}`;
+
+  document.getElementById('thread-back-btn').onclick = () => {
+    if (currentThreadGroupId.startsWith('school:')) {
+      openSchoolGroup(currentThreadGroupId.split(':')[1]);
+    } else {
+      openCommunity(currentThreadGroupId);
+    }
+  };
+  showScreen('thread');
+}
+
+function submitComment() {
+  if (!currentUser) { toast('Please log in'); return; }
+  const text = document.getElementById('comment-input').value.trim();
+  if (!text) { showVal('comment-err','Please write something'); return; }
+  const v = validateText(text);
+  if (!v.ok) { showVal('comment-err', v.reason); return; }
+  const comments = getComments();
+  comments.push({id:'c_'+Date.now(), threadId:currentThreadId, authorId:currentUser.id, authorName:currentUser.name, text, timestamp:Date.now(), score:0});
+  saveComments(comments);
+  toast('💬 Comment posted!');
+  openThread(currentThreadId);
+}
+
+let pendingThreadGroupId = null;
+function openThreadModal(groupId) {
+  if (!currentUser) { toast('Please log in'); return; }
+  pendingThreadGroupId = groupId;
+  document.getElementById('thread-title').value = '';
+  document.getElementById('thread-body').value = '';
+  clearVal('thread-title-err'); clearVal('thread-body-err');
+  openModal('modal-thread');
+}
+
+function submitThread() {
+  if (!currentUser) { toast('Please log in'); return; }
+  const title = document.getElementById('thread-title').value.trim();
+  const body = document.getElementById('thread-body').value.trim();
+  if (!title) { showVal('thread-title-err','Please enter a title'); return; }
+  const vt = validateText(title);
+  if (!vt.ok) { showVal('thread-title-err', vt.reason); return; }
+  if (!body) { showVal('thread-body-err','Please enter a body'); return; }
+  const vb = validateText(body);
+  if (!vb.ok) { showVal('thread-body-err', vb.reason); return; }
+  const threads = getThreads();
+  threads.unshift({id:'t_'+Date.now(), groupId:pendingThreadGroupId, title, authorId:currentUser.id, authorName:currentUser.name, text:body, timestamp:Date.now(), score:1, pinned:false, tags:[]});
+  saveThreads(threads);
+  // self-upvote
+  const tv = getTVotes();
+  tv.push({id:threads[0].id, userId:currentUser.id, dir:1});
+  saveTVotes(tv);
+  closeModal('modal-thread');
+  toast('🧵 Thread posted!');
+  if (pendingThreadGroupId.startsWith('school:')) openSchoolGroup(pendingThreadGroupId.split(':')[1]);
+  else openCommunity(pendingThreadGroupId);
+}
+
+// Subject proposals
+function submitSubjectProposal() {
+  if (!currentUser) { toast('Please log in'); return; }
+  const name = document.getElementById('subj-name').value.trim();
+  const emoji = document.getElementById('subj-emoji').value.trim() || '📘';
+  const band = document.getElementById('subj-band').value;
+  if (!name) { showVal('subj-name-err','Please enter a name'); return; }
+  const v = validateText(name);
+  if (!v.ok) { showVal('subj-name-err', v.reason); return; }
+  const props = getSubjProposals();
+  props.push({id:'sp_'+Date.now(), name, emoji, gradeBand:band, proposerId:currentUser.id, proposerName:currentUser.name, score:1, created:Date.now()});
+  saveSubjProposals(props);
+  closeModal('modal-subject');
+  toast('📘 Subject group suggested! Thanks for the idea.');
+}
+
+// Validation UI helpers
+function showVal(id, msg) { const e=document.getElementById(id); if(e){e.textContent=msg; e.classList.add('show');} }
+function clearVal(id) { const e=document.getElementById(id); if(e) e.classList.remove('show'); }
+
+function renderParentChatSidebar() {
+  if (!currentUser || currentUser.role !== 'parent') return '';
+  const chats = load('yfs_chat_parents', [
+    {author:'Sunita P.',text:'Has anyone tried the Math Quest app? My daughter loves it!',time:Date.now()-3600000*2,mine:false},
+    {author:'Raj K.',text:'Yes! It helped my son a lot. The timed drills are great.',time:Date.now()-3600000*1,mine:false},
+  ]);
+  const bubbles = chats.slice(-5).map(c =>
+    `<div class="chat-bubble ${c.mine?'mine':''}">
+      ${!c.mine?`<div class="chat-author">${c.author}</div>`:''}
+      <div class="chat-text">${escHtml(c.text)}</div>
+    </div>`).join('');
+  return `<div class="sidebar-card" style="margin-top:12px">
+    <h4>💬 Parent Chat</h4>
+    <div id="parent-chat-area">${bubbles}</div>
+    <div class="chat-input-row">
+      <input type="text" id="parent-chat-input" placeholder="Type a message..." />
+      <button class="btn blue sm" onclick="sendParentChat()">Send</button>
+    </div>
+  </div>`;
+}
+
+function sendParentChat() {
+  const input = document.getElementById('parent-chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const chats = load('yfs_chat_parents', []);
+  chats.push({author:currentUser.name, text, time:Date.now(), mine:true});
+  save('yfs_chat_parents', chats);
+  input.value = '';
+  openCommunity(currentCommunityId);
+}
+
+function toggleJoinCommunity() {
+  if (!currentUser) { toast('Please log in first'); return; }
+  joinCommunity(currentCommunityId);
+  openCommunity(currentCommunityId);
+}
+
+function joinCommunity(id) {
+  if (!currentUser) return;
+  const joined = getUserCommunities(currentUser.id);
+  if (joined.includes(id)) {
+    const idx = joined.indexOf(id);
+    joined.splice(idx, 1);
+    toast('Left community');
+  } else {
+    joined.push(id);
+    // Boost score
+    const accounts = getAccounts();
+    const me = accounts.find(a => a.id === currentUser.id);
+    if (me) { me.foundryScore = (me.foundryScore||0) + 5; saveAccounts(accounts); }
+    toast('Joined! +5 Foundry Points 🎉');
+  }
+  saveUserCommunities(currentUser.id, joined);
+  renderFeed();
+}
+
+// ============================================================
+// POST CREATION
+// ============================================================
+function openPostModal(communityId, isMentor) {
+  pendingPostCommunity = communityId || null;
+  pendingPostMentor = !!isMentor;
+  const sel = document.getElementById('post-community');
+  sel.innerHTML = COMMUNITIES.filter(c => !c.parent || currentUser?.role === 'parent')
+    .map(c => `<option value="${c.id}" ${communityId===c.id?'selected':''}>${c.emoji} ${c.name}${c.creative?' (parent approval)':''}</option>`).join('');
+  document.getElementById('post-text').value = '';
+  document.getElementById('post-image').value = '';
+  document.getElementById('post-image-preview').style.display = 'none';
+  document.getElementById('submit-post-btn').disabled = true;
+  document.getElementById('ai-review-panel').style.display = 'none';
+  const mentorToggle = document.getElementById('mentor-tip-toggle');
+  if (currentUser && currentUser.isMentor) mentorToggle.style.display = 'block';
+  openModal('modal-post');
+}
+
+function previewImage(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const preview = document.getElementById('post-image-preview');
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function resetAiPanel() {
+  document.getElementById('ai-review-panel').style.display = 'none';
+  document.getElementById('submit-post-btn').disabled = true;
+}
+
+function aiReview(text) {
+  const lower = text.toLowerCase();
+  for (const word of ADULT_KEYWORDS) {
+    if (lower.includes(word)) return {pass:false,severity:'block',reason:`Content contains inappropriate language ("${word}"). Please revise your post.`};
+  }
+  for (const phrase of DEFAMATION_TRIGGERS) {
+    if (lower.includes(phrase)) return {pass:false,severity:'block',reason:'Content appears to defame a school or teacher. TYF Network does not allow this. Please revise.'};
+  }
+  let negCount = NEGATIVE_WORDS.filter(w => lower.includes(w)).length;
+  if (negCount >= 2) return {pass:false,severity:'warn',reason:'Your post has multiple negative words that could feel hurtful. Try reframing it constructively. You can still submit after rewording.'};
+  const words = text.split(' ');
+  if (words.length > 40 && !lower.match(/\b(i|my|me|we|our|us)\b/)) {
+    return {pass:false,severity:'warn',reason:'This looks like it might be copied text (no personal voice detected). Add your own perspective to make it genuinely yours!'};
+  }
+  if (text.length < 10) return {pass:false,severity:'warn',reason:'Post seems too short. Share more about your work or idea!'};
+  return {pass:true,severity:'ok',reason:'Content looks great! Your post follows community guidelines.'};
+}
+
+function runAiReview() {
+  const text = document.getElementById('post-text').value.trim();
+  if (!text) { toast('Please write something first'); return; }
+  const result = aiReview(text);
+  const panel = document.getElementById('ai-review-panel');
+  panel.className = 'ai-panel ' + result.severity;
+  panel.style.display = 'block';
+  const icons = {ok:'✅',warn:'⚠️',block:'❌'};
+  const titles = {ok:'AI Review: Approved',warn:'AI Review: Needs a Revision',block:'AI Review: Cannot Be Posted'};
+  panel.innerHTML = `<div class="ai-panel-title">${icons[result.severity]} ${titles[result.severity]}</div><div class="ai-panel-msg">${result.reason}</div>`;
+  document.getElementById('submit-post-btn').disabled = !result.pass;
+}
+
+function submitPost() {
+  if (!currentUser) return;
+  const text = document.getElementById('post-text').value.trim();
+  const v = validateText(text);
+  if (!v.ok) { toast('⚠️ '+v.reason); return; }
+  const communityId = document.getElementById('post-community').value;
+  const isMentorTip = document.getElementById('is-mentor-tip')?.checked || false;
+  const preview = document.getElementById('post-image-preview');
+  const imageB64 = preview.style.display !== 'none' ? preview.src : null;
+  const comm = COMMUNITIES.find(c => c.id === communityId);
+  const needsParentApproval = comm && comm.creative && currentUser.role === 'student';
+  const post = {
+    id:'p_'+Date.now(),
+    authorId:currentUser.id,
+    authorName:currentUser.name,
+    communityId,
+    text,
+    imageB64,
+    timestamp:Date.now(),
+    aiStatus:'approved',
+    parentApproved:!needsParentApproval,
+    reactions:{loveIt:0,likeIt:0,canDoBetter:0,workToBetter:0,motivated:0,inspire:0,keepGoing:0},
+    reports:[],
+    isMentorTip,
+  };
+  const posts = getPosts();
+  posts.unshift(post);
+  savePosts(posts);
+  // Notify parent on every child post
+  if (currentUser.role === 'student') {
+    const accts = getAccounts();
+    const childAcc = accts.find(a => a.id === currentUser.id);
+    if (childAcc && childAcc.parentEmail) {
+      addParentNotification(childAcc.parentEmail, 'post_published',
+        `${childAcc.name} just posted in ${comm ? comm.name : communityId}: "${text.slice(0,80)}${text.length>80?'…':''}"`);
+    }
+  }
+  // Boost score
+  const accounts = getAccounts();
+  const me = accounts.find(a => a.id === currentUser.id);
+  if (me) { me.foundryScore = (me.foundryScore||0) + 10; saveAccounts(accounts); }
+  closeModal('modal-post');
+  if (needsParentApproval) toast('✅ Post submitted! Waiting for parent approval before it goes live.');
+  else toast('✅ Post published! +10 Foundry Points 🎉');
+  renderFeed();
+  renderParentSidebar();
+}
+
+// ============================================================
+// PARENT APPROVAL QUEUE
+// ============================================================
+function renderParentQueue() {
+  const posts = getPosts();
+  const pending = posts.filter(p => !p.parentApproved && p.aiStatus === 'approved');
+  const el = document.getElementById('parent-queue-list');
+  if (pending.length === 0) {
+    el.innerHTML = `<div class="empty"><span class="empty-icon">✅</span><p>No posts pending approval. All clear!</p></div>`;
+    return;
+  }
+  el.innerHTML = pending.map(p => {
+    const comm = COMMUNITIES.find(c => c.id === p.communityId);
+    return `<div class="pending-item">
+      <div class="pi-header">
+        <div class="post-av" style="background:${avatarColor(p.authorName)};width:36px;height:36px;font-size:16px">${p.authorName.charAt(0)}</div>
+        <div>
+          <div style="font-weight:900;font-size:13px">${p.authorName}</div>
+          <div style="font-size:12px;color:var(--muted);font-weight:700">${comm?comm.emoji+' '+comm.name:p.communityId} · ${timeAgo(p.timestamp)}</div>
+        </div>
+        <span class="badge yellow" style="margin-left:auto">⏳ Pending</span>
+      </div>
+      <div class="pi-text">${escHtml(p.text)}</div>
+      <div class="pi-actions">
+        <button class="btn green sm" onclick="approvePost('${p.id}')">✅ Approve</button>
+        <button class="btn red sm" onclick="rejectPost('${p.id}')">❌ Reject</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function approvePost(id) {
+  const posts = getPosts();
+  const p = posts.find(x => x.id === id);
+  if (p) { p.parentApproved = true; savePosts(posts); }
+  toast('✅ Post approved and published!');
+  renderParentQueue();
+  renderParentSidebar();
+}
+
+function rejectPost(id) {
+  const posts = getPosts().filter(p => p.id !== id);
+  savePosts(posts);
+  toast('Post rejected and removed.');
+  renderParentQueue();
+  renderParentSidebar();
+}
+
+// ============================================================
+// PROPOSALS
+// ============================================================
+function openSuggestModal() { openModal('modal-suggest'); }
+
+function submitProposal() {
+  if (!currentUser) { toast('Please log in'); return; }
+  const name = document.getElementById('suggest-name').value.trim();
+  const emoji = document.getElementById('suggest-emoji').value.trim() || '💡';
+  const desc = document.getElementById('suggest-desc').value.trim();
+  if (!name || !desc) { toast('Please fill all fields'); return; }
+  const props = getProposals();
+  props.push({id:'prop_'+Date.now(), name, emoji, desc, proposerId:currentUser.id, proposerName:currentUser.name, score:1, created:Date.now()});
+  saveProposals(props);
+  // Boost score
+  const accounts = getAccounts();
+  const me = accounts.find(a => a.id === currentUser.id);
+  if (me) { me.foundryScore = (me.foundryScore||0) + 5; saveAccounts(accounts); }
+  closeModal('modal-suggest');
+  toast('✅ Proposal submitted! +5 Foundry Points');
+  showScreen('proposals');
+}
+
+function voteProposal(id, dir) {
+  if (!currentUser) { toast('Please log in'); return; }
+  const votes = getProposalVotes();
+  const existing = votes.find(v => v.propId === id && v.userId === currentUser.id);
+  if (existing) { toast('You already voted on this proposal'); return; }
+  votes.push({propId:id, userId:currentUser.id, dir});
+  saveProposalVotes(votes);
+  const props = getProposals();
+  const p = props.find(x => x.id === id);
+  if (p) { p.score = (p.score||0) + dir; saveProposals(props); }
+  renderProposals();
+  toast(dir > 0 ? '👍 Upvoted!' : '👎 Downvoted');
+}
+
+function renderProposals() {
+  const props = getProposals().sort((a,b) => (b.score||0)-(a.score||0));
+  const el = document.getElementById('proposals-list');
+  if (!props.length) {
+    el.innerHTML = `<div class="empty"><span class="empty-icon">💡</span><p>No proposals yet. Be the first to suggest a community!</p></div>`;
+    return;
+  }
+  el.innerHTML = props.map(p => `
+    <div class="proposal-card">
+      <div class="prop-votes">
+        <button class="prop-vote-btn up" onclick="voteProposal('${p.id}',1)">▲</button>
+        <div class="prop-score" style="color:${(p.score||0)>0?'var(--green)':(p.score||0)<0?'var(--red)':'var(--muted)'}">${p.score||0}</div>
+        <button class="prop-vote-btn down" onclick="voteProposal('${p.id}',-1)">▼</button>
+      </div>
+      <div class="prop-info">
+        <div class="prop-name">${p.emoji} ${p.name}</div>
+        <div class="prop-desc">${p.desc}</div>
+        <div style="margin-top:6px;font-size:11px;color:var(--muted);font-weight:700">Proposed by ${p.proposerName} · ${timeAgo(p.created)}</div>
+      </div>
+    </div>`).join('');
+
+  const top3Block = document.getElementById('top-proposals-admin');
+  const top3List = document.getElementById('top3-list');
+  if (currentUser && currentUser.role === 'admin' && props.filter(p => (p.score||0) > 0).length >= 1) {
+    top3Block.style.display = 'block';
+    const top3 = props.filter(p => (p.score||0) > 0).slice(0,3);
+    top3List.innerHTML = top3.map(p => `
+      <div class="proposal-card">
+        <div style="font-size:2rem;margin-right:4px">${p.emoji}</div>
+        <div class="prop-info">
+          <div class="prop-name">${p.name} <span class="badge green">+${p.score} votes</span></div>
+          <div class="prop-desc">${p.desc}</div>
+        </div>
+        <button class="btn green sm" onclick="createCommunityFromProposal('${p.id}')">✅ Create</button>
+      </div>`).join('');
+  }
+}
+
+function createCommunityFromProposal(id) {
+  const props = getProposals();
+  const p = props.find(x => x.id === id);
+  if (!p) return;
+  toast(`🎉 Community "${p.name}" created! The proposer earns a Founder badge.`);
+  // In a real app, would add to COMMUNITIES and give founder badge
+  props.splice(props.indexOf(p), 1);
+  saveProposals(props);
+  renderProposals();
+}
+
+// ============================================================
+// QUESTS
+// ============================================================
+function renderQuests() {
+  const el = document.getElementById('quests-list');
+  el.innerHTML = QUESTS.map(q => {
+    const comm = COMMUNITIES.find(c => c.id === q.community);
+    return `<div class="quest-card" style="margin-bottom:14px;">
+      <div class="quest-title">${q.title} ${q.active ? '<span class="badge green" style="background:rgba(255,255,255,.2);color:#fff;font-size:11px">Active</span>' : '<span class="badge muted" style="background:rgba(0,0,0,.2);color:rgba(255,255,255,.7);font-size:11px">Coming Soon</span>'}</div>
+      <div class="quest-desc">${q.desc}</div>
+      <div class="quest-meta">⏰ ${q.deadline} · ${comm?comm.emoji+' '+comm.name:q.community} · 🏅 +${q.reward} pts</div>
+      ${q.active ? `<button class="btn sm" style="background:rgba(255,255,255,.2);color:#fff;border:2px solid rgba(255,255,255,.3);margin-top:12px" onclick="openPostModal('${q.community}')">Submit Entry →</button>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// PROFILE
+// ============================================================
+function renderProfile() {
+  if (!currentUser) return;
+  const accounts = getAccounts();
+  const me = accounts.find(a => a.id === currentUser.id) || currentUser;
+  const posts = getPosts().filter(p => p.authorId === currentUser.id && p.parentApproved);
+  const score = me.foundryScore || 0;
+  const joined = getUserCommunities(currentUser.id);
+  const isPublic = me.profilePublic !== false;
+  document.getElementById('profile-hero-block').innerHTML = `
+    <div class="profile-hero">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;flex-wrap:wrap">
+        <div style="font-size:2.6rem;line-height:1">${me.avatar || PRESET_AVATARS[0]}</div>
+        <div>
+          <div class="profile-name">${escHtml(me.name)}</div>
+          <div class="profile-sub">
+            ${me.role === 'student' ? `Grade ${me.grade}${me.schoolName?' · 🏫 '+escHtml(me.schoolName):''}` : me.role === 'parent' ? 'Parent' : 'Admin'}
+            ${me.isMentor ? ' · <span class="mentor-tag">🎓 Mentor</span>' : ''}
+          </div>
+        </div>
+        <div style="margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <span class="badge ${me.status==='active'?'green':me.status==='suspended'?'red':'orange'}">${me.status||'active'}</span>
+          <button class="wall-privacy-toggle" onclick="toggleProfileVisibility()" title="Toggle public/private">${isPublic?'🌐 Public':'🔒 Private'}</button>
+          <button class="wall-privacy-toggle" onclick="showScreen('wall')" style="background:rgba(255,255,255,.1)">🧱 My Wall</button>
+        </div>
+      </div>
+      ${me.aboutMe?`<div style="background:rgba(255,255,255,.12);border-radius:12px;padding:10px 14px;font-size:13px;font-weight:700;margin-bottom:10px">"${escHtml(me.aboutMe)}"</div>`:''}
+      ${me.objective?`<div style="font-size:12px;font-weight:700;opacity:.85;margin-bottom:10px">🎯 ${escHtml(me.objective)}</div>`:''}
+      <div class="profile-stats">
+        <div class="pstat"><div class="pstat-num">${posts.length}</div><div class="pstat-label">Posts</div></div>
+        <div class="pstat"><div class="pstat-num">${joined.length}</div><div class="pstat-label">Communities</div></div>
+        <div class="pstat"><div class="pstat-num">${posts.reduce((s,p) => s+totalReactions(p),0)}</div><div class="pstat-label">Reactions</div></div>
+      </div>
+      <div style="margin-top:12px;display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.15);border-radius:14px;padding:10px 16px;">
+        <span style="font-family:'Fredoka One',cursive;font-size:26px">${score}</span>
+        <div><div style="font-size:12px;font-weight:900">Foundry Score</div><div style="font-size:11px;opacity:.8;font-weight:700">${scoreLabel(score)}</div></div>
+      </div>
+    </div>`;
+  renderProfileTab();
+}
+
+function switchProfileTab(tab) {
+  activeProfileTab = tab;
+  document.querySelectorAll('#screen-profile .tab').forEach(t => t.classList.remove('active'));
+  const idx = ['about','posts','communities','badges','portfolio'].indexOf(tab);
+  const tabs = document.querySelectorAll('#screen-profile .tab');
+  if (idx >= 0 && tabs[idx]) tabs[idx].classList.add('active');
+  renderProfileTab();
+}
+
+function renderProfileTab() {
+  const el = document.getElementById('profile-tab-content');
+  if (activeProfileTab === 'about') {
+    const accounts = getAccounts();
+    const me = accounts.find(a => a.id === currentUser.id) || currentUser;
+    const joined = getUserCommunities(currentUser.id);
+    el.innerHTML = `<div class="card"><div class="card-body">
+      <div class="no-photo-note">🔒 Profile photos are not allowed on TYF Network. Your privacy and safety come first.</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:16px;margin-bottom:14px">🎭 Choose Your Avatar</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
+        ${PRESET_AVATARS.map(av => `<button onclick="selectAvatar('${av}')" style="font-size:2rem;padding:8px;border-radius:14px;border:3px solid ${(me.avatar||PRESET_AVATARS[0])===av?'var(--blue)':'var(--line)'};background:${(me.avatar||PRESET_AVATARS[0])===av?'var(--soft)':'#fff'};cursor:pointer;transition:.15s" title="Select avatar">${av}</button>`).join('')}
+      </div>
+      <div class="field">
+        <label>About Me <span style="color:var(--muted);font-weight:700">(max 200 chars)</span></label>
+        <textarea id="about-me-input" maxlength="200" placeholder="Tell the community about yourself — your hobbies, what excites you...">${escHtml(me.aboutMe||'')}</textarea>
+        <div class="val-err" id="about-err"></div>
+      </div>
+      <div class="field">
+        <label>🎯 My Objective in Life <span style="color:var(--muted);font-weight:700">(max 300 chars)</span></label>
+        <textarea id="objective-input" maxlength="300" placeholder="What do you want to achieve? What drives you every day?">${escHtml(me.objective||'')}</textarea>
+        <div class="val-err" id="obj-err"></div>
+      </div>
+      <div style="margin-bottom:18px">
+        <label style="font-weight:800;font-size:13px;color:var(--dark);display:block;margin-bottom:8px">🌐 My Interests</label>
+        <p style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:8px">Auto-populated from the communities you've joined</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          ${joined.length ? joined.map(cid => {
+            const c = COMMUNITIES.find(x => x.id === cid);
+            return c ? `<span class="badge blue">${c.emoji} ${c.name}</span>` : '';
+          }).join('') : '<span style="font-size:13px;color:var(--muted);font-weight:700">Join communities to add interests</span>'}
+        </div>
+      </div>
+      <div style="background:#fff3e0;border:2px solid #ffe0b2;border-radius:12px;padding:10px 14px;font-size:12px;font-weight:700;color:#E65100;margin-bottom:16px">
+        🔒 Your email address is always kept private and never visible to other users.
+      </div>
+      <button class="btn green" onclick="saveAboutMe()">Save Profile →</button>
+    </div></div>`;
+  } else if (activeProfileTab === 'posts') {
+    const posts = getPosts().filter(p => p.authorId === currentUser.id);
+    el.innerHTML = posts.length ? posts.map(p => renderPostCard(p)).join('') : `<div class="empty"><span class="empty-icon">✍️</span><p>No posts yet. Share your first creation!</p></div>`;
+  } else if (activeProfileTab === 'communities') {
+    const joined = getUserCommunities(currentUser.id);
+    el.innerHTML = joined.length ? `<div class="comm-grid">${joined.map(cid => {
+      const c = COMMUNITIES.find(x => x.id === cid);
+      return c ? `<div class="comm-card" onclick="openCommunity('${c.id}')"><span class="comm-emoji">${c.emoji}</span><div class="comm-name" style="color:${c.color}">${c.name}</div><div class="comm-desc">${c.desc}</div></div>` : '';
+    }).join('')}</div>` : `<div class="empty"><span class="empty-icon">🌐</span><p>No communities joined yet.</p></div>`;
+  } else if (activeProfileTab === 'badges') {
+    const accounts = getAccounts();
+    const me = accounts.find(a => a.id === currentUser.id) || currentUser;
+    const badges = getBadges(me);
+    el.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;">
+      ${badges.map(b => `<div style="background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:16px;text-align:center;box-shadow:var(--shadow-sm)">
+        <div style="font-size:2.5rem;margin-bottom:8px">${b.emoji}</div>
+        <div style="font-weight:900;font-size:13px;color:var(--dark)">${b.name}</div>
+        <div style="font-size:11px;color:var(--muted);font-weight:700;margin-top:4px">${b.desc}</div>
+      </div>`).join('')}
+    </div>`;
+  } else if (activeProfileTab === 'portfolio') {
+    const accounts = getAccounts();
+    const me = accounts.find(a => a.id === currentUser.id) || currentUser;
+    const score = me.foundryScore || 0;
+    const posts = getPosts().filter(p => p.authorId === currentUser.id && p.parentApproved);
+    const canShare = parseInt(me.grade||0) >= 9 || score >= 100;
+    el.innerHTML = `<div class="card"><div class="card-body">
+      <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:12px">🔗 Foundry Portfolio</div>
+      ${canShare ? `
+        <p style="font-size:14px;font-weight:700;color:var(--muted);margin-bottom:16px">Share your Foundry journey. This link shows your posts, communities, and score.</p>
+        <div style="background:var(--soft);border-radius:12px;padding:12px;font-family:monospace;font-size:13px;word-break:break-all;margin-bottom:12px">
+          tyf.network/portfolio/${currentUser.id}
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn green sm" onclick="toast('Portfolio link copied! 🎉')">Copy Link</button>
+          <button class="btn ghost sm">Download PDF</button>
+        </div>
+      ` : `
+        <div style="text-align:center;padding:24px;">
+          <div style="font-size:3rem;margin-bottom:12px">🔒</div>
+          <p style="font-weight:800;color:var(--dark);margin-bottom:6px">Portfolio available from Grade 9+</p>
+          <p style="font-size:13px;color:var(--muted);font-weight:700">Or earn 100 Foundry Points to unlock early. You have ${score} points.</p>
+        </div>
+      `}
+    </div></div>`;
+  }
+}
+
+function getBadges(user) {
+  const posts = getPosts().filter(p => p.authorId === user.id);
+  const badges = [];
+  if (posts.length >= 1) badges.push({emoji:'✍️',name:'First Post',desc:'Posted for the first time'});
+  if (posts.length >= 5) badges.push({emoji:'📝',name:'Active Voice',desc:'5+ posts shared'});
+  const score = user.foundryScore || 0;
+  if (score >= 20) badges.push({emoji:'🌱',name:'Seedling',desc:'20+ Foundry Points'});
+  if (score >= 60) badges.push({emoji:'🌿',name:'Grower',desc:'60+ Foundry Points'});
+  if (score >= 120) badges.push({emoji:'🌳',name:'Builder',desc:'120+ Foundry Points'});
+  if (user.isMentor) badges.push({emoji:'🎓',name:'Mentor',desc:'Sharing wisdom with younger grades'});
+  if (getUserCommunities(user.id).length >= 3) badges.push({emoji:'🌐',name:'Community Citizen',desc:'Joined 3+ communities'});
+  if (!badges.length) badges.push({emoji:'🚀',name:'Just Getting Started',desc:'Keep posting and reacting!'});
+  return badges;
+}
+
+// ============================================================
+// MODERATION
+// ============================================================
+function renderModTab() {
+  const el = document.getElementById('mod-tab-content');
+  document.querySelectorAll('#screen-mod .tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#screen-mod .tab')[['flags','accounts','proposals'].indexOf(activeModTab)].classList.add('active');
+  if (activeModTab === 'flags') {
+    const flags = getFlags();
+    if (!flags.length) { el.innerHTML = `<div class="empty"><span class="empty-icon">✅</span><p>No flagged posts. Community is clean!</p></div>`; return; }
+    el.innerHTML = flags.map(f => `
+      <div class="mod-row">
+        <div class="mod-icon" style="background:#ffebee">🚩</div>
+        <div class="mod-info">
+          <div class="mod-title">${f.reason}</div>
+          <div class="mod-sub">Post ID: ${f.postId} · ${timeAgo(f.timestamp)}</div>
+        </div>
+        <button class="btn red sm" onclick="adminRemovePost('${f.postId}')">Remove Post</button>
+      </div>`).join('');
+  } else if (activeModTab === 'accounts') {
+    const accounts = getAccounts().filter(a => a.role === 'student');
+    if (!accounts.length) { el.innerHTML = `<div class="empty"><span class="empty-icon">👤</span><p>No student accounts yet.</p></div>`; return; }
+    el.innerHTML = accounts.map(a => `
+      <div class="mod-row">
+        <div class="av" style="background:${avatarColor(a.name)};width:40px;height:40px">${a.name.charAt(0)}</div>
+        <div class="mod-info">
+          <div class="mod-title">${a.name} · Grade ${a.grade}</div>
+          <div class="mod-sub">${a.schoolId} · <span style="color:${a.status==='active'?'var(--green)':a.status==='suspended'?'var(--red)':'var(--orange)'}">${a.status}</span></div>
+        </div>
+        ${a.status==='active'
+          ? `<button class="btn orange sm" onclick="suspendAccount('${a.id}')">Suspend</button>`
+          : a.status==='suspended'
+          ? `<button class="btn green sm" onclick="reinstateAccount('${a.id}')">Reinstate</button>`
+          : `<button class="btn green sm" onclick="approveAccount('${a.id}')">Approve</button>`
+        }
+      </div>`).join('');
+  } else if (activeModTab === 'proposals') {
+    renderProposals();
+  }
+}
+
+function switchModTab(tab) {
+  activeModTab = tab;
+  renderModTab();
+}
+
+function adminRemovePost(id) {
+  const posts = getPosts().filter(p => p.id !== id);
+  savePosts(posts);
+  const flags = getFlags().filter(f => f.postId !== id);
+  saveFlags(flags);
+  toast('Post removed');
+  renderModTab();
+}
+
+function suspendAccount(id) {
+  const accounts = getAccounts();
+  const a = accounts.find(x => x.id === id);
+  if (a) { a.status = 'suspended'; saveAccounts(accounts); }
+  toast('Account suspended');
+  renderModTab();
+}
+
+function reinstateAccount(id) {
+  const accounts = getAccounts();
+  const a = accounts.find(x => x.id === id);
+  if (a) { a.status = 'active'; saveAccounts(accounts); }
+  toast('Account reinstated');
+  renderModTab();
+}
+
+function approveAccount(id) {
+  const accounts = getAccounts();
+  const a = accounts.find(x => x.id === id);
+  if (a) { a.status = 'active'; saveAccounts(accounts); }
+  toast('Account approved');
+  renderModTab();
+}
+
+// ============================================================
+// REPORT
+// ============================================================
+function openReportModal(postId) {
+  document.getElementById('report-post-id').value = postId;
+  openModal('modal-report');
+}
+
+function submitReport() {
+  if (!currentUser) return;
+  const postId = document.getElementById('report-post-id').value;
+  const reason = document.getElementById('report-reason').value;
+  const flags = getFlags();
+  flags.push({postId, reason, timestamp:Date.now(), reviewedBy:'ai', action:'pending', reporterId:currentUser.id});
+  saveFlags(flags);
+  // Notify parent if the reported account belongs to a student
+  const rPosts = getPosts();
+  const rp = rPosts.find(p => p.id === postId);
+  if (rp) {
+    const rAccounts = getAccounts();
+    const reportedUser = rAccounts.find(a => a.id === rp.authorId);
+    if (reportedUser && reportedUser.parentEmail) {
+      addParentNotification(reportedUser.parentEmail, 'report',
+        `A post by ${reportedUser.name} has been reported (reason: ${reason}). Please review their recent activity on TYF Network.`);
+    }
+  }
+  // Auto-check report count
+  const postFlags = flags.filter(f => f.postId === postId);
+  if (postFlags.length >= 3) {
+    const posts = getPosts();
+    const p = posts.find(x => x.id === postId);
+    if (p) { p.aiStatus = 'flagged'; savePosts(posts); }
+    toast('⚠️ Post has been automatically hidden pending admin review.');
+  } else {
+    toast('🚩 Report submitted. Admins will review this post.');
+  }
+  closeModal('modal-report');
+  renderPosts();
+}
+
+// ============================================================
+// MODAL HELPERS
+// ============================================================
+function openComingSoon() {
+  document.getElementById('coming-grid').innerHTML = COMING_SOON.map(c =>
+    `<div class="coming-item"><span class="ci-emoji">${c.emoji}</span><div><div class="ci-title">${c.title}</div><div class="ci-desc">${c.desc}</div></div></div>`
+  ).join('');
+  openModal('modal-coming');
+}
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+
+// ============================================================
+// UTILS
+// ============================================================
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function timeAgo(ts) {
+  const diff = Date.now() - ts;
+  if (diff < 60000) return 'just now';
+  if (diff < 3600000) return Math.floor(diff/60000)+'m ago';
+  if (diff < 86400000) return Math.floor(diff/3600000)+'h ago';
+  return Math.floor(diff/86400000)+'d ago';
+}
+
+function avatarColor(name) {
+  const colors = ['#E53935','#43A047','#1E88E5','#F97316','#8B5CF6','#00897B','#E91E63','#5D4037'];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash<<5)-hash);
+  return colors[Math.abs(hash) % colors.length];
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ============================================================
+// PRESET AVATARS
+// ============================================================
+const PRESET_AVATARS = ['🦁','🐯','🦊','🐼','🐨','🦋','🌟','🚀','🎨','🎵','📚','⚡','🌈','🎯','🔬','🏆','🌱','🎭','🦅','🐉'];
+
+function renderAvatarCircle(name, avatar, cls) {
+  if (avatar) return `<div class="${cls}" style="background:${avatarColor(name)};font-size:${cls==='post-av'?'1.3rem':'1.8rem'}">${avatar}</div>`;
+  return `<div class="${cls}" style="background:${avatarColor(name)}">${name.charAt(0)}</div>`;
+}
+
+function selectAvatar(av) {
+  if (!currentUser) return;
+  const accounts = getAccounts();
+  const me = accounts.find(a => a.id === currentUser.id);
+  if (me) { me.avatar = av; saveAccounts(accounts); }
+  renderProfile();
+}
+
+// ============================================================
+// ABOUT ME / PROFILE EDITING
+// ============================================================
+function saveAboutMe() {
+  if (!currentUser) return;
+  const aboutRaw = document.getElementById('about-me-input').value.trim();
+  const objRaw = document.getElementById('objective-input').value.trim();
+  const aErr = document.getElementById('about-err');
+  const oErr = document.getElementById('obj-err');
+  aErr.classList.remove('show'); oErr.classList.remove('show');
+  if (aboutRaw) {
+    const v = validateText(aboutRaw);
+    if (!v.ok) { aErr.textContent = v.reason; aErr.classList.add('show'); return; }
+  }
+  if (objRaw) {
+    const v = validateText(objRaw);
+    if (!v.ok) { oErr.textContent = v.reason; oErr.classList.add('show'); return; }
+  }
+  const accounts = getAccounts();
+  const me = accounts.find(a => a.id === currentUser.id);
+  if (me) { me.aboutMe = aboutRaw; me.objective = objRaw; saveAccounts(accounts); }
+  toast('✅ Profile updated!');
+  renderProfile();
+}
+
+// ============================================================
+// PUBLIC/PRIVATE TOGGLE
+// ============================================================
+function toggleProfileVisibility() {
+  if (!currentUser) return;
+  const accounts = getAccounts();
+  const me = accounts.find(a => a.id === currentUser.id);
+  if (me) { me.profilePublic = me.profilePublic === false ? true : false; saveAccounts(accounts); }
+  const isPublic = !me || me.profilePublic !== false;
+  toast(isPublic ? '🌐 Your profile is now Public' : '🔒 Your profile is now Private');
+  renderProfile();
+}
+
+// ============================================================
+// MY WALL
+// ============================================================
+function renderWall(userId) {
+  const uid = userId || (currentUser && currentUser.id);
+  if (!uid) return;
+  const accounts = getAccounts();
+  const user = accounts.find(a => a.id === uid) || (currentUser && currentUser.id === uid ? currentUser : null);
+  if (!user) { document.getElementById('wall-posts-block').innerHTML = `<div class="empty"><span class="empty-icon">👤</span><p>User not found.</p></div>`; return; }
+  const isOwn = currentUser && currentUser.id === uid;
+  const isPublic = user.profilePublic !== false;
+  if (!isPublic && !isOwn && (!currentUser || currentUser.role !== 'admin')) {
+    document.getElementById('wall-header-block').innerHTML = `<div class="profile-hero" style="margin-bottom:20px"><div style="font-size:2rem;margin-bottom:8px">🔒</div><div class="profile-name">${escHtml(user.name)}</div><div class="profile-sub">This profile is private.</div></div>`;
+    document.getElementById('wall-posts-block').innerHTML = '';
+    return;
+  }
+  const joined = getUserCommunities(uid);
+  const posts = getPosts().filter(p => p.authorId === uid && p.parentApproved && p.aiStatus === 'approved');
+  document.getElementById('wall-header-block').innerHTML = `
+    <div class="profile-hero" style="margin-bottom:20px">
+      <div style="display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap">
+        <div style="font-size:2.8rem;line-height:1">${user.avatar || PRESET_AVATARS[0]}</div>
+        <div style="flex:1">
+          <div style="font-family:'Fredoka One',cursive;font-size:22px">${escHtml(user.name)}</div>
+          <div style="font-size:13px;opacity:.8;font-weight:700;margin-top:2px">
+            ${user.role==='student'?`Grade ${user.grade}${user.schoolName?' · 🏫 '+escHtml(user.schoolName):''}`:user.role==='parent'?'Parent':'Admin'}
+            ${user.isMentor?' · <span class="mentor-tag">🎓 Mentor</span>':''}
+          </div>
+          ${user.aboutMe?`<div style="font-size:13px;font-weight:700;margin-top:8px;opacity:.9;background:rgba(255,255,255,.12);border-radius:10px;padding:8px 12px">"${escHtml(user.aboutMe)}"</div>`:''}
+          ${user.objective?`<div style="font-size:12px;font-weight:700;margin-top:6px;opacity:.8">🎯 ${escHtml(user.objective)}</div>`:''}
+          ${joined.length?`<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">${joined.slice(0,5).map(cid=>{const c=COMMUNITIES.find(x=>x.id===cid);return c?`<span style="background:rgba(255,255,255,.15);border-radius:8px;padding:3px 8px;font-size:11px;font-weight:800">${c.emoji} ${c.name}</span>`:''}).join('')}${joined.length>5?`<span style="font-size:11px;font-weight:700;opacity:.7">+${joined.length-5} more</span>`:''}</div>`:''}
+        </div>
+      </div>
+      ${isOwn?`<div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="wall-privacy-toggle" onclick="toggleProfileVisibility()">
+          ${user.profilePublic!==false?'🌐 Public — click to make Private':'🔒 Private — click to make Public'}
+        </button>
+        <button class="wall-privacy-toggle" onclick="showScreen('profile')" style="background:rgba(255,255,255,.1)">✏️ Edit Profile</button>
+      </div>`:''}
+    </div>`;
+  document.getElementById('wall-posts-block').innerHTML = posts.length
+    ? `<div class="sectlab" style="margin-bottom:14px">📝 Posts by ${escHtml(user.name)}</div>` + posts.map(p=>renderPostCard(p)).join('')
+    : `<div class="empty"><span class="empty-icon">✍️</span><p>No posts yet.</p></div>`;
+}
+
+function openPublicWall(userId) {
+  const accounts = getAccounts();
+  const user = accounts.find(a => a.id === userId);
+  if (!user) return;
+  showScreen('wall');
+  renderWall(userId);
+}
+
+// ============================================================
+// SHARE FUNCTIONS
+// ============================================================
+function openMFC() {
+  if (currentUser && currentUser.role === 'student')
+    localStorage.setItem('mfc_session', JSON.stringify(currentUser));
+  window.location.href = 'MyFirstChapter.html';
+}
+function openTool(url) {
+  if (currentUser && currentUser.role === 'student')
+    localStorage.setItem('mfc_session', JSON.stringify(currentUser));
+  window.location.href = url;
+}
+
+function shareWhatsApp(postId) {
+  const post = getPosts().find(p => p.id === postId);
+  if (!post) return;
+  const snippet = post.text.slice(0,200) + (post.text.length>200?'...':'');
+  const text = encodeURIComponent(`Check out this post by ${post.authorName} on TYF Network:\n\n"${snippet}"\n\n🚀 Join The Young Foundry Network!`);
+  window.open(`https://wa.me/?text=${text}`, '_blank');
+}
+
+function shareEmail(postId) {
+  const post = getPosts().find(p => p.id === postId);
+  if (!post) return;
+  const subject = encodeURIComponent(`${post.authorName} shared something on TYF Network`);
+  const body = encodeURIComponent(`${post.authorName} posted on The Young Foundry Network:\n\n"${post.text.slice(0,400)}"\n\nJoin TYF Network to see more and be part of the community!`);
+  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+}
+
+function repostToWall(postId) {
+  if (!currentUser) { toast('Please log in to repost'); return; }
+  const allPosts = getPosts();
+  const post = allPosts.find(p => p.id === postId);
+  if (!post) return;
+  if (post.authorId === currentUser.id) { toast('You cannot repost your own post'); return; }
+  const alreadyReposted = allPosts.some(p => p.isRepost && p.originalPostId === postId && p.authorId === currentUser.id);
+  if (alreadyReposted) { toast('You already reposted this'); return; }
+  const repost = {
+    id:'rp_'+Date.now(),
+    authorId:currentUser.id,
+    authorName:currentUser.name,
+    authorAvatar:currentUser.avatar||null,
+    communityId:post.communityId,
+    text:post.text,
+    imageB64:post.imageB64,
+    timestamp:Date.now(),
+    aiStatus:'approved',
+    parentApproved:true,
+    reactions:{loveIt:0,likeIt:0,canDoBetter:0,workToBetter:0,motivated:0,inspire:0,keepGoing:0},
+    reports:[],
+    isMentorTip:false,
+    isRepost:true,
+    originalAuthor:post.authorName,
+    originalPostId:postId,
+  };
+  allPosts.unshift(repost);
+  savePosts(allPosts);
+  toast('✅ Reposted to your wall! +2 Foundry Points');
+  const accounts = getAccounts();
+  const me = accounts.find(a=>a.id===currentUser.id);
+  if (me) { me.foundryScore=(me.foundryScore||0)+2; saveAccounts(accounts); }
+  renderFeed();
+}
+
+// ============================================================
+// USER BASE COUNTER
+// ============================================================
+function updateUserBaseCounter() {
+  const total = getAccounts().filter(a => a.status !== 'pending').length;
+  const el = document.getElementById('ub-counter');
+  const cnt = document.getElementById('ub-count');
+  if (el && cnt) {
+    cnt.textContent = total || '—';
+    el.style.display = 'block';
+  }
+}
+
+// ============================================================
+// PARENT NOTIFICATIONS
+// ============================================================
+function getParentNotifs(email) { return load('yfs_pnotif_'+btoa(email||''), []); }
+function saveParentNotifs(email, n) { save('yfs_pnotif_'+btoa(email||''), n); }
+
+function addParentNotification(parentEmail, type, message) {
+  if (!parentEmail) return;
+  const notifs = getParentNotifs(parentEmail);
+  notifs.unshift({ id:'n_'+Date.now(), type, message, timestamp: Date.now(), read: false });
+  saveParentNotifs(parentEmail, notifs);
+}
+
+function renderParentNotifBell() {
+  if (!currentUser || currentUser.role !== 'parent') return;
+  const notifs = getParentNotifs(currentUser.email || '');
+  const unread = notifs.filter(n => !n.read).length;
+  const existing = document.getElementById('notif-bell');
+  if (existing) existing.remove();
+  const bell = document.createElement('div');
+  bell.id = 'notif-bell';
+  bell.style.cssText = 'position:fixed;bottom:60px;right:18px;z-index:200;cursor:pointer;';
+  bell.innerHTML = `<div style="background:var(--dark);color:#fff;border-radius:14px;padding:8px 14px;font-size:13px;font-weight:800;box-shadow:var(--shadow);display:flex;align-items:center;gap:8px" onclick="showParentNotifs()">
+    🔔 ${unread > 0 ? `<span style="background:var(--red);border-radius:999px;padding:2px 7px;font-size:11px">${unread}</span>` : ''}
+    Notifications
+  </div>`;
+  document.body.appendChild(bell);
+}
+
+function showParentNotifs() {
+  if (!currentUser || !currentUser.email) return;
+  const notifs = getParentNotifs(currentUser.email);
+  notifs.forEach(n => n.read = true);
+  saveParentNotifs(currentUser.email, notifs);
+  renderParentNotifBell();
+  if (!notifs.length) { toast('No notifications yet'); return; }
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(45,55,72,.55);backdrop-filter:blur(4px);z-index:500;display:grid;place-items:center;';
+  overlay.innerHTML = `<div style="background:#fff;border-radius:24px;padding:28px;max-width:480px;width:calc(100% - 32px);box-shadow:0 24px 64px -12px rgba(45,55,72,.4);max-height:80vh;overflow-y:auto;position:relative;">
+    <button onclick="this.closest('div[style]').remove()" style="position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;background:var(--soft);font-size:15px;display:grid;place-items:center;cursor:pointer;color:var(--muted);border:none">✕</button>
+    <div style="font-family:'Fredoka One',cursive;font-size:20px;margin-bottom:16px">🔔 Notifications</div>
+    ${notifs.map(n => `<div style="background:var(--soft);border-radius:14px;padding:12px 14px;margin-bottom:10px;font-size:13px;font-weight:700;color:var(--dark);line-height:1.5">
+      ${n.type==='account_created'?'👤':n.type==='post_published'?'📝':n.type==='report'?'🚩':'🔔'} ${n.message}
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">${timeAgo(n.timestamp)}</div>
+    </div>`).join('')}
+  </div>`;
+  overlay.addEventListener('click', e => { if (e.target===overlay) overlay.remove(); });
+  document.body.appendChild(overlay);
+}
+
+// Init seed data so feed isn't empty on first load
+if (!localStorage.getItem('yfs_posts')) savePosts(getSeedPosts());
+</script>
 </body>
 </html>
