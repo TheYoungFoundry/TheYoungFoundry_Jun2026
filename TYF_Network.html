@@ -3556,6 +3556,7 @@ function showScreen(id) {
   else if (id==='mod') renderModTab();
   else if (id==='chat') renderChatScreen();
   else if (id==='free-resources') { /* no extra render needed */ }
+  showScreenWizard(id);
 }
 
 
@@ -4750,6 +4751,20 @@ function renderProfileTab() {
           <button class="btn ghost sm" onclick="inviteByEmail('')">📧 Invite via Email</button>
         </div>
       </div>
+      <div style="margin-top:16px;background:linear-gradient(135deg,#f3e5f5,#e8f5e9);border:2px solid #ce93d8;border-radius:16px;padding:16px;">
+        <div style="font-family:'Fredoka One',cursive;font-size:16px;color:#6A1B9A;margin-bottom:4px">🧙 My Guide Wizard</div>
+        <p style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:12px">Pick one guide to follow you across all pages, or keep page-specific guides.</p>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px">
+          <button onclick="selectWizard('page')" style="display:flex;flex-direction:column;align-items:center;padding:10px 6px;border-radius:14px;border:2.5px solid ${(me.wizardChoice||'page')==='page'?'#7B1FA2':'var(--line)'};background:${(me.wizardChoice||'page')==='page'?'#f3e5f5':'#fff'};cursor:pointer;font-size:11px;font-weight:800;color:#6A1B9A;gap:4px">
+            <span style="font-size:1.6rem">🗺️</span>Page guides
+          </button>
+          ${WIZARD_DEFS.map(w => `<button onclick="selectWizard('${w.id}')" style="display:flex;flex-direction:column;align-items:center;padding:6px 4px;border-radius:14px;border:2.5px solid ${(me.wizardChoice||'page')===w.id?w.color:'var(--line)'};background:${(me.wizardChoice||'page')===w.id?'#fafafa':'#fff'};cursor:pointer;gap:2px">
+            ${WIZARD_SVGS[w.id].replace('width="72" height="86"','width="48" height="56"')}
+            <span style="font-size:10px;font-weight:800;color:var(--dark)">${w.name}</span>
+            <span style="font-size:9px;color:var(--muted);font-weight:700">${w.hindi}</span>
+          </button>`).join('')}
+        </div>
+      </div>
       <div style="margin-top:16px;background:#ffebee;border:2px solid #ef9a9a;border-radius:16px;padding:16px;">
         <div style="font-weight:900;font-size:14px;color:var(--red);margin-bottom:6px">⚠️ Danger Zone</div>
         <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">Permanently delete your account and all your posts. This cannot be undone. Parents/guardians can request this at any time as required by the DPDP Act 2023.</p>
@@ -5848,212 +5863,187 @@ if (!localStorage.getItem('yfs_posts')) savePosts(getSeedPosts());
   </div>
 </div>
 
-<!-- PAGE BUDDIES -->
-<div id="page-buddies"></div>
-<button id="buddy-launch-btn" onclick="initBuddies()" title="Meet your page guides!" style="display:none;position:fixed;bottom:72px;right:16px;z-index:8400;background:linear-gradient(135deg,#7B1FA2,#E91E63);color:#fff;border:none;border-radius:999px;padding:9px 16px;font-weight:900;font-size:13px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.25);animation:buddyPulse 2s infinite">🧙 Meet the Guides</button>
+<!-- PAGE WIZARDS -->
+<div id="page-wizard-host"></div>
 
 <style>
-@keyframes buddyPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
-@keyframes buddyBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
-@keyframes buddyPop { 0%{transform:scale(0);opacity:0} 70%{transform:scale(1.15)} 100%{transform:scale(1);opacity:1} }
-.buddy-widget {
-  position:fixed;
-  z-index:8500;
-  user-select:none;
-  cursor:grab;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:0;
-  pointer-events:all;
+@keyframes wizBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+@keyframes wizPop { 0%{transform:scale(0) translateX(-50%);opacity:0} 70%{transform:scale(1.12) translateX(-50%)} 100%{transform:scale(1) translateX(-50%);opacity:1} }
+@keyframes wizIn { 0%{transform:scale(0);opacity:0} 70%{transform:scale(1.1)} 100%{transform:scale(1);opacity:1} }
+.wiz-widget {
+  position:fixed; bottom:80px; right:16px; z-index:8500;
+  user-select:none; cursor:grab; display:flex;
+  flex-direction:column; align-items:center; pointer-events:all;
+  animation:wizIn .35s cubic-bezier(.34,1.56,.64,1);
 }
-.buddy-widget:active { cursor:grabbing; }
-.buddy-statue {
-  font-size:2.4rem;
-  line-height:1;
-  filter:drop-shadow(0 2px 4px rgba(0,0,0,.2));
-  animation:buddyBounce 2.5s ease-in-out infinite;
-  transition:transform .2s;
+.wiz-widget:active { cursor:grabbing; }
+.wiz-svg-wrap {
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,.22));
+  animation:wizBounce 2.8s ease-in-out infinite;
+  transition:transform .18s;
 }
-.buddy-statue:hover { transform:scale(1.15); }
-.buddy-bubble {
-  position:absolute;
-  bottom:calc(100% + 8px);
-  left:50%;
+.wiz-svg-wrap:hover { transform:scale(1.1); }
+.wiz-statue .wiz-svg-wrap { opacity:.5; animation:none; filter:drop-shadow(0 2px 4px rgba(0,0,0,.15)) grayscale(.4); }
+.wiz-bubble {
+  position:absolute; bottom:calc(100% + 10px); left:50%;
   transform:translateX(-50%);
-  background:#fff;
-  border:3px solid var(--line);
-  border-radius:18px 18px 18px 4px;
-  padding:12px 14px;
-  min-width:200px;
-  max-width:240px;
-  box-shadow:0 6px 24px rgba(0,0,0,.14);
-  animation:buddyPop .3s ease;
+  background:#fff; border:2.5px solid var(--line);
+  border-radius:16px 16px 16px 4px;
+  padding:11px 14px; min-width:190px; max-width:230px;
+  box-shadow:0 8px 28px rgba(0,0,0,.13);
+  animation:wizPop .3s cubic-bezier(.34,1.56,.64,1);
   pointer-events:none;
 }
-.buddy-bubble-text { font-size:13px;font-weight:700;color:var(--dark);line-height:1.5; }
-.buddy-bubble-name { font-size:11px;font-weight:900;margin-bottom:5px; }
-.buddy-close {
-  position:absolute;
-  top:-8px;
-  right:-8px;
-  width:22px;
-  height:22px;
-  border-radius:50%;
-  background:var(--muted);
-  color:#fff;
-  border:none;
-  font-size:13px;
-  line-height:22px;
-  text-align:center;
-  cursor:pointer;
-  pointer-events:all;
-  z-index:1;
+.wiz-bubble-name { font-size:11px; font-weight:900; margin-bottom:4px; }
+.wiz-bubble-hindi { font-size:10px; opacity:.6; margin-left:4px; font-weight:700; }
+.wiz-bubble-text { font-size:13px; font-weight:700; color:var(--dark); line-height:1.5; }
+.wiz-close {
+  position:absolute; top:-9px; right:-9px;
+  width:24px; height:24px; border-radius:50%;
+  background:#888; color:#fff; border:none;
+  font-size:14px; line-height:24px; text-align:center;
+  cursor:pointer; pointer-events:all; z-index:1; font-weight:900;
 }
-.buddy-close:hover { background:var(--red); }
-.buddy-statue-mode .buddy-statue { opacity:.55; animation:none; }
+.wiz-close:hover { background:var(--red); }
 </style>
 
 <script>
-const BUDDY_DEFS = [
-  {id:'wizard', emoji:'🧙', name:'Wizzy', color:'#7B1FA2', tips:[
-    'Welcome to The Young Foundry! I\'m Wizzy — here to help you explore! ✨',
-    'Click 🏠 Feed in the sidebar to see all community posts!',
-    'Visit 🌐 Communities to discover groups you\'ll love!',
-    'Check your 👤 Profile to track your badges and portfolio!',
-    'Use 💬 Chat to message your friends anytime!'
-  ]},
-  {id:'fairy', emoji:'🧚', name:'Faye', color:'#E91E63', tips:[
-    'Hi! I\'m Faye the Fairy! ✨ Need help finding your way around?',
-    'Go to 🗓️ TYF Events to see upcoming workshops and programmes!',
-    'Visit 🎁 Free Resources for fun activities — no signup needed!',
-    'Tap 🔍 to search for friends and community posts!',
-    'Earn badges by posting, reacting, and connecting with friends!'
-  ]},
-  {id:'robot', emoji:'🤖', name:'Robo', color:'#0288D1', tips:[
-    'BEEP BOOP! I\'m Robo — your tech-savvy guide! 🤖',
-    'Post in communities to earn Foundry Points and level up!',
-    'React to friends\' posts — spread the love and earn XP!',
-    'Add buddies to unlock private chats and connections!',
-    'The higher your Foundry Score, the more badges you unlock!'
-  ]},
-  {id:'hero', emoji:'🦸', name:'Sparky', color:'#D32F2F', tips:[
-    'I\'m Sparky — your superhero guide! Let\'s go! 💥',
-    'Your Wall is your personal space — posts, score, and story!',
-    'Join communities to find others who share your passions!',
-    'Reach 500 XP to become a Foundry Fellow — you can do it!',
-    'Send a buddy request to connect with someone new today!'
-  ]},
-  {id:'student', emoji:'👨‍🎓', name:'Kip', color:'#2E7D32', tips:[
-    'Hey there! I\'m Kip, your student guide to the Network! 📚',
-    'Write and publish your own book in MyFirstChapter!',
-    'Use 💬 Chat to message friends — try @mentioning them!',
-    'Toggle your profile to Public to share your journey!',
-    'Create a group chat for team projects or friend squads!'
-  ]}
+const WIZARD_SVGS = {
+  arjun: `<svg width="72" height="86" viewBox="0 0 72 86" xmlns="http://www.w3.org/2000/svg"><rect x="16" y="5" width="40" height="14" rx="2" fill="#FFFDE7" stroke="#E0C890" stroke-width=".8"/><rect x="12" y="17" width="48" height="5" rx="2.5" fill="#E8D080"/><text x="36" y="15" font-size="7" text-anchor="middle" font-family="sans-serif" font-weight="500" fill="#9A7800">NEWS</text><circle cx="36" cy="51" r="24" fill="#FF7D00"/><ellipse cx="18" cy="57" rx="5" ry="3" fill="#cc5500" opacity=".3"/><ellipse cx="54" cy="57" rx="5" ry="3" fill="#cc5500" opacity=".3"/><circle cx="27" cy="46" r="6" fill="#fff"/><circle cx="45" cy="46" r="6" fill="#fff"/><circle cx="28.5" cy="47.5" r="3.8" fill="#222"/><circle cx="46.5" cy="47.5" r="3.8" fill="#222"/><circle cx="30" cy="46" r="1.3" fill="#fff"/><circle cx="48" cy="46" r="1.3" fill="#fff"/><ellipse cx="36" cy="53" rx="2.5" ry="2" fill="#d06000"/><path d="M25 59 Q36 69 47 59" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><rect x="50" y="59" width="17" height="10" rx="2" fill="#fff" stroke="#E0C090" stroke-width=".6"/><text x="58.5" y="66.5" font-size="5.5" text-anchor="middle" font-family="sans-serif" fill="#9A7800" font-weight="500">PRESS</text><ellipse cx="36" cy="80" rx="16" ry="7" fill="#FF7D00"/></svg>`,
+
+  mithali: `<svg width="72" height="86" viewBox="0 0 72 86" xmlns="http://www.w3.org/2000/svg"><defs><clipPath id="wiz-cl-m"><circle cx="36" cy="51" r="23"/></clipPath></defs><line x1="28" y1="29" x2="22" y2="10" stroke="#333" stroke-width="1.5" stroke-linecap="round"/><line x1="44" y1="29" x2="50" y2="10" stroke="#333" stroke-width="1.5" stroke-linecap="round"/><circle cx="22" cy="9" r="3" fill="#333"/><circle cx="50" cy="9" r="3" fill="#FFD600"/><ellipse cx="7" cy="42" rx="12" ry="7" fill="#E3F2FD" stroke="#90CAF9" stroke-width="1" transform="rotate(-22 7 42)" opacity=".92"/><ellipse cx="65" cy="42" rx="12" ry="7" fill="#E3F2FD" stroke="#90CAF9" stroke-width="1" transform="rotate(22 65 42)" opacity=".92"/><circle cx="36" cy="51" r="23" fill="#FFD600"/><g clip-path="url(#wiz-cl-m)"><rect x="13" y="41" width="46" height="7" fill="#222" opacity=".72"/><rect x="13" y="53" width="46" height="7" fill="#222" opacity=".72"/></g><circle cx="27" cy="47" r="6" fill="#fff"/><circle cx="45" cy="47" r="6" fill="#fff"/><circle cx="28.5" cy="48.5" r="3.8" fill="#111"/><circle cx="46.5" cy="48.5" r="3.8" fill="#111"/><circle cx="30" cy="47" r="1.3" fill="#fff"/><circle cx="48" cy="47" r="1.3" fill="#fff"/><path d="M24 60 Q36 71 48 60" fill="none" stroke="#333" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="36" cy="76" rx="10" ry="5" fill="#FFD600"/><polygon points="36,78 33,85 39,85" fill="#FF8F00"/></svg>`,
+
+  vikram: `<svg width="72" height="86" viewBox="0 0 72 86" xmlns="http://www.w3.org/2000/svg"><ellipse cx="36" cy="29" rx="23" ry="7" fill="#B8966A"/><ellipse cx="36" cy="23" rx="19" ry="14" fill="#CDAA7A"/><ellipse cx="36" cy="28" rx="23" ry="3.5" fill="#A0784A" opacity=".55"/><circle cx="36" cy="52" r="22" fill="#FDDCB0"/><circle cx="22" cy="56" r="1.8" fill="#e8a870" opacity=".6"/><circle cx="50" cy="56" r="1.8" fill="#e8a870" opacity=".6"/><circle cx="27" cy="48" r="6" fill="#fff"/><circle cx="45" cy="48" r="6" fill="#fff"/><circle cx="28.5" cy="49.5" r="4" fill="#3a2a0a"/><circle cx="46.5" cy="49.5" r="4" fill="#3a2a0a"/><circle cx="30.2" cy="48" r="1.4" fill="#fff"/><circle cx="48.2" cy="48" r="1.4" fill="#fff"/><path d="M24 59 Q36 70 48 59" fill="none" stroke="#c0735a" stroke-width="2.2" stroke-linecap="round"/><rect x="55" y="54" width="14" height="17" rx="2" fill="#FFF9C4" stroke="#D4B040" stroke-width=".8"/><circle cx="55" cy="54" r="2.2" fill="#C8A040"/><circle cx="69" cy="54" r="2.2" fill="#C8A040"/><circle cx="55" cy="71" r="2.2" fill="#C8A040"/><circle cx="69" cy="71" r="2.2" fill="#C8A040"/><line x1="58" y1="59" x2="66" y2="59" stroke="#A08030" stroke-width=".9"/><path d="M58 63 Q62 65 66 63" fill="none" stroke="#A08030" stroke-width=".9"/><line x1="58" y1="67" x2="66" y2="67" stroke="#A08030" stroke-width=".9"/><ellipse cx="36" cy="80" rx="16" ry="7" fill="#8B6914"/></svg>`,
+
+  kavya: `<svg width="72" height="86" viewBox="0 0 72 86" xmlns="http://www.w3.org/2000/svg"><ellipse cx="38" cy="29" rx="21" ry="9" fill="#E91E63"/><ellipse cx="38" cy="23" rx="16" ry="10" fill="#C2185B"/><circle cx="45" cy="19" r="3.5" fill="#E91E63"/><circle cx="36" cy="51" r="22" fill="#FDDCB0"/><ellipse cx="19" cy="55" rx="5" ry="3" fill="#4CAF50" opacity=".6" transform="rotate(-20 19 55)"/><circle cx="27" cy="47" r="6" fill="#fff"/><circle cx="45" cy="47" r="6" fill="#fff"/><circle cx="28.5" cy="48.5" r="3.8" fill="#2a1a6e"/><circle cx="46.5" cy="48.5" r="3.8" fill="#2a1a6e"/><circle cx="30" cy="47" r="1.3" fill="#fff"/><circle cx="48" cy="47" r="1.3" fill="#fff"/><path d="M25 58 Q36 68 47 58" fill="none" stroke="#c0735a" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="9" cy="62" rx="8" ry="6" fill="#FFF9C4" stroke="#ddd" stroke-width=".5" transform="rotate(-15 9 62)"/><circle cx="6" cy="60" r="2.3" fill="#E53935"/><circle cx="11" cy="58" r="2.3" fill="#1E88E5"/><circle cx="13" cy="64" r="2.3" fill="#43A047"/><rect x="55" y="47" width="4" height="22" rx="2" fill="#8B4513"/><rect x="54" y="43" width="6" height="6" rx="1" fill="#aaa"/><ellipse cx="57" cy="41" rx="4" ry="5" fill="#E91E63"/><ellipse cx="36" cy="80" rx="16" ry="7" fill="#7B1FA2"/></svg>`,
+
+  gyan: `<svg width="72" height="86" viewBox="0 0 72 86" xmlns="http://www.w3.org/2000/svg"><rect x="13" y="18" width="46" height="5" rx="1.5" fill="#111"/><ellipse cx="36" cy="18" rx="23" ry="4" fill="#222"/><rect x="33" y="7" width="6" height="11" rx="1" fill="#444"/><line x1="56" y1="18" x2="62" y2="29" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/><circle cx="63" cy="31" r="3" fill="#FFD700"/><circle cx="36" cy="51" r="23" fill="#00ACC1"/><circle cx="26" cy="48" r="7.5" fill="none" stroke="#222" stroke-width="2.2"/><circle cx="46" cy="48" r="7.5" fill="none" stroke="#222" stroke-width="2.2"/><line x1="33.5" y1="48" x2="38.5" y2="48" stroke="#222" stroke-width="2.2"/><line x1="18.5" y1="46" x2="15" y2="44" stroke="#222" stroke-width="1.8"/><line x1="53.5" y1="46" x2="57" y2="44" stroke="#222" stroke-width="1.8"/><circle cx="26" cy="48" r="5" fill="#fff"/><circle cx="46" cy="48" r="5" fill="#fff"/><circle cx="27" cy="49" r="3.2" fill="#1a1a4e"/><circle cx="47" cy="49" r="3.2" fill="#1a1a4e"/><circle cx="28.2" cy="47.8" r="1.1" fill="#fff"/><circle cx="48.2" cy="47.8" r="1.1" fill="#fff"/><path d="M24 60 Q36 70 48 60" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><rect x="49" y="56" width="20" height="15" rx="2" fill="#FFF9C4" stroke="#D4B040" stroke-width=".8"/><line x1="59" y1="56" x2="59" y2="71" stroke="#C8A040" stroke-width="1"/><line x1="51" y1="61" x2="57" y2="61" stroke="#ccc" stroke-width=".8"/><line x1="61" y1="61" x2="67" y2="61" stroke="#ccc" stroke-width=".8"/><line x1="51" y1="65" x2="57" y2="65" stroke="#ccc" stroke-width=".8"/><line x1="61" y1="65" x2="67" y2="65" stroke="#ccc" stroke-width=".8"/><ellipse cx="36" cy="80" rx="16" ry="7" fill="#00838F"/></svg>`,
+
+  vani: `<svg width="72" height="86" viewBox="0 0 72 86" xmlns="http://www.w3.org/2000/svg"><path d="M12,4 Q4,4 4,14 L4,56 Q4,66 12,66 L26,66 L20,80 L36,66 L60,66 Q68,66 68,56 L68,14 Q68,4 60,4 Z" fill="#1976D2"/><path d="M12,6 Q6,6 6,14 L6,24" fill="none" stroke="#42A5F5" stroke-width="2" stroke-linecap="round" opacity=".5"/><circle cx="23" cy="33" r="7.5" fill="#fff"/><circle cx="49" cy="33" r="7.5" fill="#fff"/><circle cx="24.5" cy="34.5" r="4.8" fill="#0D47A1"/><circle cx="50.5" cy="34.5" r="4.8" fill="#0D47A1"/><circle cx="26.2" cy="33" r="1.6" fill="#fff"/><circle cx="52.2" cy="33" r="1.6" fill="#fff"/><path d="M19 48 Q36 60 53 48" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><circle cx="28" cy="57" r="2" fill="#90CAF9"/><circle cx="36" cy="57" r="2" fill="#90CAF9"/><circle cx="44" cy="57" r="2" fill="#90CAF9"/></svg>`,
+
+  tara: `<svg width="72" height="86" viewBox="0 0 72 86" xmlns="http://www.w3.org/2000/svg"><g fill="#FFE082" opacity=".55"><polygon points="36,5 37.8,13 39.6,5 37.8,0"/><polygon points="11,28 19,31 11,34 5,31"/><polygon points="61,28 67,31 61,34 55,31"/><polygon points="16,12 22,18 16,24 10,18"/><polygon points="56,12 62,18 56,24 50,18"/></g><polygon points="18,27 22,14 29,23 36,11 43,23 50,14 54,27" fill="#FF8F00"/><rect x="18" y="25" width="36" height="8" rx="2" fill="#FFC107"/><circle cx="25" cy="28" r="2.8" fill="#E53935"/><circle cx="36" cy="26" r="3.2" fill="#42A5F5"/><circle cx="47" cy="28" r="2.8" fill="#66BB6A"/><circle cx="36" cy="57" r="23" fill="#FFC107"/><polygon points="14,59 16,57 18,59 16,61" fill="#FFE082"/><polygon points="54,59 56,57 58,59 56,61" fill="#FFE082"/><circle cx="27" cy="53" r="6" fill="#fff"/><circle cx="45" cy="53" r="6" fill="#fff"/><circle cx="28.5" cy="54.5" r="3.8" fill="#5C2D00"/><circle cx="46.5" cy="54.5" r="3.8" fill="#5C2D00"/><circle cx="30" cy="53" r="1.3" fill="#fff"/><circle cx="48" cy="53" r="1.3" fill="#fff"/><path d="M25 64 Q36 74 47 64" fill="none" stroke="#FF6F00" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="36" cy="82" rx="16" ry="6" fill="#FFB300"/></svg>`
+};
+
+const WIZARD_DEFS = [
+  {id:'arjun',   name:'Arjun',   hindi:'अर्जुन',  color:'#FF7D00', screen:'feed',
+   tips:['Namaste! I\'m Arjun — your Feed guide! See what your community is creating today.','Post something in a community to earn Foundry Points!','React to posts you love — it helps your friends get noticed!','Use the search bar to find topics and friends.','The most-reacted posts get featured — share your best!']},
+  {id:'mithali', name:'Mithali', hindi:'मिताली', color:'#E6A800', screen:'communities',
+   tips:['Hi! I\'m Mithali — your community guide! Find your tribe here.','Join a community that matches your interests and start posting!','Each community has its own feed, members, and vibe.','You can join up to 10 communities — explore them all!','Suggest a new community if you don\'t find what you\'re looking for!']},
+  {id:'vikram',  name:'Vikram',  hindi:'विक्रम',  color:'#8B6914', screen:'quests',
+   tips:['Adventure awaits! I\'m Vikram — your TYF Events guide!','Check here for upcoming TYF workshops and programmes.','Post about an event to share it with the whole community!','Events are a great way to earn extra Foundry Points.','Click Post an Event to share a workshop or activity!']},
+  {id:'kavya',   name:'Kavya',   hindi:'काव्या',  color:'#C2185B', screen:'wall',
+   tips:['Hello! I\'m Kavya — your creative guide for My Wall!','Your Wall shows your posts, score, and journey all in one place.','Make your Wall shine by posting often and getting reactions!','Toggle your profile to Public so others can discover your Wall.','Your Wall is YOUR story — make it colourful!']},
+  {id:'gyan',    name:'Gyan',    hindi:'ज्ञान',   color:'#007B8F', screen:'free-resources',
+   tips:['Namaste! I\'m Gyan — your knowledge guide!','All free resources here work without any extra signup.','Try MyFirstChapter to write and publish your own book!','Math Quest and Telugu Learning are fun activities to try.','Bookmark this page — new resources get added regularly!']},
+  {id:'vani',    name:'Vani',    hindi:'वाणी',   color:'#1565C0', screen:'chat',
+   tips:['Hello! I\'m Vani — your Chat guide! Start a conversation!','Type @ followed by a name to mention someone in a group chat.','You can react to any message with an emoji — tap and hold!','Create a group chat for your squad or school project.','Only TYF links are allowed in chat — keep it safe!']},
+  {id:'tara',    name:'Tara',    hindi:'तारा',    color:'#E65C00', screen:'profile',
+   tips:['Namaste! I\'m Tara — your Profile guide! You\'re a star!','Fill in your About Me to help others get to know you.','Check the Badges tab to see what you can earn next.','Your Portfolio unlocks at Grade 9 or 100 Foundry Points.','Choose your Guide Wizard right here in the About tab!']},
 ];
 
-let buddiesInit = false;
-let buddyTipIndex = {};
+let _wizTipIdx = {};
+let _wizDragging = false;
 
-function initBuddies() {
-  if (buddiesInit) {
-    document.querySelectorAll('.buddy-widget').forEach(b => { b.style.display = 'flex'; });
-    document.getElementById('buddy-launch-btn').style.display = 'none';
-    return;
-  }
-  buddiesInit = true;
-  document.getElementById('buddy-launch-btn').style.display = 'none';
-  const container = document.getElementById('page-buddies');
-  const positions = [
-    {right:'80px',bottom:'80px'}, {right:'160px',bottom:'80px'},
-    {right:'240px',bottom:'80px'}, {right:'320px',bottom:'80px'},
-    {right:'400px',bottom:'80px'}
-  ];
-  BUDDY_DEFS.forEach((def, i) => {
-    buddyTipIndex[def.id] = 0;
-    const el = document.createElement('div');
-    el.className = 'buddy-widget buddy-statue-mode';
-    el.id = 'buddy-' + def.id;
-    el.style.right = positions[i].right;
-    el.style.bottom = positions[i].bottom;
-    el.innerHTML = `
-      <button class="buddy-close" onclick="closeBuddy('${def.id}')">×</button>
-      <div class="buddy-statue" onclick="activateBuddy('${def.id}')" title="Click me!">${def.emoji}</div>
-    `;
-    makeDraggable(el);
-    container.appendChild(el);
-    setTimeout(() => activateBuddy(def.id), i * 400);
-  });
+function showScreenWizard(screenId) {
+  if (!currentUser) return;
+  const choice = (currentUser.wizardChoice && currentUser.wizardChoice !== 'page')
+    ? currentUser.wizardChoice : null;
+  const def = choice
+    ? WIZARD_DEFS.find(d => d.id === choice)
+    : WIZARD_DEFS.find(d => d.screen === screenId);
+  const host = document.getElementById('page-wizard-host');
+  if (!def) { host.innerHTML = ''; return; }
+  // Keep same wizard if already showing correct one (just update — no flicker)
+  const existing = document.getElementById('wiz-active');
+  if (existing && existing.dataset.wizId === def.id) return;
+  host.innerHTML = '';
+  _wizTipIdx[def.id] = _wizTipIdx[def.id] || 0;
+  const el = document.createElement('div');
+  el.className = 'wiz-widget wiz-statue';
+  el.id = 'wiz-active';
+  el.dataset.wizId = def.id;
+  el.innerHTML = `
+    <button class="wiz-close" onclick="closeWizard()" title="Minimise">×</button>
+    <div class="wiz-svg-wrap" onclick="activateWizard()" title="Click me!">
+      ${WIZARD_SVGS[def.id]}
+    </div>`;
+  _makeWizDraggable(el);
+  host.appendChild(el);
+  // Auto-greet after short delay
+  setTimeout(() => activateWizard(), 600);
 }
 
-function activateBuddy(id) {
-  const el = document.getElementById('buddy-' + id);
+function activateWizard() {
+  const el = document.getElementById('wiz-active');
   if (!el) return;
-  const def = BUDDY_DEFS.find(d => d.id === id);
-  el.classList.remove('buddy-statue-mode');
-  const existing = el.querySelector('.buddy-bubble');
-  if (existing) existing.remove();
-  const tipIdx = buddyTipIndex[id] % def.tips.length;
-  buddyTipIndex[id] = (tipIdx + 1) % def.tips.length;
-  const bubble = document.createElement('div');
-  bubble.className = 'buddy-bubble';
-  bubble.innerHTML = `<div class="buddy-bubble-name" style="color:${def.color}">${def.emoji} ${def.name}</div><div class="buddy-bubble-text">${def.tips[tipIdx]}</div>`;
-  el.appendChild(bubble);
-  clearTimeout(el._bubbleTimer);
-  el._bubbleTimer = setTimeout(() => {
-    bubble.remove();
-    el.classList.add('buddy-statue-mode');
-  }, 6000);
+  const def = WIZARD_DEFS.find(d => d.id === el.dataset.wizId);
+  if (!def) return;
+  el.classList.remove('wiz-statue');
+  const old = el.querySelector('.wiz-bubble');
+  if (old) old.remove();
+  const idx = _wizTipIdx[def.id] % def.tips.length;
+  _wizTipIdx[def.id] = (idx + 1) % def.tips.length;
+  const b = document.createElement('div');
+  b.className = 'wiz-bubble';
+  b.innerHTML = `<div class="wiz-bubble-name" style="color:${def.color}">${def.name} <span class="wiz-bubble-hindi">${def.hindi}</span></div><div class="wiz-bubble-text">${def.tips[idx]}</div>`;
+  el.appendChild(b);
+  clearTimeout(el._wt);
+  el._wt = setTimeout(() => { b.remove(); el.classList.add('wiz-statue'); }, 7000);
 }
 
-function closeBuddy(id) {
-  const el = document.getElementById('buddy-' + id);
+function closeWizard() {
+  const el = document.getElementById('wiz-active');
   if (!el) return;
-  const bubble = el.querySelector('.buddy-bubble');
-  if (bubble) bubble.remove();
-  el.classList.add('buddy-statue-mode');
+  const b = el.querySelector('.wiz-bubble');
+  if (b) b.remove();
+  el.classList.add('wiz-statue');
 }
 
-function makeDraggable(el) {
-  let ox=0, oy=0, sx=0, sy=0, dragging=false;
-  el.addEventListener('mousedown', e => {
-    if (e.target.classList.contains('buddy-close') || e.target.classList.contains('buddy-statue')) {
-      if (e.target.classList.contains('buddy-close')) return;
-    }
-    dragging = true;
-    const rect = el.getBoundingClientRect();
-    ox = e.clientX - rect.left;
-    oy = e.clientY - rect.top;
-    el.style.right = 'auto';
-    el.style.bottom = 'auto';
-    el.style.left = rect.left + 'px';
-    el.style.top = rect.top + 'px';
-    e.preventDefault();
-  });
-  document.addEventListener('mousemove', e => {
-    if (!dragging) return;
-    el.style.left = (e.clientX - ox) + 'px';
-    el.style.top = (e.clientY - oy) + 'px';
-  });
-  document.addEventListener('mouseup', () => { dragging = false; });
-  el.addEventListener('touchstart', e => {
-    const t = e.touches[0];
-    const rect = el.getBoundingClientRect();
-    ox = t.clientX - rect.left; oy = t.clientY - rect.top;
+function _makeWizDraggable(el) {
+  let ox=0, oy=0, moved=false;
+  const down = (cx, cy) => {
+    moved = false;
+    const r = el.getBoundingClientRect();
+    ox = cx - r.left; oy = cy - r.top;
     el.style.right = 'auto'; el.style.bottom = 'auto';
-    el.style.left = rect.left + 'px'; el.style.top = rect.top + 'px';
-  }, {passive:true});
-  el.addEventListener('touchmove', e => {
-    const t = e.touches[0];
-    el.style.left = (t.clientX - ox) + 'px';
-    el.style.top = (t.clientY - oy) + 'px';
-    e.preventDefault();
-  }, {passive:false});
+    el.style.left = r.left + 'px'; el.style.top = r.top + 'px';
+    _wizDragging = true;
+  };
+  const move = (cx, cy) => {
+    if (!_wizDragging) return;
+    moved = true;
+    el.style.left = (cx - ox) + 'px'; el.style.top = (cy - oy) + 'px';
+  };
+  const up = () => { _wizDragging = false; };
+  el.addEventListener('mousedown', e => { if (e.target.classList.contains('wiz-close')) return; down(e.clientX, e.clientY); e.preventDefault(); });
+  document.addEventListener('mousemove', e => move(e.clientX, e.clientY));
+  document.addEventListener('mouseup', up);
+  el.addEventListener('touchstart', e => { const t=e.touches[0]; down(t.clientX, t.clientY); }, {passive:true});
+  el.addEventListener('touchmove', e => { const t=e.touches[0]; move(t.clientX, t.clientY); e.preventDefault(); }, {passive:false});
+  el.addEventListener('touchend', up);
 }
 
+function selectWizard(wizId) {
+  if (!currentUser) return;
+  const accounts = getAccounts();
+  const idx = accounts.findIndex(a => a.id === currentUser.id);
+  if (idx !== -1) { accounts[idx].wizardChoice = wizId; saveAccounts(accounts); }
+  currentUser.wizardChoice = wizId;
+  // Re-render picker & update active wizard
+  renderProfileTabContent();
+  const active = document.querySelector('.screen.active');
+  const screenId = active ? active.id.replace('screen-','') : 'profile';
+  const host = document.getElementById('page-wizard-host');
+  if (host) host.innerHTML = '';
+  showScreenWizard(screenId);
+  toast('Guide updated! ' + (WIZARD_DEFS.find(d=>d.id===wizId)||{}).name);
+}
+
+// Called on login
 function showBuddyBtn() {
-  if (currentUser) document.getElementById('buddy-launch-btn').style.display = 'block';
+  const active = document.querySelector('.screen.active');
+  const screenId = active ? active.id.replace('screen-','') : 'feed';
+  showScreenWizard(screenId);
 }
 </script>
 
