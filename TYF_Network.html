@@ -1335,13 +1335,10 @@ input,textarea,select{font-family:var(--body);}
         </div>
       </div>
       <div class="pp-nav-item active" data-tab="approvals"  onclick="switchParentTab('approvals')">📋 Pending Approvals <span class="pp-nav-badge" id="pp-badge-approvals" style="display:none">0</span></div>
-      <div class="pp-nav-item" data-tab="activity"   onclick="switchParentTab('activity')">👁️ Child's Activity</div>
-      <div class="pp-nav-item" data-tab="alerts"     onclick="switchParentTab('alerts')">🔔 Notifications <span class="pp-nav-badge" id="pp-badge-alerts" style="display:none">0</span></div>
-      <div class="pp-nav-item" data-tab="analytics"  onclick="switchParentTab('analytics')">📊 Profile Analytics</div>
+      <div class="pp-nav-item" data-tab="profiles"   onclick="switchParentTab('profiles')">👶 Child Profiles</div>
+      <div class="pp-nav-item" data-tab="activity"   onclick="switchParentTab('activity')">👁️ Child's Activity <span class="pp-nav-badge" id="pp-badge-alerts" style="display:none">0</span></div>
       <div class="pp-nav-item" data-tab="communities" onclick="switchParentTab('communities')">🌐 Community View</div>
-      <div class="pp-nav-item" data-tab="friends"    onclick="switchParentTab('friends')">👫 Child's Friends</div>
       <div class="pp-nav-item" data-tab="network"    onclick="switchParentTab('network')">🤝 Parent Network</div>
-      <div class="pp-nav-item" data-tab="controls"   onclick="switchParentTab('controls')">🔒 Safety Controls</div>
       <div style="margin-top:auto;padding:16px 20px;border-top:1px solid #2D3E50;display:flex;flex-direction:column;gap:8px">
         <div style="font-size:10px;color:#8A9BB5;font-weight:700;text-align:center;text-transform:uppercase;letter-spacing:.5px">TYF Network · Safe Learning Platform</div>
         <button class="pp-btn pp-btn-red" style="width:100%;justify-content:center" onclick="logout()">⏏ Sign Out</button>
@@ -4751,6 +4748,8 @@ function submitPost() {
 // PARENT APPROVAL QUEUE & DASHBOARD
 // ============================================================
 let activeParentTab = 'approvals';
+let activeChildId = null;
+let activeActivitySubTab = 'notifications';
 
 function getPendingAccounts() { return load('yfs_pending_accounts', []); }
 function savePendingAccounts(d) { save('yfs_pending_accounts', d); }
@@ -4864,121 +4863,239 @@ function renderParentTabContent() {
         <div style="font-size:13px;font-weight:700;margin-top:6px">No pending approvals right now.</div>
       </div>` : ''}`;
 
-  // ── ACTIVITY MONITOR ───────────────────────────────────────
-  } else if (activeParentTab === 'activity') {
+  // ── CHILD PROFILES ─────────────────────────────────────────
+  } else if (activeParentTab === 'profiles') {
     const children = getPpChildren();
-    const allPosts = getPosts();
     if (!children.length) {
-      el.innerHTML = `<div class="pp-section-title">👁️ Child's Activity</div><div style="text-align:center;padding:60px 20px;color:#8A9BB5"><div style="font-size:3rem;margin-bottom:12px">👶</div><div style="font-size:13px;font-weight:700">No linked child accounts found.<br>Your child's email should list you as their parent during registration.</div></div>`;
+      el.innerHTML = `<div class="pp-section-title">👶 Child Profiles</div><div style="text-align:center;padding:60px 20px;color:#8A9BB5"><div style="font-size:3rem;margin-bottom:12px">👶</div><div style="font-size:13px;font-weight:700">No linked children found.</div></div>`;
       return;
     }
-    let html = `<div class="pp-section-title">👁️ Child's Activity</div><div class="pp-section-sub">Full profile details, time spent, recent posts, and buddy connections for each of your children.</div>`;
-    children.forEach(child => {
-      const childPosts = allPosts.filter(p => p.authorId === child.id);
-      const livePosts = childPosts.filter(p => p.parentApproved);
-      const reactions = livePosts.reduce((s,p) => s + Object.values(p.reactions||{}).reduce((a,b)=>a+b,0), 0);
-      const joined = getUserCommunities(child.id);
+    const accentColors = ['rgba(201,168,76,.4)','rgba(74,144,164,.4)','rgba(91,140,90,.4)'];
+    let html = `<div class="pp-section-title">👶 Child Profiles</div><div class="pp-section-sub">${children.length} linked ${children.length===1?'child':'children'} on your account.</div>`;
+    children.forEach((child, idx) => {
       const xp = getXP(child.id);
       const xpLevel = getXPLevel(xp);
       const xpProg = getXPProgress(xp);
       const streak = getLoginStreak(child.id);
       const friends = getFriends(child.id);
-      const today = new Date().toDateString();
-      const sessionMins = getSessionMins(child.id, today);
-      const chatSecs = getDailyChatSecs(child.id);
-      const chatMins = Math.round(chatSecs / 60);
-      // 7-day chart
-      const days7 = [];
-      let maxMins7 = 0;
-      for (let i=6; i>=0; i--) {
-        const d = new Date(Date.now() - i*86400000);
-        const m = getSessionMins(child.id, d.toDateString());
-        if (m > maxMins7) maxMins7 = m;
-        days7.push({label:['Su','Mo','Tu','We','Th','Fr','Sa'][d.getDay()], mins:m});
-      }
-      if (maxMins7 === 0) maxMins7 = 1;
-      html += `<div class="pp-card">
-        <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid #2D3E50">
-          <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#C9A84C,#4A90A4);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0">${child.avatar||child.name.charAt(0)}</div>
+      const joined = getUserCommunities(child.id);
+      const posts = getPosts().filter(p=>p.authorId===child.id);
+      html += `<div class="pp-card" style="border-color:${accentColors[idx%3]}">
+        <div style="font-size:11px;font-weight:900;color:#8A9BB5;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px">Child ${idx+1}</div>
+        <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #2D3E50">
+          <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#C9A84C,#4A90A4);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0">${child.avatar||child.name.charAt(0)}</div>
           <div style="flex:1;min-width:0">
             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">
               <div style="font-weight:900;font-size:16px;color:#E8EDF4">${escHtml(child.name)}</div>
               <span class="pp-tag pp-tag-${child.status==='active'?'green':child.status==='suspended'?'red':'orange'}">${child.status||'active'}</span>
-              ${streak.count>=3?`<span class="pp-tag pp-tag-gold">🔥 ${streak.count}-day streak</span>`:''}
+              ${streak.count>=3?`<span class="pp-tag pp-tag-gold">🔥 ${streak.count}-day</span>`:''}
             </div>
-            <div style="font-size:12px;color:#8A9BB5;font-weight:700;margin-bottom:6px">Grade ${child.grade} · ${escHtml(child.schoolName||'')} · @${escHtml(child.username||child.name)}</div>
-            ${child.aboutMe?`<div style="font-size:12px;color:#A0B0C5;font-style:italic;font-weight:700;margin-bottom:8px">"${escHtml(child.aboutMe.slice(0,100))}${child.aboutMe.length>100?'…':''}"</div>`:''}
-            <div style="background:#0F1923;border-radius:8px;padding:8px 10px">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
-                <span style="font-size:11px;font-weight:900;color:#C9A84C">${xpLevel} · ${xp} XP</span>
-                <span style="font-size:10px;color:#8A9BB5;font-weight:700">${xpProg.next>xp?xpProg.next-xp+' XP to next level':'🏆 Max Level'}</span>
-              </div>
-              <div style="height:6px;background:#2D3E50;border-radius:3px;overflow:hidden">
-                <div style="height:100%;width:${xpProg.pct}%;background:linear-gradient(90deg,#C9A84C,#E8C96E);border-radius:3px"></div>
-              </div>
-            </div>
+            <div style="font-size:12px;color:#8A9BB5;font-weight:700">@${escHtml(child.username||child.name)} · Grade ${child.grade}</div>
+            <div style="font-size:12px;color:#8A9BB5;font-weight:700">${escHtml(child.schoolName||'No school set')} · ${child.profilePublic?'🌐 Public':'🔒 Private'}</div>
+            ${child.aboutMe?`<div style="font-size:12px;color:#A0B0C5;font-style:italic;font-weight:700;margin-top:4px">"${escHtml(child.aboutMe.slice(0,90))}${child.aboutMe.length>90?'…':''}"</div>`:''}
           </div>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">
-          <div class="pp-stat"><div class="pp-stat-num">${childPosts.length}</div><div class="pp-stat-label">Total Posts</div></div>
-          <div class="pp-stat"><div class="pp-stat-num">${reactions}</div><div class="pp-stat-label">Reactions</div></div>
-          <div class="pp-stat"><div class="pp-stat-num">${friends.length}</div><div class="pp-stat-label">Buddies</div></div>
-          <div class="pp-stat" style="border-color:rgba(74,144,164,.3)"><div class="pp-stat-num" style="color:#4A90A4">${sessionMins}</div><div class="pp-stat-label">Session Mins</div></div>
-          <div class="pp-stat" style="border-color:rgba(74,144,164,.3)"><div class="pp-stat-num" style="color:#4A90A4">${chatMins}</div><div class="pp-stat-label">Chat Mins</div></div>
+        <div style="background:#0F1923;border-radius:8px;padding:8px 10px;margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+            <span style="font-size:11px;font-weight:900;color:#C9A84C">${xpLevel} · ${xp} XP</span>
+            <span style="font-size:10px;color:#8A9BB5;font-weight:700">${xpProg.next>xp?xpProg.next-xp+' to next':'🏆 Max Level'}</span>
+          </div>
+          <div style="height:6px;background:#2D3E50;border-radius:3px;overflow:hidden">
+            <div style="height:100%;width:${xpProg.pct}%;background:linear-gradient(90deg,#C9A84C,#E8C96E);border-radius:3px"></div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px">
+          <div class="pp-stat"><div class="pp-stat-num">${posts.length}</div><div class="pp-stat-label">Posts</div></div>
           <div class="pp-stat"><div class="pp-stat-num">${joined.length}</div><div class="pp-stat-label">Communities</div></div>
+          <div class="pp-stat"><div class="pp-stat-num">${friends.length}</div><div class="pp-stat-label">Buddies</div></div>
+          <div class="pp-stat"><div class="pp-stat-num">${child.foundryScore||0}</div><div class="pp-stat-label">Score</div></div>
         </div>
-        <div style="margin-bottom:16px">
-          <div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">📅 7-Day Session Activity</div>
-          <div style="background:#0F1923;border-radius:10px;padding:12px">
-            <div style="display:flex;align-items:flex-end;gap:4px;height:60px;margin-bottom:5px">
-              ${days7.map(d=>`<div style="flex:1;background:linear-gradient(180deg,#4A90A4,#2D5F72);border-radius:3px 3px 0 0;height:${Math.max(3,Math.round(d.mins/maxMins7*54))}px;opacity:${d.mins>0?'1':'.2'}"></div>`).join('')}
-            </div>
-            <div style="display:flex;gap:4px">${days7.map(d=>`<div style="flex:1;text-align:center;font-size:9px;color:#8A9BB5;font-weight:800">${d.label}</div>`).join('')}</div>
-            <div style="margin-top:6px;font-size:11px;color:#4A90A4;font-weight:700">${days7.filter(d=>d.mins>0).map(d=>d.label+': '+d.mins+'m').join(' · ')||'No session data yet'}</div>
-          </div>
+        <div style="display:flex;justify-content:flex-end">
+          <button class="pp-btn" style="background:rgba(74,144,164,.15);border:1px solid rgba(74,144,164,.4);color:#4A90A4;font-size:12px;font-weight:800;border-radius:8px;padding:7px 14px;cursor:pointer" onclick="activeChildId='${child.id}';activeActivitySubTab='notifications';switchParentTab('activity')">👁️ View Activity →</button>
         </div>
-        <div style="margin-bottom:14px">
-          <div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">📝 Recent Posts</div>
-          ${childPosts.length ? childPosts.slice(0,5).map(p => {
-            const comm = COMMUNITIES.find(c=>c.id===p.communityId);
-            return `<div style="background:#0F1923;border-radius:10px;padding:10px 12px;margin-bottom:6px">
-              <div style="display:flex;gap:6px;align-items:center;margin-bottom:4px">
-                <span class="pp-tag pp-tag-${p.parentApproved?'green':'orange'}" style="font-size:10px">${p.parentApproved?'✅ Live':'⏳ Pending'}</span>
-                <span style="font-size:11px;color:#8A9BB5;font-weight:700">${comm?comm.emoji+' '+comm.name:''} · ${timeAgo(p.timestamp)}</span>
-              </div>
-              <div style="font-size:13px;color:#E8EDF4;font-weight:700;line-height:1.5">${escHtml(p.text.slice(0,150))}${p.text.length>150?'…':''}</div>
-            </div>`;
-          }).join('') : '<div style="font-size:13px;color:#8A9BB5;font-weight:700">No posts yet.</div>'}
-        </div>
-        ${(() => {
-          const childFriends = getFriends(child.id);
-          if (!childFriends.length) return `<div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">👫 Buddy Connections</div><div style="font-size:13px;color:#8A9BB5;font-weight:700">No buddies yet.</div>`;
-          const accounts2 = getAccounts();
-          const week = Date.now() - 7*24*3600*1000;
-          const allMsgs = getMessages();
-          const chatRows = childFriends.map(r => {
-            const fid = r.fromId===child.id ? r.toId : r.fromId;
-            const fr = accounts2.find(a=>a.id===fid);
-            if (!fr) return null;
-            const conv = allMsgs.filter(m => (m.fromId===child.id||m.fromId===fid) && m.chatId && m.chatId.includes(child.id) && m.chatId.includes(fid));
-            const recentMsgs = conv.filter(m=>m.timestamp>week);
-            return {fr, total:conv.length, recent:recentMsgs.length};
-          }).filter(Boolean);
-          return `<div>
-            <div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">👫 Buddy Connections (${childFriends.length})</div>
-            ${chatRows.map(({fr,total,recent})=>`<div style="display:flex;align-items:center;gap:10px;background:#0F1923;border-radius:10px;padding:8px 12px;margin-bottom:6px">
-              <span style="font-size:1.3rem">${fr.avatar||'👤'}</span>
-              <div style="flex:1">
-                <div style="font-weight:900;color:#E8EDF4;font-size:12px">@${escHtml(fr.username||fr.name)} <span style="color:#8A9BB5;font-weight:700">· Gr.${fr.grade}</span></div>
-                <div style="font-size:11px;color:#8A9BB5;font-weight:700">${fr.schoolName||''}</div>
-              </div>
-              ${total>0?`<span class="pp-tag pp-tag-${recent>0?'gold':'orange'}" style="font-size:10px">${recent>0?recent+' msg this week':total+' msgs total'}</span>`:'<span class="pp-tag" style="font-size:10px;background:#1A2533;color:#8A9BB5">No msgs</span>'}
-            </div>`).join('')}
-          </div>`;
-        })()}
       </div>`;
     });
     el.innerHTML = html;
+
+  // ── ACTIVITY MONITOR ───────────────────────────────────────
+  } else if (activeParentTab === 'activity') {
+    const children = getPpChildren();
+    if (!children.length) {
+      el.innerHTML = `<div class="pp-section-title">👁️ Child's Activity</div><div style="text-align:center;padding:60px 20px;color:#8A9BB5"><div style="font-size:3rem;margin-bottom:12px">👶</div><div style="font-size:13px;font-weight:700">No linked child accounts found.</div></div>`;
+      return;
+    }
+    if (!activeChildId || !children.find(c=>c.id===activeChildId)) activeChildId = children[0].id;
+    const child = children.find(c=>c.id===activeChildId);
+    const allPosts = getPosts();
+    const childPosts = allPosts.filter(p=>p.authorId===child.id);
+    const livePosts = childPosts.filter(p=>p.parentApproved);
+    const xp = getXP(child.id);
+    const xpLevel = getXPLevel(xp);
+    const xpProg = getXPProgress(xp);
+    const streak = getLoginStreak(child.id);
+    const friends = getFriends(child.id);
+    const joined = getUserCommunities(child.id);
+    const today = new Date().toDateString();
+    const sessionMins = getSessionMins(child.id, today);
+    const chatSecs = getDailyChatSecs(child.id);
+    const chatMins = Math.round(chatSecs / 60);
+
+    // Sub-tab content
+    let subHtml = '';
+    const subTabs = [{id:'notifications',label:'🔔 Notifications'},{id:'analytics',label:'📊 Analytics'},{id:'friends',label:'👫 Friends'},{id:'safety',label:'🔒 Safety'}];
+
+    if (activeActivitySubTab === 'notifications') {
+      const flags = getFlags().filter(f=>{ const p=allPosts.find(x=>x.id===f.postId); return p&&p.authorId===child.id; });
+      const childPostsSorted = childPosts.slice().sort((a,b)=>b.timestamp-a.timestamp);
+      subHtml += flags.length ? `<div class="pp-card" style="border-color:rgba(231,76,60,.3);margin-bottom:12px">
+        <div class="pp-card-title" style="color:#E74C3C">🚨 Safety Alerts (${flags.length})</div>
+        ${flags.map(f=>{
+          const p=allPosts.find(x=>x.id===f.postId);
+          const sev=['hate','spam','inappropriate'].includes(f.reason);
+          return `<div class="pp-alert-item ${sev?'danger':'warn'}">
+            <div style="font-size:1.6rem">${sev?'🔴':'🟡'}</div>
+            <div style="flex:1">
+              <span class="pp-tag pp-tag-${sev?'red':'orange'}">${escHtml(f.reason||'Flagged')}</span>
+              ${p?`<div style="font-size:12px;color:#8A9BB5;font-weight:700;margin-top:4px">"${escHtml(p.text.slice(0,80))}..."</div>`:''}
+              <div style="font-size:11px;color:#8A9BB5;font-weight:700">${timeAgo(f.timestamp||Date.now())} · Under review</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>` : `<div class="pp-card" style="border-color:rgba(74,144,164,.2);margin-bottom:12px;display:flex;align-items:center;gap:12px"><div style="font-size:2rem">🛡️</div><div><div style="font-family:'Fredoka One',cursive;font-size:15px;color:#4A90A4">All Clear!</div><div style="font-size:12px;color:#8A9BB5;font-weight:700">No safety alerts for ${escHtml(child.name)}.</div></div></div>`;
+      subHtml += `<div class="pp-card"><div class="pp-card-title">📢 Post Activity (${childPosts.length} total)</div>
+        ${childPostsSorted.length ? childPostsSorted.slice(0,12).map(p=>{
+          const comm=COMMUNITIES.find(c=>c.id===p.communityId);
+          const rxns=Object.values(p.reactions||{}).reduce((a,b)=>a+b,0);
+          return `<div style="display:flex;gap:10px;background:#0F1923;border-radius:10px;padding:10px 12px;margin-bottom:6px">
+            <div style="flex-shrink:0;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#C9A84C,#4A90A4);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#0A1520">${child.name.charAt(0)}</div>
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-bottom:2px">
+                <span class="pp-tag pp-tag-${p.parentApproved?'green':'orange'}" style="font-size:10px">${p.parentApproved?'✅ Live':'⏳ Pending'}</span>
+                ${comm?`<span style="font-size:10px;color:#8A9BB5;font-weight:700">${comm.emoji} ${comm.name}</span>`:''}
+              </div>
+              <div style="font-size:12px;color:#A0B0C5;font-weight:700;line-height:1.4">${escHtml(p.text.slice(0,110))}${p.text.length>110?'…':''}</div>
+              <div style="display:flex;gap:8px;margin-top:3px"><span style="font-size:11px;color:#8A9BB5;font-weight:700">${timeAgo(p.timestamp)}</span>${rxns?`<span style="font-size:11px;color:#C9A84C;font-weight:700">🎉 ${rxns}</span>`:''}</div>
+            </div>
+          </div>`;
+        }).join('') : `<div style="text-align:center;padding:24px;color:#8A9BB5;font-size:13px;font-weight:700">No posts yet.</div>`}
+      </div>`;
+
+    } else if (activeActivitySubTab === 'analytics') {
+      const totalRxns = livePosts.reduce((s,p)=>s+Object.values(p.reactions||{}).reduce((a,b)=>a+b,0),0);
+      const allMsgsA = getMessages();
+      const childMsgsA = allMsgsA.filter(m=>m.fromId===child.id);
+      const weekA = Date.now()-7*24*3600*1000;
+      const weekMsgsA = childMsgsA.filter(m=>m.timestamp>weekA);
+      const resLogA = getResourceLog(child.id);
+      const days7a = []; let maxMinsA=0, totalWeekA=0;
+      for (let i=6;i>=0;i--){const d=new Date(Date.now()-i*86400000);const m=getSessionMins(child.id,d.toDateString());if(m>maxMinsA)maxMinsA=m;totalWeekA+=m;days7a.push({label:['Su','Mo','Tu','We','Th','Fr','Sa'][d.getDay()],mins:m});}
+      if(maxMinsA===0)maxMinsA=1;
+      const topPost=livePosts.slice().sort((a,b)=>Object.values(b.reactions||{}).reduce((x,y)=>x+y,0)-Object.values(a.reactions||{}).reduce((x,y)=>x+y,0))[0];
+      subHtml += `<div class="pp-card" style="margin-bottom:12px">
+        <div style="background:#0F1923;border-radius:8px;padding:8px 10px;margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+            <span style="font-size:12px;font-weight:900;color:#C9A84C">⭐ ${xp} XP · ${xpLevel}</span>
+            <span style="font-size:11px;color:#8A9BB5;font-weight:700">${xpProg.next>xp?xpProg.next-xp+' to next':'🏆 Max'}</span>
+          </div>
+          <div style="height:7px;background:#2D3E50;border-radius:4px;overflow:hidden"><div style="height:100%;width:${xpProg.pct}%;background:linear-gradient(90deg,#C9A84C,#E8C96E);border-radius:4px"></div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px">
+          <div class="pp-stat"><div class="pp-stat-num">${livePosts.length}</div><div class="pp-stat-label">Live Posts</div></div>
+          <div class="pp-stat"><div class="pp-stat-num">${totalRxns}</div><div class="pp-stat-label">Reactions</div></div>
+          <div class="pp-stat"><div class="pp-stat-num">${joined.length}</div><div class="pp-stat-label">Communities</div></div>
+          <div class="pp-stat" style="border-color:rgba(74,144,164,.3)"><div class="pp-stat-num" style="color:#4A90A4">${sessionMins}</div><div class="pp-stat-label">Session Mins</div></div>
+          <div class="pp-stat" style="border-color:rgba(74,144,164,.3)"><div class="pp-stat-num" style="color:#4A90A4">${chatMins}</div><div class="pp-stat-label">Chat Mins</div></div>
+          <div class="pp-stat"><div class="pp-stat-num">${friends.length}</div><div class="pp-stat-label">Buddies</div></div>
+        </div>
+        <div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">⏱️ Time Breakdown — Today</div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px">
+          <div style="background:#0F1923;border-radius:10px;padding:11px"><div style="font-size:10px;font-weight:800;color:#8A9BB5;text-transform:uppercase;margin-bottom:3px">💬 Chat</div><div style="font-size:20px;font-weight:900;color:#4A90A4">${chatMins}<span style="font-size:11px;color:#8A9BB5"> min</span></div><div style="font-size:11px;color:#8A9BB5;font-weight:700">${childMsgsA.length} msgs · ${weekMsgsA.length} this week</div></div>
+          <div style="background:#0F1923;border-radius:10px;padding:11px"><div style="font-size:10px;font-weight:800;color:#8A9BB5;text-transform:uppercase;margin-bottom:3px">📱 Session</div><div style="font-size:20px;font-weight:900;color:#C9A84C">${sessionMins}<span style="font-size:11px;color:#8A9BB5"> min</span></div><div style="font-size:11px;color:#8A9BB5;font-weight:700">${totalWeekA} min this week</div></div>
+          <div style="background:#0F1923;border-radius:10px;padding:11px"><div style="font-size:10px;font-weight:800;color:#8A9BB5;text-transform:uppercase;margin-bottom:3px">🌐 Communities</div><div style="font-size:20px;font-weight:900;color:#5B8C5A">${joined.length}<span style="font-size:11px;color:#8A9BB5"> joined</span></div><div style="font-size:11px;color:#8A9BB5;font-weight:700">${childPosts.length} posts total</div></div>
+          <div style="background:#0F1923;border-radius:10px;padding:11px"><div style="font-size:10px;font-weight:800;color:#8A9BB5;text-transform:uppercase;margin-bottom:3px">📚 Resources</div><div style="font-size:20px;font-weight:900;color:#9B59B6">${resLogA?resLogA.length:0}<span style="font-size:11px;color:#8A9BB5"> views</span></div><div style="font-size:11px;color:#8A9BB5;font-weight:700">Learning visits</div></div>
+        </div>
+        <div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">📅 7-Day Session Chart</div>
+        <div style="background:#0F1923;border-radius:10px;padding:12px;margin-bottom:14px">
+          <div style="display:flex;align-items:flex-end;gap:5px;height:70px;margin-bottom:5px">${days7a.map(d=>`<div style="flex:1;background:linear-gradient(180deg,#C9A84C,#8B6020);border-radius:3px 3px 0 0;height:${Math.max(3,Math.round(d.mins/maxMinsA*62))}px;opacity:${d.mins>0?'1':'.2'}"></div>`).join('')}</div>
+          <div style="display:flex;gap:5px">${days7a.map(d=>`<div style="flex:1;text-align:center;font-size:9px;color:#8A9BB5;font-weight:800">${d.label}</div>`).join('')}</div>
+          <div style="display:flex;justify-content:space-between;margin-top:7px"><span style="font-size:11px;color:#8A9BB5;font-weight:700">Week: ${totalWeekA} min</span><span style="font-size:11px;color:#C9A84C;font-weight:800">Today: ${sessionMins} min</span></div>
+        </div>
+        ${topPost?`<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">🏆 Top Post</div><div style="background:#0F1923;border-radius:10px;padding:12px;border:1px solid rgba(201,168,76,.2)"><div style="font-size:13px;color:#E8EDF4;font-weight:700;line-height:1.5;margin-bottom:5px">${escHtml(topPost.text.slice(0,120))}${topPost.text.length>120?'…':''}</div><div style="font-size:12px;color:#C9A84C;font-weight:800">${Object.values(topPost.reactions||{}).reduce((a,b)=>a+b,0)} reactions · ${timeAgo(topPost.timestamp)}</div></div></div>`:''}
+        <hr class="pp-divider">
+        <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+          <div style="font-size:12px;color:#4A90A4;font-weight:700">Posts, time spent, reactions, communities</div>
+          <button class="pp-btn pp-btn-gold" onclick="ppSendWeeklySummary('${child.id}','${escHtml(child.name)}')">📧 Email Weekly Summary</button>
+        </div>
+      </div>`;
+
+    } else if (activeActivitySubTab === 'friends') {
+      const accounts3 = getAccounts();
+      const week3 = Date.now()-7*24*3600*1000;
+      const allMsgs3 = getMessages();
+      const friendAccts = friends.map(r=>{
+        const oid=r.fromId===child.id?r.toId:r.fromId;
+        return accounts3.find(a=>a.id===oid);
+      }).filter(Boolean);
+      subHtml += `<div class="pp-card"><div class="pp-card-title">👫 ${escHtml(child.name)}'s Buddies (${friendAccts.length})</div>
+        ${friendAccts.length ? friendAccts.map(fr=>{
+          const conv=allMsgs3.filter(m=>(m.fromId===child.id||m.fromId===fr.id)&&m.chatId&&m.chatId.includes(child.id)&&m.chatId.includes(fr.id));
+          const recent=conv.filter(m=>m.timestamp>week3).length;
+          return `<div style="display:flex;align-items:center;gap:10px;background:#0F1923;border-radius:10px;padding:10px 12px;margin-bottom:6px">
+            <span style="font-size:1.4rem">${fr.avatar||'👤'}</span>
+            <div style="flex:1">
+              <div style="font-weight:900;color:#E8EDF4;font-size:13px">@${escHtml(fr.username||fr.name)}</div>
+              <div style="font-size:12px;color:#8A9BB5;font-weight:700">Grade ${fr.grade} · ${escHtml(fr.schoolName||'')} · ${fr.profilePublic?'🌐 Public':'🔒 Private'}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+              <span class="pp-tag pp-tag-${fr.status==='active'?'green':fr.status==='suspended'?'red':'orange'}">${fr.status||'active'}</span>
+              ${conv.length?`<span class="pp-tag pp-tag-${recent?'gold':'orange'}" style="font-size:10px">${recent?recent+' msg/wk':conv.length+' total'}</span>`:'<span class="pp-tag" style="font-size:10px;background:#1A2533;color:#8A9BB5">No msgs</span>'}
+            </div>
+          </div>`;
+        }).join('') : `<div style="text-align:center;padding:30px;color:#8A9BB5;font-size:13px;font-weight:700">No friends added yet.</div>`}
+      </div>`;
+
+    } else if (activeActivitySubTab === 'safety') {
+      const controls = getParentControls(child.id) || {};
+      subHtml += `<div class="pp-card">
+        <div class="pp-card-title">🔒 Safety Controls for ${escHtml(child.name)}</div>
+        <div class="pp-section-sub" style="margin-bottom:16px">Manage account restrictions, messaging limits, and post approval settings.</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="background:#0F1923;border-radius:10px;padding:14px;display:flex;align-items:center;justify-content:space-between">
+            <div><div style="font-weight:900;color:#E8EDF4;font-size:13px">Require Post Approval</div><div style="font-size:12px;color:#8A9BB5;font-weight:700">Every post needs your approval before going live</div></div>
+            <button class="pp-btn ${controls.requireApproval?'pp-btn-gold':'pp-btn-teal'}" onclick="toggleParentControl('${child.id}','requireApproval',${!controls.requireApproval});renderParentTabContent()">${controls.requireApproval?'✅ ON':'○ OFF'}</button>
+          </div>
+          <div style="background:#0F1923;border-radius:10px;padding:14px;display:flex;align-items:center;justify-content:space-between">
+            <div><div style="font-weight:900;color:#E8EDF4;font-size:13px">Messaging Enabled</div><div style="font-size:12px;color:#8A9BB5;font-weight:700">Allow private messages with friends</div></div>
+            <button class="pp-btn ${controls.messagingEnabled!==false?'pp-btn-gold':'pp-btn-teal'}" onclick="toggleParentControl('${child.id}','messagingEnabled',${controls.messagingEnabled===false});renderParentTabContent()">${controls.messagingEnabled!==false?'✅ ON':'○ OFF'}</button>
+          </div>
+          <div style="background:#0F1923;border-radius:10px;padding:14px;display:flex;align-items:center;justify-content:space-between">
+            <div><div style="font-weight:900;color:#E8EDF4;font-size:13px">Community Posting</div><div style="font-size:12px;color:#8A9BB5;font-weight:700">Allow posting in communities</div></div>
+            <button class="pp-btn ${controls.communityPosting!==false?'pp-btn-gold':'pp-btn-teal'}" onclick="toggleParentControl('${child.id}','communityPosting',${controls.communityPosting===false});renderParentTabContent()">${controls.communityPosting!==false?'✅ ON':'○ OFF'}</button>
+          </div>
+          <div style="background:#0F1923;border-radius:10px;padding:14px">
+            <div style="font-weight:900;color:#E8EDF4;font-size:13px;margin-bottom:8px">Account Status</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              ${['active','suspended'].map(s=>`<button class="pp-btn ${child.status===s?'pp-btn-gold':''}" style="${child.status!==s?'background:#1A2533;border:1px solid #2D3E50;color:#8A9BB5;':''}" onclick="setChildStatus('${child.id}','${s}');renderParentTabContent()">${s==='active'?'✅ Active':'🚫 Suspend'}</button>`).join('')}
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    const childSelectorHtml = children.length > 1 ? `<div style="background:#0A1520;border-radius:10px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px">Viewing:</span>
+      ${children.map(c=>`<button onclick="activeChildId='${c.id}';renderParentTabContent()" style="background:${c.id===activeChildId?'linear-gradient(135deg,#C9A84C,#B8932A)':'rgba(45,62,80,.6)'};border:1px solid ${c.id===activeChildId?'rgba(201,168,76,.5)':'#2D3E50'};color:${c.id===activeChildId?'#0A1520':'#A0B0C5'};border-radius:8px;padding:6px 14px;font-size:12px;font-weight:900;cursor:pointer">${c.avatar||'👤'} ${escHtml(c.name)}</button>`).join('')}
+    </div>` : '';
+
+    const subTabNavHtml = `<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:16px;background:#0A1520;border-radius:10px;padding:5px">
+      ${subTabs.map(t=>`<button onclick="activeActivitySubTab='${t.id}';renderParentTabContent()" style="flex:1;background:${activeActivitySubTab===t.id?'linear-gradient(135deg,#C9A84C,#B8932A)':'transparent'};border:none;color:${activeActivitySubTab===t.id?'#0A1520':'#8A9BB5'};border-radius:7px;padding:8px 10px;font-size:12px;font-weight:900;cursor:pointer;white-space:nowrap">${t.label}</button>`).join('')}
+    </div>`;
+
+    el.innerHTML = `<div class="pp-section-title">👁️ Child's Activity</div>
+      <div class="pp-section-sub">Monitoring ${escHtml(child.name)} · Grade ${child.grade}</div>
+      ${childSelectorHtml}
+      ${subTabNavHtml}
+      ${subHtml}`;
 
   // ── ALERTS ─────────────────────────────────────────────────
   } else if (activeParentTab === 'alerts') {
@@ -5416,6 +5533,28 @@ function ppSendWeeklySummary(childId, childName) {
   toast('📧 Weekly summary for ' + childName + ' sent to ' + (currentUser.email||'your email') + '!');
   const msg = 'Week summary: ' + weekPosts.length + ' posts · ' + totalRxns + ' reactions · Foundry Score: ' + ((getAccounts().find(a=>a.id===childId)||{}).foundryScore||0);
   setTimeout(() => toast('📊 ' + msg), 1500);
+}
+
+function getParentControls(childId) {
+  try { return JSON.parse(localStorage.getItem('yfs_pctrl_' + childId) || '{}'); }
+  catch(e) { return {}; }
+}
+function saveParentControls(childId, controls) {
+  localStorage.setItem('yfs_pctrl_' + childId, JSON.stringify(controls));
+}
+function toggleParentControl(childId, key, value) {
+  const c = getParentControls(childId);
+  c[key] = value;
+  saveParentControls(childId, c);
+  toast(value ? '✅ ' + key + ' enabled' : '○ ' + key + ' disabled');
+}
+function setChildStatus(childId, status) {
+  const accounts = getAccounts();
+  const acc = accounts.find(a => a.id === childId);
+  if (!acc) return;
+  acc.status = status;
+  saveAccounts(accounts);
+  toast(status === 'active' ? '✅ Account reactivated' : '🚫 Account suspended');
 }
 
 function ppSendConnectionRequest(toParentId) {
