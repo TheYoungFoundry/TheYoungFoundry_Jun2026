@@ -423,6 +423,50 @@ input,textarea,select{font-family:var(--body);}
 @keyframes popIn{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
 .people-know-card{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);}
 .people-know-card:last-child{border-bottom:none;}
+/* ── CHAT ENHANCEMENTS ── */
+.msg-notif-popup{position:fixed;bottom:80px;right:20px;z-index:1100;background:#fff;border:2px solid var(--line);border-radius:20px;padding:12px 16px;box-shadow:0 8px 32px -4px rgba(45,55,72,.22);cursor:pointer;max-width:300px;min-width:220px;display:none;animation:slideInRight .3s cubic-bezier(.22,.68,0,1.2);}
+.msg-notif-popup:hover{border-color:var(--blue);}
+@keyframes slideInRight{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
+.emoji-picker{position:absolute;bottom:62px;left:0;background:#fff;border:2px solid var(--line);border-radius:18px;padding:10px;z-index:300;box-shadow:0 8px 24px -4px rgba(0,0,0,.15);display:none;width:288px;}
+.emoji-picker.open{display:block;}
+.emoji-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;}
+.emoji-btn{background:none;border:none;cursor:pointer;font-size:20px;padding:4px;border-radius:8px;transition:background .1s;line-height:1;}
+.emoji-btn:hover{background:var(--soft);}
+.chat-reply-bar{display:none;background:#f0f4ff;border-left:3px solid var(--blue);padding:6px 14px;font-size:12px;font-weight:700;color:var(--muted);flex-shrink:0;align-items:center;gap:8px;}
+.chat-reply-bar.show{display:flex;}
+.chat-reply-bar .rply-text{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--dark);}
+.chat-reply-bar .rply-cancel{background:none;border:none;cursor:pointer;color:var(--muted);font-size:18px;line-height:1;}
+.msg-toolbar{display:none;position:absolute;top:-34px;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:3px 6px;gap:2px;box-shadow:0 2px 8px -2px rgba(0,0,0,.15);z-index:10;white-space:nowrap;}
+.msg-row:hover .msg-toolbar{display:flex;}
+.msg-row{position:relative;margin-bottom:2px;}
+.mine .msg-toolbar{right:0;}
+.them .msg-toolbar{left:0;}
+.msg-toolbar button{background:none;border:none;cursor:pointer;font-size:14px;padding:2px 4px;border-radius:6px;transition:background .1s;}
+.msg-toolbar button:hover{background:var(--soft);}
+.msg-reply-preview{background:rgba(0,0,0,.06);border-left:3px solid var(--blue);border-radius:6px;padding:4px 8px;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;overflow:hidden;max-height:36px;text-overflow:ellipsis;white-space:nowrap;}
+.msg-reactions{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px;padding:0 4px;}
+.reaction-pill{background:#f1f5f9;border:1.5px solid var(--line);border-radius:999px;padding:2px 8px;font-size:12px;cursor:pointer;font-weight:800;transition:.1s;line-height:1.4;}
+.reaction-pill:hover,.reaction-pill.mine-react{background:var(--blue);color:#fff;border-color:var(--blue);}
+.msg-edited{font-size:10px;color:var(--muted);font-weight:700;margin-left:4px;font-style:italic;}
+.msg-status{font-size:11px;color:var(--muted);font-weight:900;margin-left:4px;}
+.msg-status.read{color:#3b82f6;}
+.msg-edit-input{width:100%;border:1.5px solid var(--blue);border-radius:8px;padding:5px 9px;font-size:13px;font-weight:700;font-family:var(--body);resize:none;outline:none;margin-bottom:4px;}
+.online-dot{width:9px;height:9px;border-radius:50%;background:#22c55e;border:2px solid #fff;display:inline-block;flex-shrink:0;}
+.fav-star{background:none;border:none;cursor:pointer;font-size:13px;line-height:1;padding:2px;opacity:.35;transition:.1s;}
+.fav-star.active{opacity:1;}
+.grp-badge{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;font-size:9px;font-weight:900;padding:1px 6px;border-radius:999px;margin-left:5px;vertical-align:middle;}
+.chat-invite-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-top:2px solid var(--line);cursor:pointer;color:var(--muted);font-size:13px;font-weight:800;transition:.15s;}
+.chat-invite-item:hover{background:var(--soft);}
+.chat-invite-item .ci-icon{width:40px;height:40px;border-radius:50%;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:2px dashed var(--line);}
+.member-chip{display:inline-flex;align-items:center;gap:4px;background:var(--soft);border:1.5px solid var(--line);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800;color:var(--dark);margin:3px;}
+.mention-dropdown{position:absolute;bottom:100%;left:0;right:0;background:#fff;border:2px solid var(--line);border-radius:12px;box-shadow:0 4px 16px -2px rgba(0,0,0,.12);z-index:300;display:none;max-height:160px;overflow-y:auto;}
+.mention-dropdown.open{display:block;}
+.mention-item{padding:8px 14px;cursor:pointer;font-size:13px;font-weight:800;display:flex;align-items:center;gap:8px;}
+.mention-item:hover{background:var(--soft);}
+.chat-section-hdr{font-size:10px;font-weight:900;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;padding:8px 14px 3px;}
+.last-active-txt{font-size:11px;color:var(--muted);font-weight:700;}
+.msg-group-sender{font-size:10px;font-weight:900;color:var(--blue);margin-bottom:2px;}
+.chat-input-wrap{position:relative;}
 </style>
 </head>
 <body>
@@ -701,16 +745,26 @@ input,textarea,select{font-family:var(--body);}
 </div>
 
 <!-- ============================================================
-     SCREEN: CHAT (friends only · text only)
+     SCREEN: CHAT (friends only · safe & moderated)
 ============================================================ -->
 <div class="screen" id="screen-chat">
   <div class="page-wrap" style="padding-top:16px;padding-bottom:16px">
     <div class="chat-wrap" id="chat-wrap">
 
       <!-- LEFT: conversation list -->
-      <div class="chat-list-panel">
-        <div class="chat-list-header">💬 Messages</div>
-        <div id="chat-list"></div>
+      <div class="chat-list-panel" style="display:flex;flex-direction:column">
+        <div class="chat-list-header" style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+          <span style="flex:1">💬 Messages</span>
+          <button class="btn blue sm" style="padding:4px 10px;font-size:11px" onclick="openCreateGroup()" title="New Group Chat">👥+</button>
+        </div>
+        <div id="chat-list" style="flex:1;overflow-y:auto"></div>
+        <div class="chat-invite-item" onclick="openFindBuddy()">
+          <div class="ci-icon">👤+</div>
+          <div>
+            <div style="color:var(--dark)">Invite your friends</div>
+            <div style="font-size:11px;font-weight:700;color:var(--muted)">Connect to start chatting</div>
+          </div>
+        </div>
       </div>
 
       <!-- RIGHT: active conversation -->
@@ -723,17 +777,27 @@ input,textarea,select{font-family:var(--body);}
           <button class="btn red sm" onclick="deleteSelectedMessages()">🗑️ Delete Selected</button>
           <button class="btn ghost sm" onclick="exitSelectMode()">Cancel</button>
         </div>
-        <div class="chat-input-area" id="chat-input-area" style="display:none">
-          <textarea id="chat-input" maxlength="500" placeholder="Type a message… (text only)"
-            rows="1"
-            onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"
-            oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px'"></textarea>
-          <button class="btn blue sm" onclick="sendMessage()" style="flex-shrink:0;height:38px">Send ↑</button>
+        <div class="chat-reply-bar" id="chat-reply-bar">
+          <span style="font-size:14px;flex-shrink:0">↩️</span>
+          <div class="rply-text" id="chat-reply-text">Replying…</div>
+          <button class="rply-cancel" onclick="clearReplyTo()">×</button>
+        </div>
+        <div class="chat-input-wrap">
+          <div class="mention-dropdown" id="mention-dropdown"></div>
+          <div class="emoji-picker" id="emoji-picker"></div>
+          <div class="chat-input-area" id="chat-input-area" style="display:none">
+            <button class="btn ghost sm" style="padding:5px 8px;font-size:18px;flex-shrink:0;height:38px" onclick="toggleEmojiPicker()" title="Emoji">😊</button>
+            <textarea id="chat-input" maxlength="500" placeholder="Type a message… use @ to mention"
+              rows="1"
+              onkeydown="chatInputKeydown(event)"
+              oninput="chatInputChanged(this)"></textarea>
+            <button class="btn blue sm" onclick="sendMessage()" style="flex-shrink:0;height:38px">Send ↑</button>
+          </div>
         </div>
         <div class="chat-empty-state" id="chat-empty">
           <span style="font-size:2.8rem">💬</span>
           <span>Select a buddy to chat!</span>
-          <span style="font-size:12px;opacity:.7">Only text messages · Friends only · Safe &amp; moderated</span>
+          <span style="font-size:12px;opacity:.7">Friends only · Safe &amp; moderated</span>
         </div>
       </div>
 
@@ -1461,9 +1525,453 @@ function markChatRead(myId, theirId) {
 // CHAT SCREEN
 // ============================================================
 let activeChatFriendId = null;
+let activeChatGroupId = null;
+let _replyToMsgId = null;
+let _msgPollLastTs = 0;
+let _msgPollTimer = null;
 let selectMode = false;
 let selectedMsgIds = new Set();
 let _chatRefreshTimer = null;
+
+// ── GROUP STORAGE ──
+function getGroups(){return JSON.parse(localStorage.getItem('yfs_groups')||'[]');}
+function saveGroups(g){localStorage.setItem('yfs_groups',JSON.stringify(g));}
+function getReportsList(){return JSON.parse(localStorage.getItem('yfs_reports')||'[]');}
+function saveReportsList(r){localStorage.setItem('yfs_reports',JSON.stringify(r));}
+
+// ── USER HELPERS ──
+function getBlockedUsers(){return (currentUser&&currentUser.blockedUsers)||[];}
+function isBlocked(uid){return getBlockedUsers().includes(uid);}
+function getFavoriteFriends(){return (currentUser&&currentUser.favoriteFriends)||[];}
+
+// ── LAST ACTIVE ──
+function updateLastActive(){
+  if(!currentUser)return;
+  const accs=getAccounts();const a=accs.find(x=>x.id===currentUser.id);
+  if(a){a.lastActive=Date.now();saveAccounts(accs);currentUser=a;}
+}
+function getLastActiveText(uid){
+  if(!uid)return null;
+  const a=getAccounts().find(x=>x.id===uid);
+  if(!a||!a.lastActive||a.profilePublic===false)return null;
+  const d=Date.now()-a.lastActive;
+  if(d<2*60000)return'Online now';
+  if(d<3600000)return`Active ${Math.floor(d/60000)}m ago`;
+  if(d<86400000)return`Active ${Math.floor(d/3600000)}h ago`;
+  return null;
+}
+
+// ── SOUNDS ──
+function playPopSound(){
+  try{const ctx=new(window.AudioContext||window.webkitAudioContext)();
+  const o=ctx.createOscillator(),g=ctx.createGain();
+  o.connect(g);g.connect(ctx.destination);o.type='sine';
+  o.frequency.setValueAtTime(880,ctx.currentTime);
+  o.frequency.exponentialRampToValueAtTime(440,ctx.currentTime+0.08);
+  g.gain.setValueAtTime(0.25,ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.18);
+  o.start(ctx.currentTime);o.stop(ctx.currentTime+0.18);}catch(e){}
+}
+function playCheerSound(){
+  try{const ctx=new(window.AudioContext||window.webkitAudioContext)();
+  [523,659,784,1047].forEach((f,i)=>{
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);o.type='sine';o.frequency.value=f;
+    const t=ctx.currentTime+i*0.09;
+    g.gain.setValueAtTime(0.2,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.18);
+    o.start(t);o.stop(t+0.18);
+  });}catch(e){}
+}
+
+// ── MESSAGE NOTIFICATION POPUP ──
+function showMsgPopup(fromUser,msgText){
+  const pop=document.getElementById('msg-popup');if(!pop)return;
+  document.getElementById('msg-popup-av').textContent=fromUser.avatar||'👤';
+  document.getElementById('msg-popup-av').style.background=avatarColor(fromUser.name||fromUser.username||'?');
+  document.getElementById('msg-popup-name').textContent='@'+(fromUser.username||fromUser.name);
+  document.getElementById('msg-popup-text').textContent=msgText.slice(0,60)+(msgText.length>60?'…':'');
+  pop.style.display='block';
+  pop.onclick=()=>{pop.style.display='none';showScreen('chat');openChatWith(fromUser.id);};
+  clearTimeout(pop._t);pop._t=setTimeout(()=>pop.style.display='none',5000);
+  playPopSound();
+}
+function startMsgPoller(){
+  if(_msgPollTimer)return;
+  _msgPollLastTs=Date.now();
+  _msgPollTimer=setInterval(()=>{
+    if(!currentUser)return;
+    const msgs=getMessages();
+    const fresh=msgs.filter(m=>m.timestamp>_msgPollLastTs&&m.fromId!==currentUser.id&&!isBlocked(m.fromId));
+    if(fresh.length){
+      const m=fresh[fresh.length-1];
+      const chatOpen=document.querySelector('#screen-chat.active')&&
+        (activeChatFriendId===m.fromId||activeChatGroupId===m.chatId);
+      if(!chatOpen){
+        const from=getAccounts().find(a=>a.id===m.fromId);
+        if(from)showMsgPopup(from,m.text);
+      }
+      updateChatBadge();renderChatList();
+    }
+    _msgPollLastTs=Date.now();
+  },4000);
+}
+function stopMsgPoller(){clearInterval(_msgPollTimer);_msgPollTimer=null;}
+
+// ── EMOJI PICKER ──
+const CHILD_EMOJIS=['😊','😂','😍','🥰','😎','🤔','😅','🙌','👍','❤️','🎉','🌟','🔥','✨','🎊','🎈','🏆','💡','📚','🎨','🎮','⚽','🏀','🎵','🌈','🦋','🐶','🐱','🦄','🌸','🍕','🍦','🎂','🍭','🍫','👏','🤗','😜','🥳','💪','🌍','🚀','⭐','🌙','☀️','🌊','🏔️','🌺','🦊','🐸','👋','🤝','🙏','✌️','💙','💚','💛','💜','🧡','🎓','📖','🏅','🥇','🎯'];
+const QUICK_REACTIONS=['❤️','😂','😮','😢','🔥','👍'];
+function buildEmojiPicker(){
+  const p=document.getElementById('emoji-picker');if(!p||p.dataset.built)return;
+  p.innerHTML=`<div class="emoji-grid">${CHILD_EMOJIS.map(e=>`<button class="emoji-btn" onclick="insertEmoji('${e}')">${e}</button>`).join('')}</div>`;
+  p.dataset.built='1';
+}
+function toggleEmojiPicker(){
+  buildEmojiPicker();
+  const p=document.getElementById('emoji-picker');p.classList.toggle('open');
+}
+function insertEmoji(e){
+  const inp=document.getElementById('chat-input');
+  const pos=inp.selectionStart;
+  inp.value=inp.value.slice(0,pos)+e+inp.value.slice(pos);
+  inp.focus();inp.setSelectionRange(pos+e.length,pos+e.length);
+  document.getElementById('emoji-picker').classList.remove('open');
+}
+
+// ── REPLY TO MESSAGE ──
+function setReplyTo(msgId){
+  _replyToMsgId=msgId;
+  const m=getMessages().find(x=>x.id===msgId);if(!m)return;
+  const from=getAccounts().find(a=>a.id===m.fromId);
+  document.getElementById('chat-reply-text').textContent=`@${from?(from.username||from.name):'User'}: ${m.text.slice(0,60)}`;
+  document.getElementById('chat-reply-bar').classList.add('show');
+  document.getElementById('chat-input').focus();
+}
+function clearReplyTo(){
+  _replyToMsgId=null;
+  const b=document.getElementById('chat-reply-bar');if(b)b.classList.remove('show');
+}
+
+// ── EDIT MESSAGE ──
+function startEditMessage(msgId){
+  const msgs=getMessages();const m=msgs.find(x=>x.id===msgId);
+  if(!m||m.fromId!==currentUser.id)return;
+  const fid=activeChatFriendId;
+  if(fid&&m.readBy&&m.readBy.includes(fid)){toast('✏️ Already read — cannot edit.');return;}
+  const bEl=document.querySelector(`[data-msgid="${msgId}"] .msg-bubble`);if(!bEl)return;
+  bEl.innerHTML=`<textarea class="msg-edit-input" id="edit-inp-${msgId}" rows="2">${m.text.replace(/</g,'&lt;')}</textarea>
+    <div style="display:flex;gap:4px;margin-top:4px">
+      <button class="btn blue sm" style="font-size:11px;padding:2px 8px" onclick="saveEditMessage('${msgId}')">Save</button>
+      <button class="btn ghost sm" style="font-size:11px;padding:2px 8px" onclick="(activeChatGroupId?renderGroupMessages(activeChatGroupId):renderChatMessages(activeChatFriendId))">Cancel</button>
+    </div>`;
+  document.getElementById(`edit-inp-${msgId}`)?.focus();
+}
+function saveEditMessage(msgId){
+  const inp=document.getElementById(`edit-inp-${msgId}`);if(!inp)return;
+  const newText=inp.value.trim();if(!newText)return;
+  const v=validateText(newText);if(!v.ok){toast('⚠️ '+v.reason);return;}
+  const msgs=getMessages();const m=msgs.find(x=>x.id===msgId);if(!m)return;
+  m.text=newText;m.editedAt=Date.now();saveMessages(msgs);
+  activeChatGroupId?renderGroupMessages(activeChatGroupId):renderChatMessages(activeChatFriendId);
+}
+
+// ── REACTIONS ──
+function openReactionBar(msgId,btn){
+  document.querySelectorAll('.floating-rbar').forEach(x=>x.remove());
+  const bar=document.createElement('div');
+  bar.className='msg-toolbar floating-rbar';
+  bar.style.cssText='position:absolute;top:-38px;display:flex;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:4px 8px;gap:6px;box-shadow:0 4px 16px -2px rgba(0,0,0,.15);z-index:50;';
+  bar.innerHTML=QUICK_REACTIONS.map(e=>`<button style="background:none;border:none;cursor:pointer;font-size:20px;padding:2px;border-radius:6px" onclick="reactToMessage('${msgId}','${e}')">${e}</button>`).join('');
+  btn.closest('.msg-row').style.position='relative';
+  btn.closest('.msg-row').appendChild(bar);
+  setTimeout(()=>document.addEventListener('click',()=>bar.remove(),{once:true}),50);
+}
+function reactToMessage(msgId,emoji){
+  const msgs=getMessages();const m=msgs.find(x=>x.id===msgId);if(!m)return;
+  if(!m.reactions)m.reactions={};
+  if(m.reactions[currentUser.id]===emoji)delete m.reactions[currentUser.id];
+  else m.reactions[currentUser.id]=emoji;
+  saveMessages(msgs);
+  activeChatGroupId?renderGroupMessages(activeChatGroupId):renderChatMessages(activeChatFriendId);
+}
+function renderReactions(m){
+  if(!m.reactions||!Object.keys(m.reactions).length)return'';
+  const counts={};let myE=null;
+  Object.entries(m.reactions).forEach(([uid,e])=>{counts[e]=(counts[e]||0)+1;if(uid===currentUser.id)myE=e;});
+  return`<div class="msg-reactions">${Object.entries(counts).map(([e,n])=>`<span class="reaction-pill${myE===e?' mine-react':''}" onclick="reactToMessage('${m.id}','${e}')">${e}${n>1?' '+n:''}</span>`).join('')}</div>`;
+}
+
+// ── BLOCK & REPORT ──
+function blockUser(uid){
+  const accs=getAccounts();const me=accs.find(a=>a.id===currentUser.id);if(!me)return;
+  if(!me.blockedUsers)me.blockedUsers=[];
+  if(!me.blockedUsers.includes(uid))me.blockedUsers.push(uid);
+  saveAccounts(accs);currentUser=me;renderChatList();
+  toast('🚫 User blocked.');
+}
+function unblockUser(uid){
+  const accs=getAccounts();const me=accs.find(a=>a.id===currentUser.id);if(!me)return;
+  me.blockedUsers=(me.blockedUsers||[]).filter(x=>x!==uid);
+  saveAccounts(accs);currentUser=me;renderChatList();
+  toast('✅ User unblocked.');
+}
+function reportMessage(msgId,toId){
+  document.getElementById('report-msg-id').value=msgId||'';
+  document.getElementById('report-msg-to').value=toId||'';
+  document.getElementById('report-msg-reason').value='';
+  document.getElementById('report-also-block').checked=false;
+  openModal('modal-report-msg');
+}
+function submitMsgReport(){
+  const toId=document.getElementById('report-msg-to').value;
+  const msgId=document.getElementById('report-msg-id').value;
+  const reason=document.getElementById('report-msg-reason').value;
+  if(!reason){toast('Please select a reason');return;}
+  const rpts=getReportsList();
+  rpts.push({id:'rpt_'+Date.now(),fromId:currentUser.id,toId,msgId,reason,createdAt:Date.now()});
+  saveReportsList(rpts);
+  if(document.getElementById('report-also-block').checked)blockUser(toId);
+  closeModal('modal-report-msg');
+  toast('✅ Reported! Thank you for keeping AlphaVerse safe. 🛡️');
+}
+
+// ── FAVOURITES ──
+function toggleFavorite(uid,e){
+  if(e&&e.stopPropagation)e.stopPropagation();
+  const accs=getAccounts();const me=accs.find(a=>a.id===currentUser.id);if(!me)return;
+  if(!me.favoriteFriends)me.favoriteFriends=[];
+  if(me.favoriteFriends.includes(uid))me.favoriteFriends=me.favoriteFriends.filter(x=>x!==uid);
+  else me.favoriteFriends.push(uid);
+  saveAccounts(accs);currentUser=me;renderChatList();
+}
+
+// ── LINK VALIDATION ──
+function containsExternalLink(text){
+  const urls=text.match(/https?:\/\/[^\s]+/gi);if(!urls)return false;
+  const ok=/theyoungfoundry\.github\.io/i;
+  return urls.some(u=>!ok.test(u));
+}
+
+// ── AUTO-PURGE (>30 days) ──
+function purgeOldMessages(){
+  const MAX=30*24*3600*1000;
+  const kept=getMessages().filter(m=>Date.now()-m.timestamp<MAX);
+  saveMessages(kept);
+}
+
+// ── READ RECEIPTS ──
+function getReadReceiptHtml(m,activeFid){
+  if(!m||m.fromId!==currentUser.id||!activeFid)return'';
+  const friend=getAccounts().find(a=>a.id===activeFid);
+  if(friend&&friend.readReceiptsEnabled===false)return'';
+  const isRead=m.readBy&&m.readBy.includes(activeFid);
+  return isRead?'<span class="msg-status read" title="Read">✓✓</span>':'<span class="msg-status" title="Delivered">✓</span>';
+}
+
+// ── @MENTION AUTOCOMPLETE ──
+function getChatMembers(){
+  if(activeChatGroupId){
+    const g=getGroups().find(x=>x.id===activeChatGroupId);
+    if(!g)return[];
+    return getAccounts().filter(a=>g.members.includes(a.id)&&a.id!==currentUser.id);
+  }
+  const f=getAccounts().find(a=>a.id===activeChatFriendId);
+  return f?[f]:[];
+}
+function chatInputChanged(inp){
+  inp.style.height='auto';inp.style.height=Math.min(inp.scrollHeight,100)+'px';
+  updateLastActive();
+  const val=inp.value;const pos=inp.selectionStart;
+  const before=val.slice(0,pos);
+  const mm=before.match(/@(\w*)$/);
+  const dd=document.getElementById('mention-dropdown');
+  if(mm){
+    const q=mm[1].toLowerCase();
+    const members=getChatMembers().filter(m=>(m.username||m.name||'').toLowerCase().startsWith(q));
+    if(members.length){
+      dd.innerHTML=members.map(m=>`<div class="mention-item" onclick="insertMention('${escHtml(m.username||m.name)}','${mm[1]}')">${m.avatar||'👤'} @${escHtml(m.username||m.name)}</div>`).join('');
+      dd.classList.add('open');return;
+    }
+  }
+  dd.classList.remove('open');
+}
+function insertMention(username,partial){
+  const inp=document.getElementById('chat-input');
+  const pos=inp.selectionStart;
+  const replaced=inp.value.slice(0,pos).replace(/@\w*$/,'@'+username+' ');
+  inp.value=replaced+inp.value.slice(pos);
+  inp.focus();inp.setSelectionRange(replaced.length,replaced.length);
+  document.getElementById('mention-dropdown').classList.remove('open');
+}
+function chatInputKeydown(e){
+  const dd=document.getElementById('mention-dropdown');
+  if(e.key==='Enter'&&!e.shiftKey){
+    if(dd&&dd.classList.contains('open')){e.preventDefault();return;}
+    e.preventDefault();sendMessage();
+  }
+  if(e.key==='Escape'&&dd)dd.classList.remove('open');
+}
+
+// ── SHARED MESSAGE ROW RENDERER ──
+function renderMsgRow(m,activeFid){
+  const isMine=m.fromId===currentUser.id;
+  const accs=getAccounts();
+  const fromUser=accs.find(a=>a.id===m.fromId);
+  const time=new Date(m.timestamp).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  const replyHtml=m.replyTo?(()=>{
+    const orig=getMessages().find(x=>x.id===m.replyTo);if(!orig)return'';
+    const ou=accs.find(a=>a.id===orig.fromId);
+    return`<div class="msg-reply-preview">↩ @${ou?(ou.username||ou.name):'User'}: ${escHtml(orig.text.slice(0,60))}</div>`;
+  })():'';
+  const rawText=activeChatGroupId
+    ?m.text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/@(\w+)/g,'<strong style="color:var(--blue)">@$1</strong>')
+    :escHtml(m.text);
+  const editedHtml=m.editedAt?'<span class="msg-edited">(edited)</span>':'';
+  const statusHtml=activeFid&&isMine?getReadReceiptHtml(m,activeFid):'';
+  const nameHtml=(!isMine&&activeChatGroupId)?`<div class="msg-group-sender">@${escHtml(fromUser?(fromUser.username||fromUser.name):'?')}</div>`:'';
+  const toolbar=`<div class="msg-toolbar">
+    <button title="Reply" onclick="setReplyTo('${m.id}')">↩️</button>
+    <button title="React" onclick="openReactionBar('${m.id}',this)">😊</button>
+    ${isMine?`<button title="Edit" onclick="startEditMessage('${m.id}')">✏️</button>`:''}
+    ${isMine?`<button title="Delete" onclick="quickDeleteMsg('${m.id}')">🗑️</button>`:''}
+    ${!isMine?`<button title="Report/Block" onclick="reportMessage('${m.id}','${m.fromId}')">⚠️</button>`:''}
+  </div>`;
+  return`<div class="msg-row ${isMine?'mine':'them'}" data-msgid="${m.id}">
+    <input type="checkbox" class="msg-check" id="chk_${m.id}" onchange="toggleMsgSelect('${m.id}',this.checked)">
+    ${toolbar}
+    <div class="msg-bubble">${nameHtml}${replyHtml}${rawText}${editedHtml}${statusHtml}</div>
+    ${renderReactions(m)}
+    <div class="msg-meta">${time}</div>
+  </div>`;
+}
+
+// ── GROUP CHAT ──
+function openCreateGroup(){
+  const friends=getFriends(currentUser.id);const accs=getAccounts();
+  document.getElementById('cg-members-list').innerHTML=friends.map(r=>{
+    const fid=r.fromId===currentUser.id?r.toId:r.fromId;
+    const f=accs.find(a=>a.id===fid);if(!f)return'';
+    return`<label style="display:flex;align-items:center;gap:8px;padding:7px 0;cursor:pointer;font-size:13px;font-weight:800">
+      <input type="checkbox" class="cg-member-cb" value="${fid}">
+      <span style="font-size:16px">${f.avatar||'👤'}</span> @${escHtml(f.username||f.name)}
+    </label>`;
+  }).join('')||'<p style="color:var(--muted);font-size:13px;font-weight:700;padding:8px 0">Add some buddies first to create a group!</p>';
+  document.getElementById('cg-name').value='';
+  openModal('modal-create-group');
+}
+function createGroup(){
+  const name=document.getElementById('cg-name').value.trim();
+  if(!name){toast('Enter a group name');return;}
+  const members=[currentUser.id,...Array.from(document.querySelectorAll('.cg-member-cb:checked')).map(c=>c.value)];
+  if(members.length<2){toast('Add at least one buddy to the group');return;}
+  const g={id:'grp_'+Date.now(),name,avatar:document.getElementById('cg-avatar').value||'💬',createdBy:currentUser.id,members,restricted:false,createdAt:Date.now()};
+  const groups=getGroups();groups.push(g);saveGroups(groups);
+  closeModal('modal-create-group');
+  renderChatList();openGroupChat(g.id);
+  toast('🎉 Group "'+escHtml(name)+'" created!');
+}
+function openGroupChat(groupId){
+  activeChatGroupId=groupId;activeChatFriendId=null;
+  exitSelectMode();clearReplyTo();
+  const g=getGroups().find(x=>x.id===groupId);if(!g)return;
+  const accs=getAccounts();
+  const header=document.getElementById('chat-header');
+  const inputArea=document.getElementById('chat-input-area');
+  const emptyState=document.getElementById('chat-empty');
+  header.style.display='flex';inputArea.style.display='flex';emptyState.style.display='none';
+  const memberNames=g.members.map(id=>{const a=accs.find(x=>x.id===id);return a?('@'+(a.username||a.name)):null;}).filter(Boolean).slice(0,3).join(', ');
+  const isCreator=g.createdBy===currentUser.id;
+  header.innerHTML=`
+    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">${g.avatar||'💬'}</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-weight:900;font-size:14px;color:var(--dark)">${escHtml(g.name)}<span class="grp-badge">Group</span></div>
+      <div class="last-active-txt">${g.members.length} members · ${memberNames}${g.members.length>3?'…':''}</div>
+    </div>
+    ${isCreator?`<button class="btn ghost sm" onclick="openGroupSettings('${groupId}')" title="Settings">⚙️</button>`:''}
+    <button class="btn ghost sm" style="color:var(--red)" onclick="confirmLeaveGroup('${groupId}')" title="Leave group">🚪 Leave</button>`;
+  renderGroupMessages(groupId);checkChatTimeLimit();
+}
+function renderGroupMessages(groupId){
+  const el=document.getElementById('chat-messages');if(!el)return;
+  const msgs=getMessages().filter(m=>m.chatId===groupId&&!m.deletedBySender);
+  if(!msgs.length){el.innerHTML=`<div style="text-align:center;padding:30px 0;color:var(--muted);font-size:13px;font-weight:800">👋 Say hi to the group!</div>`;return;}
+  el.innerHTML=msgs.map(m=>renderMsgRow(m,null)).join('');
+  el.scrollTop=el.scrollHeight;
+}
+function openGroupSettings(groupId){
+  const g=getGroups().find(x=>x.id===groupId);
+  if(!g||g.createdBy!==currentUser.id){toast('Only the group creator can manage settings.');return;}
+  const accs=getAccounts();
+  const memberList=g.members.map(id=>{
+    const a=accs.find(x=>x.id===id);if(!a)return'';
+    const isC=id===g.createdBy;
+    return`<div style="display:flex;align-items:center;gap:8px;padding:6px 0">
+      <span style="font-size:15px">${a.avatar||'👤'}</span>
+      <span style="font-size:13px;font-weight:800">@${escHtml(a.username||a.name)}${isC?' 👑':''}</span>
+      ${!isC?`<button class="btn red sm" style="margin-left:auto;font-size:11px;padding:2px 8px" onclick="removeGroupMember('${groupId}','${id}')">Remove</button>`:''}
+    </div>`;
+  }).join('');
+  document.getElementById('group-settings-body').innerHTML=`
+    <h3 style="margin-bottom:12px">⚙️ Group Settings</h3>
+    <div class="field"><label class="field-label">Group Name</label>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <input id="gs-name" class="form-input" value="${escHtml(g.name)}" style="flex:1">
+      <button class="btn blue sm" onclick="renameGroup('${groupId}')">Save</button>
+    </div></div>
+    <div class="field"><label class="field-label">Members (${g.members.length})</label><div style="max-height:180px;overflow-y:auto">${memberList}</div></div>
+    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:14px;font-size:13px;font-weight:800">
+      <input type="checkbox" id="gs-restricted" ${g.restricted?'checked':''} onchange="toggleGroupRestricted('${groupId}',this.checked)">
+      🔒 Only I can add/remove members
+    </label>
+    <button class="btn red" style="width:100%" onclick="confirmDeleteGroup('${groupId}')">🗑️ Delete Group</button>`;
+  openModal('modal-group-settings');
+}
+function renameGroup(groupId){
+  const n=document.getElementById('gs-name').value.trim();if(!n){toast('Enter a name');return;}
+  const groups=getGroups();const g=groups.find(x=>x.id===groupId);if(!g)return;
+  g.name=n;saveGroups(groups);toast('✅ Group renamed');
+  closeModal('modal-group-settings');openGroupChat(groupId);renderChatList();
+}
+function toggleGroupRestricted(groupId,val){
+  const groups=getGroups();const g=groups.find(x=>x.id===groupId);if(!g)return;
+  g.restricted=val;saveGroups(groups);
+  toast(val?'🔒 Group restricted':'🔓 Group open');
+}
+function removeGroupMember(groupId,uid){
+  const groups=getGroups();const g=groups.find(x=>x.id===groupId);
+  if(!g||g.createdBy!==currentUser.id)return;
+  g.members=g.members.filter(x=>x!==uid);saveGroups(groups);
+  renderChatList();closeModal('modal-group-settings');
+  openGroupSettings(groupId);toast('✅ Member removed');
+}
+function confirmDeleteGroup(groupId){
+  if(!confirm('Delete this group? All messages will be removed for everyone.'))return;
+  deleteGroup(groupId);
+}
+function deleteGroup(groupId){
+  saveGroups(getGroups().filter(g=>g.id!==groupId));
+  saveMessages(getMessages().filter(m=>m.chatId!==groupId));
+  activeChatGroupId=null;
+  document.getElementById('chat-header').style.display='none';
+  document.getElementById('chat-input-area').style.display='none';
+  document.getElementById('chat-empty').style.display='flex';
+  document.getElementById('chat-messages').innerHTML='';
+  closeModal('modal-group-settings');renderChatList();
+  toast('🗑️ Group deleted');
+}
+function confirmLeaveGroup(groupId){
+  if(!confirm('Leave this group?'))return;leaveGroup(groupId);
+}
+function leaveGroup(groupId){
+  const groups=getGroups();const g=groups.find(x=>x.id===groupId);if(!g)return;
+  if(g.createdBy===currentUser.id){deleteGroup(groupId);return;}
+  g.members=g.members.filter(x=>x!==currentUser.id);saveGroups(groups);
+  activeChatGroupId=null;
+  document.getElementById('chat-header').style.display='none';
+  document.getElementById('chat-input-area').style.display='none';
+  document.getElementById('chat-empty').style.display='flex';
+  document.getElementById('chat-messages').innerHTML='';
+  renderChatList();toast('✅ You left the group');
+}
 
 function renderChatScreen() {
   if (!currentUser) return;
@@ -1479,39 +1987,96 @@ function renderChatList() {
   if (!el) return;
   const friends = getFriends(currentUser.id);
   const accounts = getAccounts();
-  if (!friends.length) {
-    el.innerHTML = `<div class="chat-no-friends">No buddies yet!<br>Add friends to start chatting 👥<br><button class="btn blue sm" style="margin-top:10px" onclick="openFindBuddy()">Find a Buddy</button></div>`;
+  const myFavs = getFavoriteFriends();
+  const myBlocked = getBlockedUsers();
+  let html = '';
+
+  // Groups section
+  const myGroups = getGroups().filter(g => g.members.includes(currentUser.id));
+  if (myGroups.length) {
+    html += '<div class="chat-section-hdr">Groups</div>';
+    html += myGroups.map(g => {
+      const isActive = activeChatGroupId === g.id;
+      const grpMsgs = getMessages().filter(m => m.chatId === g.id);
+      const unread = grpMsgs.filter(m => m.fromId !== currentUser.id && (!m.readBy || !m.readBy.includes(currentUser.id))).length;
+      const last = grpMsgs[grpMsgs.length - 1];
+      const lastText = last ? last.text.slice(0, 35) + (last.text.length > 35 ? '…' : '') : 'No messages yet';
+      return `<div class="chat-item ${isActive ? 'active' : ''}" onclick="openGroupChat('${g.id}')">
+        <div class="ci-av" style="background:linear-gradient(135deg,#667eea,#764ba2)">${g.avatar || '💬'}</div>
+        <div style="flex:1;min-width:0">
+          <div class="ci-name">${escHtml(g.name)}<span class="grp-badge">Group</span></div>
+          <div class="ci-last">${escHtml(lastText)}</div>
+        </div>
+        ${unread > 0 ? `<span class="ci-unread">${unread}</span>` : ''}
+      </div>`;
+    }).join('');
+  }
+
+  if (!friends.length && !myGroups.length) {
+    el.innerHTML = `<div class="chat-no-friends">No buddies yet!<br>Add friends to start chatting 👥</div>`;
     return;
   }
-  const rows = friends.map(r => {
-    const fid = r.fromId === currentUser.id ? r.toId : r.fromId;
-    const friend = accounts.find(a => a.id === fid);
-    if (!friend) return '';
-    const msgs = getChatMessages(currentUser.id, fid).filter(m => !m.deletedBySender || m.fromId !== currentUser.id);
-    const last = msgs[msgs.length - 1];
-    const unread = getUnreadCount(currentUser.id, fid);
-    const lastText = last ? (last.deletedBySender ? '🗑️ Deleted' : last.text.slice(0, 35) + (last.text.length > 35 ? '…' : '')) : 'No messages yet';
-    const isActive = activeChatFriendId === fid;
-    return `<div class="chat-item ${isActive ? 'active' : ''}" onclick="openChatWith('${fid}')">
+
+  if (friends.length) {
+    const friendData = friends.map(r => {
+      const fid = r.fromId === currentUser.id ? r.toId : r.fromId;
+      const friend = accounts.find(a => a.id === fid);
+      if (!friend || myBlocked.includes(fid)) return null;
+      return { fid, friend, isFav: myFavs.includes(fid) };
+    }).filter(Boolean);
+
+    const byName = (a, b) => (a.friend.username || a.friend.name).localeCompare(b.friend.username || b.friend.name);
+    const favs = friendData.filter(x => x.isFav).sort(byName);
+    const others = friendData.filter(x => !x.isFav).sort(byName);
+
+    if (favs.length) {
+      html += '<div class="chat-section-hdr">⭐ Favourites</div>';
+      html += favs.map(x => renderChatListItem(x.fid, x.friend, true)).join('');
+    }
+    if (others.length) {
+      if (favs.length) html += '<div class="chat-section-hdr">All Chats</div>';
+      html += others.map(x => renderChatListItem(x.fid, x.friend, false)).join('');
+    }
+  }
+
+  el.innerHTML = html || '<div class="chat-no-friends">No active chats.</div>';
+}
+
+function renderChatListItem(fid, friend, isFav) {
+  const msgs = getChatMessages(currentUser.id, fid).filter(m => !m.deletedBySender || m.fromId !== currentUser.id);
+  const last = msgs[msgs.length - 1];
+  const unread = getUnreadCount(currentUser.id, fid);
+  const lastText = last ? (last.deletedBySender ? '🗑️ Deleted' : last.text.slice(0, 35) + (last.text.length > 35 ? '…' : '')) : 'No messages yet';
+  const isActive = !activeChatGroupId && activeChatFriendId === fid;
+  const lastActive = getLastActiveText(fid);
+  const isOnline = lastActive === 'Online now';
+  return `<div class="chat-item ${isActive ? 'active' : ''}" onclick="openChatWith('${fid}')">
+    <div style="position:relative;flex-shrink:0">
       <div class="ci-av" style="background:${avatarColor(friend.name)}">${friend.avatar || '👤'}</div>
-      <div style="flex:1;min-width:0">
-        <div class="ci-name">@${escHtml(friend.username || friend.name)}</div>
-        <div class="ci-last">${escHtml(lastText)}</div>
-      </div>
+      ${isOnline ? '<span class="online-dot" style="position:absolute;bottom:1px;right:1px"></span>' : ''}
+    </div>
+    <div style="flex:1;min-width:0">
+      <div class="ci-name">@${escHtml(friend.username || friend.name)}</div>
+      <div class="ci-last">${escHtml(lastText)}</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
       ${unread > 0 ? `<span class="ci-unread">${unread}</span>` : ''}
-    </div>`;
-  }).join('');
-  el.innerHTML = rows || `<div class="chat-no-friends">No active chats.</div>`;
+      <button class="fav-star ${isFav ? 'active' : ''}" onclick="toggleFavorite('${fid}',event)" title="${isFav ? 'Remove favourite' : 'Add to favourites'}">${isFav ? '⭐' : '☆'}</button>
+    </div>
+  </div>`;
 }
 
 function openChatWith(friendId) {
   activeChatFriendId = friendId;
+  activeChatGroupId = null;
   exitSelectMode();
+  clearReplyTo();
   const accounts = getAccounts();
   const friend = accounts.find(a => a.id === friendId);
   if (!friend) return;
   markChatRead(currentUser.id, friendId);
   renderChatList();
+  updateLastActive();
 
   const header = document.getElementById('chat-header');
   const inputArea = document.getElementById('chat-input-area');
@@ -1520,14 +2085,24 @@ function openChatWith(friendId) {
   inputArea.style.display = 'flex';
   emptyState.style.display = 'none';
 
+  const lastActive = getLastActiveText(friendId);
+  const isOnline = lastActive === 'Online now';
+  const blk = isBlocked(friendId);
+  const subLine = lastActive || ('Grade ' + friend.grade + (friend.isMentor ? ' · 🎓 Mentor' : ''));
+
   header.innerHTML = `
-    <div class="ci-av" style="background:${avatarColor(friend.name)};width:36px;height:36px;font-size:16px">${friend.avatar || '👤'}</div>
-    <div style="flex:1">
-      <div style="font-weight:900;font-size:14px;color:var(--dark)">@${escHtml(friend.username || friend.name)}</div>
-      <div style="font-size:11px;color:var(--muted);font-weight:700">Grade ${friend.grade}${friend.isMentor ? ' · 🎓 Mentor' : ''}</div>
+    <div style="position:relative;flex-shrink:0">
+      <div class="ci-av" style="background:${avatarColor(friend.name)};width:36px;height:36px;font-size:16px">${friend.avatar || '👤'}</div>
+      ${isOnline ? '<span class="online-dot" style="position:absolute;bottom:0;right:0"></span>' : ''}
     </div>
-    <button class="btn ghost sm" onclick="enterSelectMode()" title="Select messages">☑️ Select</button>
-    <button class="btn ghost sm" style="color:var(--red);border-color:var(--red)" onclick="confirmDeleteChat('${friendId}')" title="Delete entire chat">🗑️ Clear Chat</button>`;
+    <div style="flex:1;min-width:0">
+      <div style="font-weight:900;font-size:14px;color:var(--dark)">@${escHtml(friend.username || friend.name)}</div>
+      <div class="last-active-txt">${escHtml(subLine)}</div>
+    </div>
+    <button class="btn ghost sm" onclick="enterSelectMode()" title="Select messages">☑️</button>
+    ${blk
+      ? `<button class="btn ghost sm" style="color:var(--green)" onclick="unblockUser('${friendId}')">✅ Unblock</button>`
+      : `<button class="btn ghost sm" style="color:var(--red);border-color:var(--red)" onclick="reportMessage('','${friendId}')">⚠️ Report</button>`}`;
 
   renderChatMessages(friendId);
   checkChatTimeLimit();
@@ -1541,44 +2116,38 @@ function renderChatMessages(friendId) {
     el.innerHTML = `<div style="text-align:center;padding:30px 0;color:var(--muted);font-size:13px;font-weight:800">👋 Say hello! This is the start of your conversation.</div>`;
     return;
   }
-  const ARCHIVE_MS = 14 * 24 * 3600 * 1000;
   el.innerHTML = msgs.map(m => {
-    const isMine = m.fromId === currentUser.id;
-    const isDeleted = m.deletedBySender && (Date.now() - m.deletedAt < ARCHIVE_MS);
-    if (m.deletedBySender && isMine && Date.now() - m.deletedAt >= ARCHIVE_MS) return '';
-    const bubbleClass = isDeleted ? 'msg-bubble deleted' : 'msg-bubble';
-    const text = isDeleted ? '🗑️ You deleted this message' : escHtml(m.text);
-    const time = new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    return `<div class="msg-row ${isMine ? 'mine' : 'them'}" data-msgid="${m.id}">
-      <input type="checkbox" class="msg-check" id="chk_${m.id}" onchange="toggleMsgSelect('${m.id}',this.checked)">
-      <div class="${bubbleClass}">${text}${isMine && !isDeleted ? `<button onclick="quickDeleteMsg('${m.id}')" style="background:none;border:none;cursor:pointer;opacity:.5;font-size:10px;margin-left:6px;vertical-align:middle" title="Delete">🗑️</button>` : ''}</div>
-      <div class="msg-meta">${time}</div>
-    </div>`;
+    if (m.deletedBySender) {
+      const isMine = m.fromId === currentUser.id;
+      const time = new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      return `<div class="msg-row ${isMine ? 'mine' : 'them'}" data-msgid="${m.id}">
+        <input type="checkbox" class="msg-check" id="chk_${m.id}" onchange="toggleMsgSelect('${m.id}',this.checked)">
+        <div class="msg-bubble deleted" style="opacity:.55;font-style:italic">🗑️ This message was deleted</div>
+        <div class="msg-meta">${time}</div>
+      </div>`;
+    }
+    return renderMsgRow(m, friendId);
   }).join('');
   el.scrollTop = el.scrollHeight;
 }
 
 function sendMessage() {
-  if (!currentUser || !activeChatFriendId) return;
-  // Check parental controls
+  const isGroup = !!activeChatGroupId;
+  if (!currentUser || (!activeChatFriendId && !activeChatGroupId)) return;
   const pc = getParentalControls(currentUser.id);
   if (pc.canChat === false) { toast('💬 Chat has been turned off by your parent.'); return; }
   if (pc.chatTimeLimitMins > 0) {
     const usedSecs = getDailyChatSecs(currentUser.id);
-    if (usedSecs >= pc.chatTimeLimitMins * 60) {
-      toast(`⏰ Daily chat limit of ${pc.chatTimeLimitMins} min reached.`);
-      checkChatTimeLimit();
-      return;
-    }
+    if (usedSecs >= pc.chatTimeLimitMins * 60) { toast(`⏰ Daily chat limit of ${pc.chatTimeLimitMins} min reached.`); checkChatTimeLimit(); return; }
   }
   const input = document.getElementById('chat-input');
   const text = (input.value || '').trim();
   if (!text) return;
   if (text.length > 500) { toast('⚠️ Max 500 characters'); return; }
-  // Basic content check
   const v = validateText(text);
   if (!v.ok) { toast('⚠️ ' + v.reason); return; }
-  const cid = chatId(currentUser.id, activeChatFriendId);
+  if (containsExternalLink(text)) { toast('🔗 Only links from AlphaVerse are allowed in chats!'); return; }
+  const cid = isGroup ? activeChatGroupId : chatId(currentUser.id, activeChatFriendId);
   const msg = {
     id: 'msg_' + Date.now(),
     chatId: cid,
@@ -1588,23 +2157,26 @@ function sendMessage() {
     deletedBySender: false,
     deletedAt: null,
     readBy: [currentUser.id],
+    replyTo: _replyToMsgId || null,
+    editedAt: null,
+    reactions: {},
+    isGroupMsg: isGroup,
   };
   const msgs = getMessages();
   msgs.push(msg);
   saveMessages(msgs);
   input.value = '';
   input.style.height = 'auto';
-  // XP for messaging (max 20 msgs/day)
+  clearReplyTo();
+  document.getElementById('emoji-picker')?.classList.remove('open');
+  document.getElementById('mention-dropdown')?.classList.remove('open');
   const todayMsgKey = 'yfs_msgxp_' + currentUser.id + '_' + new Date().toDateString();
   const todayMsgs = parseInt(localStorage.getItem(todayMsgKey) || '0');
   if (todayMsgs < 20) { addXP(currentUser.id, XP_REWARDS.messageSent); localStorage.setItem(todayMsgKey, todayMsgs + 1); }
-  // Track chat time
-  if (_chatSessionStart) {
-    addDailyChatSecs(currentUser.id, Math.floor((Date.now() - _chatSessionStart) / 1000));
-    _chatSessionStart = Date.now();
-  }
-  logActivity(currentUser.id, 'message', activeChatFriendId);
-  renderChatMessages(activeChatFriendId);
+  if (_chatSessionStart) { addDailyChatSecs(currentUser.id, Math.floor((Date.now() - _chatSessionStart) / 1000)); _chatSessionStart = Date.now(); }
+  logActivity(currentUser.id, 'message', isGroup ? activeChatGroupId : activeChatFriendId);
+  updateLastActive();
+  isGroup ? renderGroupMessages(activeChatGroupId) : renderChatMessages(activeChatFriendId);
   renderChatList();
   checkChatTimeLimit();
   updateChatBadge();
@@ -2213,7 +2785,7 @@ function getSeedThreads() {
 function validateText(text) {
   // Strip emojis/Unicode before special-char check so emoji messages pass
   const noEmoji = text.replace(/[^\x00-\x7F]/g, '');
-  if (/[^a-zA-Z0-9\s!?.,:;'"()\-_*@#]{2,}|[!?.,:;'"()\-_]{5,}/.test(noEmoji))
+  if (/[^a-zA-Z0-9\s!?.,:;'"()\-_*@#]{3,}|[!?.,:;'"()\-_]{5,}/.test(noEmoji))
     return {ok:false, reason:'Contains too many consecutive special characters'};
   const letters = text.replace(/[^a-zA-Z]/g,'').length;
   if (text.replace(/\s/g,'').length > 6 && letters / text.replace(/\s/g,'').length < 0.4)
@@ -2868,6 +3440,8 @@ function logout() {
     _chatSessionStart = null;
   }
   activeChatFriendId = null;
+  activeChatGroupId = null;
+  stopMsgPoller();
   currentUser = null;
   document.getElementById('main-topbar').style.display = 'none';
   document.getElementById('main-footer').style.display = 'none';
@@ -2926,6 +3500,9 @@ function enterApp() {
   updateChatBadge();
   resetSessionTimeout();
   _sessionStart = Date.now();
+  updateLastActive();
+  startMsgPoller();
+  purgeOldMessages();
   // Daily login XP (once per calendar day)
   if (currentUser.role === 'student') {
     const loginKey = 'yfs_loginxp_' + currentUser.id + '_' + new Date().toDateString();
@@ -3811,7 +4388,7 @@ function submitPost() {
   logActivity(currentUser.id, 'post', text);
   closeModal('modal-post');
   if (needsParentApproval) toast('✅ Post submitted! Waiting for parent approval before it goes live.');
-  else toast('✅ Post published! +' + XP_REWARDS.post + ' XP 🎉');
+  else { toast('✅ Post published! +' + XP_REWARDS.post + ' XP 🎉'); playCheerSound(); }
   renderFeed();
   renderParentSidebar();
 }
@@ -5015,6 +5592,86 @@ if (!localStorage.getItem('yfs_posts')) savePosts(getSeedPosts());
       <p style="color:var(--muted)">By using TYF Network you agree to these terms. They may be updated with notice via the parent email on file.</p>
     </div>
     <div style="margin-top:16px"><button class="btn green" onclick="closeModal('modal-terms')">I Agree →</button></div>
+  </div>
+</div>
+
+<!-- MODAL: REPORT MESSAGE -->
+<div class="modal-overlay" id="modal-report-msg">
+  <div class="modal" style="max-width:420px">
+    <button class="modal-close" onclick="closeModal('modal-report-msg')">✕</button>
+    <h3>⚠️ Report / Block</h3>
+    <p class="sub">Help keep AlphaVerse safe. All reports are reviewed by admins.</p>
+    <input type="hidden" id="report-msg-id">
+    <input type="hidden" id="report-msg-to">
+    <div class="field">
+      <label class="field-label">Reason</label>
+      <select id="report-msg-reason" class="form-input">
+        <option value="">— Select a reason —</option>
+        <option value="abusive">Abusive or hurtful language</option>
+        <option value="bullying">Bullying or harassment</option>
+        <option value="inappropriate">Inappropriate content</option>
+        <option value="spam">Spam or unwanted messages</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-bottom:16px;font-size:13px;font-weight:800">
+      <input type="checkbox" id="report-also-block"> Also block this user
+    </label>
+    <div style="display:flex;gap:8px">
+      <button class="btn red" onclick="submitMsgReport()">Submit Report</button>
+      <button class="btn ghost" onclick="closeModal('modal-report-msg')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: CREATE GROUP CHAT -->
+<div class="modal-overlay" id="modal-create-group">
+  <div class="modal" style="max-width:460px">
+    <button class="modal-close" onclick="closeModal('modal-create-group')">✕</button>
+    <h3>👥 Create Group Chat</h3>
+    <p class="sub">Bring your friends together in one conversation!</p>
+    <div class="field-row" style="gap:10px;margin-bottom:10px">
+      <div class="field" style="flex:0 0 70px">
+        <label class="field-label">Avatar</label>
+        <select id="cg-avatar" class="form-input" style="font-size:20px;text-align:center">
+          <option>💬</option><option>🚀</option><option>🌟</option><option>🎮</option>
+          <option>🎨</option><option>📚</option><option>⚽</option><option>🎵</option>
+          <option>🦄</option><option>🔥</option><option>🌈</option><option>🏆</option>
+        </select>
+      </div>
+      <div class="field" style="flex:1">
+        <label class="field-label">Group Name</label>
+        <input id="cg-name" class="form-input" placeholder="e.g. Study Squad, Game Crew…" maxlength="40">
+      </div>
+    </div>
+    <div class="field">
+      <label class="field-label">Add Buddies</label>
+      <div id="cg-members-list" style="max-height:200px;overflow-y:auto;border:2px solid var(--line);border-radius:12px;padding:8px 12px"></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn blue" onclick="createGroup()">Create Group 🎉</button>
+      <button class="btn ghost" onclick="closeModal('modal-create-group')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: GROUP SETTINGS -->
+<div class="modal-overlay" id="modal-group-settings">
+  <div class="modal" style="max-width:460px">
+    <button class="modal-close" onclick="closeModal('modal-group-settings')">✕</button>
+    <div id="group-settings-body"></div>
+  </div>
+</div>
+
+<!-- MESSAGE NOTIFICATION POPUP -->
+<div class="msg-notif-popup" id="msg-popup">
+  <div style="display:flex;align-items:center;gap:10px">
+    <div id="msg-popup-av" style="width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:var(--soft)">👤</div>
+    <div style="flex:1;min-width:0">
+      <div id="msg-popup-name" style="font-weight:900;font-size:13px;color:var(--dark)"></div>
+      <div id="msg-popup-text" style="font-size:12px;color:var(--muted);font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
+    </div>
+    <button onclick="event.stopPropagation();document.getElementById('msg-popup').style.display='none'" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:18px;line-height:1;flex-shrink:0">×</button>
   </div>
 </div>
 
