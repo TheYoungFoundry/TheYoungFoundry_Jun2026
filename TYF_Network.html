@@ -830,8 +830,9 @@ input,textarea,select{font-family:var(--body);}
             <span style="color:#4A90A4">New here?</span> Your account is created the first time you log in.
           </div>
           <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-            <button onclick="parentLogin('demo')" style="background:none;border:1px solid rgba(201,168,76,.3);color:#C9A84C;border-radius:10px;padding:8px 16px;font-size:12px;font-weight:800;cursor:pointer">⚡ Demo Parent A<br><span style="font-size:10px;opacity:.8">parent@tyf.test · Demo Student's parent</span></button>
-            <button onclick="parentLogin('demo2')" style="background:none;border:1px solid rgba(74,144,164,.4);color:#4A90A4;border-radius:10px;padding:8px 16px;font-size:12px;font-weight:800;cursor:pointer">⚡ Demo Parent B<br><span style="font-size:10px;opacity:.8">raj@tyf.test · Arjun's parent</span></button>
+            <button onclick="parentLogin('demo1')" style="background:none;border:1px solid rgba(201,168,76,.4);color:#C9A84C;border-radius:10px;padding:8px 16px;font-size:12px;font-weight:800;cursor:pointer;text-align:center">👶 1 Child<br><span style="font-size:10px;opacity:.8">Sunita S. · Maya (Gr.7)</span></button>
+            <button onclick="parentLogin('demo2')" style="background:none;border:1px solid rgba(74,144,164,.4);color:#4A90A4;border-radius:10px;padding:8px 16px;font-size:12px;font-weight:800;cursor:pointer;text-align:center">👶👶 2 Children<br><span style="font-size:10px;opacity:.8">Meena K. · Demo + Priya</span></button>
+            <button onclick="parentLogin('demo3')" style="background:none;border:1px solid rgba(91,140,90,.5);color:#5B8C5A;border-radius:10px;padding:8px 16px;font-size:12px;font-weight:800;cursor:pointer;text-align:center">👶👶👶 3 Children<br><span style="font-size:10px;opacity:.8">Raj K. · Arjun, Rishi, Ananya</span></button>
           </div>
         </div>
       </div>
@@ -3216,7 +3217,7 @@ function seedDemoData() {
       email: 'demo@tyf.test', grade: 6, nextAcademicGrade: 7,
       nextGrade: 7, birthYear: 2013, yob: 2013, schoolId: 'DEMO-001',
       schoolName: 'Demo School', role: 'student', status: 'active',
-      parentName: 'Demo Parent', parentEmail: 'parent@tyf.test',
+      parentName: 'Meena K.', parentEmail: 'parent2@tyf.test',
       tempPassword: 'Demo@123', joined: Date.now() - 86400000 * 30,
       foundryScore: 185, badges: [], joinedCommunities: [],
       lastGradeYear: new Date().getFullYear(),
@@ -3230,26 +3231,36 @@ function seedDemoData() {
 
   // ── Companion accounts ─────────────────────────────────────────────────────
   const companions = [
-    { id:'seed-maya',   name:'Maya S.',   username:'maya_s',   email:'maya@tyf.test',   grade:7, nextGrade:8, birthYear:2012, yob:2012, schoolId:'DEMO-001', schoolName:'Demo School',     role:'student', status:'active', parentName:'Sunita S.', parentEmail:'sunita@tyf.test', tempPassword:'Demo@123', joined:Date.now()-86400000*45, foundryScore:120, badges:[], joinedCommunities:[], lastGradeYear:new Date().getFullYear(), isMentor:false, profilePublic:true,  avatar:'🦋', aboutMe:'I write poems and short stories. Love the monsoon season!',              communities:['literature','painting','photography'] },
-    { id:'seed-arjun',  name:'Arjun K.',  username:'arjun_k',  email:'arjun@tyf.test',  grade:6, nextGrade:7, birthYear:2013, yob:2013, schoolId:'DEMO-002', schoolName:'Sunrise Academy', role:'student', status:'active', parentName:'Raj K.',    parentEmail:'raj@tyf.test',    tempPassword:'Demo@123', joined:Date.now()-86400000*60, foundryScore:200, badges:[], joinedCommunities:[], lastGradeYear:new Date().getFullYear(), isMentor:false, profilePublic:true,  avatar:'🚀', aboutMe:'Python + Arduino enthusiast. Building cool stuff one project at a time!', communities:['coding','robotics','science'] },
-    { id:'seed-priya',  name:'Priya M.',  username:'priya_m',  email:'priya@tyf.test',  grade:6, nextGrade:7, birthYear:2013, yob:2013, schoolId:'DEMO-001', schoolName:'Demo School',     role:'student', status:'active', parentName:'Meena M.',  parentEmail:'meena@tyf.test',  tempPassword:'Demo@123', joined:Date.now()-86400000*20, foundryScore:85,  badges:[], joinedCommunities:[], lastGradeYear:new Date().getFullYear(), isMentor:false, profilePublic:true,  avatar:'📸', aboutMe:'Photography is my superpower. Every corner of my street is a story.',     communities:['photography','literature','science'] },
-    { id:'seed-rishi',  name:'Rishi T.',  username:'rishi_t',  email:'rishi@tyf.test',  grade:8, nextGrade:9, birthYear:2011, yob:2011, schoolId:'DEMO-003', schoolName:'Greenfield High', role:'student', status:'active', parentName:'Tarun T.',  parentEmail:'tarun@tyf.test',  tempPassword:'Demo@123', joined:Date.now()-86400000*90, foundryScore:310, badges:[], joinedCommunities:[], lastGradeYear:new Date().getFullYear(), isMentor:true,  profilePublic:true,  avatar:'🤖', aboutMe:'Robotics nerd and Arduino wizard. Ask me anything about sensors!',         communities:['robotics','coding','science'] },
-    { id:'seed-ananya', name:'Ananya R.', username:'ananya_r', email:'ananya@tyf.test', grade:7, nextGrade:8, birthYear:2012, yob:2012, schoolId:'DEMO-001', schoolName:'Demo School',     role:'student', status:'active', parentName:'Rekha R.',  parentEmail:'rekha@tyf.test',  tempPassword:'Demo@123', joined:Date.now()-86400000*15, foundryScore:65,  badges:[], joinedCommunities:[], lastGradeYear:new Date().getFullYear(), isMentor:false, profilePublic:false, avatar:'🎨', aboutMe:'Watercolour lover. Still learning — and that is totally okay.',            communities:['painting','photography'] },
+    // parent1@tyf.test → 1 child: Maya
+    { id:'seed-maya',   name:'Maya S.',   username:'maya_s',   email:'maya@tyf.test',   grade:7, nextGrade:8, birthYear:2012, yob:2012, schoolId:'DEMO-001', schoolName:'Demo School',     role:'student', status:'active', parentName:'Sunita S.', parentEmail:'parent1@tyf.test', tempPassword:'Demo@123', joined:Date.now()-86400000*45, foundryScore:120, badges:[], joinedCommunities:[], lastGradeYear:new Date().getFullYear(), isMentor:false, profilePublic:true,  avatar:'🦋', aboutMe:'I write poems and short stories. Love the monsoon season!',              communities:['literature','painting','photography'] },
+    // parent3@tyf.test → 3 children: Arjun, Rishi, Ananya
+    { id:'seed-arjun',  name:'Arjun K.',  username:'arjun_k',  email:'arjun@tyf.test',  grade:6, nextGrade:7, birthYear:2013, yob:2013, schoolId:'DEMO-002', schoolName:'Sunrise Academy', role:'student', status:'active', parentName:'Raj K.',    parentEmail:'parent3@tyf.test', tempPassword:'Demo@123', joined:Date.now()-86400000*60, foundryScore:200, badges:[], joinedCommunities:[], lastGradeYear:new Date().getFullYear(), isMentor:false, profilePublic:true,  avatar:'🚀', aboutMe:'Python + Arduino enthusiast. Building cool stuff one project at a time!', communities:['coding','robotics','science'] },
+    // parent2@tyf.test → 2 children: Demo Student + Priya
+    { id:'seed-priya',  name:'Priya M.',  username:'priya_m',  email:'priya@tyf.test',  grade:6, nextGrade:7, birthYear:2013, yob:2013, schoolId:'DEMO-001', schoolName:'Demo School',     role:'student', status:'active', parentName:'Meena K.',  parentEmail:'parent2@tyf.test', tempPassword:'Demo@123', joined:Date.now()-86400000*20, foundryScore:85,  badges:[], joinedCommunities:[], lastGradeYear:new Date().getFullYear(), isMentor:false, profilePublic:true,  avatar:'📸', aboutMe:'Photography is my superpower. Every corner of my street is a story.',     communities:['photography','literature','science'] },
+    { id:'seed-rishi',  name:'Rishi T.',  username:'rishi_t',  email:'rishi@tyf.test',  grade:8, nextGrade:9, birthYear:2011, yob:2011, schoolId:'DEMO-003', schoolName:'Greenfield High', role:'student', status:'active', parentName:'Raj K.',    parentEmail:'parent3@tyf.test', tempPassword:'Demo@123', joined:Date.now()-86400000*90, foundryScore:310, badges:[], joinedCommunities:[], lastGradeYear:new Date().getFullYear(), isMentor:true,  profilePublic:true,  avatar:'🤖', aboutMe:'Robotics nerd and Arduino wizard. Ask me anything about sensors!',         communities:['robotics','coding','science'] },
+    { id:'seed-ananya', name:'Ananya R.', username:'ananya_r', email:'ananya@tyf.test', grade:7, nextGrade:8, birthYear:2012, yob:2012, schoolId:'DEMO-001', schoolName:'Demo School',     role:'student', status:'active', parentName:'Raj K.',    parentEmail:'parent3@tyf.test', tempPassword:'Demo@123', joined:Date.now()-86400000*15, foundryScore:65,  badges:[], joinedCommunities:[], lastGradeYear:new Date().getFullYear(), isMentor:false, profilePublic:false, avatar:'🎨', aboutMe:'Watercolour lover. Still learning — and that is totally okay.',            communities:['painting','photography'] },
   ];
   companions.forEach(c => {
-    if (!accounts.find(a => a.id === c.id)) {
-      const { communities: comms, ...acct } = c;
+    const { communities: comms, ...acct } = c;
+    const existing = accounts.find(a => a.id === c.id);
+    if (existing) {
+      existing.parentEmail = acct.parentEmail;
+      existing.parentName = acct.parentName;
+    } else {
       accounts.push(acct);
       saveUserCommunities(c.id, comms);
     }
   });
 
-  // ── Demo parent accounts ───────────────────────────────────────────────────
-  if (!accounts.find(a => a.id === 'parent_demo_a')) {
-    accounts.push({ id:'parent_demo_a', name:'Demo Parent', email:'parent@tyf.test', role:'parent', status:'active', joined:Date.now()-86400000*30, foundryScore:0, badges:[], children:[] });
+  // ── Demo parent accounts (1 child / 2 children / 3 children) ─────────────
+  if (!accounts.find(a => a.id === 'parent_demo_1')) {
+    accounts.push({ id:'parent_demo_1', name:'Sunita S.', email:'parent1@tyf.test', role:'parent', status:'active', joined:Date.now()-86400000*45, foundryScore:0, badges:[], children:[] });
   }
-  if (!accounts.find(a => a.id === 'parent_demo_b')) {
-    accounts.push({ id:'parent_demo_b', name:'Raj K.', email:'raj@tyf.test', role:'parent', status:'active', joined:Date.now()-86400000*60, foundryScore:0, badges:[], children:[] });
+  if (!accounts.find(a => a.id === 'parent_demo_2')) {
+    accounts.push({ id:'parent_demo_2', name:'Meena K.', email:'parent2@tyf.test', role:'parent', status:'active', joined:Date.now()-86400000*30, foundryScore:0, badges:[], children:[] });
+  }
+  if (!accounts.find(a => a.id === 'parent_demo_3')) {
+    accounts.push({ id:'parent_demo_3', name:'Raj K.', email:'parent3@tyf.test', role:'parent', status:'active', joined:Date.now()-86400000*60, foundryScore:0, badges:[], children:[] });
   }
   saveAccounts(accounts);
 
@@ -3280,7 +3291,7 @@ function seedDemoData() {
   // ── Pending account request for parent@tyf.test Approvals tab ─────────────
   const pending = getPendingAccounts();
   if (!pending.find(p => p.id === 'pending_kavya')) {
-    pending.push({ id:'pending_kavya', name:'Kavya P.', username:'kavya_p', email:'kavya@tyf.test', grade:6, schoolName:'Demo School', parentEmail:'parent@tyf.test', status:'pending', joined:Date.now()-3600000*3 });
+    pending.push({ id:'pending_kavya', name:'Kavya P.', username:'kavya_p', email:'kavya@tyf.test', grade:6, schoolName:'Demo School', parentEmail:'parent2@tyf.test', status:'pending', joined:Date.now()-3600000*3 });
     savePendingAccounts(pending);
   }
 
@@ -3336,8 +3347,9 @@ function studentLogin() {
 
 function parentLogin(mode) {
   let name, email;
-  if (mode === 'demo')  { seedDemoData(); name = 'Demo Parent'; email = 'parent@tyf.test'; }
-  else if (mode === 'demo2') { seedDemoData(); name = 'Raj K.'; email = 'raj@tyf.test'; }
+  if (mode === 'demo1')  { seedDemoData(); name = 'Sunita S.'; email = 'parent1@tyf.test'; }
+  else if (mode === 'demo2') { seedDemoData(); name = 'Meena K.'; email = 'parent2@tyf.test'; }
+  else if (mode === 'demo3') { seedDemoData(); name = 'Raj K.';   email = 'parent3@tyf.test'; }
   else {
     name = document.getElementById('p-name').value.trim();
     email = document.getElementById('p-email').value.trim();
