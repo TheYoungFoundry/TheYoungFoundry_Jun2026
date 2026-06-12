@@ -4869,53 +4869,90 @@ function renderParentTabContent() {
     const children = getPpChildren();
     const allPosts = getPosts();
     if (!children.length) {
-      el.innerHTML = `<div class="pp-section-title">👁️ Activity Monitor</div><div style="text-align:center;padding:60px 20px;color:#8A9BB5"><div style="font-size:3rem;margin-bottom:12px">👶</div><div style="font-size:13px;font-weight:700">No linked child accounts found.<br>Your child's email should list you as their parent during registration.</div></div>`;
+      el.innerHTML = `<div class="pp-section-title">👁️ Child's Activity</div><div style="text-align:center;padding:60px 20px;color:#8A9BB5"><div style="font-size:3rem;margin-bottom:12px">👶</div><div style="font-size:13px;font-weight:700">No linked child accounts found.<br>Your child's email should list you as their parent during registration.</div></div>`;
       return;
     }
-    let html = `<div class="pp-section-title">👁️ Activity Monitor</div><div class="pp-section-sub">Everything your child has done — posts, reactions, communities, avatar changes.</div>`;
+    let html = `<div class="pp-section-title">👁️ Child's Activity</div><div class="pp-section-sub">Full profile details, time spent, recent posts, and buddy connections for each of your children.</div>`;
     children.forEach(child => {
       const childPosts = allPosts.filter(p => p.authorId === child.id);
-      const reactions = childPosts.reduce((s,p) => s + Object.values(p.reactions||{}).reduce((a,b)=>a+b,0), 0);
+      const livePosts = childPosts.filter(p => p.parentApproved);
+      const reactions = livePosts.reduce((s,p) => s + Object.values(p.reactions||{}).reduce((a,b)=>a+b,0), 0);
       const joined = getUserCommunities(child.id);
+      const xp = getXP(child.id);
+      const xpLevel = getXPLevel(xp);
+      const xpProg = getXPProgress(xp);
+      const streak = getLoginStreak(child.id);
+      const friends = getFriends(child.id);
+      const today = new Date().toDateString();
+      const sessionMins = getSessionMins(child.id, today);
+      const chatSecs = getDailyChatSecs(child.id);
+      const chatMins = Math.round(chatSecs / 60);
+      // 7-day chart
+      const days7 = [];
+      let maxMins7 = 0;
+      for (let i=6; i>=0; i--) {
+        const d = new Date(Date.now() - i*86400000);
+        const m = getSessionMins(child.id, d.toDateString());
+        if (m > maxMins7) maxMins7 = m;
+        days7.push({label:['Su','Mo','Tu','We','Th','Fr','Sa'][d.getDay()], mins:m});
+      }
+      if (maxMins7 === 0) maxMins7 = 1;
       html += `<div class="pp-card">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-          <div class="pp-av" style="width:48px;height:48px;font-size:20px;border-radius:50%;background:linear-gradient(135deg,#C9A84C,#4A90A4)">${child.name.charAt(0)}</div>
-          <div style="flex:1">
-            <div style="font-weight:900;font-size:15px;color:#E8EDF4">${escHtml(child.name)}</div>
-            <div style="font-size:12px;color:#8A9BB5;font-weight:700">Grade ${child.grade} · ${escHtml(child.schoolName||'')} · @${escHtml(child.username||child.name)}</div>
+        <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid #2D3E50">
+          <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#C9A84C,#4A90A4);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0">${child.avatar||child.name.charAt(0)}</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">
+              <div style="font-weight:900;font-size:16px;color:#E8EDF4">${escHtml(child.name)}</div>
+              <span class="pp-tag pp-tag-${child.status==='active'?'green':child.status==='suspended'?'red':'orange'}">${child.status||'active'}</span>
+              ${streak.count>=3?`<span class="pp-tag pp-tag-gold">🔥 ${streak.count}-day streak</span>`:''}
+            </div>
+            <div style="font-size:12px;color:#8A9BB5;font-weight:700;margin-bottom:6px">Grade ${child.grade} · ${escHtml(child.schoolName||'')} · @${escHtml(child.username||child.name)}</div>
+            ${child.aboutMe?`<div style="font-size:12px;color:#A0B0C5;font-style:italic;font-weight:700;margin-bottom:8px">"${escHtml(child.aboutMe.slice(0,100))}${child.aboutMe.length>100?'…':''}"</div>`:''}
+            <div style="background:#0F1923;border-radius:8px;padding:8px 10px">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+                <span style="font-size:11px;font-weight:900;color:#C9A84C">${xpLevel} · ${xp} XP</span>
+                <span style="font-size:10px;color:#8A9BB5;font-weight:700">${xpProg.next>xp?xpProg.next-xp+' XP to next level':'🏆 Max Level'}</span>
+              </div>
+              <div style="height:6px;background:#2D3E50;border-radius:3px;overflow:hidden">
+                <div style="height:100%;width:${xpProg.pct}%;background:linear-gradient(90deg,#C9A84C,#E8C96E);border-radius:3px"></div>
+              </div>
+            </div>
           </div>
-          <span class="pp-tag pp-tag-${child.status==='active'?'green':child.status==='suspended'?'red':'orange'}">${child.status||'active'}</span>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
-          <div class="pp-stat"><div class="pp-stat-num">${childPosts.length}</div><div class="pp-stat-label">Posts</div></div>
-          <div class="pp-stat"><div class="pp-stat-num">${childPosts.filter(p=>p.parentApproved).length}</div><div class="pp-stat-label">Live</div></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">
+          <div class="pp-stat"><div class="pp-stat-num">${childPosts.length}</div><div class="pp-stat-label">Total Posts</div></div>
           <div class="pp-stat"><div class="pp-stat-num">${reactions}</div><div class="pp-stat-label">Reactions</div></div>
+          <div class="pp-stat"><div class="pp-stat-num">${friends.length}</div><div class="pp-stat-label">Buddies</div></div>
+          <div class="pp-stat" style="border-color:rgba(74,144,164,.3)"><div class="pp-stat-num" style="color:#4A90A4">${sessionMins}</div><div class="pp-stat-label">Session Mins</div></div>
+          <div class="pp-stat" style="border-color:rgba(74,144,164,.3)"><div class="pp-stat-num" style="color:#4A90A4">${chatMins}</div><div class="pp-stat-label">Chat Mins</div></div>
           <div class="pp-stat"><div class="pp-stat-num">${joined.length}</div><div class="pp-stat-label">Communities</div></div>
         </div>
-        <div style="margin-bottom:12px">
-          <div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Avatar &amp; Profile</div>
-          <div style="display:flex;align-items:center;gap:10px;background:#0F1923;border-radius:10px;padding:10px 12px">
-            <span style="font-size:1.4rem">${child.avatar||'👤'}</span>
-            <div>
-              <div style="font-size:12px;color:#E8EDF4;font-weight:800">${escHtml(child.avatar||'Default')} avatar</div>
-              <div style="font-size:11px;color:#8A9BB5;font-weight:700">${escHtml(child.aboutMe||'No bio set')}</div>
+        <div style="margin-bottom:16px">
+          <div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">📅 7-Day Session Activity</div>
+          <div style="background:#0F1923;border-radius:10px;padding:12px">
+            <div style="display:flex;align-items:flex-end;gap:4px;height:60px;margin-bottom:5px">
+              ${days7.map(d=>`<div style="flex:1;background:linear-gradient(180deg,#4A90A4,#2D5F72);border-radius:3px 3px 0 0;height:${Math.max(3,Math.round(d.mins/maxMins7*54))}px;opacity:${d.mins>0?'1':'.2'}"></div>`).join('')}
             </div>
+            <div style="display:flex;gap:4px">${days7.map(d=>`<div style="flex:1;text-align:center;font-size:9px;color:#8A9BB5;font-weight:800">${d.label}</div>`).join('')}</div>
+            <div style="margin-top:6px;font-size:11px;color:#4A90A4;font-weight:700">${days7.filter(d=>d.mins>0).map(d=>d.label+': '+d.mins+'m').join(' · ')||'No session data yet'}</div>
           </div>
         </div>
-        <div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Recent Posts</div>
-        ${childPosts.length ? childPosts.slice(0,5).map(p => {
-          const comm = COMMUNITIES.find(c=>c.id===p.communityId);
-          return `<div style="background:#0F1923;border-radius:10px;padding:10px 12px;margin-bottom:6px">
-            <div style="display:flex;gap:6px;align-items:center;margin-bottom:4px">
-              <span class="pp-tag pp-tag-${p.parentApproved?'green':'orange'}" style="font-size:10px">${p.parentApproved?'✅ Live':'⏳ Pending'}</span>
-              <span style="font-size:11px;color:#8A9BB5;font-weight:700">${comm?comm.emoji+' '+comm.name:''} · ${timeAgo(p.timestamp)}</span>
-            </div>
-            <div style="font-size:13px;color:#E8EDF4;font-weight:700;line-height:1.5">${escHtml(p.text.slice(0,150))}${p.text.length>150?'…':''}</div>
-          </div>`;
-        }).join('') : '<div style="font-size:13px;color:#8A9BB5;font-weight:700">No posts yet.</div>'}
+        <div style="margin-bottom:14px">
+          <div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">📝 Recent Posts</div>
+          ${childPosts.length ? childPosts.slice(0,5).map(p => {
+            const comm = COMMUNITIES.find(c=>c.id===p.communityId);
+            return `<div style="background:#0F1923;border-radius:10px;padding:10px 12px;margin-bottom:6px">
+              <div style="display:flex;gap:6px;align-items:center;margin-bottom:4px">
+                <span class="pp-tag pp-tag-${p.parentApproved?'green':'orange'}" style="font-size:10px">${p.parentApproved?'✅ Live':'⏳ Pending'}</span>
+                <span style="font-size:11px;color:#8A9BB5;font-weight:700">${comm?comm.emoji+' '+comm.name:''} · ${timeAgo(p.timestamp)}</span>
+              </div>
+              <div style="font-size:13px;color:#E8EDF4;font-weight:700;line-height:1.5">${escHtml(p.text.slice(0,150))}${p.text.length>150?'…':''}</div>
+            </div>`;
+          }).join('') : '<div style="font-size:13px;color:#8A9BB5;font-weight:700">No posts yet.</div>'}
+        </div>
         ${(() => {
           const childFriends = getFriends(child.id);
-          if (!childFriends.length) return '<div style="margin-top:14px;font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">👫 Buddy Connections</div><div style="font-size:13px;color:#8A9BB5;font-weight:700">No buddies yet.</div>';
+          if (!childFriends.length) return `<div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">👫 Buddy Connections</div><div style="font-size:13px;color:#8A9BB5;font-weight:700">No buddies yet.</div>`;
           const accounts2 = getAccounts();
           const week = Date.now() - 7*24*3600*1000;
           const allMsgs = getMessages();
@@ -4927,7 +4964,7 @@ function renderParentTabContent() {
             const recentMsgs = conv.filter(m=>m.timestamp>week);
             return {fr, total:conv.length, recent:recentMsgs.length};
           }).filter(Boolean);
-          return `<div style="margin-top:14px">
+          return `<div>
             <div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">👫 Buddy Connections (${childFriends.length})</div>
             ${chatRows.map(({fr,total,recent})=>`<div style="display:flex;align-items:center;gap:10px;background:#0F1923;border-radius:10px;padding:8px 12px;margin-bottom:6px">
               <span style="font-size:1.3rem">${fr.avatar||'👤'}</span>
@@ -4948,76 +4985,188 @@ function renderParentTabContent() {
     const children = getPpChildren();
     const childIds = children.map(c => c.id);
     const allPosts = getPosts();
+    const childPostsAll = allPosts.filter(p => childIds.includes(p.authorId)).sort((a,b)=>b.timestamp-a.timestamp);
     const flags = getFlags().filter(f => {
       const post = allPosts.find(p => p.id === f.postId);
       return post && childIds.includes(post.authorId);
     });
-    el.innerHTML = `
-      <div class="pp-section-title">🚨 Alerts</div>
-      <div class="pp-section-sub">Non-compliance reports, flagged content, and safety notifications for your child's account.</div>
-      ${!flags.length ? `<div style="text-align:center;padding:60px 20px;color:#8A9BB5">
-        <div style="font-size:3rem;margin-bottom:12px">🛡️</div>
-        <div style="font-family:'Fredoka One',cursive;font-size:18px;color:#4A90A4">All safe!</div>
-        <div style="font-size:13px;font-weight:700;margin-top:6px">No flags or reports on your child's posts.</div>
-      </div>` : flags.map(f => {
-        const post = allPosts.find(p => p.id === f.postId);
-        const child = children.find(c => post && c.id === post.authorId);
-        const isSevere = ['hate','spam','inappropriate'].includes(f.reason);
-        return `<div class="pp-alert-item ${isSevere?'danger':'warn'}">
-          <div style="font-size:1.8rem">${isSevere?'🔴':'🟡'}</div>
-          <div style="flex:1">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
-              <span style="font-weight:900;color:#E8EDF4;font-size:13px">${escHtml(child?child.name:'Your child')}</span>
-              <span class="pp-tag pp-tag-${isSevere?'red':'orange'}">${escHtml(f.reason||'Flagged')}</span>
+    let notifHtml = `<div class="pp-section-title">🔔 Notifications</div>
+      <div class="pp-section-sub">Post activity, safety alerts, and non-compliance reports for your children.</div>`;
+    if (flags.length) {
+      notifHtml += `<div class="pp-card" style="border-color:rgba(231,76,60,.3);margin-bottom:14px">
+        <div class="pp-card-title" style="color:#E74C3C">🚨 Safety Alerts (${flags.length})</div>
+        ${flags.map(f => {
+          const post = allPosts.find(p => p.id === f.postId);
+          const child = children.find(c => post && c.id === post.authorId);
+          const isSevere = ['hate','spam','inappropriate'].includes(f.reason);
+          return `<div class="pp-alert-item ${isSevere?'danger':'warn'}">
+            <div style="font-size:1.8rem">${isSevere?'🔴':'🟡'}</div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                <span style="font-weight:900;color:#E8EDF4;font-size:13px">${escHtml(child?child.name:'Your child')}</span>
+                <span class="pp-tag pp-tag-${isSevere?'red':'orange'}">${escHtml(f.reason||'Flagged')}</span>
+              </div>
+              ${post?`<div style="font-size:12px;color:#8A9BB5;font-weight:700;margin-bottom:4px">"${escHtml(post.text.slice(0,100))}${post.text.length>100?'…':''}"</div>`:''}
+              <div style="font-size:12px;color:#8A9BB5;font-weight:700">Reported ${timeAgo(f.timestamp||Date.now())} · Under moderation review</div>
+              ${isSevere?`<div style="margin-top:6px;font-size:12px;font-weight:800;color:#E74C3C">⚠️ TYF moderators are reviewing this report.</div>`:''}
             </div>
-            ${post ? `<div style="font-size:12px;color:#8A9BB5;font-weight:700;margin-bottom:6px">Post: "${escHtml(post.text.slice(0,100))}${post.text.length>100?'…':''}"</div>` : ''}
-            <div style="font-size:12px;color:#8A9BB5;font-weight:700">Reported ${timeAgo(f.timestamp||Date.now())} · Under moderation review</div>
-            ${isSevere ? `<div style="margin-top:8px;font-size:12px;font-weight:800;color:#E74C3C">⚠️ This content has been flagged as potentially serious. TYF moderators are reviewing this report.</div>` : ''}
+          </div>`;
+        }).join('')}
+      </div>`;
+    } else {
+      notifHtml += `<div class="pp-card" style="border-color:rgba(74,144,164,.2);margin-bottom:14px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="font-size:2.5rem">🛡️</div>
+          <div>
+            <div style="font-family:'Fredoka One',cursive;font-size:16px;color:#4A90A4">All Clear!</div>
+            <div style="font-size:12px;color:#8A9BB5;font-weight:700">No safety flags or reports on your children's posts.</div>
           </div>
-        </div>`;
-      }).join('')}
-      <div class="pp-card" style="margin-top:16px">
-        <div class="pp-card-title">📋 Community Standards</div>
-        <div style="font-size:12px;color:#8A9BB5;font-weight:700;line-height:1.7">
-          TYF Network enforces safe, respectful communication for all members under 18. Posts go through automated AI screening before parent review. Any flagged content is paused pending moderation. Repeat violations may result in temporary account suspension.
         </div>
       </div>`;
+    }
+    notifHtml += `<div class="pp-card">
+      <div class="pp-card-title">📢 Post Activity Feed</div>
+      <div style="font-size:12px;color:#8A9BB5;font-weight:700;margin-bottom:12px">Every post your children have made — most recent first.</div>
+      ${childPostsAll.length ? childPostsAll.slice(0,15).map(p => {
+        const child = children.find(c=>c.id===p.authorId);
+        const comm = COMMUNITIES.find(c=>c.id===p.communityId);
+        const rxns = Object.values(p.reactions||{}).reduce((a,b)=>a+b,0);
+        return `<div style="display:flex;gap:10px;background:#0F1923;border-radius:10px;padding:10px 12px;margin-bottom:6px">
+          <div style="flex-shrink:0;width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#C9A84C,#4A90A4);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#0A1520">${child?child.name.charAt(0):'?'}</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:3px">
+              <span style="font-weight:900;font-size:12px;color:#E8EDF4">${child?escHtml(child.name):'Child'}</span>
+              <span class="pp-tag pp-tag-${p.parentApproved?'green':'orange'}" style="font-size:10px">${p.parentApproved?'✅ Live':'⏳ Pending'}</span>
+              ${comm?`<span style="font-size:10px;color:#8A9BB5;font-weight:700">${comm.emoji} ${comm.name}</span>`:''}
+            </div>
+            <div style="font-size:12px;color:#A0B0C5;font-weight:700;line-height:1.4">${escHtml(p.text.slice(0,120))}${p.text.length>120?'…':''}</div>
+            <div style="display:flex;gap:10px;margin-top:4px">
+              <span style="font-size:11px;color:#8A9BB5;font-weight:700">${timeAgo(p.timestamp)}</span>
+              ${rxns>0?`<span style="font-size:11px;color:#C9A84C;font-weight:700">🎉 ${rxns} reactions</span>`:''}
+            </div>
+          </div>
+        </div>`;
+      }).join('') : `<div style="text-align:center;padding:30px;color:#8A9BB5;font-size:13px;font-weight:700">No posts from your children yet.</div>`}
+    </div>
+    <div class="pp-card" style="margin-top:14px">
+      <div class="pp-card-title">📋 Community Standards</div>
+      <div style="font-size:12px;color:#8A9BB5;font-weight:700;line-height:1.7">
+        TYF Network enforces safe, respectful communication for all members under 18. Posts go through automated AI screening before parent review. Any flagged content is paused pending moderation. Repeat violations may result in temporary account suspension.
+      </div>
+    </div>`;
+    el.innerHTML = notifHtml;
 
   // ── ANALYTICS ──────────────────────────────────────────────
   } else if (activeParentTab === 'analytics') {
     const children = getPpChildren();
     const allPosts = getPosts();
     if (!children.length) {
-      el.innerHTML = `<div class="pp-section-title">📊 Analytics</div><div style="text-align:center;padding:60px 20px;color:#8A9BB5"><div style="font-size:2rem;margin-bottom:12px">📊</div><div style="font-size:13px;font-weight:700">No linked children found.</div></div>`;
+      el.innerHTML = `<div class="pp-section-title">📊 Profile Analytics</div><div style="text-align:center;padding:60px 20px;color:#8A9BB5"><div style="font-size:2rem;margin-bottom:12px">📊</div><div style="font-size:13px;font-weight:700">No linked children found.</div></div>`;
       return;
     }
-    let html = `<div class="pp-section-title">📊 Analytics</div><div class="pp-section-sub">Engagement metrics, post performance, and weekly summaries for your child.</div>`;
+    let html = `<div class="pp-section-title">📊 Profile Analytics</div><div class="pp-section-sub">Engagement metrics, time tracking by section, and weekly summaries for each child.</div>`;
     children.forEach(child => {
       const childPosts = allPosts.filter(p => p.authorId === child.id);
       const livePosts = childPosts.filter(p => p.parentApproved);
       const totalRxns = livePosts.reduce((s,p) => s + Object.values(p.reactions||{}).reduce((a,b)=>a+b,0), 0);
       const joined = getUserCommunities(child.id);
-      const topPost = livePosts.slice().sort((a,b) => Object.values(b.reactions||{}).reduce((x,y)=>x+y,0) - Object.values(a.reactions||{}).reduce((x,y)=>x+y,0))[0];
+      const friends = getFriends(child.id);
+      const xp = getXP(child.id);
+      const xpLevel = getXPLevel(xp);
+      const xpProg = getXPProgress(xp);
+      const topPost = livePosts.slice().sort((a,b)=>Object.values(b.reactions||{}).reduce((x,y)=>x+y,0)-Object.values(a.reactions||{}).reduce((x,y)=>x+y,0))[0];
+      const today = new Date().toDateString();
+      const sessionMins = getSessionMins(child.id, today);
+      const chatSecs = getDailyChatSecs(child.id);
+      const chatMins = Math.round(chatSecs / 60);
+      const allMsgs = getMessages();
+      const childMsgs = allMsgs.filter(m => m.fromId === child.id);
+      const week = Date.now() - 7*24*3600*1000;
+      const weekMsgs = childMsgs.filter(m => m.timestamp > week);
+      const resLog = getResourceLog(child.id);
+      const resCount = resLog ? resLog.length : 0;
+      // 7-day chart
+      const days7a = [];
+      let maxMinsA = 0, totalWeekMins = 0;
+      for (let i=6; i>=0; i--) {
+        const d = new Date(Date.now() - i*86400000);
+        const m = getSessionMins(child.id, d.toDateString());
+        if (m > maxMinsA) maxMinsA = m;
+        totalWeekMins += m;
+        days7a.push({label:['Su','Mo','Tu','We','Th','Fr','Sa'][d.getDay()], mins:m});
+      }
+      if (maxMinsA === 0) maxMinsA = 1;
       html += `<div class="pp-card">
-        <div style="font-weight:900;font-size:15px;color:#C9A84C;margin-bottom:16px">📊 ${escHtml(child.name)}'s Dashboard</div>
-        <div class="pp-stat-grid">
-          <div class="pp-stat"><div class="pp-stat-num">${livePosts.length}</div><div class="pp-stat-label">Published Posts</div></div>
-          <div class="pp-stat"><div class="pp-stat-num">${totalRxns}</div><div class="pp-stat-label">Total Reactions</div></div>
-          <div class="pp-stat"><div class="pp-stat-num">${joined.length}</div><div class="pp-stat-label">Communities</div></div>
-          <div class="pp-stat"><div class="pp-stat-num">${child.foundryScore||0}</div><div class="pp-stat-label">Foundry Score</div></div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #2D3E50">
+          <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#C9A84C,#4A90A4);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">${child.avatar||child.name.charAt(0)}</div>
+          <div style="flex:1">
+            <div style="font-weight:900;font-size:15px;color:#C9A84C">📊 ${escHtml(child.name)}'s Dashboard</div>
+            <div style="font-size:12px;color:#8A9BB5;font-weight:700">Grade ${child.grade} · ${escHtml(child.schoolName||'')} · ${xpLevel}</div>
+          </div>
         </div>
-        ${topPost ? `<div style="margin-bottom:14px">
+        <div style="background:#0F1923;border-radius:10px;padding:10px 12px;margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+            <span style="font-size:12px;font-weight:900;color:#C9A84C">⭐ ${xp} XP · ${xpLevel}</span>
+            <span style="font-size:11px;color:#8A9BB5;font-weight:700">${xpProg.next>xp?xpProg.next-xp+' to next level':'🏆 Max Level'}</span>
+          </div>
+          <div style="height:8px;background:#2D3E50;border-radius:4px;overflow:hidden">
+            <div style="height:100%;width:${xpProg.pct}%;background:linear-gradient(90deg,#C9A84C,#E8C96E);border-radius:4px"></div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px">
+          <div class="pp-stat"><div class="pp-stat-num">${livePosts.length}</div><div class="pp-stat-label">Live Posts</div></div>
+          <div class="pp-stat"><div class="pp-stat-num">${totalRxns}</div><div class="pp-stat-label">Reactions</div></div>
+          <div class="pp-stat"><div class="pp-stat-num">${joined.length}</div><div class="pp-stat-label">Communities</div></div>
+          <div class="pp-stat" style="border-color:rgba(74,144,164,.3)"><div class="pp-stat-num" style="color:#4A90A4">${sessionMins}</div><div class="pp-stat-label">Session Mins</div></div>
+          <div class="pp-stat" style="border-color:rgba(74,144,164,.3)"><div class="pp-stat-num" style="color:#4A90A4">${chatMins}</div><div class="pp-stat-label">Chat Mins</div></div>
+          <div class="pp-stat"><div class="pp-stat-num">${friends.length}</div><div class="pp-stat-label">Buddies</div></div>
+        </div>
+        <div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">⏱️ Time Breakdown — Today</div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px">
+          <div style="background:#0F1923;border-radius:10px;padding:12px">
+            <div style="font-size:10px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">💬 Chat</div>
+            <div style="font-size:22px;font-weight:900;color:#4A90A4">${chatMins}<span style="font-size:12px;color:#8A9BB5"> min</span></div>
+            <div style="font-size:11px;color:#8A9BB5;font-weight:700">${childMsgs.length} total · ${weekMsgs.length} this week</div>
+          </div>
+          <div style="background:#0F1923;border-radius:10px;padding:12px">
+            <div style="font-size:10px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">📱 App Session</div>
+            <div style="font-size:22px;font-weight:900;color:#C9A84C">${sessionMins}<span style="font-size:12px;color:#8A9BB5"> min</span></div>
+            <div style="font-size:11px;color:#8A9BB5;font-weight:700">${totalWeekMins} min this week total</div>
+          </div>
+          <div style="background:#0F1923;border-radius:10px;padding:12px">
+            <div style="font-size:10px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">🌐 Communities</div>
+            <div style="font-size:22px;font-weight:900;color:#5B8C5A">${joined.length}<span style="font-size:12px;color:#8A9BB5"> joined</span></div>
+            <div style="font-size:11px;color:#8A9BB5;font-weight:700">${childPosts.length} posts across all</div>
+          </div>
+          <div style="background:#0F1923;border-radius:10px;padding:12px">
+            <div style="font-size:10px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">📚 Resources</div>
+            <div style="font-size:22px;font-weight:900;color:#9B59B6">${resCount}<span style="font-size:12px;color:#8A9BB5"> views</span></div>
+            <div style="font-size:11px;color:#8A9BB5;font-weight:700">Learning resources visited</div>
+          </div>
+        </div>
+        <div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">📅 7-Day Session History</div>
+        <div style="background:#0F1923;border-radius:10px;padding:14px;margin-bottom:16px">
+          <div style="display:flex;align-items:flex-end;gap:6px;height:80px;margin-bottom:6px">
+            ${days7a.map(d=>`<div style="flex:1;background:linear-gradient(180deg,#C9A84C,#8B6020);border-radius:3px 3px 0 0;height:${Math.max(3,Math.round(d.mins/maxMinsA*72))}px;opacity:${d.mins>0?'1':'.2'}"></div>`).join('')}
+          </div>
+          <div style="display:flex;gap:6px">${days7a.map(d=>`<div style="flex:1;text-align:center;font-size:9px;color:#8A9BB5;font-weight:800">${d.label}</div>`).join('')}</div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px">
+            <span style="font-size:11px;color:#8A9BB5;font-weight:700">Week total: ${totalWeekMins} min</span>
+            <span style="font-size:11px;color:#C9A84C;font-weight:800">Today: ${sessionMins} min</span>
+          </div>
+        </div>
+        ${topPost?`<div style="margin-bottom:14px">
           <div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">🏆 Top Post</div>
           <div style="background:#0F1923;border-radius:10px;padding:12px;border:1px solid rgba(201,168,76,.2)">
             <div style="font-size:13px;color:#E8EDF4;font-weight:700;line-height:1.5;margin-bottom:6px">${escHtml(topPost.text.slice(0,120))}${topPost.text.length>120?'…':''}</div>
             <div style="font-size:12px;color:#C9A84C;font-weight:800">${Object.values(topPost.reactions||{}).reduce((a,b)=>a+b,0)} reactions · ${timeAgo(topPost.timestamp)}</div>
           </div>
-        </div>` : ''}
+        </div>`:''}
         <hr class="pp-divider">
         <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap">
           <div>
             <div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px">Weekly Summary</div>
-            <div style="font-size:12px;color:#4A90A4;font-weight:700;margin-top:2px">Posts this week, reactions, community activity</div>
+            <div style="font-size:12px;color:#4A90A4;font-weight:700;margin-top:2px">Posts, reactions, time by section, communities</div>
           </div>
           <button class="pp-btn pp-btn-gold" onclick="ppSendWeeklySummary('${child.id}','${escHtml(child.name)}')">📧 Email Weekly Summary</button>
         </div>
@@ -5029,22 +5178,57 @@ function renderParentTabContent() {
   } else if (activeParentTab === 'communities') {
     const children = getPpChildren();
     const cornerPosts = getParentsCornerPosts();
-    let html = `<div class="pp-section-title">🌐 Communities</div>
-      <div class="pp-section-sub">View your child's community activity (read-only). Post and interact in the Parents' Corner below.</div>`;
+    const allPostsC = getPosts();
+    const studentComms = COMMUNITIES.filter(c => !c.parent);
+    const childJoinedMap = {};
+    children.forEach(ch => { childJoinedMap[ch.id] = getUserCommunities(ch.id); });
+    let html = `<div class="pp-section-title">🌐 Community View</div>
+      <div class="pp-section-sub">Read-only view of all TYF communities. Your children's joined communities are highlighted in gold.</div>`;
+    // Child summary card
     if (children.length) {
-      children.forEach(child => {
-        const joined = getUserCommunities(child.id);
-        const comms = joined.map(cid => COMMUNITIES.find(c => c.id === cid)).filter(Boolean);
-        html += `<div class="pp-card">
-          <div class="pp-card-title">📁 ${escHtml(child.name)}'s Communities <span class="pp-tag pp-tag-blue" style="margin-left:6px">Read Only</span></div>
-          ${comms.length ? `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
-            ${comms.map(c => `<span style="background:rgba(74,144,164,.1);border:1px solid rgba(74,144,164,.2);color:#4A90A4;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:800">${c.emoji} ${c.name}</span>`).join('')}
-          </div>
-          <div style="font-size:12px;color:#8A9BB5;font-weight:700">Recent posts in these communities are visible in Activity Monitor. You may not post or react in your child's communities.</div>`
-          : `<div style="font-size:13px;color:#8A9BB5;font-weight:700">No communities joined yet.</div>`}
-        </div>`;
-      });
+      html += `<div class="pp-card" style="margin-bottom:14px">
+        <div class="pp-card-title">📁 Your Children's Communities</div>
+        ${children.map(ch => {
+          const joined = getUserCommunities(ch.id);
+          const comms = joined.map(cid=>COMMUNITIES.find(c=>c.id===cid)).filter(Boolean);
+          return `<div style="margin-bottom:${children.length>1?'12px':'0'}">
+            <div style="font-size:12px;font-weight:800;color:#E8EDF4;margin-bottom:6px">${escHtml(ch.name)} <span style="color:#8A9BB5;font-weight:700">(${comms.length})</span></div>
+            ${comms.length?`<div style="display:flex;gap:6px;flex-wrap:wrap">${comms.map(c=>`<span style="background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);color:#C9A84C;border-radius:999px;padding:3px 10px;font-size:11px;font-weight:800">${c.emoji} ${c.name}</span>`).join('')}</div>`:`<div style="font-size:12px;color:#8A9BB5;font-weight:700">No communities joined yet.</div>`}
+          </div>`;
+        }).join('')}
+      </div>`;
     }
+    // All communities grid
+    html += `<div class="pp-card" style="margin-bottom:14px">
+      <div class="pp-card-title">🌍 All TYF Communities <span class="pp-tag pp-tag-blue" style="margin-left:6px">Read Only</span></div>
+      <div style="font-size:12px;color:#8A9BB5;font-weight:700;margin-bottom:12px">⭐ gold border = your child is a member</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">
+        ${studentComms.map(comm => {
+          const commPosts = allPostsC.filter(p=>p.communityId===comm.id&&p.parentApproved);
+          const recentPosts = commPosts.filter(p=>p.timestamp>Date.now()-7*24*3600*1000);
+          const childNames = children.filter(ch=>(childJoinedMap[ch.id]||[]).includes(comm.id)).map(ch=>ch.name);
+          const isJoined = childNames.length > 0;
+          return `<div style="background:#0F1923;border-radius:10px;padding:12px;border:1px solid ${isJoined?'rgba(201,168,76,.5)':'#2D3E50'}">
+            <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px">
+              <span style="font-size:1.4rem;flex-shrink:0">${comm.emoji}</span>
+              <div style="flex:1;min-width:0">
+                <div style="font-weight:900;font-size:12px;color:${isJoined?'#C9A84C':'#E8EDF4'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escHtml(comm.name)}</div>
+                ${isJoined?`<div style="font-size:10px;color:#C9A84C;font-weight:800">⭐ ${childNames.join(', ')}</div>`:`<div style="font-size:10px;color:#8A9BB5;font-weight:700;text-transform:uppercase">${comm.cat}</div>`}
+              </div>
+            </div>
+            <div style="font-size:11px;color:#8A9BB5;font-weight:700;line-height:1.5;margin-bottom:8px">${escHtml(comm.desc)}</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:${commPosts.length?'8px':'0'}">
+              <span style="font-size:10px;color:#4A90A4;font-weight:800">📝 ${commPosts.length} posts</span>
+              ${recentPosts.length?`<span style="font-size:10px;color:#C9A84C;font-weight:800">🔥 ${recentPosts.length} this week</span>`:''}
+            </div>
+            ${commPosts.length?`<div style="padding-top:8px;border-top:1px solid #2D3E50">
+              ${commPosts.slice(-2).reverse().map(p=>`<div style="font-size:11px;color:#A0B0C5;font-weight:700;line-height:1.4;margin-bottom:3px">"${escHtml(p.text.slice(0,65))}${p.text.length>65?'…':''}"</div>`).join('')}
+            </div>`:''}
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+    // Parents' Corner
     html += `<div class="pp-card" style="border-color:rgba(201,168,76,.3)">
       <div class="pp-card-title" style="color:#C9A84C">👨‍👩‍👧 Parents' Corner <span class="pp-tag pp-tag-gold" style="margin-left:6px">Interactive</span></div>
       <div style="font-size:12px;color:#8A9BB5;font-weight:700;margin-bottom:14px">A dedicated space for parents to start threads, share tips, and support each other.</div>
@@ -5054,7 +5238,7 @@ function renderParentTabContent() {
           <button class="pp-btn pp-btn-gold" onclick="ppPostToCorner()">Post in Parents' Corner →</button>
         </div>
       </div>
-      ${cornerPosts.length ? cornerPosts.slice().reverse().slice(0,10).map(p => `
+      ${cornerPosts.length ? cornerPosts.slice().reverse().slice(0,10).map(p=>`
         <div style="background:#0F1923;border-radius:10px;padding:12px;margin-bottom:8px;border:1px solid #2D3E50">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
             <div class="pp-av" style="width:32px;height:32px;font-size:13px">${(p.authorName||'?').charAt(0)}</div>
