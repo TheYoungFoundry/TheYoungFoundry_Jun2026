@@ -824,8 +824,9 @@ input,textarea,select{font-family:var(--body);}
             ℹ️ Enter your email to access the portal. If your child has listed you as their parent, their account will appear automatically.<br>
             <span style="color:#4A90A4">New here?</span> Your account is created the first time you log in.
           </div>
-          <div style="margin-top:10px;text-align:center">
-            <button onclick="parentLogin('demo')" style="background:none;border:1px solid rgba(201,168,76,.3);color:#C9A84C;border-radius:10px;padding:8px 20px;font-size:12px;font-weight:800;cursor:pointer">⚡ Demo Parent Login</button>
+          <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+            <button onclick="parentLogin('demo')" style="background:none;border:1px solid rgba(201,168,76,.3);color:#C9A84C;border-radius:10px;padding:8px 16px;font-size:12px;font-weight:800;cursor:pointer">⚡ Demo Parent A<br><span style="font-size:10px;opacity:.8">parent@tyf.test · Demo Student's parent</span></button>
+            <button onclick="parentLogin('demo2')" style="background:none;border:1px solid rgba(74,144,164,.4);color:#4A90A4;border-radius:10px;padding:8px 16px;font-size:12px;font-weight:800;cursor:pointer">⚡ Demo Parent B<br><span style="font-size:10px;opacity:.8">raj@tyf.test · Arjun's parent</span></button>
           </div>
         </div>
       </div>
@@ -3192,136 +3193,99 @@ function switchLoginTab(tab) {
   if (map[tab] !== null && tabs[map[tab]]) tabs[map[tab]].classList.add('active');
 }
 
-function demoLogin() {
-  // Creates/reuses the demo student account and companion demo accounts — testing only
+function seedDemoData() {
+  // Idempotent — safe to call from both student and parent demo logins
   const accounts = getAccounts();
 
-  // ── Main demo account ───────────────────────────────────────────────────────
-  let demo = accounts.find(a => a.id === 'demo_001');
-  if (!demo) {
-    demo = {
+  // ── Main demo student ──────────────────────────────────────────────────────
+  if (!accounts.find(a => a.id === 'demo_001')) {
+    accounts.push({
       id: 'demo_001', name: 'Demo Student', username: 'demo_student',
       email: 'demo@tyf.test', grade: 6, nextAcademicGrade: 7,
       nextGrade: 7, birthYear: 2013, yob: 2013, schoolId: 'DEMO-001',
       schoolName: 'Demo School', role: 'student', status: 'active',
       parentName: 'Demo Parent', parentEmail: 'parent@tyf.test',
       tempPassword: 'Demo@123', joined: Date.now() - 86400000 * 30,
-      foundryScore: 50, badges: [], joinedCommunities: [],
+      foundryScore: 185, badges: [], joinedCommunities: [],
       lastGradeYear: new Date().getFullYear(),
       isMentor: false, profilePublic: true, avatar: '🤖',
-      aboutMe: 'This is a demo account for testing.',
-    };
-    accounts.push(demo);
+      aboutMe: 'Coding, science and all things curious. Grade 6 @ Demo School.',
+    });
   }
-  // Ensure demo student is in coding + science communities
   const demoComms = getUserCommunities('demo_001');
-  if (!demoComms.includes('coding')) demoComms.push('coding');
-  if (!demoComms.includes('science')) demoComms.push('science');
-  if (!demoComms.includes('literature')) demoComms.push('literature');
+  ['coding','science','literature'].forEach(c => { if (!demoComms.includes(c)) demoComms.push(c); });
   saveUserCommunities('demo_001', demoComms);
 
-  // ── Companion demo accounts (match seed-post author IDs) ───────────────────
+  // ── Companion accounts ─────────────────────────────────────────────────────
   const companions = [
-    {
-      id: 'seed-maya', name: 'Maya S.', username: 'maya_s',
-      email: 'maya@tyf.test', grade: 7, nextAcademicGrade: 8,
-      nextGrade: 8, birthYear: 2012, yob: 2012, schoolId: 'DEMO-001',
-      schoolName: 'Demo School', role: 'student', status: 'active',
-      parentName: 'Sunita S.', parentEmail: 'sunita@tyf.test',
-      tempPassword: 'Demo@123', joined: Date.now() - 86400000 * 45,
-      foundryScore: 120, badges: [], joinedCommunities: [],
-      lastGradeYear: new Date().getFullYear(),
-      isMentor: false, profilePublic: true, avatar: '🦋',
-      aboutMe: 'I write poems and short stories. Love the monsoon season!',
-      communities: ['literature', 'painting', 'photography'],
-    },
-    {
-      id: 'seed-arjun', name: 'Arjun K.', username: 'arjun_k',
-      email: 'arjun@tyf.test', grade: 6, nextAcademicGrade: 7,
-      nextGrade: 7, birthYear: 2013, yob: 2013, schoolId: 'DEMO-002',
-      schoolName: 'Sunrise Academy', role: 'student', status: 'active',
-      parentName: 'Raj K.', parentEmail: 'raj@tyf.test',
-      tempPassword: 'Demo@123', joined: Date.now() - 86400000 * 60,
-      foundryScore: 200, badges: [], joinedCommunities: [],
-      lastGradeYear: new Date().getFullYear(),
-      isMentor: false, profilePublic: true, avatar: '🚀',
-      aboutMe: 'Python + Arduino enthusiast. Building cool stuff one project at a time!',
-      communities: ['coding', 'robotics', 'science'],
-    },
-    {
-      id: 'seed-priya', name: 'Priya M.', username: 'priya_m',
-      email: 'priya@tyf.test', grade: 6, nextAcademicGrade: 7,
-      nextGrade: 7, birthYear: 2013, yob: 2013, schoolId: 'DEMO-001',
-      schoolName: 'Demo School', role: 'student', status: 'active',
-      parentName: 'Meena M.', parentEmail: 'meena@tyf.test',
-      tempPassword: 'Demo@123', joined: Date.now() - 86400000 * 20,
-      foundryScore: 85, badges: [], joinedCommunities: [],
-      lastGradeYear: new Date().getFullYear(),
-      isMentor: false, profilePublic: true, avatar: '📸',
-      aboutMe: 'Photography is my superpower. Every corner of my street is a story.',
-      communities: ['photography', 'literature', 'science'],
-    },
-    {
-      id: 'seed-rishi', name: 'Rishi T.', username: 'rishi_t',
-      email: 'rishi@tyf.test', grade: 8, nextAcademicGrade: 9,
-      nextGrade: 9, birthYear: 2011, yob: 2011, schoolId: 'DEMO-003',
-      schoolName: 'Greenfield High', role: 'student', status: 'active',
-      parentName: 'Tarun T.', parentEmail: 'tarun@tyf.test',
-      tempPassword: 'Demo@123', joined: Date.now() - 86400000 * 90,
-      foundryScore: 310, badges: [], joinedCommunities: [],
-      lastGradeYear: new Date().getFullYear(),
-      isMentor: true, profilePublic: true, avatar: '🤖',
-      aboutMe: 'Robotics nerd and Arduino wizard. Ask me anything about sensors!',
-      communities: ['robotics', 'coding', 'science'],
-    },
-    {
-      id: 'seed-ananya', name: 'Ananya R.', username: 'ananya_r',
-      email: 'ananya@tyf.test', grade: 7, nextAcademicGrade: 8,
-      nextGrade: 8, birthYear: 2012, yob: 2012, schoolId: 'DEMO-001',
-      schoolName: 'Demo School', role: 'student', status: 'active',
-      parentName: 'Rekha R.', parentEmail: 'rekha@tyf.test',
-      tempPassword: 'Demo@123', joined: Date.now() - 86400000 * 15,
-      foundryScore: 65, badges: [], joinedCommunities: [],
-      lastGradeYear: new Date().getFullYear(),
-      isMentor: false, profilePublic: false, avatar: '🎨',
-      aboutMe: 'Watercolour lover. Still learning — and that is totally okay.',
-      communities: ['painting', 'photography'],
-    },
+    { id:'seed-maya',   name:'Maya S.',   username:'maya_s',   email:'maya@tyf.test',   grade:7, nextGrade:8, birthYear:2012, yob:2012, schoolId:'DEMO-001', schoolName:'Demo School',     role:'student', status:'active', parentName:'Sunita S.', parentEmail:'sunita@tyf.test', tempPassword:'Demo@123', joined:Date.now()-86400000*45, foundryScore:120, badges:[], joinedCommunities:[], lastGradeYear:new Date().getFullYear(), isMentor:false, profilePublic:true,  avatar:'🦋', aboutMe:'I write poems and short stories. Love the monsoon season!',              communities:['literature','painting','photography'] },
+    { id:'seed-arjun',  name:'Arjun K.',  username:'arjun_k',  email:'arjun@tyf.test',  grade:6, nextGrade:7, birthYear:2013, yob:2013, schoolId:'DEMO-002', schoolName:'Sunrise Academy', role:'student', status:'active', parentName:'Raj K.',    parentEmail:'raj@tyf.test',    tempPassword:'Demo@123', joined:Date.now()-86400000*60, foundryScore:200, badges:[], joinedCommunities:[], lastGradeYear:new Date().getFullYear(), isMentor:false, profilePublic:true,  avatar:'🚀', aboutMe:'Python + Arduino enthusiast. Building cool stuff one project at a time!', communities:['coding','robotics','science'] },
+    { id:'seed-priya',  name:'Priya M.',  username:'priya_m',  email:'priya@tyf.test',  grade:6, nextGrade:7, birthYear:2013, yob:2013, schoolId:'DEMO-001', schoolName:'Demo School',     role:'student', status:'active', parentName:'Meena M.',  parentEmail:'meena@tyf.test',  tempPassword:'Demo@123', joined:Date.now()-86400000*20, foundryScore:85,  badges:[], joinedCommunities:[], lastGradeYear:new Date().getFullYear(), isMentor:false, profilePublic:true,  avatar:'📸', aboutMe:'Photography is my superpower. Every corner of my street is a story.',     communities:['photography','literature','science'] },
+    { id:'seed-rishi',  name:'Rishi T.',  username:'rishi_t',  email:'rishi@tyf.test',  grade:8, nextGrade:9, birthYear:2011, yob:2011, schoolId:'DEMO-003', schoolName:'Greenfield High', role:'student', status:'active', parentName:'Tarun T.',  parentEmail:'tarun@tyf.test',  tempPassword:'Demo@123', joined:Date.now()-86400000*90, foundryScore:310, badges:[], joinedCommunities:[], lastGradeYear:new Date().getFullYear(), isMentor:true,  profilePublic:true,  avatar:'🤖', aboutMe:'Robotics nerd and Arduino wizard. Ask me anything about sensors!',         communities:['robotics','coding','science'] },
+    { id:'seed-ananya', name:'Ananya R.', username:'ananya_r', email:'ananya@tyf.test', grade:7, nextGrade:8, birthYear:2012, yob:2012, schoolId:'DEMO-001', schoolName:'Demo School',     role:'student', status:'active', parentName:'Rekha R.',  parentEmail:'rekha@tyf.test',  tempPassword:'Demo@123', joined:Date.now()-86400000*15, foundryScore:65,  badges:[], joinedCommunities:[], lastGradeYear:new Date().getFullYear(), isMentor:false, profilePublic:false, avatar:'🎨', aboutMe:'Watercolour lover. Still learning — and that is totally okay.',            communities:['painting','photography'] },
   ];
-
   companions.forEach(c => {
     if (!accounts.find(a => a.id === c.id)) {
-      const { communities: comms, ...accountData } = c;
-      accounts.push(accountData);
+      const { communities: comms, ...acct } = c;
+      accounts.push(acct);
       saveUserCommunities(c.id, comms);
     }
   });
+
+  // ── Demo parent accounts ───────────────────────────────────────────────────
+  if (!accounts.find(a => a.id === 'parent_demo_a')) {
+    accounts.push({ id:'parent_demo_a', name:'Demo Parent', email:'parent@tyf.test', role:'parent', status:'active', joined:Date.now()-86400000*30, foundryScore:0, badges:[], children:[] });
+  }
+  if (!accounts.find(a => a.id === 'parent_demo_b')) {
+    accounts.push({ id:'parent_demo_b', name:'Raj K.', email:'raj@tyf.test', role:'parent', status:'active', joined:Date.now()-86400000*60, foundryScore:0, badges:[], children:[] });
+  }
   saveAccounts(accounts);
 
-  // ── Seed friend requests (idempotent) ──────────────────────────────────────
+  // ── Friend requests / connections ──────────────────────────────────────────
   const reqs = getFriendRequests();
-
-  // Incoming request: Maya → demo_student (shows badge immediately)
-  if (!reqs.find(r => r.id === 'fr_demo_maya')) {
-    reqs.push({ id:'fr_demo_maya', fromId:'seed-maya', fromName:'Maya S.', fromUsername:'maya_s',
-      toId:'demo_001', toEmail:null, status:'pending', createdAt:Date.now() - 3600000 * 2 });
-  }
-  // Accepted friendship: demo_student ↔ Arjun (My Buddies tab has someone)
-  if (!reqs.find(r => r.id === 'fr_demo_arjun')) {
-    reqs.push({ id:'fr_demo_arjun', fromId:'demo_001', fromName:'Demo Student', fromUsername:'demo_student',
-      toId:'seed-arjun', toEmail:null, status:'accepted', createdAt:Date.now() - 86400000 * 5 });
-  }
-  // Incoming request: Priya → demo_student (second badge item)
-  if (!reqs.find(r => r.id === 'fr_demo_priya')) {
-    reqs.push({ id:'fr_demo_priya', fromId:'seed-priya', fromName:'Priya M.', fromUsername:'priya_m',
-      toId:'demo_001', toEmail:null, status:'pending', createdAt:Date.now() - 3600000 * 5 });
-  }
+  const ensureReq = r => { if (!reqs.find(x => x.id === r.id)) reqs.push(r); };
+  ensureReq({ id:'fr_demo_maya',  fromId:'seed-maya',  fromName:'Maya S.',  fromUsername:'maya_s',  toId:'demo_001',   toEmail:null, status:'pending',  createdAt:Date.now()-3600000*2 });
+  ensureReq({ id:'fr_demo_arjun', fromId:'demo_001',   fromName:'Demo Student', fromUsername:'demo_student', toId:'seed-arjun', toEmail:null, status:'accepted', createdAt:Date.now()-86400000*5 });
+  ensureReq({ id:'fr_demo_priya', fromId:'seed-priya', fromName:'Priya M.', fromUsername:'priya_m', toId:'demo_001',   toEmail:null, status:'pending',  createdAt:Date.now()-3600000*5 });
+  // Arjun is also friends with Maya and Rishi (so Parent B sees a richer buddies list)
+  ensureReq({ id:'fr_arjun_maya', fromId:'seed-arjun', fromName:'Arjun K.', fromUsername:'arjun_k', toId:'seed-maya',  toEmail:null, status:'accepted', createdAt:Date.now()-86400000*10 });
+  ensureReq({ id:'fr_arjun_rishi',fromId:'seed-arjun', fromName:'Arjun K.', fromUsername:'arjun_k', toId:'seed-rishi', toEmail:null, status:'accepted', createdAt:Date.now()-86400000*8 });
   saveFriendRequests(reqs);
 
-  // ── Log in ─────────────────────────────────────────────────────────────────
-  currentUser = { id: demo.id, name: demo.name, username: demo.username,
-    role: 'student', grade: demo.grade, avatar: demo.avatar || '🤖',
-    foundryScore: demo.foundryScore || 0 };
+  // ── Chat messages (demo_001 ↔ arjun) ──────────────────────────────────────
+  const msgs = getMessages();
+  const daCid = chatId('demo_001', 'seed-arjun');
+  const seedMsgs = [
+    { id:'dm_001', chatId:daCid, fromId:'seed-arjun', fromName:'Arjun K.', text:'Hey! Did you finish the Arduino project?', timestamp:Date.now()-86400000*2, readBy:['demo_001','seed-arjun'] },
+    { id:'dm_002', chatId:daCid, fromId:'demo_001', fromName:'Demo Student', text:'Almost! I need to fix the sensor calibration. How did you do it?', timestamp:Date.now()-86400000*2+1800000, readBy:['demo_001','seed-arjun'] },
+    { id:'dm_003', chatId:daCid, fromId:'seed-arjun', fromName:'Arjun K.', text:'Use a 10k pull-down resistor. Works perfectly!', timestamp:Date.now()-86400000+3600000*2, readBy:['demo_001','seed-arjun'] },
+    { id:'dm_004', chatId:daCid, fromId:'demo_001', fromName:'Demo Student', text:'Thanks! Will try that today 🙏', timestamp:Date.now()-3600000*3, readBy:['demo_001','seed-arjun'] },
+    { id:'dm_005', chatId:daCid, fromId:'seed-arjun', fromName:'Arjun K.', text:'Let me know how it goes! Check my robotics community post too 🤖', timestamp:Date.now()-3600000*2, readBy:['demo_001','seed-arjun'] },
+  ];
+  seedMsgs.forEach(m => { if (!msgs.find(x => x.id === m.id)) msgs.push(m); });
+  saveMessages(msgs);
+
+  // ── Pending account request for parent@tyf.test Approvals tab ─────────────
+  const pending = getPendingAccounts();
+  if (!pending.find(p => p.id === 'pending_kavya')) {
+    pending.push({ id:'pending_kavya', name:'Kavya P.', username:'kavya_p', email:'kavya@tyf.test', grade:6, schoolName:'Demo School', parentEmail:'parent@tyf.test', status:'pending', joined:Date.now()-3600000*3 });
+    savePendingAccounts(pending);
+  }
+
+  // ── Set streak + profile-complete flags for demo_001 ─────────────────────
+  const today = new Date().toDateString();
+  const streakData = getLoginStreak('demo_001');
+  if (streakData.count < 4) localStorage.setItem('yfs_streak_demo_001', JSON.stringify({count:4, lastDate:today}));
+  localStorage.setItem('yfs_profilecomplete_demo_001', '1');
+}
+
+function demoLogin() {
+  seedDemoData();
+  const accounts = getAccounts();
+  const demo = accounts.find(a => a.id === 'demo_001');
+  currentUser = { id:demo.id, name:demo.name, username:demo.username,
+    role:'student', grade:demo.grade, avatar:demo.avatar||'🤖',
+    foundryScore:demo.foundryScore||0 };
   enterApp();
   toast('⚡ Demo login — try Find a Buddy and My Network!');
 }
@@ -3360,7 +3324,8 @@ function studentLogin() {
 
 function parentLogin(mode) {
   let name, email;
-  if (mode === 'demo') { name = 'Demo Parent'; email = 'parent@tyf.test'; }
+  if (mode === 'demo')  { seedDemoData(); name = 'Demo Parent'; email = 'parent@tyf.test'; }
+  else if (mode === 'demo2') { seedDemoData(); name = 'Raj K.'; email = 'raj@tyf.test'; }
   else {
     name = document.getElementById('p-name').value.trim();
     email = document.getElementById('p-email').value.trim();
