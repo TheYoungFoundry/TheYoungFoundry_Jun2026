@@ -339,6 +339,27 @@ input,textarea,select{font-family:var(--body);}
 /* FOOTER */
 .site-footer{max-width:1280px;margin:0 auto;padding:20px 24px 40px;text-align:center;}
 .site-footer button{font-weight:800;font-size:13px;color:var(--blue);background:none;border:none;cursor:pointer;}
+
+/* NETWORK / FRIENDS */
+.fr-badge{display:inline-flex;align-items:center;justify-content:center;background:var(--red);color:#fff;border-radius:999px;font-size:10px;min-width:18px;height:18px;padding:0 5px;font-weight:900;margin-left:4px;line-height:1;vertical-align:middle;}
+.buddy-card{display:flex;align-items:center;gap:10px;padding:12px 14px;border:2px solid var(--line);border-radius:14px;background:#fff;margin-bottom:8px;transition:.15s;}
+.buddy-card:hover{border-color:var(--blue);}
+.buddy-card .buddy-actions{margin-left:auto;display:flex;gap:6px;flex-shrink:0;}
+.find-result{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);}
+.find-result:last-child{border-bottom:none;}
+.network-empty{text-align:center;padding:28px 0;color:var(--muted);font-size:13px;font-weight:800;line-height:1.6;}
+.suggest-buddies{background:linear-gradient(135deg,#e3f2fd,#f3e5f5);border-radius:16px;padding:14px;margin-top:14px;}
+.suggest-buddies h4{font-family:'Fredoka One',cursive;font-size:15px;color:var(--dark);margin-bottom:10px;}
+.invite-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:12px 0;}
+.fr-tabs{display:flex;gap:4px;background:var(--soft);border-radius:14px;padding:4px;margin-bottom:16px;}
+.fr-tab{flex:1;padding:8px;border-radius:10px;font-weight:800;font-size:12px;color:var(--muted);cursor:pointer;text-align:center;transition:.15s;border:none;background:none;}
+.fr-tab.active{background:#fff;color:var(--dark);box-shadow:var(--shadow-sm);}
+.new-buddy-pop{position:fixed;inset:0;display:none;place-items:center;z-index:700;pointer-events:none;}
+.new-buddy-pop.show{display:grid;}
+.new-buddy-pop-inner{background:#fff;border-radius:24px;padding:30px 36px;text-align:center;box-shadow:0 24px 64px -12px rgba(45,55,72,.4);animation:popIn .4s cubic-bezier(.34,1.56,.64,1);pointer-events:none;}
+@keyframes popIn{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+.people-know-card{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);}
+.people-know-card:last-child{border-bottom:none;}
 </style>
 </head>
 <body>
@@ -526,6 +547,10 @@ input,textarea,select{font-family:var(--body);}
           <div class="av-dropdown-header" id="av-dropdown-fullname">My Account</div>
           <button class="av-item" onclick="closeAvDropdown();showScreen('profile')">👤 Profile</button>
           <button class="av-item" onclick="closeAvDropdown();openChangePassword()">🔑 Change Password</button>
+          <button class="av-item" onclick="closeAvDropdown();openForgotPassword()">🔄 Reset Password</button>
+          <div class="av-dropdown-sep"></div>
+          <button class="av-item" onclick="closeAvDropdown();openMyNetwork()">👥 My Network <span class="fr-badge" id="fr-badge" style="display:none">0</span></button>
+          <button class="av-item" onclick="closeAvDropdown();openFindBuddy()">🔍 Find a Buddy</button>
           <div class="av-dropdown-sep"></div>
           <button class="av-item" onclick="closeAvDropdown();openHelp()">❓ Help</button>
           <div class="av-dropdown-sep"></div>
@@ -592,6 +617,11 @@ input,textarea,select{font-family:var(--body);}
         <div class="sidebar-card">
           <h4>👥 Suggested Communities</h4>
           <div id="suggested-communities"></div>
+        </div>
+        <div class="sidebar-card" id="people-know-sidebar" style="display:none">
+          <h4>🤝 People You May Know</h4>
+          <div id="people-know-list"></div>
+          <button class="btn blue sm" style="width:100%;margin-top:10px" onclick="openFindBuddy()">Find More Buddies →</button>
         </div>
         <div class="mfc-banner" onclick="window.location='MyFirstChapter.html'">
           <span style="font-size:2rem">📖</span>
@@ -1006,6 +1036,59 @@ input,textarea,select{font-family:var(--body);}
   </div>
 </div>
 
+<!-- ============================================================
+     MODAL: FIND A BUDDY
+============================================================ -->
+<div class="modal-overlay" id="modal-find-buddy">
+  <div class="modal" style="max-width:540px">
+    <button class="modal-close" onclick="closeModal('modal-find-buddy')">✕</button>
+    <h3>🔍 Find a Buddy</h3>
+    <p class="sub">Search by username or email to connect with friends on AlphaVerse</p>
+    <div style="display:flex;gap:8px;margin-bottom:4px">
+      <input type="text" id="buddy-search-input" placeholder="Username or email address…"
+        style="flex:1;padding:11px 14px;border:2px solid var(--line);border-radius:14px;font-size:14px;font-weight:700;outline:none;transition:border-color .15s"
+        onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--line)'"
+        onkeydown="if(event.key==='Enter')findBuddySearch()" />
+      <button class="btn blue" onclick="findBuddySearch()">Search</button>
+    </div>
+    <div id="buddy-search-results" style="min-height:20px"></div>
+    <div class="invite-row" id="buddy-invite-row" style="display:none">
+      <span style="font-size:13px;font-weight:800;color:var(--muted);flex:1">Not a member yet? Invite them!</span>
+      <button class="btn ghost sm" onclick="inviteByEmail(document.getElementById('buddy-search-input').value)">📧 Email Invite</button>
+      <button class="btn ghost sm" style="border-color:#25D366;color:#25D366" onclick="inviteByWhatsApp()">💬 WhatsApp</button>
+    </div>
+    <div class="suggest-buddies">
+      <h4>🌟 People You May Know</h4>
+      <div id="suggested-buddies-list"><div class="network-empty">Log in and join communities to see suggestions!</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: MY NETWORK
+============================================================ -->
+<div class="modal-overlay" id="modal-my-network">
+  <div class="modal" style="max-width:540px">
+    <button class="modal-close" onclick="closeModal('modal-my-network')">✕</button>
+    <h3>👥 My Network</h3>
+    <div class="fr-tabs">
+      <button class="fr-tab active" id="frtab-incoming" onclick="switchFRTab('incoming')">Incoming <span id="fr-incoming-count"></span></button>
+      <button class="fr-tab" id="frtab-outgoing" onclick="switchFRTab('outgoing')">Outgoing</button>
+      <button class="fr-tab" id="frtab-buddies" onclick="switchFRTab('buddies')">My Buddies</button>
+    </div>
+    <div id="fr-tab-content"></div>
+  </div>
+</div>
+
+<!-- NEW BUDDY CELEBRATION POPUP -->
+<div class="new-buddy-pop" id="new-buddy-pop">
+  <div class="new-buddy-pop-inner">
+    <div style="font-size:3.5rem;margin-bottom:8px">🎉</div>
+    <div style="font-family:'Fredoka One',cursive;font-size:26px;color:var(--dark);margin-bottom:6px">New Buddy!</div>
+    <div id="new-buddy-msg" style="font-size:14px;font-weight:800;color:var(--muted)"></div>
+  </div>
+</div>
+
 <script>
 // ============================================================
 // STATE
@@ -1112,6 +1195,332 @@ function getSchoolGroups() { return load('yfs_school_groups', []); }
 function saveSchoolGroups(g) { save('yfs_school_groups', g); }
 function getSubjProposals() { return load('yfs_subj_proposals', []); }
 function saveSubjProposals(p) { save('yfs_subj_proposals', p); }
+function getFriendRequests() { return load('yfs_friend_requests', []); }
+function saveFriendRequests(r) { save('yfs_friend_requests', r); }
+
+// ============================================================
+// FRIEND / NETWORK HELPERS
+// ============================================================
+function getFriends(uid) {
+  return getFriendRequests().filter(r => r.status === 'accepted' && (r.fromId === uid || r.toId === uid));
+}
+function isFriend(a, b) {
+  return getFriendRequests().some(r => r.status === 'accepted' && ((r.fromId===a&&r.toId===b)||(r.fromId===b&&r.toId===a)));
+}
+function hasAnyPendingBetween(a, b) {
+  return getFriendRequests().some(r => r.status === 'pending' && ((r.fromId===a&&r.toId===b)||(r.fromId===b&&r.toId===a)));
+}
+function updateFRBadge() {
+  if (!currentUser) return;
+  const count = getFriendRequests().filter(r => r.status==='pending' && r.toId===currentUser.id).length;
+  const badge = document.getElementById('fr-badge');
+  if (!badge) return;
+  if (count > 0) { badge.textContent = count; badge.style.display = 'inline-flex'; }
+  else badge.style.display = 'none';
+}
+function showNewBuddyPop(name) {
+  const pop = document.getElementById('new-buddy-pop');
+  document.getElementById('new-buddy-msg').textContent = 'You and ' + name + ' are now Buddies!';
+  pop.classList.add('show');
+  setTimeout(() => pop.classList.remove('show'), 3200);
+}
+
+// ============================================================
+// FRIEND REQUEST CRUD
+// ============================================================
+function sendFriendRequest(toId) {
+  if (!currentUser) return;
+  if (toId === currentUser.id) { toast('⚠️ You cannot add yourself!'); return; }
+  if (isFriend(currentUser.id, toId)) { toast('✅ Already buddies!'); return; }
+  if (hasAnyPendingBetween(currentUser.id, toId)) { toast('⏳ Request already pending!'); return; }
+  const reqs = getFriendRequests();
+  reqs.push({ id:'fr_'+Date.now(), fromId:currentUser.id, fromName:currentUser.name, fromUsername:currentUser.username||currentUser.name, toId, toEmail:null, status:'pending', createdAt:Date.now() });
+  saveFriendRequests(reqs);
+  // Small score nudge for being social
+  const accounts = getAccounts();
+  const me = accounts.find(a => a.id===currentUser.id);
+  if (me) { me.foundryScore = (me.foundryScore||0) + 1; saveAccounts(accounts); }
+  updateFRBadge();
+  toast('✅ Buddy request sent!');
+}
+
+function acceptFriendRequest(reqId) {
+  if (!currentUser) return;
+  const reqs = getFriendRequests();
+  const req = reqs.find(r => r.id===reqId);
+  if (!req) return;
+  req.status = 'accepted';
+  saveFriendRequests(reqs);
+  // Award +5 Foundry Points to both users
+  const accounts = getAccounts();
+  const me = accounts.find(a => a.id===currentUser.id);
+  const them = accounts.find(a => a.id===req.fromId);
+  if (me) me.foundryScore = (me.foundryScore||0) + 5;
+  if (them) them.foundryScore = (them.foundryScore||0) + 5;
+  saveAccounts(accounts);
+  updateFRBadge();
+  showNewBuddyPop(req.fromName);
+  renderFRTab('incoming');
+}
+
+function rejectFriendRequest(reqId) {
+  if (!currentUser) return;
+  const reqs = getFriendRequests();
+  const req = reqs.find(r => r.id===reqId);
+  if (!req) return;
+  req.status = 'rejected';
+  saveFriendRequests(reqs);
+  updateFRBadge();
+  toast('Request declined.');
+  renderFRTab('incoming');
+}
+
+function cancelFriendRequest(reqId) {
+  if (!currentUser) return;
+  const reqs = getFriendRequests().filter(r => r.id!==reqId);
+  saveFriendRequests(reqs);
+  toast('Request cancelled.');
+  renderFRTab('outgoing');
+}
+
+// ============================================================
+// FIND A BUDDY
+// ============================================================
+function openFindBuddy() {
+  openModal('modal-find-buddy');
+  document.getElementById('buddy-search-input').value = '';
+  document.getElementById('buddy-search-results').innerHTML = '';
+  document.getElementById('buddy-invite-row').style.display = 'none';
+  renderSuggestedBuddies();
+}
+
+function findBuddySearch() {
+  if (!currentUser) return;
+  const q = (document.getElementById('buddy-search-input').value||'').trim().toLowerCase();
+  const el = document.getElementById('buddy-search-results');
+  if (!q) { el.innerHTML = '<div class="network-empty">Type a username or email to search</div>'; return; }
+  const accounts = getAccounts().filter(a =>
+    a.id !== currentUser.id &&
+    a.status === 'active' &&
+    a.role === 'student' &&
+    ((a.username && a.username.toLowerCase().includes(q)) || (a.email && a.email.toLowerCase() === q))
+  );
+  if (!accounts.length) {
+    el.innerHTML = `<div class="network-empty">No members found for "<b>${escHtml(q)}</b>"<br>Maybe they haven't joined yet — send them an invite below!</div>`;
+    document.getElementById('buddy-invite-row').style.display = 'flex';
+    return;
+  }
+  document.getElementById('buddy-invite-row').style.display = 'none';
+  el.innerHTML = accounts.slice(0,8).map(a => renderFindResult(a)).join('');
+}
+
+function renderFindResult(a) {
+  const isPublic = a.profilePublic !== false;
+  const friend = isFriend(currentUser.id, a.id);
+  const pending = hasAnyPendingBetween(currentUser.id, a.id);
+  let btn = '';
+  if (friend) {
+    btn = `<button class="btn ghost sm" disabled style="opacity:.7">Buddies ✓</button>`;
+  } else if (pending) {
+    btn = `<button class="btn ghost sm" disabled style="opacity:.7">Pending…</button>`;
+  } else {
+    btn = `<button class="btn blue sm" onclick="sendFriendRequest('${a.id}');this.textContent='Sent! ✓';this.disabled=true;this.className='btn ghost sm'">Add Buddy +</button>`;
+  }
+  const wallBtn = isPublic && !friend
+    ? `<button class="btn ghost sm" onclick="closeModal('modal-find-buddy');openPublicWall('${a.id}')">Wall</button>`
+    : friend && isPublic
+    ? `<button class="btn ghost sm" onclick="closeModal('modal-find-buddy');openPublicWall('${a.id}')">View Wall</button>`
+    : '';
+  return `<div class="find-result">
+    <div class="av" style="background:${avatarColor(a.name)};width:40px;height:40px;font-size:20px;flex-shrink:0;border-radius:50%;display:grid;place-items:center">${a.avatar||'🌟'}</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-weight:900;font-size:14px;color:var(--dark)">@${escHtml(a.username||a.name)}</div>
+      ${isPublic
+        ? `<div style="font-size:12px;color:var(--muted);font-weight:700">Grade ${a.grade}${a.schoolName?' · '+escHtml(a.schoolName):''}  🌐</div>`
+        : `<div style="font-size:12px;color:var(--muted);font-weight:700">🔒 Private profile</div>`}
+    </div>
+    <div style="display:flex;gap:6px;flex-shrink:0">${wallBtn}${btn}</div>
+  </div>`;
+}
+
+function renderSuggestedBuddies() {
+  const el = document.getElementById('suggested-buddies-list');
+  if (!el || !currentUser) return;
+  const all = getAccounts().filter(a =>
+    a.id !== currentUser.id &&
+    a.status === 'active' &&
+    a.role === 'student' &&
+    !isFriend(currentUser.id, a.id) &&
+    !hasAnyPendingBetween(currentUser.id, a.id)
+  );
+  const myComms = getUserCommunities(currentUser.id);
+  const me = getAccounts().find(a => a.id===currentUser.id) || currentUser;
+  const scored = all.map(a => {
+    let sc = 0;
+    if (a.grade === me.grade) sc += 3;
+    if (a.schoolId && a.schoolId === me.schoolId) sc += 4;
+    sc += getUserCommunities(a.id).filter(c => myComms.includes(c)).length * 2;
+    return { a, sc };
+  }).filter(x => x.sc > 0).sort((a, b) => b.sc - a.sc).slice(0,5);
+  if (!scored.length) {
+    el.innerHTML = '<div class="network-empty">Join communities to discover buddies with shared interests! 🌐</div>';
+    return;
+  }
+  el.innerHTML = scored.map(({ a }) => {
+    const btn = `<button class="btn blue sm" style="font-size:11px;padding:6px 10px" onclick="sendFriendRequest('${a.id}');this.textContent='Sent! ✓';this.disabled=true;this.className='btn ghost sm'">Add +</button>`;
+    return `<div class="people-know-card">
+      <div style="font-size:1.6rem;flex-shrink:0">${a.avatar||'🌟'}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:900;font-size:13px;color:var(--dark);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">@${escHtml(a.username||a.name)}</div>
+        <div style="font-size:11px;color:var(--muted);font-weight:700">Grade ${a.grade}${a.isMentor?' · 🎓 Mentor':''}</div>
+      </div>
+      ${btn}
+    </div>`;
+  }).join('');
+}
+
+// People You May Know — Feed sidebar version (compact)
+function renderPeopleYouMayKnow() {
+  if (!currentUser || currentUser.role !== 'student') return;
+  const all = getAccounts().filter(a =>
+    a.id !== currentUser.id && a.status==='active' && a.role==='student' &&
+    !isFriend(currentUser.id, a.id) && !hasAnyPendingBetween(currentUser.id, a.id)
+  );
+  const myComms = getUserCommunities(currentUser.id);
+  const me = getAccounts().find(a => a.id===currentUser.id) || currentUser;
+  const scored = all.map(a => {
+    let sc = 0;
+    if (a.grade===me.grade) sc+=3;
+    if (a.schoolId&&a.schoolId===me.schoolId) sc+=4;
+    sc += getUserCommunities(a.id).filter(c=>myComms.includes(c)).length*2;
+    return {a,sc};
+  }).filter(x=>x.sc>0).sort((a,b)=>b.sc-a.sc).slice(0,3);
+  const sidebar = document.getElementById('people-know-sidebar');
+  const list = document.getElementById('people-know-list');
+  if (!sidebar||!list) return;
+  if (!scored.length) { sidebar.style.display='none'; return; }
+  sidebar.style.display = 'block';
+  list.innerHTML = scored.map(({a}) => `<div class="people-know-card">
+    <div style="font-size:1.4rem;flex-shrink:0">${a.avatar||'🌟'}</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-weight:900;font-size:12px;color:var(--dark);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">@${escHtml(a.username||a.name)}</div>
+      <div style="font-size:11px;color:var(--muted);font-weight:700">Gr.${a.grade}</div>
+    </div>
+    <button style="font-size:11px;padding:5px 8px;border-radius:8px;border:2px solid var(--blue);background:#fff;color:var(--blue);font-weight:900;cursor:pointer" onclick="sendFriendRequest('${a.id}');this.textContent='✓';this.disabled=true;this.style.opacity='.6'">Add</button>
+  </div>`).join('');
+}
+
+// ============================================================
+// INVITE FRIENDS (platform join — different from post sharing)
+// ============================================================
+function inviteByEmail(prefillEmail) {
+  const email = (prefillEmail&&prefillEmail.includes('@')) ? prefillEmail : '';
+  const subject = encodeURIComponent('Join me on AlphaVerse — TYF Network! 🚀');
+  const body = encodeURIComponent('Hey!\n\nI\'m on AlphaVerse, a safe and fun learning network for students just like us. Come join me!\n\n👉 https://theyoungfoundry.github.io/TheYoungFoundry_Jun2026/TYF_Network.html\n\nSee you there! 🎉');
+  window.location.href = `mailto:${encodeURIComponent(email||'')}?subject=${subject}&body=${body}`;
+}
+function inviteByWhatsApp() {
+  const text = encodeURIComponent('Hey! Come join me on AlphaVerse — a super cool learning network for students! 🚀\n\n👉 https://theyoungfoundry.github.io/TheYoungFoundry_Jun2026/TYF_Network.html\n\nIt\'s safe, fun and totally free! 🎉');
+  window.open(`https://wa.me/?text=${text}`, '_blank');
+}
+
+// ============================================================
+// MY NETWORK MODAL
+// ============================================================
+let activeFRTab = 'incoming';
+
+function openMyNetwork() {
+  activeFRTab = 'incoming';
+  openModal('modal-my-network');
+  renderFRTab('incoming');
+}
+function openFriendRequests() { openMyNetwork(); }
+
+function switchFRTab(tab) {
+  activeFRTab = tab;
+  document.querySelectorAll('.fr-tab').forEach(t => t.classList.remove('active'));
+  const tabEl = document.getElementById('frtab-'+tab);
+  if (tabEl) tabEl.classList.add('active');
+  renderFRTab(tab);
+}
+
+function renderFRTab(tab) {
+  if (!currentUser) return;
+  activeFRTab = tab;
+  const el = document.getElementById('fr-tab-content');
+  const reqs = getFriendRequests();
+  const accounts = getAccounts();
+  const incomingCount = reqs.filter(r => r.status==='pending' && r.toId===currentUser.id).length;
+  const countEl = document.getElementById('fr-incoming-count');
+  if (countEl) countEl.textContent = incomingCount>0 ? `(${incomingCount})` : '';
+
+  if (tab === 'incoming') {
+    const incoming = reqs.filter(r => r.status==='pending' && r.toId===currentUser.id);
+    if (!incoming.length) {
+      el.innerHTML = `<div class="network-empty">🎉 No pending requests right now!<br><button class="btn blue sm" style="margin-top:10px" onclick="closeModal('modal-my-network');openFindBuddy()">Find a Buddy 🔍</button></div>`;
+      return;
+    }
+    el.innerHTML = incoming.map(r => {
+      const sender = accounts.find(a => a.id===r.fromId);
+      const av = sender ? (sender.avatar||'🌟') : '🌟';
+      const info = sender ? `Grade ${sender.grade}${sender.schoolName?' · '+escHtml(sender.schoolName):''}` : '';
+      return `<div class="buddy-card">
+        <div style="font-size:1.8rem;flex-shrink:0">${av}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:900;font-size:14px;color:var(--dark)">${escHtml(r.fromName)}</div>
+          <div style="font-size:12px;color:var(--muted);font-weight:700">@${escHtml(r.fromUsername||r.fromName)}${info?' · '+info:''}</div>
+        </div>
+        <div class="buddy-actions">
+          <button class="btn green sm" onclick="acceptFriendRequest('${r.id}')">Accept ✓</button>
+          <button class="btn ghost sm" onclick="rejectFriendRequest('${r.id}')">Decline</button>
+        </div>
+      </div>`;
+    }).join('');
+
+  } else if (tab === 'outgoing') {
+    const outgoing = reqs.filter(r => r.status==='pending' && r.fromId===currentUser.id);
+    if (!outgoing.length) {
+      el.innerHTML = `<div class="network-empty">No outgoing requests.<br><button class="btn blue sm" style="margin-top:10px" onclick="closeModal('modal-my-network');openFindBuddy()">Find a Buddy 🔍</button></div>`;
+      return;
+    }
+    el.innerHTML = outgoing.map(r => {
+      const target = accounts.find(a => a.id===r.toId);
+      const av = target ? (target.avatar||'🌟') : '🌟';
+      return `<div class="buddy-card">
+        <div style="font-size:1.8rem;flex-shrink:0">${av}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:900;font-size:14px;color:var(--dark)">${target ? escHtml(target.name) : escHtml(r.toEmail||r.toId)}</div>
+          <div style="font-size:12px;color:var(--muted);font-weight:700">⏳ Waiting for them to accept</div>
+        </div>
+        <div class="buddy-actions">
+          <button class="btn ghost sm" onclick="cancelFriendRequest('${r.id}')">Cancel</button>
+        </div>
+      </div>`;
+    }).join('');
+
+  } else if (tab === 'buddies') {
+    const friends = getFriends(currentUser.id);
+    if (!friends.length) {
+      el.innerHTML = `<div class="network-empty">No buddies yet! Start connecting 🌟<br><button class="btn blue sm" style="margin-top:10px" onclick="closeModal('modal-my-network');openFindBuddy()">Find a Buddy 🔍</button></div>`;
+      return;
+    }
+    el.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px">` +
+      friends.map(r => {
+        const friendId = r.fromId===currentUser.id ? r.toId : r.fromId;
+        const friend = accounts.find(a => a.id===friendId);
+        if (!friend) return '';
+        const isPublic = friend.profilePublic !== false;
+        return `<div style="background:#fff;border:2px solid var(--line);border-radius:16px;padding:16px;text-align:center;box-shadow:var(--shadow-sm)">
+          <div style="font-size:2.2rem;margin-bottom:6px">${friend.avatar||'🌟'}</div>
+          <div style="font-weight:900;font-size:13px;color:var(--dark);margin-bottom:2px">@${escHtml(friend.username||friend.name)}</div>
+          <div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:10px">Grade ${friend.grade}${friend.isMentor?' · 🎓':''}</div>
+          ${isPublic
+            ? `<button class="btn blue sm" style="width:100%;font-size:12px" onclick="closeModal('modal-my-network');openPublicWall('${friend.id}')">View Wall</button>`
+            : `<div style="font-size:11px;color:var(--muted);font-weight:700">🔒 Private Wall</div>`}
+        </div>`;
+      }).join('') + '</div>';
+  }
+}
 
 function getSeedThreads() {
   return [
@@ -1200,9 +1609,11 @@ function switchLoginTab(tab) {
 }
 
 function demoLogin() {
-  // Creates/reuses a demo student account and logs straight in — for testing only
+  // Creates/reuses the demo student account and companion demo accounts — testing only
   const accounts = getAccounts();
-  let demo = accounts.find(a => a.username === 'demo_student');
+
+  // ── Main demo account ───────────────────────────────────────────────────────
+  let demo = accounts.find(a => a.id === 'demo_001');
   if (!demo) {
     demo = {
       id: 'demo_001', name: 'Demo Student', username: 'demo_student',
@@ -1210,19 +1621,125 @@ function demoLogin() {
       nextGrade: 7, birthYear: 2013, yob: 2013, schoolId: 'DEMO-001',
       schoolName: 'Demo School', role: 'student', status: 'active',
       parentName: 'Demo Parent', parentEmail: 'parent@tyf.test',
-      tempPassword: 'Demo@123', joined: Date.now(), foundryScore: 50,
-      badges: [], joinedCommunities: [], lastGradeYear: new Date().getFullYear(),
+      tempPassword: 'Demo@123', joined: Date.now() - 86400000 * 30,
+      foundryScore: 50, badges: [], joinedCommunities: [],
+      lastGradeYear: new Date().getFullYear(),
       isMentor: false, profilePublic: true, avatar: '🤖',
-      username: 'demo_student', aboutMe: 'This is a demo account for testing.',
+      aboutMe: 'This is a demo account for testing.',
     };
     accounts.push(demo);
-    saveAccounts(accounts);
   }
+  // Ensure demo student is in coding + science communities
+  const demoComms = getUserCommunities('demo_001');
+  if (!demoComms.includes('coding')) demoComms.push('coding');
+  if (!demoComms.includes('science')) demoComms.push('science');
+  if (!demoComms.includes('literature')) demoComms.push('literature');
+  saveUserCommunities('demo_001', demoComms);
+
+  // ── Companion demo accounts (match seed-post author IDs) ───────────────────
+  const companions = [
+    {
+      id: 'seed-maya', name: 'Maya S.', username: 'maya_s',
+      email: 'maya@tyf.test', grade: 7, nextAcademicGrade: 8,
+      nextGrade: 8, birthYear: 2012, yob: 2012, schoolId: 'DEMO-001',
+      schoolName: 'Demo School', role: 'student', status: 'active',
+      parentName: 'Sunita S.', parentEmail: 'sunita@tyf.test',
+      tempPassword: 'Demo@123', joined: Date.now() - 86400000 * 45,
+      foundryScore: 120, badges: [], joinedCommunities: [],
+      lastGradeYear: new Date().getFullYear(),
+      isMentor: false, profilePublic: true, avatar: '🦋',
+      aboutMe: 'I write poems and short stories. Love the monsoon season!',
+      communities: ['literature', 'painting', 'photography'],
+    },
+    {
+      id: 'seed-arjun', name: 'Arjun K.', username: 'arjun_k',
+      email: 'arjun@tyf.test', grade: 6, nextAcademicGrade: 7,
+      nextGrade: 7, birthYear: 2013, yob: 2013, schoolId: 'DEMO-002',
+      schoolName: 'Sunrise Academy', role: 'student', status: 'active',
+      parentName: 'Raj K.', parentEmail: 'raj@tyf.test',
+      tempPassword: 'Demo@123', joined: Date.now() - 86400000 * 60,
+      foundryScore: 200, badges: [], joinedCommunities: [],
+      lastGradeYear: new Date().getFullYear(),
+      isMentor: false, profilePublic: true, avatar: '🚀',
+      aboutMe: 'Python + Arduino enthusiast. Building cool stuff one project at a time!',
+      communities: ['coding', 'robotics', 'science'],
+    },
+    {
+      id: 'seed-priya', name: 'Priya M.', username: 'priya_m',
+      email: 'priya@tyf.test', grade: 6, nextAcademicGrade: 7,
+      nextGrade: 7, birthYear: 2013, yob: 2013, schoolId: 'DEMO-001',
+      schoolName: 'Demo School', role: 'student', status: 'active',
+      parentName: 'Meena M.', parentEmail: 'meena@tyf.test',
+      tempPassword: 'Demo@123', joined: Date.now() - 86400000 * 20,
+      foundryScore: 85, badges: [], joinedCommunities: [],
+      lastGradeYear: new Date().getFullYear(),
+      isMentor: false, profilePublic: true, avatar: '📸',
+      aboutMe: 'Photography is my superpower. Every corner of my street is a story.',
+      communities: ['photography', 'literature', 'science'],
+    },
+    {
+      id: 'seed-rishi', name: 'Rishi T.', username: 'rishi_t',
+      email: 'rishi@tyf.test', grade: 8, nextAcademicGrade: 9,
+      nextGrade: 9, birthYear: 2011, yob: 2011, schoolId: 'DEMO-003',
+      schoolName: 'Greenfield High', role: 'student', status: 'active',
+      parentName: 'Tarun T.', parentEmail: 'tarun@tyf.test',
+      tempPassword: 'Demo@123', joined: Date.now() - 86400000 * 90,
+      foundryScore: 310, badges: [], joinedCommunities: [],
+      lastGradeYear: new Date().getFullYear(),
+      isMentor: true, profilePublic: true, avatar: '🤖',
+      aboutMe: 'Robotics nerd and Arduino wizard. Ask me anything about sensors!',
+      communities: ['robotics', 'coding', 'science'],
+    },
+    {
+      id: 'seed-ananya', name: 'Ananya R.', username: 'ananya_r',
+      email: 'ananya@tyf.test', grade: 7, nextAcademicGrade: 8,
+      nextGrade: 8, birthYear: 2012, yob: 2012, schoolId: 'DEMO-001',
+      schoolName: 'Demo School', role: 'student', status: 'active',
+      parentName: 'Rekha R.', parentEmail: 'rekha@tyf.test',
+      tempPassword: 'Demo@123', joined: Date.now() - 86400000 * 15,
+      foundryScore: 65, badges: [], joinedCommunities: [],
+      lastGradeYear: new Date().getFullYear(),
+      isMentor: false, profilePublic: false, avatar: '🎨',
+      aboutMe: 'Watercolour lover. Still learning — and that is totally okay.',
+      communities: ['painting', 'photography'],
+    },
+  ];
+
+  companions.forEach(c => {
+    if (!accounts.find(a => a.id === c.id)) {
+      const { communities: comms, ...accountData } = c;
+      accounts.push(accountData);
+      saveUserCommunities(c.id, comms);
+    }
+  });
+  saveAccounts(accounts);
+
+  // ── Seed friend requests (idempotent) ──────────────────────────────────────
+  const reqs = getFriendRequests();
+
+  // Incoming request: Maya → demo_student (shows badge immediately)
+  if (!reqs.find(r => r.id === 'fr_demo_maya')) {
+    reqs.push({ id:'fr_demo_maya', fromId:'seed-maya', fromName:'Maya S.', fromUsername:'maya_s',
+      toId:'demo_001', toEmail:null, status:'pending', createdAt:Date.now() - 3600000 * 2 });
+  }
+  // Accepted friendship: demo_student ↔ Arjun (My Buddies tab has someone)
+  if (!reqs.find(r => r.id === 'fr_demo_arjun')) {
+    reqs.push({ id:'fr_demo_arjun', fromId:'demo_001', fromName:'Demo Student', fromUsername:'demo_student',
+      toId:'seed-arjun', toEmail:null, status:'accepted', createdAt:Date.now() - 86400000 * 5 });
+  }
+  // Incoming request: Priya → demo_student (second badge item)
+  if (!reqs.find(r => r.id === 'fr_demo_priya')) {
+    reqs.push({ id:'fr_demo_priya', fromId:'seed-priya', fromName:'Priya M.', fromUsername:'priya_m',
+      toId:'demo_001', toEmail:null, status:'pending', createdAt:Date.now() - 3600000 * 5 });
+  }
+  saveFriendRequests(reqs);
+
+  // ── Log in ─────────────────────────────────────────────────────────────────
   currentUser = { id: demo.id, name: demo.name, username: demo.username,
     role: 'student', grade: demo.grade, avatar: demo.avatar || '🤖',
     foundryScore: demo.foundryScore || 0 };
   enterApp();
-  toast('⚡ Logged in as Demo Student (testing mode)');
+  toast('⚡ Demo login — try Find a Buddy and My Network!');
 }
 
 function studentLogin() {
@@ -1716,6 +2233,7 @@ function enterApp() {
   if (fullNameEl) fullNameEl.textContent = currentUser.name;
   chip.style.display = 'flex';
   updateUserBaseCounter();
+  updateFRBadge();
   resetSessionTimeout();
   if (currentUser.role === 'admin') { showScreen('mod'); renderModTab(); }
   else if (currentUser.role === 'parent') { showScreen('feed'); renderFeed(); renderParentSidebar(); }
@@ -1802,6 +2320,8 @@ function renderFeed() {
   renderPosts();
   if (currentUser && currentUser.isMentor) document.getElementById('mentor-sidebar').style.display = 'block';
   renderParentSidebar();
+  renderPeopleYouMayKnow();
+  updateFRBadge();
 }
 
 function renderParentSidebar() {
@@ -2833,10 +3353,11 @@ function renderProfile() {
       </div>
       ${me.aboutMe?`<div style="background:rgba(255,255,255,.12);border-radius:12px;padding:10px 14px;font-size:13px;font-weight:700;margin-bottom:10px">"${escHtml(me.aboutMe)}"</div>`:''}
       ${me.objective?`<div style="font-size:12px;font-weight:700;opacity:.85;margin-bottom:10px">🎯 ${escHtml(me.objective)}</div>`:''}
-      <div class="profile-stats">
+      <div class="profile-stats" style="grid-template-columns:repeat(4,1fr)">
         <div class="pstat"><div class="pstat-num">${posts.length}</div><div class="pstat-label">Posts</div></div>
         <div class="pstat"><div class="pstat-num">${joined.length}</div><div class="pstat-label">Communities</div></div>
         <div class="pstat"><div class="pstat-num">${posts.reduce((s,p) => s+totalReactions(p),0)}</div><div class="pstat-label">Reactions</div></div>
+        <div class="pstat" style="cursor:pointer" onclick="openMyNetwork()" title="View my buddies"><div class="pstat-num">${getFriends(currentUser.id).length}</div><div class="pstat-label">Buddies</div></div>
       </div>
       <div style="margin-top:12px;display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.15);border-radius:14px;padding:10px 16px;">
         <span style="font-family:'Fredoka One',cursive;font-size:26px">${score}</span>
@@ -2900,7 +3421,16 @@ function renderProfileTab() {
         🔒 Your email address is always kept private and never visible to other users.
       </div>
       <button class="btn green" onclick="saveAboutMe()">Save Profile →</button>
-      <div style="margin-top:24px;background:#ffebee;border:2px solid #ef9a9a;border-radius:16px;padding:16px;">
+      <div style="margin-top:16px;background:linear-gradient(135deg,#e3f2fd,#f3e5f5);border-radius:16px;padding:14px;">
+        <div style="font-family:'Fredoka One',cursive;font-size:15px;color:var(--dark);margin-bottom:10px">👥 My Network — ${getFriends(currentUser.id).length} Buddies</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn blue sm" onclick="openMyNetwork()">👥 My Network</button>
+          <button class="btn purple sm" onclick="openFindBuddy()">🔍 Find a Buddy</button>
+          <button class="btn ghost sm" style="border-color:#25D366;color:#25D366" onclick="inviteByWhatsApp()">💬 Invite via WhatsApp</button>
+          <button class="btn ghost sm" onclick="inviteByEmail('')">📧 Invite via Email</button>
+        </div>
+      </div>
+      <div style="margin-top:16px;background:#ffebee;border:2px solid #ef9a9a;border-radius:16px;padding:16px;">
         <div style="font-weight:900;font-size:14px;color:var(--red);margin-bottom:6px">⚠️ Danger Zone</div>
         <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:12px">Permanently delete your account and all your posts. This cannot be undone. Parents/guardians can request this at any time as required by the DPDP Act 2023.</p>
         <button class="btn red sm" onclick="deleteMyAccount()">🗑️ Delete My Account</button>
@@ -2965,6 +3495,9 @@ function getBadges(user) {
   if (score >= 120) badges.push({emoji:'🌳',name:'Builder',desc:'120+ Foundry Points'});
   if (user.isMentor) badges.push({emoji:'🎓',name:'Mentor',desc:'Sharing wisdom with younger grades'});
   if (getUserCommunities(user.id).length >= 3) badges.push({emoji:'🌐',name:'Community Citizen',desc:'Joined 3+ communities'});
+  const friendCount = getFriends(user.id).length;
+  if (friendCount >= 1) badges.push({emoji:'👋',name:'Social Star',desc:'Made your first buddy connection!'});
+  if (friendCount >= 5) badges.push({emoji:'🤝',name:'Squad Goals',desc:'5+ Buddies connected!'});
   if (!badges.length) badges.push({emoji:'🚀',name:'Just Getting Started',desc:'Keep posting and reacting!'});
   return badges;
 }
@@ -3417,7 +3950,14 @@ function renderWall(userId) {
   const isOwn = currentUser && currentUser.id === uid;
   const isPublic = user.profilePublic !== false;
   if (!isPublic && !isOwn && (!currentUser || currentUser.role !== 'admin')) {
-    document.getElementById('wall-header-block').innerHTML = `<div class="profile-hero" style="margin-bottom:20px"><div style="font-size:2rem;margin-bottom:8px">🔒</div><div class="profile-name">${escHtml(user.name)}</div><div class="profile-sub">This profile is private.</div></div>`;
+    document.getElementById('wall-header-block').innerHTML = `
+      <div class="profile-hero" style="margin-bottom:20px;text-align:center">
+        <div style="font-size:2.5rem;margin-bottom:8px">🔒</div>
+        <div class="profile-name">${escHtml(user.name)}</div>
+        <div class="profile-sub" style="margin-bottom:14px">This profile is private.</div>
+        ${currentUser ? `<p style="font-size:13px;font-weight:700;opacity:.85;margin-bottom:14px">Send a buddy request to connect and unlock their wall!</p>
+        <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">${renderAddBuddyBtn(uid)}</div>` : ''}
+      </div>`;
     document.getElementById('wall-posts-block').innerHTML = '';
     return;
   }
@@ -3438,16 +3978,29 @@ function renderWall(userId) {
           ${joined.length?`<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">${joined.slice(0,5).map(cid=>{const c=COMMUNITIES.find(x=>x.id===cid);return c?`<span style="background:rgba(255,255,255,.15);border-radius:8px;padding:3px 8px;font-size:11px;font-weight:800">${c.emoji} ${c.name}</span>`:''}).join('')}${joined.length>5?`<span style="font-size:11px;font-weight:700;opacity:.7">+${joined.length-5} more</span>`:''}</div>`:''}
         </div>
       </div>
-      ${isOwn?`<div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
-        <button class="wall-privacy-toggle" onclick="toggleProfileVisibility()">
-          ${user.profilePublic!==false?'🌐 Public — click to make Private':'🔒 Private — click to make Public'}
-        </button>
-        <button class="wall-privacy-toggle" onclick="showScreen('profile')" style="background:rgba(255,255,255,.1)">✏️ Edit Profile</button>
-      </div>`:''}
+      <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
+        ${isOwn ? `
+          <button class="wall-privacy-toggle" onclick="toggleProfileVisibility()">
+            ${user.profilePublic!==false?'🌐 Public — click to make Private':'🔒 Private — click to make Public'}
+          </button>
+          <button class="wall-privacy-toggle" onclick="showScreen('profile')" style="background:rgba(255,255,255,.1)">✏️ Edit Profile</button>
+        ` : `${renderAddBuddyBtn(uid)}`}
+      </div>
     </div>`;
   document.getElementById('wall-posts-block').innerHTML = posts.length
     ? `<div class="sectlab" style="margin-bottom:14px">📝 Posts by ${escHtml(user.name)}</div>` + posts.map(p=>renderPostCard(p)).join('')
     : `<div class="empty"><span class="empty-icon">✍️</span><p>No posts yet.</p></div>`;
+}
+
+function renderAddBuddyBtn(uid) {
+  if (!currentUser || currentUser.id === uid) return '';
+  if (isFriend(currentUser.id, uid)) {
+    return `<button class="wall-privacy-toggle" disabled style="opacity:.85;cursor:default;background:rgba(67,160,71,.35)">👥 Buddies ✓</button>`;
+  }
+  if (hasAnyPendingBetween(currentUser.id, uid)) {
+    return `<button class="wall-privacy-toggle" disabled style="opacity:.7;cursor:default">⏳ Request Sent</button>`;
+  }
+  return `<button class="wall-privacy-toggle" onclick="sendFriendRequest('${uid}');this.textContent='⏳ Request Sent';this.disabled=true;this.style.opacity='.7'">👋 Add Buddy</button>`;
 }
 
 function openPublicWall(userId) {
