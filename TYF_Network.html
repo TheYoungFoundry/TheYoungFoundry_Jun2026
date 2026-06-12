@@ -1711,6 +1711,20 @@ function getXPProgress(xp) {
   if (l.max === 99999) return 100;
   return Math.min(100, Math.floor(((xp - l.min) / (l.max - l.min + 1)) * 100));
 }
+function getLoginStreak(userId) {
+  try { return JSON.parse(localStorage.getItem('yfs_streak_'+userId) || '{"count":0,"lastDate":""}'); }
+  catch(e) { return {count:0, lastDate:''}; }
+}
+function updateLoginStreak(userId) {
+  const today = new Date().toDateString();
+  const yesterday = new Date(Date.now()-86400000).toDateString();
+  const data = getLoginStreak(userId);
+  if (data.lastDate === today) return data.count;
+  data.count = data.lastDate === yesterday ? data.count + 1 : 1;
+  data.lastDate = today;
+  localStorage.setItem('yfs_streak_'+userId, JSON.stringify(data));
+  return data.count;
+}
 function addXP(userId, amount) {
   if (!amount || amount <= 0) return;
   const accounts = getAccounts();
@@ -1731,11 +1745,15 @@ function renderXPBar(user) {
   const xp = user.foundryScore || 0;
   const lvl = getXPLevel(xp);
   const pct = getXPProgress(xp);
-  const nextXP = lvl.max === 99999 ? '' : ` · ${lvl.max + 1 - xp} XP to next level`;
+  const nextXP = lvl.max === 99999 ? '' : ` · ${lvl.max + 1 - xp} XP to next`;
+  const streak = getLoginStreak(user.id).count;
+  const streakHtml = streak >= 2
+    ? `<span style="background:rgba(255,152,0,.25);color:#FFB74D;border-radius:8px;padding:2px 8px;font-size:11px;font-weight:900;margin-left:6px">🔥 ${streak}-day streak</span>`
+    : '';
   return `<div class="profile-xp-block">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
       <span class="level-badge">${lvl.emoji} Lv.${lvl.lv} ${lvl.label}</span>
-      <span style="font-family:'Fredoka One',cursive;font-size:22px;color:#fff">${xp} XP</span>
+      <span style="font-family:'Fredoka One',cursive;font-size:22px;color:#fff">${xp} XP${streakHtml}</span>
     </div>
     <div class="xp-bar-wrap"><div class="xp-bar-fill" style="width:${pct}%"></div></div>
     <div class="xp-next-label">${pct}% to next level${nextXP}</div>
@@ -2379,6 +2397,10 @@ function renderChatListItem(fid, friend, isFav) {
 }
 
 function openChatWith(friendId) {
+  if (!isFriend(currentUser.id, friendId)) {
+    toast('Add them as a buddy first! 👥');
+    return;
+  }
   activeChatFriendId = friendId;
   activeChatGroupId = null;
   exitSelectMode();
@@ -3834,13 +3856,18 @@ function enterApp() {
   updateLastActive();
   startMsgPoller();
   purgeOldMessages();
-  // Daily login XP (once per calendar day)
+  // Daily login XP + streak (once per calendar day)
   if (currentUser.role === 'student') {
     const loginKey = 'yfs_loginxp_' + currentUser.id + '_' + new Date().toDateString();
     if (!localStorage.getItem(loginKey)) {
       localStorage.setItem(loginKey, '1');
-      addXP(currentUser.id, XP_REWARDS.dailyLogin);
-      toast('🌅 Daily login bonus! +' + XP_REWARDS.dailyLogin + ' XP');
+      const streak = updateLoginStreak(currentUser.id);
+      let bonus = XP_REWARDS.dailyLogin;
+      if (streak >= 7) bonus += 10;
+      else if (streak >= 3) bonus += 5;
+      addXP(currentUser.id, bonus);
+      const streakMsg = streak >= 3 ? ` · 🔥 ${streak}-day streak!` : (streak === 2 ? ' · 2 days in a row!' : '');
+      toast(`🌅 Daily login! +${bonus} XP${streakMsg}`);
     }
   }
   if (currentUser.role === 'admin') { showScreen('mod'); renderModTab(); }
@@ -4893,6 +4920,32 @@ function renderParentTabContent() {
             <div style="font-size:13px;color:#E8EDF4;font-weight:700;line-height:1.5">${escHtml(p.text.slice(0,150))}${p.text.length>150?'…':''}</div>
           </div>`;
         }).join('') : '<div style="font-size:13px;color:#8A9BB5;font-weight:700">No posts yet.</div>'}
+        ${(() => {
+          const childFriends = getFriends(child.id);
+          if (!childFriends.length) return '<div style="margin-top:14px;font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">👫 Buddy Connections</div><div style="font-size:13px;color:#8A9BB5;font-weight:700">No buddies yet.</div>';
+          const accounts2 = getAccounts();
+          const week = Date.now() - 7*24*3600*1000;
+          const allMsgs = getMessages();
+          const chatRows = childFriends.map(r => {
+            const fid = r.fromId===child.id ? r.toId : r.fromId;
+            const fr = accounts2.find(a=>a.id===fid);
+            if (!fr) return null;
+            const conv = allMsgs.filter(m => (m.fromId===child.id||m.fromId===fid) && m.chatId && m.chatId.includes(child.id) && m.chatId.includes(fid));
+            const recentMsgs = conv.filter(m=>m.timestamp>week);
+            return {fr, total:conv.length, recent:recentMsgs.length};
+          }).filter(Boolean);
+          return `<div style="margin-top:14px">
+            <div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">👫 Buddy Connections (${childFriends.length})</div>
+            ${chatRows.map(({fr,total,recent})=>`<div style="display:flex;align-items:center;gap:10px;background:#0F1923;border-radius:10px;padding:8px 12px;margin-bottom:6px">
+              <span style="font-size:1.3rem">${fr.avatar||'👤'}</span>
+              <div style="flex:1">
+                <div style="font-weight:900;color:#E8EDF4;font-size:12px">@${escHtml(fr.username||fr.name)} <span style="color:#8A9BB5;font-weight:700">· Gr.${fr.grade}</span></div>
+                <div style="font-size:11px;color:#8A9BB5;font-weight:700">${fr.schoolName||''}</div>
+              </div>
+              ${total>0?`<span class="pp-tag pp-tag-${recent>0?'gold':'orange'}" style="font-size:10px">${recent>0?recent+' msg this week':total+' msgs total'}</span>`:'<span class="pp-tag" style="font-size:10px;background:#1A2533;color:#8A9BB5">No msgs</span>'}
+            </div>`).join('')}
+          </div>`;
+        })()}
       </div>`;
     });
     el.innerHTML = html;
@@ -5646,6 +5699,24 @@ function getBadges(user) {
   // Mentor badge
   if (user.isMentor) badges.push({emoji:'🎓',name:'Mentor',desc:'Sharing wisdom with younger grades'});
 
+  // Streak badges
+  const streakData = getLoginStreak(user.id);
+  if (streakData.count >= 3)  badges.push({emoji:'🔥',name:'On Fire',desc:'3-day login streak!'});
+  if (streakData.count >= 7)  badges.push({emoji:'⚡',name:'Weekly Warrior',desc:'7-day login streak!'});
+  if (streakData.count >= 30) badges.push({emoji:'💎',name:'Dedicated',desc:'30-day login streak!'});
+
+  // Birthday badge
+  if (localStorage.getItem('bday_' + user.id + '_' + new Date().getFullYear()))
+    badges.push({emoji:'🎂',name:'Birthday Star',desc:'Celebrated your birthday on AlphaVerse!'});
+
+  // Scholar badge (grade advanced this year)
+  if (localStorage.getItem('gradeup_' + user.id))
+    badges.push({emoji:'📚',name:'Scholar',desc:'Levelled up your grade — keep growing!'});
+
+  // Profile complete badge
+  if (localStorage.getItem('yfs_profilecomplete_' + user.id))
+    badges.push({emoji:'✨',name:'Profile Pro',desc:'Filled in your About Me — looking sharp!'});
+
   if (!badges.length) badges.push({emoji:'🚀',name:'Just Getting Started',desc:'Keep posting and reacting!'});
   return badges;
 }
@@ -6197,7 +6268,14 @@ function saveAboutMe() {
   const accounts = getAccounts();
   const me = accounts.find(a => a.id === currentUser.id);
   if (me) { me.aboutMe = aboutRaw; me.objective = objRaw; saveAccounts(accounts); }
-  toast('✅ Profile updated!');
+  const pcKey = 'yfs_profilecomplete_' + currentUser.id;
+  if (aboutRaw && !localStorage.getItem(pcKey)) {
+    localStorage.setItem(pcKey, '1');
+    addXP(currentUser.id, XP_REWARDS.profileComplete);
+    toast('✅ Profile updated! +' + XP_REWARDS.profileComplete + ' XP for completing your profile! ✨');
+  } else {
+    toast('✅ Profile updated!');
+  }
   renderProfile();
 }
 
