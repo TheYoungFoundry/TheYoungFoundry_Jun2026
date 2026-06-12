@@ -644,7 +644,6 @@ input,textarea,select{font-family:var(--body);}
       <button onclick="showScreen('quests')" id="nav-quests" class="desktop-only">🏆 Quests</button>
       <button onclick="showScreen('wall')" id="nav-wall" class="desktop-only">🧱 My Wall</button>
       <button onclick="showScreen('free-resources')" id="nav-free-resources" class="desktop-only">🎁 Free Resources</button>
-      <a href="MyFirstChapter.html" class="btn ghost sm desktop-only" style="text-decoration:none" title="Go to My First Chapter">📖 Chapter</a>
       <button onclick="showScreen('chat')" id="nav-chat" class="desktop-only">💬 Chat <span class="chat-badge" id="chat-badge" style="display:none">0</span></button>
       <button onclick="openPostModal()" class="btn green sm desktop-only">+ Post</button>
       <div class="avatar-chip" id="topbar-avatar" style="display:none" onclick="toggleAvDropdown(event)">
@@ -705,7 +704,7 @@ input,textarea,select{font-family:var(--body);}
           <button class="tab active" onclick="switchFeedTab('all')">🌐 All</button>
           <button class="tab" onclick="switchFeedTab('mine')">✨ My Communities</button>
           <button class="tab" onclick="switchFeedTab('trending')">🔥 Trending</button>
-          <button class="tab" onclick="switchFeedTab('city')">🏙️ City Board</button>
+          <button class="tab" disabled style="opacity:.35;cursor:not-allowed" title="City Board — coming soon">🏙️ City Board</button>
         </div>
         <div id="feed-posts"></div>
       </div>
@@ -787,7 +786,7 @@ input,textarea,select{font-family:var(--body);}
           <div class="emoji-picker" id="emoji-picker"></div>
           <div class="chat-input-area" id="chat-input-area" style="display:none">
             <button class="btn ghost sm" style="padding:5px 8px;font-size:18px;flex-shrink:0;height:38px" onclick="toggleEmojiPicker()" title="Emoji">😊</button>
-            <textarea id="chat-input" maxlength="500" placeholder="Type a message… use @ to mention"
+            <textarea id="chat-input" spellcheck="true" maxlength="500" placeholder="Type a message… use @ to mention"
               rows="1"
               onkeydown="chatInputKeydown(event)"
               oninput="chatInputChanged(this)"></textarea>
@@ -885,10 +884,11 @@ input,textarea,select{font-family:var(--body);}
 ============================================================ -->
 <div class="screen" id="screen-quests">
   <div class="page-wrap">
-    <div class="sectlab">🏆 City Quests</div>
-    <div style="background:linear-gradient(135deg,var(--blue),var(--teal));border-radius:20px;padding:24px;color:#fff;margin-bottom:24px;">
-      <div style="font-family:'Fredoka One',cursive;font-size:22px;margin-bottom:6px;">Weekly Community Challenges</div>
-      <div style="font-size:14px;opacity:.85;font-weight:700;">Complete quests, earn reactions, build your Foundry Score. The most-reacted submission becomes a Foundry Fellow!</div>
+    <div class="sectlab">🗓️ TYF Events</div>
+    <div style="background:linear-gradient(135deg,#E53935,#FF7043);border-radius:20px;padding:24px;color:#fff;margin-bottom:24px;">
+      <div style="font-family:'Fredoka One',cursive;font-size:22px;margin-bottom:6px;">Official TYF Workshops &amp; Events</div>
+      <div style="font-size:14px;opacity:.85;font-weight:700;">Stay up to date with The Young Foundry's workshops, programmes, and community events!</div>
+      <button class="btn sm" style="background:rgba(255,255,255,.2);color:#fff;border:2px solid rgba(255,255,255,.4);margin-top:14px" onclick="openPostModal('tyf-events')">📢 Post an Event →</button>
     </div>
     <div id="quests-list"></div>
   </div>
@@ -900,7 +900,7 @@ input,textarea,select{font-family:var(--body);}
     <div class="sectlab">🎁 Free Resources</div>
     <p style="font-size:14px;color:var(--muted);font-weight:700;margin-bottom:24px">Free tools and activities from The Young Foundry — no signup needed for guests.</p>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px">
-      <div class="card" style="cursor:pointer" onclick="window.open('MyFirstChapter.html','_blank')">
+      <div class="card" style="cursor:pointer" onclick="window.location.href='MyFirstChapter.html'">
         <div class="card-body">
           <div style="font-size:2.5rem;margin-bottom:10px">✍️</div>
           <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--purple)">MyFirstChapter</div>
@@ -908,7 +908,7 @@ input,textarea,select{font-family:var(--body);}
           <span class="badge purple">Writing Studio</span>
         </div>
       </div>
-      <div class="card" style="cursor:pointer" onclick="window.open('telugu-learning/index.html','_blank')">
+      <div class="card" style="cursor:pointer" onclick="window.location.href='telugu-learning/index.html'">
         <div class="card-body">
           <div style="font-size:2.5rem;margin-bottom:10px">🇮🇳</div>
           <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--teal)">Telugu Velugu</div>
@@ -916,7 +916,7 @@ input,textarea,select{font-family:var(--body);}
           <span class="badge" style="background:#e0f2f1;color:var(--teal)">Telugu Learning</span>
         </div>
       </div>
-      <div class="card" style="cursor:pointer" onclick="window.open('math-quest/index.html','_blank')">
+      <div class="card" style="cursor:pointer" onclick="window.location.href='math-quest/index.html'">
         <div class="card-body">
           <div style="font-size:2.5rem;margin-bottom:10px">🔢</div>
           <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--orange)">Math Quest</div>
@@ -932,7 +932,7 @@ input,textarea,select{font-family:var(--body);}
           <span class="badge orange">Coming Soon</span>
         </div>
       </div>
-      <div class="card" style="cursor:pointer" onclick="window.open('https://theyoungfoundry.github.io/TheYoungFoundry_MathLove','_blank')">
+      <div class="card" style="cursor:pointer" onclick="window.location.href='https://theyoungfoundry.github.io/TheYoungFoundry_MathLove'">
         <div class="card-body">
           <div style="font-size:2.5rem;margin-bottom:10px">🏭</div>
           <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:6px;color:var(--green)">Math Love</div>
@@ -1001,7 +1001,7 @@ input,textarea,select{font-family:var(--body);}
       <div class="tabs">
         <button class="tab active" onclick="switchProfileTab('about')">👤 About</button>
         <button class="tab" onclick="switchProfileTab('posts')">📝 Posts</button>
-        <button class="tab" onclick="switchProfileTab('communities')">🌐 Communities</button>
+        <button class="tab" onclick="switchProfileTab('communities')">🌐 My Communities</button>
         <button class="tab" onclick="switchProfileTab('badges')">🏅 Badges</button>
         <button class="tab" onclick="switchProfileTab('portfolio')">🔗 Portfolio</button>
       </div>
@@ -1065,7 +1065,7 @@ input,textarea,select{font-family:var(--body);}
     </div>
     <div class="field">
       <label>What's on your mind?</label>
-      <textarea id="post-text" placeholder="Share your creation, idea, or story..." oninput="resetAiPanel()"></textarea>
+      <textarea id="post-text" spellcheck="true" placeholder="Share your creation, idea, or story..." oninput="resetAiPanel()"></textarea>
     </div>
     <div class="field">
       <label>Attach Image (optional)</label>
@@ -1104,7 +1104,7 @@ input,textarea,select{font-family:var(--body);}
     </div>
     <div class="field">
       <label>Description (why does this community matter?)</label>
-      <textarea id="suggest-desc" placeholder="Describe what kids will share and learn..." style="min-height:80px;"></textarea>
+      <textarea id="suggest-desc" spellcheck="true" placeholder="Describe what kids will share and learn..." style="min-height:80px;"></textarea>
     </div>
     <button class="btn blue" style="width:100%" onclick="submitProposal()">Submit Proposal →</button>
   </div>
@@ -1135,7 +1135,7 @@ input,textarea,select{font-family:var(--body);}
     </div>
     <div class="field">
       <label>Body</label>
-      <textarea id="thread-body" placeholder="Share your thoughts, questions or updates..." oninput="clearVal('thread-body-err')"></textarea>
+      <textarea id="thread-body" spellcheck="true" placeholder="Share your thoughts, questions or updates..." oninput="clearVal('thread-body-err')"></textarea>
       <div class="val-err" id="thread-body-err"></div>
     </div>
     <button class="btn green" style="width:100%" onclick="submitThread()">Post Thread →</button>
@@ -1227,7 +1227,6 @@ input,textarea,select{font-family:var(--body);}
     <div class="invite-row" id="buddy-invite-row" style="display:none">
       <span style="font-size:13px;font-weight:800;color:var(--muted);flex:1">Not a member yet? Invite them!</span>
       <button class="btn ghost sm" onclick="inviteByEmail(document.getElementById('buddy-search-input').value)">📧 Email Invite</button>
-      <button class="btn ghost sm" style="border-color:#25D366;color:#25D366" onclick="inviteByWhatsApp()">💬 WhatsApp</button>
     </div>
     <div class="suggest-buddies">
       <h4>🌟 People You May Know</h4>
@@ -1371,6 +1370,8 @@ function getFriendRequests() { return load('yfs_friend_requests', []); }
 function saveFriendRequests(r) { save('yfs_friend_requests', r); }
 function getMessages() { return load('yfs_messages', []); }
 function saveMessages(m) { save('yfs_messages', m); }
+function getBooks() { return load('yfs_books', []); }
+function saveBooks(b) { save('yfs_books', b); }
 function getChats() { return load('yfs_chats', []); }
 function saveChats(c) { save('yfs_chats', c); }
 
@@ -3517,6 +3518,7 @@ function enterApp() {
   else { showScreen('feed'); renderFeed(); }
   if (currentUser.role === 'parent') renderParentNotifBell();
   if (currentUser.role === 'student') checkGradeUp(); checkBirthday();
+  showBuddyBtn();
 }
 
 // ============================================================
@@ -3684,8 +3686,7 @@ function renderPostCard(post) {
     ${img}
     <div class="reactions">${rxns}${reportBtn}${editBtn}</div>
     <div class="share-bar">
-      <button class="share-btn wa" data-tip="Share on WhatsApp" onclick="shareWhatsApp('${post.id}')">📲 WhatsApp</button>
-      <button class="share-btn em" data-tip="Share via Email" onclick="shareEmail('${post.id}')">📧 Email</button>
+      <button class="share-btn em" data-tip="Copy post link" onclick="shareEmail('${post.id}')">📋 Copy Link</button>
       <button class="share-btn rp" data-tip="Repost to My Wall" onclick="repostToWall('${post.id}')">🔁 My Wall</button>
     </div>
   </div>`;
@@ -3712,16 +3713,18 @@ function hasReacted(postId, key) {
 
 function react(postId, key) {
   if (!currentUser) { toast('Please log in to react'); return; }
-  const rxns = getReactions();
-  const existing = rxns.find(r => r.postId === postId && r.userId === currentUser.id && r.type === key);
+  let rxns = getReactions();
   const posts = getPosts();
   const post = posts.find(p => p.id === postId);
   if (!post) return;
-  if (existing) {
-    const idx = rxns.indexOf(existing);
-    rxns.splice(idx, 1);
-    post.reactions[key] = Math.max(0, (post.reactions[key]||0) - 1);
-  } else {
+  // Remove any existing reaction this user has on this post (single emoji rule)
+  const prevReaction = rxns.find(r => r.postId === postId && r.userId === currentUser.id);
+  if (prevReaction) {
+    post.reactions[prevReaction.type] = Math.max(0, (post.reactions[prevReaction.type]||0) - 1);
+    rxns = rxns.filter(r => !(r.postId === postId && r.userId === currentUser.id));
+  }
+  // Toggle: if same key, just remove (already done); otherwise add new
+  if (!prevReaction || prevReaction.type !== key) {
     rxns.push({postId, userId: currentUser.id, type: key});
     post.reactions[key] = (post.reactions[key]||0) + 1;
     addXP(post.authorId, XP_REWARDS.reactReceived);
@@ -4113,7 +4116,7 @@ function openThread(tid) {
     <div class="sectlab" style="font-size:16px;margin:18px 0 12px">💬 Comments (${comments.length})</div>
     <div class="card" style="margin-bottom:16px"><div class="card-body">
       <div class="field" style="margin-bottom:8px">
-        <textarea id="comment-input" placeholder="Share a friendly reply..." style="min-height:70px" oninput="clearVal('comment-err')"></textarea>
+        <textarea id="comment-input" spellcheck="true" placeholder="Share a friendly reply..." style="min-height:70px" oninput="clearVal('comment-err')"></textarea>
         <div class="val-err" id="comment-err"></div>
       </div>
       <button class="btn green sm" onclick="submitComment()">Post Comment →</button>
@@ -4613,13 +4616,33 @@ function createCommunityFromProposal(id) {
 // ============================================================
 function renderQuests() {
   const el = document.getElementById('quests-list');
-  el.innerHTML = QUESTS.map(q => {
-    const comm = COMMUNITIES.find(c => c.id === q.community);
-    return `<div class="quest-card" style="margin-bottom:14px;">
-      <div class="quest-title">${q.title} ${q.active ? '<span class="badge green" style="background:rgba(255,255,255,.2);color:#fff;font-size:11px">Active</span>' : '<span class="badge muted" style="background:rgba(0,0,0,.2);color:rgba(255,255,255,.7);font-size:11px">Coming Soon</span>'}</div>
-      <div class="quest-desc">${q.desc}</div>
-      <div class="quest-meta">⏰ ${q.deadline} · ${comm?comm.emoji+' '+comm.name:q.community} · 🏅 +${q.reward} pts</div>
-      ${q.active ? `<button class="btn sm" style="background:rgba(255,255,255,.2);color:#fff;border:2px solid rgba(255,255,255,.3);margin-top:12px" onclick="openPostModal('${q.community}')">Submit Entry →</button>` : ''}
+  const posts = getPosts().filter(p => p.communityId === 'tyf-events' && p.parentApproved);
+  if (!posts.length) {
+    el.innerHTML = `<div class="empty"><span class="empty-icon">🗓️</span><p>No events posted yet. Check back soon!</p></div>`;
+    return;
+  }
+  posts.sort((a,b) => b.createdAt - a.createdAt);
+  el.innerHTML = posts.map(p => {
+    const author = getAccounts().find(a => a.id === p.authorId);
+    const authorName = author ? escHtml(author.name) : 'TYF Team';
+    const date = new Date(p.createdAt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+    const totalRxn = Object.values(p.reactions||{}).reduce((s,v)=>s+v,0);
+    return `<div class="card" style="margin-bottom:14px;">
+      <div class="card-body">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div style="font-size:1.8rem">🗓️</div>
+          <div>
+            <div style="font-weight:900;font-size:15px;color:var(--dark)">${escHtml(p.title||'TYF Event')}</div>
+            <div style="font-size:12px;color:var(--muted);font-weight:700">📅 ${date} · by ${authorName}</div>
+          </div>
+        </div>
+        ${p.image?`<img src="${escHtml(p.image)}" style="width:100%;border-radius:12px;margin-bottom:10px;max-height:220px;object-fit:cover" alt="event image">`:''}
+        <div style="font-size:14px;font-weight:700;color:var(--dark);line-height:1.5;margin-bottom:10px">${escHtml(p.body||'')}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--muted);font-weight:700">
+          ${Object.entries(p.reactions||{}).filter(([,v])=>v>0).map(([k,v])=>`<span>${k} ${v}</span>`).join('')}
+          ${totalRxn?`<span>· ${totalRxn} reaction${totalRxn!==1?'s':''}</span>`:''}
+        </div>
+      </div>
     </div>`;
   }).join('');
 }
@@ -4697,12 +4720,12 @@ function renderProfileTab() {
       </div>
       <div class="field">
         <label>About Me <span style="color:var(--muted);font-weight:700">(max 200 chars)</span></label>
-        <textarea id="about-me-input" maxlength="200" placeholder="Tell the community about yourself — your hobbies, what excites you...">${escHtml(me.aboutMe||'')}</textarea>
+        <textarea id="about-me-input" spellcheck="true" maxlength="200" placeholder="Tell the community about yourself — your hobbies, what excites you...">${escHtml(me.aboutMe||'')}</textarea>
         <div class="val-err" id="about-err"></div>
       </div>
       <div class="field">
         <label>🎯 My Objective in Life <span style="color:var(--muted);font-weight:700">(max 300 chars)</span></label>
-        <textarea id="objective-input" maxlength="300" placeholder="What do you want to achieve? What drives you every day?">${escHtml(me.objective||'')}</textarea>
+        <textarea id="objective-input" spellcheck="true" maxlength="300" placeholder="What do you want to achieve? What drives you every day?">${escHtml(me.objective||'')}</textarea>
         <div class="val-err" id="obj-err"></div>
       </div>
       <div style="margin-bottom:18px">
@@ -4724,7 +4747,6 @@ function renderProfileTab() {
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="btn blue sm" onclick="openMyNetwork()">👥 My Network</button>
           <button class="btn purple sm" onclick="openFindBuddy()">🔍 Find a Buddy</button>
-          <button class="btn ghost sm" style="border-color:#25D366;color:#25D366" onclick="inviteByWhatsApp()">💬 Invite via WhatsApp</button>
           <button class="btn ghost sm" onclick="inviteByEmail('')">📧 Invite via Email</button>
         </div>
       </div>
@@ -4746,21 +4768,101 @@ function renderProfileTab() {
   } else if (activeProfileTab === 'badges') {
     const accounts = getAccounts();
     const me = accounts.find(a => a.id === currentUser.id) || currentUser;
-    const badges = getBadges(me);
-    el.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;">
-      ${badges.map(b => `<div style="background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:16px;text-align:center;box-shadow:var(--shadow-sm)">
-        <div style="font-size:2.5rem;margin-bottom:8px">${b.emoji}</div>
-        <div style="font-weight:900;font-size:13px;color:var(--dark)">${b.name}</div>
-        <div style="font-size:11px;color:var(--muted);font-weight:700;margin-top:4px">${b.desc}</div>
-      </div>`).join('')}
-    </div>`;
+    const earned = getBadges(me).map(b => b.name);
+    const ALL_BADGE_DEFS = [
+      {cat:'✍️ Posting', badges:[
+        {emoji:'✍️',name:'First Post',desc:'Share your first post',hint:'Post anything in a community'},
+        {emoji:'📝',name:'Active Voice',desc:'5+ approved posts',hint:'Keep posting — get to 5!'},
+        {emoji:'🗞️',name:'Storyteller',desc:'20+ approved posts',hint:'Post 20 times to unlock'},
+      ]},
+      {cat:'⭐ Foundry Score', badges:[
+        {emoji:'🌿',name:'Grower',desc:'Reach 50 XP',hint:'Earn 50 Foundry Points'},
+        {emoji:'🌳',name:'Builder',desc:'Reach 150 XP',hint:'Earn 150 Foundry Points'},
+        {emoji:'⭐',name:'Maker',desc:'Reach 300 XP',hint:'Earn 300 Foundry Points'},
+        {emoji:'🏆',name:'Foundry Fellow',desc:'Reach 500 XP',hint:'Earn 500 Foundry Points'},
+        {emoji:'🚀',name:'Innovator',desc:'Reach 800 XP',hint:'Earn 800 Foundry Points'},
+        {emoji:'🌟',name:'Legend',desc:'Reach 1200 XP',hint:'Earn 1200 Foundry Points — legendary!'},
+      ]},
+      {cat:'🌐 Communities', badges:[
+        {emoji:'🌐',name:'Community Citizen',desc:'Join 3+ communities',hint:'Explore and join 3 communities'},
+        {emoji:'🏙️',name:'Community Builder',desc:'Join 6+ communities',hint:'Join 6 communities'},
+      ]},
+      {cat:'💫 Reactions', badges:[
+        {emoji:'💫',name:'Crowd Pleaser',desc:'Receive 10+ reactions',hint:'Get 10 reactions on your posts'},
+        {emoji:'🔥',name:'Trending',desc:'Receive 50+ reactions',hint:'Get 50 reactions across all posts'},
+      ]},
+      {cat:'👥 Social', badges:[
+        {emoji:'👋',name:'Social Star',desc:'Make your first buddy',hint:'Connect with 1 friend'},
+        {emoji:'🤝',name:'Squad Goals',desc:'5+ Buddies',hint:'Connect with 5 friends'},
+        {emoji:'🌟',name:'Super Connector',desc:'10+ Buddies',hint:'Connect with 10 friends'},
+      ]},
+      {cat:'💬 Chat', badges:[
+        {emoji:'💬',name:'Chatterbox',desc:'Send 10+ messages',hint:'Chat with your friends — send 10 messages'},
+      ]},
+      {cat:'🎓 Special', badges:[
+        {emoji:'🎓',name:'Mentor',desc:'Become a mentor',hint:'Apply to become a TYF Mentor'},
+      ]},
+    ];
+    const earnedCount = earned.filter(n => n !== 'Just Getting Started').length;
+    const totalCount = ALL_BADGE_DEFS.reduce((s,c)=>s+c.badges.length,0);
+    el.innerHTML = `
+      <div style="background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:16px;padding:16px;color:#fff;margin-bottom:20px;display:flex;align-items:center;gap:14px;">
+        <div style="font-size:2.5rem">🏅</div>
+        <div>
+          <div style="font-family:'Fredoka One',cursive;font-size:18px">Badge Progress</div>
+          <div style="font-size:13px;opacity:.9;font-weight:700">${earnedCount} of ${totalCount} badges earned — keep going!</div>
+          <div style="background:rgba(255,255,255,.25);border-radius:999px;height:8px;margin-top:8px;overflow:hidden;width:180px">
+            <div style="background:#fff;height:100%;border-radius:999px;width:${Math.round(earnedCount/totalCount*100)}%"></div>
+          </div>
+        </div>
+      </div>
+      ${ALL_BADGE_DEFS.map(cat => `
+        <div style="margin-bottom:20px">
+          <div style="font-weight:900;font-size:14px;color:var(--dark);margin-bottom:10px">${cat.cat}</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;">
+            ${cat.badges.map(b => {
+              const isEarned = earned.includes(b.name);
+              return `<div style="background:${isEarned?'var(--paper)':'#f5f5f5'};border:2px solid ${isEarned?'var(--blue)':'var(--line)'};border-radius:14px;padding:14px;text-align:center;${isEarned?'box-shadow:var(--shadow-sm)':'opacity:.65'}">
+                <div style="font-size:2rem;margin-bottom:6px;${isEarned?'':'filter:grayscale(1)'}">${b.emoji}</div>
+                <div style="font-weight:900;font-size:12px;color:var(--dark)">${b.name}</div>
+                <div style="font-size:11px;color:var(--muted);font-weight:700;margin-top:3px">${isEarned?b.desc:b.hint}</div>
+                ${isEarned?`<button class="btn blue sm" style="font-size:10px;padding:4px 8px;margin-top:8px" onclick="shareBadgeToFriend('${b.emoji}','${b.name.replace(/'/g,"\\'")}')">Share 🎉</button>`:`<div style="font-size:10px;color:var(--muted);font-weight:700;margin-top:6px">🔒 Locked</div>`}
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+      `).join('')}`;
   } else if (activeProfileTab === 'portfolio') {
     const accounts = getAccounts();
     const me = accounts.find(a => a.id === currentUser.id) || currentUser;
     const score = me.foundryScore || 0;
     const posts = getPosts().filter(p => p.authorId === currentUser.id && p.parentApproved);
     const canShare = parseInt(me.grade||0) >= 9 || score >= 100;
-    el.innerHTML = `<div class="card"><div class="card-body">
+    const myBooks = getBooks().filter(b => b.authorId === currentUser.id);
+    const booksHtml = myBooks.length ? `
+      <div class="card" style="margin-bottom:16px"><div class="card-body">
+        <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:14px">📚 Books I Authored</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;">
+          ${myBooks.map(b => `
+            <div style="background:linear-gradient(135deg,#fff9c4,#fff3e0);border:2px solid #ffe082;border-radius:14px;padding:14px;text-align:center;cursor:pointer" onclick="window.location.href='MyFirstChapter.html'">
+              <div style="font-size:2.2rem;margin-bottom:8px">📖</div>
+              <div style="font-weight:900;font-size:13px;color:var(--dark);margin-bottom:4px">${escHtml(b.title||'Untitled Book')}</div>
+              <div style="font-size:11px;color:var(--muted);font-weight:700">${b.chapters?b.chapters.length:0} chapter${(b.chapters?b.chapters.length:0)!==1?'s':''}</div>
+              ${b.published?'<span class="badge green" style="font-size:10px;margin-top:6px;display:inline-block">Published</span>':'<span class="badge orange" style="font-size:10px;margin-top:6px;display:inline-block">Draft</span>'}
+            </div>
+          `).join('')}
+        </div>
+      </div></div>` : `
+      <div class="card" style="margin-bottom:16px"><div class="card-body">
+        <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:10px">📚 Books I Authored</div>
+        <div style="text-align:center;padding:20px 0;">
+          <div style="font-size:2.5rem;margin-bottom:10px">✍️</div>
+          <p style="font-weight:800;color:var(--dark);margin-bottom:6px">No books yet!</p>
+          <p style="font-size:13px;color:var(--muted);font-weight:700;margin-bottom:14px">Start writing your first book with MyFirstChapter.</p>
+          <button class="btn blue sm" onclick="window.location.href='MyFirstChapter.html'">Start Writing →</button>
+        </div>
+      </div></div>`;
+    el.innerHTML = booksHtml + `<div class="card"><div class="card-body">
       <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:12px">🔗 Foundry Portfolio</div>
       ${canShare ? `
         <p style="font-size:14px;font-weight:700;color:var(--muted);margin-bottom:16px">Share your Foundry journey. This link shows your posts, communities, and score.</p>
@@ -4827,6 +4929,63 @@ function getBadges(user) {
 
   if (!badges.length) badges.push({emoji:'🚀',name:'Just Getting Started',desc:'Keep posting and reacting!'});
   return badges;
+}
+
+function shareBadgeToFriend(emoji, name) {
+  if (!currentUser) { toast('Please log in'); return; }
+  document.getElementById('share-badge-preview').innerHTML =
+    `<div style="font-size:3rem;margin-bottom:6px">${emoji}</div>
+     <div style="font-weight:900;font-size:16px;color:var(--dark)">${escHtml(name)}</div>
+     <div style="font-size:12px;color:var(--muted);font-weight:700;margin-top:4px">I just earned this badge on TYF! 🎉</div>`;
+  const friends = getFriends(currentUser.id);
+  const groups = load('yfs_groups',[]);
+  const listEl = document.getElementById('share-badge-list');
+  const noneEl = document.getElementById('share-badge-none');
+  if (!friends.length && !groups.length) {
+    listEl.style.display = 'none'; noneEl.style.display = 'block';
+  } else {
+    listEl.style.display = 'flex'; noneEl.style.display = 'none';
+    const accounts = getAccounts();
+    const friendRows = friends.map(fr => {
+      const otherId = fr.fromId === currentUser.id ? fr.toId : fr.fromId;
+      const other = accounts.find(a => a.id === otherId);
+      if (!other) return '';
+      return `<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--paper);border:2px solid var(--line);border-radius:12px">
+        <div style="font-size:1.4rem">${other.avatar||'🧑'}</div>
+        <div style="flex:1;font-weight:800;font-size:13px">${escHtml(other.name)}</div>
+        <button class="btn blue sm" style="font-size:11px" onclick="sendBadgeMessage('${otherId}','${emoji}','${name.replace(/'/g,"\\'")}')">Send</button>
+      </div>`;
+    });
+    const groupRows = groups.filter(g => g.members && g.members.includes(currentUser.id)).map(g =>
+      `<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--paper);border:2px solid var(--line);border-radius:12px">
+        <div style="font-size:1.4rem">👥</div>
+        <div style="flex:1;font-weight:800;font-size:13px">${escHtml(g.name)}</div>
+        <button class="btn blue sm" style="font-size:11px" onclick="sendBadgeMessage('${g.id}','${emoji}','${name.replace(/'/g,"\\'")}')">Send</button>
+      </div>`
+    );
+    listEl.innerHTML = [...friendRows, ...groupRows].join('');
+  }
+  openModal('modal-share-badge');
+}
+
+function sendBadgeMessage(chatId, emoji, badgeName) {
+  if (!currentUser) return;
+  const msg = {
+    id: 'msg_' + Date.now(),
+    chatId,
+    fromId: currentUser.id,
+    fromName: currentUser.name,
+    text: `🏅 I just earned the "${badgeName}" badge ${emoji} on The Young Foundry! 🎉`,
+    createdAt: Date.now(),
+    readBy: [currentUser.id]
+  };
+  const msgs = getMessages();
+  msgs.push(msg);
+  saveMessages(msgs);
+  closeModal('modal-share-badge');
+  toast('Badge shared! 🎉');
+  showScreen('chat');
+  setTimeout(() => openChat(chatId), 300);
 }
 
 // ============================================================
@@ -5368,11 +5527,13 @@ function shareWhatsApp(postId) {
 }
 
 function shareEmail(postId) {
-  const post = getPosts().find(p => p.id === postId);
-  if (!post) return;
-  const subject = encodeURIComponent(`${post.authorName} shared something on TYF Network`);
-  const body = encodeURIComponent(`${post.authorName} posted on The Young Foundry Network:\n\n"${post.text.slice(0,400)}"\n\nJoin TYF Network to see more and be part of the community!`);
-  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  const link = `https://theyoungfoundry.github.io/TheYoungFoundry_Jun2026/TYF_Network.html#post_${postId}`;
+  navigator.clipboard.writeText(link).then(() => toast('📋 Post link copied to clipboard!')).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = link; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    toast('📋 Post link copied!');
+  });
 }
 
 function repostToWall(postId) {
@@ -5624,6 +5785,18 @@ if (!localStorage.getItem('yfs_posts')) savePosts(getSeedPosts());
   </div>
 </div>
 
+<!-- MODAL: SHARE BADGE -->
+<div class="modal-overlay" id="modal-share-badge">
+  <div class="modal" style="max-width:420px">
+    <button class="modal-close" onclick="closeModal('modal-share-badge')">✕</button>
+    <div style="font-family:'Fredoka One',cursive;font-size:20px;margin-bottom:6px">🎉 Share Your Badge!</div>
+    <div id="share-badge-preview" style="text-align:center;padding:14px;background:var(--soft);border-radius:14px;margin-bottom:16px"></div>
+    <div style="font-weight:800;font-size:13px;color:var(--dark);margin-bottom:10px">Send to friends or groups:</div>
+    <div id="share-badge-list" style="max-height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:8px"></div>
+    <div id="share-badge-none" style="display:none;text-align:center;padding:20px;color:var(--muted);font-weight:700;font-size:13px">No friends yet — connect with someone first!</div>
+  </div>
+</div>
+
 <!-- MODAL: CREATE GROUP CHAT -->
 <div class="modal-overlay" id="modal-create-group">
   <div class="modal" style="max-width:460px">
@@ -5674,6 +5847,215 @@ if (!localStorage.getItem('yfs_posts')) savePosts(getSeedPosts());
     <button onclick="event.stopPropagation();document.getElementById('msg-popup').style.display='none'" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:18px;line-height:1;flex-shrink:0">×</button>
   </div>
 </div>
+
+<!-- PAGE BUDDIES -->
+<div id="page-buddies"></div>
+<button id="buddy-launch-btn" onclick="initBuddies()" title="Meet your page guides!" style="display:none;position:fixed;bottom:72px;right:16px;z-index:8400;background:linear-gradient(135deg,#7B1FA2,#E91E63);color:#fff;border:none;border-radius:999px;padding:9px 16px;font-weight:900;font-size:13px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.25);animation:buddyPulse 2s infinite">🧙 Meet the Guides</button>
+
+<style>
+@keyframes buddyPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
+@keyframes buddyBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+@keyframes buddyPop { 0%{transform:scale(0);opacity:0} 70%{transform:scale(1.15)} 100%{transform:scale(1);opacity:1} }
+.buddy-widget {
+  position:fixed;
+  z-index:8500;
+  user-select:none;
+  cursor:grab;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:0;
+  pointer-events:all;
+}
+.buddy-widget:active { cursor:grabbing; }
+.buddy-statue {
+  font-size:2.4rem;
+  line-height:1;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.2));
+  animation:buddyBounce 2.5s ease-in-out infinite;
+  transition:transform .2s;
+}
+.buddy-statue:hover { transform:scale(1.15); }
+.buddy-bubble {
+  position:absolute;
+  bottom:calc(100% + 8px);
+  left:50%;
+  transform:translateX(-50%);
+  background:#fff;
+  border:3px solid var(--line);
+  border-radius:18px 18px 18px 4px;
+  padding:12px 14px;
+  min-width:200px;
+  max-width:240px;
+  box-shadow:0 6px 24px rgba(0,0,0,.14);
+  animation:buddyPop .3s ease;
+  pointer-events:none;
+}
+.buddy-bubble-text { font-size:13px;font-weight:700;color:var(--dark);line-height:1.5; }
+.buddy-bubble-name { font-size:11px;font-weight:900;margin-bottom:5px; }
+.buddy-close {
+  position:absolute;
+  top:-8px;
+  right:-8px;
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  background:var(--muted);
+  color:#fff;
+  border:none;
+  font-size:13px;
+  line-height:22px;
+  text-align:center;
+  cursor:pointer;
+  pointer-events:all;
+  z-index:1;
+}
+.buddy-close:hover { background:var(--red); }
+.buddy-statue-mode .buddy-statue { opacity:.55; animation:none; }
+</style>
+
+<script>
+const BUDDY_DEFS = [
+  {id:'wizard', emoji:'🧙', name:'Wizzy', color:'#7B1FA2', tips:[
+    'Welcome to The Young Foundry! I\'m Wizzy — here to help you explore! ✨',
+    'Click 🏠 Feed in the sidebar to see all community posts!',
+    'Visit 🌐 Communities to discover groups you\'ll love!',
+    'Check your 👤 Profile to track your badges and portfolio!',
+    'Use 💬 Chat to message your friends anytime!'
+  ]},
+  {id:'fairy', emoji:'🧚', name:'Faye', color:'#E91E63', tips:[
+    'Hi! I\'m Faye the Fairy! ✨ Need help finding your way around?',
+    'Go to 🗓️ TYF Events to see upcoming workshops and programmes!',
+    'Visit 🎁 Free Resources for fun activities — no signup needed!',
+    'Tap 🔍 to search for friends and community posts!',
+    'Earn badges by posting, reacting, and connecting with friends!'
+  ]},
+  {id:'robot', emoji:'🤖', name:'Robo', color:'#0288D1', tips:[
+    'BEEP BOOP! I\'m Robo — your tech-savvy guide! 🤖',
+    'Post in communities to earn Foundry Points and level up!',
+    'React to friends\' posts — spread the love and earn XP!',
+    'Add buddies to unlock private chats and connections!',
+    'The higher your Foundry Score, the more badges you unlock!'
+  ]},
+  {id:'hero', emoji:'🦸', name:'Sparky', color:'#D32F2F', tips:[
+    'I\'m Sparky — your superhero guide! Let\'s go! 💥',
+    'Your Wall is your personal space — posts, score, and story!',
+    'Join communities to find others who share your passions!',
+    'Reach 500 XP to become a Foundry Fellow — you can do it!',
+    'Send a buddy request to connect with someone new today!'
+  ]},
+  {id:'student', emoji:'👨‍🎓', name:'Kip', color:'#2E7D32', tips:[
+    'Hey there! I\'m Kip, your student guide to the Network! 📚',
+    'Write and publish your own book in MyFirstChapter!',
+    'Use 💬 Chat to message friends — try @mentioning them!',
+    'Toggle your profile to Public to share your journey!',
+    'Create a group chat for team projects or friend squads!'
+  ]}
+];
+
+let buddiesInit = false;
+let buddyTipIndex = {};
+
+function initBuddies() {
+  if (buddiesInit) {
+    document.querySelectorAll('.buddy-widget').forEach(b => { b.style.display = 'flex'; });
+    document.getElementById('buddy-launch-btn').style.display = 'none';
+    return;
+  }
+  buddiesInit = true;
+  document.getElementById('buddy-launch-btn').style.display = 'none';
+  const container = document.getElementById('page-buddies');
+  const positions = [
+    {right:'80px',bottom:'80px'}, {right:'160px',bottom:'80px'},
+    {right:'240px',bottom:'80px'}, {right:'320px',bottom:'80px'},
+    {right:'400px',bottom:'80px'}
+  ];
+  BUDDY_DEFS.forEach((def, i) => {
+    buddyTipIndex[def.id] = 0;
+    const el = document.createElement('div');
+    el.className = 'buddy-widget buddy-statue-mode';
+    el.id = 'buddy-' + def.id;
+    el.style.right = positions[i].right;
+    el.style.bottom = positions[i].bottom;
+    el.innerHTML = `
+      <button class="buddy-close" onclick="closeBuddy('${def.id}')">×</button>
+      <div class="buddy-statue" onclick="activateBuddy('${def.id}')" title="Click me!">${def.emoji}</div>
+    `;
+    makeDraggable(el);
+    container.appendChild(el);
+    setTimeout(() => activateBuddy(def.id), i * 400);
+  });
+}
+
+function activateBuddy(id) {
+  const el = document.getElementById('buddy-' + id);
+  if (!el) return;
+  const def = BUDDY_DEFS.find(d => d.id === id);
+  el.classList.remove('buddy-statue-mode');
+  const existing = el.querySelector('.buddy-bubble');
+  if (existing) existing.remove();
+  const tipIdx = buddyTipIndex[id] % def.tips.length;
+  buddyTipIndex[id] = (tipIdx + 1) % def.tips.length;
+  const bubble = document.createElement('div');
+  bubble.className = 'buddy-bubble';
+  bubble.innerHTML = `<div class="buddy-bubble-name" style="color:${def.color}">${def.emoji} ${def.name}</div><div class="buddy-bubble-text">${def.tips[tipIdx]}</div>`;
+  el.appendChild(bubble);
+  clearTimeout(el._bubbleTimer);
+  el._bubbleTimer = setTimeout(() => {
+    bubble.remove();
+    el.classList.add('buddy-statue-mode');
+  }, 6000);
+}
+
+function closeBuddy(id) {
+  const el = document.getElementById('buddy-' + id);
+  if (!el) return;
+  const bubble = el.querySelector('.buddy-bubble');
+  if (bubble) bubble.remove();
+  el.classList.add('buddy-statue-mode');
+}
+
+function makeDraggable(el) {
+  let ox=0, oy=0, sx=0, sy=0, dragging=false;
+  el.addEventListener('mousedown', e => {
+    if (e.target.classList.contains('buddy-close') || e.target.classList.contains('buddy-statue')) {
+      if (e.target.classList.contains('buddy-close')) return;
+    }
+    dragging = true;
+    const rect = el.getBoundingClientRect();
+    ox = e.clientX - rect.left;
+    oy = e.clientY - rect.top;
+    el.style.right = 'auto';
+    el.style.bottom = 'auto';
+    el.style.left = rect.left + 'px';
+    el.style.top = rect.top + 'px';
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    el.style.left = (e.clientX - ox) + 'px';
+    el.style.top = (e.clientY - oy) + 'px';
+  });
+  document.addEventListener('mouseup', () => { dragging = false; });
+  el.addEventListener('touchstart', e => {
+    const t = e.touches[0];
+    const rect = el.getBoundingClientRect();
+    ox = t.clientX - rect.left; oy = t.clientY - rect.top;
+    el.style.right = 'auto'; el.style.bottom = 'auto';
+    el.style.left = rect.left + 'px'; el.style.top = rect.top + 'px';
+  }, {passive:true});
+  el.addEventListener('touchmove', e => {
+    const t = e.touches[0];
+    el.style.left = (t.clientX - ox) + 'px';
+    el.style.top = (t.clientY - oy) + 'px';
+    e.preventDefault();
+  }, {passive:false});
+}
+
+function showBuddyBtn() {
+  if (currentUser) document.getElementById('buddy-launch-btn').style.display = 'block';
+}
+</script>
 
 </body>
 </html>
