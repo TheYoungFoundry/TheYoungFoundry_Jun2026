@@ -3211,7 +3211,8 @@ function seedDemoData() {
   const accounts = getAccounts();
 
   // ── Main demo student ──────────────────────────────────────────────────────
-  if (!accounts.find(a => a.id === 'demo_001')) {
+  const existingDemo = accounts.find(a => a.id === 'demo_001');
+  if (!existingDemo) {
     accounts.push({
       id: 'demo_001', name: 'Demo Student', username: 'demo_student',
       email: 'demo@tyf.test', grade: 6, nextAcademicGrade: 7,
@@ -3224,6 +3225,9 @@ function seedDemoData() {
       isMentor: false, profilePublic: true, avatar: '🤖',
       aboutMe: 'Coding, science and all things curious. Grade 6 @ Demo School.',
     });
+  } else {
+    existingDemo.parentEmail = 'parent2@tyf.test';
+    existingDemo.parentName = 'Meena K.';
   }
   const demoComms = getUserCommunities('demo_001');
   ['coding','science','literature'].forEach(c => { if (!demoComms.includes(c)) demoComms.push(c); });
@@ -3253,15 +3257,16 @@ function seedDemoData() {
   });
 
   // ── Demo parent accounts (1 child / 2 children / 3 children) ─────────────
-  if (!accounts.find(a => a.id === 'parent_demo_1')) {
-    accounts.push({ id:'parent_demo_1', name:'Sunita S.', email:'parent1@tyf.test', role:'parent', status:'active', joined:Date.now()-86400000*45, foundryScore:0, badges:[], children:[] });
-  }
-  if (!accounts.find(a => a.id === 'parent_demo_2')) {
-    accounts.push({ id:'parent_demo_2', name:'Meena K.', email:'parent2@tyf.test', role:'parent', status:'active', joined:Date.now()-86400000*30, foundryScore:0, badges:[], children:[] });
-  }
-  if (!accounts.find(a => a.id === 'parent_demo_3')) {
-    accounts.push({ id:'parent_demo_3', name:'Raj K.', email:'parent3@tyf.test', role:'parent', status:'active', joined:Date.now()-86400000*60, foundryScore:0, badges:[], children:[] });
-  }
+  // Always ensure all 3 demo parents exist with correct emails (upsert)
+  [
+    { id:'parent_demo_1', name:'Sunita S.', email:'parent1@tyf.test', days:45 },
+    { id:'parent_demo_2', name:'Meena K.',  email:'parent2@tyf.test', days:30 },
+    { id:'parent_demo_3', name:'Raj K.',    email:'parent3@tyf.test', days:60 },
+  ].forEach(p => {
+    const ex = accounts.find(a => a.id === p.id);
+    if (ex) { ex.email = p.email; ex.name = p.name; }
+    else accounts.push({ id:p.id, name:p.name, email:p.email, role:'parent', status:'active', joined:Date.now()-86400000*p.days, foundryScore:0, badges:[], children:[] });
+  });
   saveAccounts(accounts);
 
   // ── Friend requests / connections ──────────────────────────────────────────
