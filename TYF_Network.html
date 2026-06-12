@@ -467,6 +467,288 @@ input,textarea,select{font-family:var(--body);}
 .last-active-txt{font-size:11px;color:var(--muted);font-weight:700;}
 .msg-group-sender{font-size:10px;font-weight:900;color:var(--blue);margin-bottom:2px;}
 .chat-input-wrap{position:relative;}
+
+/* ============================================================
+   PARENT PORTAL THEME
+   ============================================================ */
+:root {
+  --pp-bg:      #0F1923;
+  --pp-card:    #1A2533;
+  --pp-border:  #2D3E50;
+  --pp-gold:    #C9A84C;
+  --pp-teal:    #4A90A4;
+  --pp-text:    #E8EDF4;
+  --pp-muted:   #8A9BB5;
+  --pp-green:   #27AE60;
+  --pp-red:     #E74C3C;
+  --pp-orange:  #E67E22;
+}
+
+/* Parent login card override */
+.parent-login-card {
+  background: linear-gradient(135deg, #0F1923 0%, #1A2533 100%);
+  border: 1.5px solid #2D3E50;
+  border-radius: 20px;
+  padding: 28px 24px;
+  color: #E8EDF4;
+}
+.parent-login-card label { color: #8A9BB5; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .6px; }
+.parent-login-card input {
+  background: #0F1923;
+  border: 1.5px solid #2D3E50;
+  color: #E8EDF4;
+  border-radius: 10px;
+  padding: 10px 14px;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 700;
+  outline: none;
+  box-sizing: border-box;
+}
+.parent-login-card input:focus { border-color: #C9A84C; }
+.parent-login-card .field { margin-bottom: 14px; }
+.btn-parent-gold {
+  background: linear-gradient(135deg, #C9A84C, #A07C28);
+  color: #0F1923;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-weight: 900;
+  font-size: 14px;
+  width: 100%;
+  cursor: pointer;
+  letter-spacing: .3px;
+}
+.btn-parent-gold:hover { opacity: .9; }
+
+/* Parent portal full-screen layout */
+#screen-parent-queue { background: #0F1923; }
+.pp-layout {
+  display: flex;
+  min-height: calc(100vh - 60px);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.pp-nav {
+  width: 220px;
+  flex-shrink: 0;
+  background: #1A2533;
+  border-right: 1.5px solid #2D3E50;
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+}
+.pp-nav-logo {
+  padding: 0 20px 24px;
+  border-bottom: 1.5px solid #2D3E50;
+  margin-bottom: 12px;
+}
+.pp-nav-logo .pp-logo-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 18px;
+  color: #C9A84C;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pp-nav-logo .pp-logo-sub {
+  font-size: 11px;
+  color: #8A9BB5;
+  font-weight: 700;
+  margin-top: 2px;
+}
+.pp-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 20px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+  color: #8A9BB5;
+  border-left: 3px solid transparent;
+  transition: .15s;
+}
+.pp-nav-item:hover { background: rgba(201,168,76,.06); color: #E8EDF4; }
+.pp-nav-item.active { border-left-color: #C9A84C; background: rgba(201,168,76,.08); color: #C9A84C; }
+.pp-nav-badge {
+  margin-left: auto;
+  background: #E74C3C;
+  color: #fff;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 900;
+  padding: 1px 6px;
+  min-width: 18px;
+  text-align: center;
+}
+.pp-content {
+  flex: 1;
+  padding: 28px 28px 60px;
+  overflow-y: auto;
+  background: #0F1923;
+}
+.pp-section-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 22px;
+  color: #C9A84C;
+  margin-bottom: 6px;
+}
+.pp-section-sub {
+  font-size: 13px;
+  color: #8A9BB5;
+  font-weight: 700;
+  margin-bottom: 22px;
+}
+.pp-card {
+  background: #1A2533;
+  border: 1.5px solid #2D3E50;
+  border-radius: 16px;
+  padding: 18px 20px;
+  margin-bottom: 14px;
+}
+.pp-card-title {
+  font-weight: 900;
+  font-size: 14px;
+  color: #E8EDF4;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pp-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.pp-stat {
+  background: #1A2533;
+  border: 1.5px solid #2D3E50;
+  border-radius: 14px;
+  padding: 14px 16px;
+  text-align: center;
+}
+.pp-stat-num {
+  font-family: 'Fredoka One', cursive;
+  font-size: 28px;
+  color: #C9A84C;
+}
+.pp-stat-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: #8A9BB5;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  margin-top: 2px;
+}
+.pp-tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+}
+.pp-tag-green  { background: rgba(39,174,96,.15);  color: #27AE60; }
+.pp-tag-red    { background: rgba(231,76,60,.15);   color: #E74C3C; }
+.pp-tag-orange { background: rgba(230,126,34,.15);  color: #E67E22; }
+.pp-tag-gold   { background: rgba(201,168,76,.15);  color: #C9A84C; }
+.pp-tag-blue   { background: rgba(74,144,164,.15);  color: #4A90A4; }
+.pp-divider    { border: none; border-top: 1px solid #2D3E50; margin: 16px 0; }
+.pp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 1.5px solid #2D3E50;
+  background: transparent;
+  color: #E8EDF4;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: .15s;
+}
+.pp-btn:hover { border-color: #C9A84C; color: #C9A84C; }
+.pp-btn-gold  { background: rgba(201,168,76,.12); border-color: #C9A84C; color: #C9A84C; }
+.pp-btn-green { background: rgba(39,174,96,.12); border-color: #27AE60; color: #27AE60; }
+.pp-btn-red   { background: rgba(231,76,60,.12); border-color: #E74C3C; color: #E74C3C; }
+.pp-input {
+  background: #0F1923;
+  border: 1.5px solid #2D3E50;
+  color: #E8EDF4;
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+.pp-input:focus { border-color: #C9A84C; }
+.pp-textarea {
+  background: #0F1923;
+  border: 1.5px solid #2D3E50;
+  color: #E8EDF4;
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  outline: none;
+  width: 100%;
+  resize: vertical;
+  min-height: 80px;
+  box-sizing: border-box;
+}
+.pp-alert-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  border: 1.5px solid;
+}
+.pp-alert-item.warn  { background: rgba(230,126,34,.06); border-color: rgba(230,126,34,.3); }
+.pp-alert-item.danger{ background: rgba(231,76,60,.06);  border-color: rgba(231,76,60,.3); }
+.pp-friend-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #2D3E50;
+}
+.pp-friend-row:last-child { border-bottom: none; }
+.pp-parent-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1.5px solid #2D3E50;
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+.pp-av {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2D3E50, #4A90A4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 900;
+  color: #E8EDF4;
+  flex-shrink: 0;
+}
+@media (max-width: 700px) {
+  .pp-layout { flex-direction: column; }
+  .pp-nav { width: 100%; flex-direction: row; flex-wrap: wrap; overflow-x: auto; border-right: none; border-bottom: 1.5px solid #2D3E50; padding: 8px 0; }
+  .pp-nav-logo { display: none; }
+  .pp-nav-item { padding: 8px 14px; font-size: 12px; border-left: none; border-bottom: 3px solid transparent; }
+  .pp-nav-item.active { border-bottom-color: #C9A84C; border-left-color: transparent; }
+  .pp-stat-grid { grid-template-columns: repeat(2,1fr); }
+}
 </style>
 </head>
 <body>
@@ -523,15 +805,29 @@ input,textarea,select{font-family:var(--body);}
 
       <!-- Parent Login -->
       <div id="login-parent" style="display:none">
-        <div class="field">
-          <label>Parent Name</label>
-          <input type="text" id="p-name" placeholder="Your full name" />
+        <div class="parent-login-card">
+          <div style="text-align:center;margin-bottom:20px">
+            <div style="font-size:2.2rem;margin-bottom:6px">🏛️</div>
+            <div style="font-family:'Fredoka One',cursive;font-size:20px;color:#C9A84C;letter-spacing:.5px">Parent Portal</div>
+            <div style="font-size:12px;color:#8A9BB5;font-weight:700;margin-top:4px">Monitor, guide, and keep your child safe</div>
+          </div>
+          <div class="field">
+            <label>Your Name</label>
+            <input type="text" id="p-name" placeholder="Full name" />
+          </div>
+          <div class="field">
+            <label>Your Email</label>
+            <input type="email" id="p-email" placeholder="parent@email.com" />
+          </div>
+          <button class="btn-parent-gold" onclick="parentLogin()">Enter Parent Portal →</button>
+          <div style="margin-top:14px;padding:12px;background:rgba(74,144,164,.08);border:1px solid rgba(74,144,164,.2);border-radius:12px;font-size:12px;font-weight:700;color:#8A9BB5;line-height:1.6">
+            ℹ️ Enter your email to access the portal. If your child has listed you as their parent, their account will appear automatically.<br>
+            <span style="color:#4A90A4">New here?</span> Your account is created the first time you log in.
+          </div>
+          <div style="margin-top:10px;text-align:center">
+            <button onclick="parentLogin('demo')" style="background:none;border:1px solid rgba(201,168,76,.3);color:#C9A84C;border-radius:10px;padding:8px 20px;font-size:12px;font-weight:800;cursor:pointer">⚡ Demo Parent Login</button>
+          </div>
         </div>
-        <div class="field">
-          <label>Email</label>
-          <input type="email" id="p-email" placeholder="your@email.com" />
-        </div>
-        <button class="btn purple" style="width:100%" onclick="parentLogin()">Parent Portal →</button>
       </div>
 
       <!-- Register -->
@@ -1016,18 +1312,27 @@ input,textarea,select{font-family:var(--body);}
      SCREEN: PARENT QUEUE
 ============================================================ -->
 <div class="screen" id="screen-parent-queue">
-  <div class="page-wrap" style="max-width:720px;margin:0 auto;">
-    <button class="btn ghost sm" onclick="showScreen('feed')" style="margin-bottom:16px">← Back</button>
-    <div class="sectlab">👨‍👩‍👧 Parent Dashboard</div>
-    <div class="tabs" style="flex-wrap:wrap">
-      <button class="tab active" onclick="switchParentTab('pending')">⏳ Pending</button>
-      <button class="tab" onclick="switchParentTab('activity')">📋 Activity</button>
-      <button class="tab" onclick="switchParentTab('chats')">💬 Chats</button>
-      <button class="tab" onclick="switchParentTab('analytics')">📊 Analytics</button>
-      <button class="tab" onclick="switchParentTab('communities')">🌐 Communities</button>
-      <button class="tab" onclick="switchParentTab('controls')">🔒 Controls</button>
-    </div>
-    <div id="parent-tab-content"></div>
+  <div class="pp-layout">
+    <!-- Left nav -->
+    <nav class="pp-nav" id="pp-nav">
+      <div class="pp-nav-logo">
+        <div class="pp-logo-title">🏛️ Parent Portal</div>
+        <div class="pp-logo-sub" id="pp-nav-parent-name">Welcome</div>
+      </div>
+      <div class="pp-nav-item active" data-tab="approvals"  onclick="switchParentTab('approvals')">📋 Approvals <span class="pp-nav-badge" id="pp-badge-approvals" style="display:none">0</span></div>
+      <div class="pp-nav-item" data-tab="activity"   onclick="switchParentTab('activity')">👁️ Activity Monitor</div>
+      <div class="pp-nav-item" data-tab="alerts"     onclick="switchParentTab('alerts')">🚨 Alerts <span class="pp-nav-badge" id="pp-badge-alerts" style="display:none">0</span></div>
+      <div class="pp-nav-item" data-tab="analytics"  onclick="switchParentTab('analytics')">📊 Analytics</div>
+      <div class="pp-nav-item" data-tab="communities" onclick="switchParentTab('communities')">🌐 Communities</div>
+      <div class="pp-nav-item" data-tab="friends"    onclick="switchParentTab('friends')">👫 Child's Friends</div>
+      <div class="pp-nav-item" data-tab="network"    onclick="switchParentTab('network')">🤝 Parent Network</div>
+      <div class="pp-nav-item" data-tab="controls"   onclick="switchParentTab('controls')">🔒 Controls</div>
+      <div style="margin-top:auto;padding:16px 20px;border-top:1px solid #2D3E50">
+        <button class="pp-btn" style="width:100%;justify-content:center" onclick="showScreen('feed')">← Exit Portal</button>
+      </div>
+    </nav>
+    <!-- Content -->
+    <div class="pp-content" id="parent-tab-content"></div>
   </div>
 </div>
 
@@ -3031,9 +3336,13 @@ function studentLogin() {
   enterApp();
 }
 
-function parentLogin() {
-  const name = document.getElementById('p-name').value.trim();
-  const email = document.getElementById('p-email').value.trim();
+function parentLogin(mode) {
+  let name, email;
+  if (mode === 'demo') { name = 'Demo Parent'; email = 'parent@tyf.test'; }
+  else {
+    name = document.getElementById('p-name').value.trim();
+    email = document.getElementById('p-email').value.trim();
+  }
   if (!name || !email) { toast('Please fill all fields'); return; }
   const accounts = getAccounts();
   let account = accounts.find(a => a.email === email && a.role === 'parent');
@@ -3044,6 +3353,7 @@ function parentLogin() {
   }
   currentUser = account;
   enterApp();
+  ppUpdateBadges();
 }
 
 async function adminLogin() {
@@ -3108,6 +3418,10 @@ function requestAccount() {
   };
   accounts.push(pending);
   saveAccounts(accounts);
+  // Add to pending approvals queue for parent
+  const pendingAccts = getPendingAccounts();
+  pendingAccts.push({...pending, status: 'pending'});
+  savePendingAccounts(pendingAccts);
   // Auto-create school group + auto-join student
   const g = ensureSchoolGroup(school, studentId);
   if (g) saveUserCommunities(studentId, [schoolGroupGroupId(g)]);
@@ -3568,7 +3882,7 @@ function showScreen(id) {
   else if (id==='profile') { activeProfileTab='about'; renderProfile(); }
   else if (id==='wall') renderWall();
   else if (id==='proposals') renderProposals();
-  else if (id==='parent-queue') renderParentQueue();
+  else if (id==='parent-queue') { renderParentQueue(); ppUpdateBadges(); }
   else if (id==='mod') renderModTab();
   else if (id==='chat') renderChatScreen();
   else if (id==='free-resources') { /* no extra render needed */ }
@@ -4416,112 +4730,394 @@ function submitPost() {
 // ============================================================
 // PARENT APPROVAL QUEUE & DASHBOARD
 // ============================================================
-let activeParentTab = 'pending';
+let activeParentTab = 'approvals';
+
+function getPendingAccounts() { return load('yfs_pending_accounts', []); }
+function savePendingAccounts(d) { save('yfs_pending_accounts', d); }
+function getParentConnections() { return load('yfs_parent_connections', []); }
+function saveParentConnections(d) { save('yfs_parent_connections', d); }
+function getParentsCornerPosts() { return load('yfs_parents_corner', []); }
+function saveParentsCornerPosts(d) { save('yfs_parents_corner', d); }
+
+function getPpChildren() {
+  // Returns linked children for current parent (by parentEmail match)
+  if (!currentUser || currentUser.role !== 'parent') return [];
+  const accounts = getAccounts();
+  return accounts.filter(a => a.role === 'student' && a.parentEmail === currentUser.email);
+}
+
+function ppUpdateBadges() {
+  // Pending approvals count
+  const pending = getPosts().filter(p => !p.parentApproved && p.aiStatus === 'approved');
+  const pendingAccts = getPendingAccounts().filter(a => a.status === 'pending');
+  const totalPending = pending.length + pendingAccts.length;
+  const pb = document.getElementById('pp-badge-approvals');
+  if (pb) { pb.textContent = totalPending; pb.style.display = totalPending ? 'inline-block' : 'none'; }
+  // Alerts count (flagged posts by children)
+  const children = getPpChildren();
+  const childIds = children.map(c => c.id);
+  const flags = getFlags().filter(f => {
+    const post = getPosts().find(p => p.id === f.postId);
+    return post && childIds.includes(post.authorId);
+  });
+  const ab = document.getElementById('pp-badge-alerts');
+  if (ab) { ab.textContent = flags.length; ab.style.display = flags.length ? 'inline-block' : 'none'; }
+  // Update parent name in nav
+  const nameEl = document.getElementById('pp-nav-parent-name');
+  if (nameEl && currentUser) nameEl.textContent = currentUser.name || currentUser.email || '';
+}
 
 function switchParentTab(tab) {
   activeParentTab = tab;
-  document.querySelectorAll('#screen-parent-queue .tab').forEach(t => t.classList.remove('active'));
-  const idx = ['pending','activity','chats','analytics','communities','controls'].indexOf(tab);
-  const tabs = document.querySelectorAll('#screen-parent-queue .tab');
-  if (tabs[idx]) tabs[idx].classList.add('active');
+  document.querySelectorAll('#pp-nav .pp-nav-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.tab === tab);
+  });
   renderParentTabContent();
 }
 
 function renderParentQueue() {
-  activeParentTab = 'pending';
+  activeParentTab = 'approvals';
+  document.querySelectorAll('#pp-nav .pp-nav-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.tab === 'approvals');
+  });
   renderParentTabContent();
+  ppUpdateBadges();
 }
 
 function renderParentTabContent() {
   const el = document.getElementById('parent-tab-content');
-  const allPosts = getPosts();
+  if (!el) return;
+  ppUpdateBadges();
 
-  if (activeParentTab === 'pending') {
-    const pending = allPosts.filter(p => !p.parentApproved && p.aiStatus === 'approved');
-    if (pending.length === 0) {
-      el.innerHTML = `<div class="empty"><span class="empty-icon">✅</span><p>No posts pending approval. All clear!</p></div>`;
+  // ── APPROVALS ──────────────────────────────────────────────
+  if (activeParentTab === 'approvals') {
+    const allPosts = getPosts();
+    const pendingPosts = allPosts.filter(p => !p.parentApproved && p.aiStatus === 'approved');
+    const pendingAccts = getPendingAccounts().filter(a => a.status === 'pending');
+    const total = pendingPosts.length + pendingAccts.length;
+    el.innerHTML = `
+      <div class="pp-section-title">📋 Approvals</div>
+      <div class="pp-section-sub">Review pending child account requests and new posts before they go live.</div>
+      ${pendingAccts.length ? `
+        <div class="pp-card">
+          <div class="pp-card-title">🧒 New Account Requests (${pendingAccts.length})</div>
+          ${pendingAccts.map(a => `
+            <div class="pp-alert-item warn" style="margin-bottom:10px">
+              <div class="pp-av">${a.name.charAt(0)}</div>
+              <div style="flex:1">
+                <div style="font-weight:900;color:#E8EDF4;font-size:13px">${escHtml(a.name)} <span class="pp-tag pp-tag-gold" style="margin-left:6px">Grade ${a.grade}</span></div>
+                <div style="font-size:12px;color:#8A9BB5;font-weight:700;margin-top:2px">${escHtml(a.schoolName||'')} · ${escHtml(a.email)}</div>
+                <div style="font-size:12px;color:#8A9BB5;font-weight:700">Requested ${timeAgo(a.joined)}</div>
+                <div style="display:flex;gap:8px;margin-top:10px">
+                  <button class="pp-btn pp-btn-green" onclick="ppApproveAccount('${a.id}')">✅ Approve &amp; Activate</button>
+                  <button class="pp-btn pp-btn-red" onclick="ppRejectAccount('${a.id}')">❌ Reject</button>
+                </div>
+              </div>
+            </div>`).join('')}
+        </div>` : ''}
+      ${pendingPosts.length ? `
+        <div class="pp-card">
+          <div class="pp-card-title">📝 Posts Awaiting Approval (${pendingPosts.length})</div>
+          <p style="font-size:12px;color:#8A9BB5;font-weight:700;margin-bottom:14px">Automated content check has pre-screened these. Please review before publishing.</p>
+          ${pendingPosts.map(p => {
+            const comm = COMMUNITIES.find(c => c.id === p.communityId);
+            return `<div style="background:#0F1923;border:1.5px solid #2D3E50;border-radius:12px;padding:14px;margin-bottom:10px">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+                <div class="pp-av">${p.authorName.charAt(0)}</div>
+                <div>
+                  <div style="font-weight:900;color:#E8EDF4;font-size:13px">${escHtml(p.authorName)}</div>
+                  <div style="font-size:12px;color:#8A9BB5;font-weight:700">${comm?comm.emoji+' '+comm.name:p.communityId} · ${timeAgo(p.timestamp)}</div>
+                </div>
+                <span class="pp-tag pp-tag-orange" style="margin-left:auto">⏳ Pending</span>
+              </div>
+              <div style="font-size:13px;color:#E8EDF4;font-weight:700;background:#1A2533;border-radius:10px;padding:10px 12px;margin-bottom:10px;line-height:1.5">${escHtml(p.text)}</div>
+              <div style="display:flex;gap:8px">
+                <button class="pp-btn pp-btn-green" onclick="approvePost('${p.id}')">✅ Approve</button>
+                <button class="pp-btn pp-btn-red" onclick="rejectPost('${p.id}')">❌ Reject</button>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>` : ''}
+      ${total === 0 ? `<div style="text-align:center;padding:60px 20px;color:#8A9BB5">
+        <div style="font-size:3rem;margin-bottom:12px">✅</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:18px;color:#4A90A4">All clear!</div>
+        <div style="font-size:13px;font-weight:700;margin-top:6px">No pending approvals right now.</div>
+      </div>` : ''}`;
+
+  // ── ACTIVITY MONITOR ───────────────────────────────────────
+  } else if (activeParentTab === 'activity') {
+    const children = getPpChildren();
+    const allPosts = getPosts();
+    if (!children.length) {
+      el.innerHTML = `<div class="pp-section-title">👁️ Activity Monitor</div><div style="text-align:center;padding:60px 20px;color:#8A9BB5"><div style="font-size:3rem;margin-bottom:12px">👶</div><div style="font-size:13px;font-weight:700">No linked child accounts found.<br>Your child's email should list you as their parent during registration.</div></div>`;
       return;
     }
-    el.innerHTML = `<p style="font-size:14px;color:var(--muted);font-weight:700;margin-bottom:16px">Review your child's creative posts before they go live. Automated content check has already pre-screened these.</p>` +
-      pending.map(p => {
-        const comm = COMMUNITIES.find(c => c.id === p.communityId);
-        return `<div class="pending-item">
-          <div class="pi-header">
-            <div class="post-av" style="background:${avatarColor(p.authorName)};width:36px;height:36px;font-size:16px">${p.authorName.charAt(0)}</div>
-            <div>
-              <div style="font-weight:900;font-size:13px">${p.authorName}</div>
-              <div style="font-size:12px;color:var(--muted);font-weight:700">${comm?comm.emoji+' '+comm.name:p.communityId} · ${timeAgo(p.timestamp)}</div>
-            </div>
-            <span class="badge yellow" style="margin-left:auto">⏳ Pending</span>
+    let html = `<div class="pp-section-title">👁️ Activity Monitor</div><div class="pp-section-sub">Everything your child has done — posts, reactions, communities, avatar changes.</div>`;
+    children.forEach(child => {
+      const childPosts = allPosts.filter(p => p.authorId === child.id);
+      const reactions = childPosts.reduce((s,p) => s + Object.values(p.reactions||{}).reduce((a,b)=>a+b,0), 0);
+      const joined = getUserCommunities(child.id);
+      html += `<div class="pp-card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <div class="pp-av" style="width:48px;height:48px;font-size:20px;border-radius:50%;background:linear-gradient(135deg,#C9A84C,#4A90A4)">${child.name.charAt(0)}</div>
+          <div style="flex:1">
+            <div style="font-weight:900;font-size:15px;color:#E8EDF4">${escHtml(child.name)}</div>
+            <div style="font-size:12px;color:#8A9BB5;font-weight:700">Grade ${child.grade} · ${escHtml(child.schoolName||'')} · @${escHtml(child.username||child.name)}</div>
           </div>
-          <div class="pi-text">${escHtml(p.text)}</div>
-          <div class="pi-actions">
-            <button class="btn green sm" onclick="approvePost('${p.id}')">✅ Approve</button>
-            <button class="btn red sm" onclick="rejectPost('${p.id}')">❌ Reject</button>
+          <span class="pp-tag pp-tag-${child.status==='active'?'green':child.status==='suspended'?'red':'orange'}">${child.status||'active'}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
+          <div class="pp-stat"><div class="pp-stat-num">${childPosts.length}</div><div class="pp-stat-label">Posts</div></div>
+          <div class="pp-stat"><div class="pp-stat-num">${childPosts.filter(p=>p.parentApproved).length}</div><div class="pp-stat-label">Live</div></div>
+          <div class="pp-stat"><div class="pp-stat-num">${reactions}</div><div class="pp-stat-label">Reactions</div></div>
+          <div class="pp-stat"><div class="pp-stat-num">${joined.length}</div><div class="pp-stat-label">Communities</div></div>
+        </div>
+        <div style="margin-bottom:12px">
+          <div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Avatar &amp; Profile</div>
+          <div style="display:flex;align-items:center;gap:10px;background:#0F1923;border-radius:10px;padding:10px 12px">
+            <span style="font-size:1.4rem">${child.avatar||'👤'}</span>
+            <div>
+              <div style="font-size:12px;color:#E8EDF4;font-weight:800">${escHtml(child.avatar||'Default')} avatar</div>
+              <div style="font-size:11px;color:#8A9BB5;font-weight:700">${escHtml(child.aboutMe||'No bio set')}</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Recent Posts</div>
+        ${childPosts.length ? childPosts.slice(0,5).map(p => {
+          const comm = COMMUNITIES.find(c=>c.id===p.communityId);
+          return `<div style="background:#0F1923;border-radius:10px;padding:10px 12px;margin-bottom:6px">
+            <div style="display:flex;gap:6px;align-items:center;margin-bottom:4px">
+              <span class="pp-tag pp-tag-${p.parentApproved?'green':'orange'}" style="font-size:10px">${p.parentApproved?'✅ Live':'⏳ Pending'}</span>
+              <span style="font-size:11px;color:#8A9BB5;font-weight:700">${comm?comm.emoji+' '+comm.name:''} · ${timeAgo(p.timestamp)}</span>
+            </div>
+            <div style="font-size:13px;color:#E8EDF4;font-weight:700;line-height:1.5">${escHtml(p.text.slice(0,150))}${p.text.length>150?'…':''}</div>
+          </div>`;
+        }).join('') : '<div style="font-size:13px;color:#8A9BB5;font-weight:700">No posts yet.</div>'}
+      </div>`;
+    });
+    el.innerHTML = html;
+
+  // ── ALERTS ─────────────────────────────────────────────────
+  } else if (activeParentTab === 'alerts') {
+    const children = getPpChildren();
+    const childIds = children.map(c => c.id);
+    const allPosts = getPosts();
+    const flags = getFlags().filter(f => {
+      const post = allPosts.find(p => p.id === f.postId);
+      return post && childIds.includes(post.authorId);
+    });
+    el.innerHTML = `
+      <div class="pp-section-title">🚨 Alerts</div>
+      <div class="pp-section-sub">Non-compliance reports, flagged content, and safety notifications for your child's account.</div>
+      ${!flags.length ? `<div style="text-align:center;padding:60px 20px;color:#8A9BB5">
+        <div style="font-size:3rem;margin-bottom:12px">🛡️</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:18px;color:#4A90A4">All safe!</div>
+        <div style="font-size:13px;font-weight:700;margin-top:6px">No flags or reports on your child's posts.</div>
+      </div>` : flags.map(f => {
+        const post = allPosts.find(p => p.id === f.postId);
+        const child = children.find(c => post && c.id === post.authorId);
+        const isSevere = ['hate','spam','inappropriate'].includes(f.reason);
+        return `<div class="pp-alert-item ${isSevere?'danger':'warn'}">
+          <div style="font-size:1.8rem">${isSevere?'🔴':'🟡'}</div>
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+              <span style="font-weight:900;color:#E8EDF4;font-size:13px">${escHtml(child?child.name:'Your child')}</span>
+              <span class="pp-tag pp-tag-${isSevere?'red':'orange'}">${escHtml(f.reason||'Flagged')}</span>
+            </div>
+            ${post ? `<div style="font-size:12px;color:#8A9BB5;font-weight:700;margin-bottom:6px">Post: "${escHtml(post.text.slice(0,100))}${post.text.length>100?'…':''}"</div>` : ''}
+            <div style="font-size:12px;color:#8A9BB5;font-weight:700">Reported ${timeAgo(f.timestamp||Date.now())} · Under moderation review</div>
+            ${isSevere ? `<div style="margin-top:8px;font-size:12px;font-weight:800;color:#E74C3C">⚠️ This content has been flagged as potentially serious. TYF moderators are reviewing this report.</div>` : ''}
           </div>
         </div>`;
-      }).join('');
-
-  } else if (activeParentTab === 'activity') {
-    // All posts by any children linked to parents in the system (or all students for prototype)
-    const accounts = getAccounts();
-    const studentAccounts = accounts.filter(a => a.role === 'student' && a.status === 'active');
-    if (!studentAccounts.length) { el.innerHTML = `<div class="empty"><span class="empty-icon">📋</span><p>No child accounts found.</p></div>`; return; }
-    let html = '';
-    studentAccounts.forEach(child => {
-      const childPosts = allPosts.filter(p => p.authorId === child.id).slice(0, 10);
-      const flags = getFlags().filter(f => childPosts.some(p => p.id === f.postId));
-      html += `<div class="card" style="margin-bottom:16px"><div class="card-body">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-          <div class="av" style="background:${avatarColor(child.name)}">${child.name.charAt(0)}</div>
-          <div>
-            <div style="font-weight:900;font-size:14px">${escHtml(child.name)}</div>
-            <div style="font-size:12px;color:var(--muted);font-weight:700">Grade ${child.grade} · ${childPosts.length} posts · ${flags.length > 0 ? '<span style="color:var(--red)">⚠️ '+flags.length+' report(s)</span>' : '✅ No reports'}</div>
-          </div>
+      }).join('')}
+      <div class="pp-card" style="margin-top:16px">
+        <div class="pp-card-title">📋 Community Standards</div>
+        <div style="font-size:12px;color:#8A9BB5;font-weight:700;line-height:1.7">
+          TYF Network enforces safe, respectful communication for all members under 18. Posts go through automated AI screening before parent review. Any flagged content is paused pending moderation. Repeat violations may result in temporary account suspension.
         </div>
-        ${childPosts.length ? childPosts.slice(0,3).map(p => {
-          const comm = COMMUNITIES.find(c => c.id === p.communityId);
-          return `<div style="background:var(--soft);border-radius:12px;padding:10px 12px;margin-bottom:8px;font-size:13px;">
-            <span class="badge ${p.parentApproved ? 'green' : 'orange'}" style="margin-bottom:4px">${p.parentApproved ? '✅ Live' : '⏳ Pending'}</span>
-            <span style="font-size:11px;color:var(--muted);font-weight:700;margin-left:6px">${comm?comm.emoji+' '+comm.name:''} · ${timeAgo(p.timestamp)}</span>
-            <div style="font-weight:700;margin-top:4px">${escHtml(p.text.slice(0,120))}${p.text.length>120?'…':''}</div>
-          </div>`;
-        }).join('') : '<p style="font-size:13px;color:var(--muted);font-weight:700">No posts yet.</p>'}
-      </div></div>`;
+      </div>`;
+
+  // ── ANALYTICS ──────────────────────────────────────────────
+  } else if (activeParentTab === 'analytics') {
+    const children = getPpChildren();
+    const allPosts = getPosts();
+    if (!children.length) {
+      el.innerHTML = `<div class="pp-section-title">📊 Analytics</div><div style="text-align:center;padding:60px 20px;color:#8A9BB5"><div style="font-size:2rem;margin-bottom:12px">📊</div><div style="font-size:13px;font-weight:700">No linked children found.</div></div>`;
+      return;
+    }
+    let html = `<div class="pp-section-title">📊 Analytics</div><div class="pp-section-sub">Engagement metrics, post performance, and weekly summaries for your child.</div>`;
+    children.forEach(child => {
+      const childPosts = allPosts.filter(p => p.authorId === child.id);
+      const livePosts = childPosts.filter(p => p.parentApproved);
+      const totalRxns = livePosts.reduce((s,p) => s + Object.values(p.reactions||{}).reduce((a,b)=>a+b,0), 0);
+      const joined = getUserCommunities(child.id);
+      const topPost = livePosts.slice().sort((a,b) => Object.values(b.reactions||{}).reduce((x,y)=>x+y,0) - Object.values(a.reactions||{}).reduce((x,y)=>x+y,0))[0];
+      html += `<div class="pp-card">
+        <div style="font-weight:900;font-size:15px;color:#C9A84C;margin-bottom:16px">📊 ${escHtml(child.name)}'s Dashboard</div>
+        <div class="pp-stat-grid">
+          <div class="pp-stat"><div class="pp-stat-num">${livePosts.length}</div><div class="pp-stat-label">Published Posts</div></div>
+          <div class="pp-stat"><div class="pp-stat-num">${totalRxns}</div><div class="pp-stat-label">Total Reactions</div></div>
+          <div class="pp-stat"><div class="pp-stat-num">${joined.length}</div><div class="pp-stat-label">Communities</div></div>
+          <div class="pp-stat"><div class="pp-stat-num">${child.foundryScore||0}</div><div class="pp-stat-label">Foundry Score</div></div>
+        </div>
+        ${topPost ? `<div style="margin-bottom:14px">
+          <div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">🏆 Top Post</div>
+          <div style="background:#0F1923;border-radius:10px;padding:12px;border:1px solid rgba(201,168,76,.2)">
+            <div style="font-size:13px;color:#E8EDF4;font-weight:700;line-height:1.5;margin-bottom:6px">${escHtml(topPost.text.slice(0,120))}${topPost.text.length>120?'…':''}</div>
+            <div style="font-size:12px;color:#C9A84C;font-weight:800">${Object.values(topPost.reactions||{}).reduce((a,b)=>a+b,0)} reactions · ${timeAgo(topPost.timestamp)}</div>
+          </div>
+        </div>` : ''}
+        <hr class="pp-divider">
+        <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+          <div>
+            <div style="font-size:12px;font-weight:800;color:#8A9BB5;text-transform:uppercase;letter-spacing:.5px">Weekly Summary</div>
+            <div style="font-size:12px;color:#4A90A4;font-weight:700;margin-top:2px">Posts this week, reactions, community activity</div>
+          </div>
+          <button class="pp-btn pp-btn-gold" onclick="ppSendWeeklySummary('${child.id}','${escHtml(child.name)}')">📧 Email Weekly Summary</button>
+        </div>
+      </div>`;
     });
     el.innerHTML = html;
 
-  } else if (activeParentTab === 'chats') {
-    renderParentChatView();
-    return;
+  // ── COMMUNITIES ────────────────────────────────────────────
+  } else if (activeParentTab === 'communities') {
+    const children = getPpChildren();
+    const cornerPosts = getParentsCornerPosts();
+    let html = `<div class="pp-section-title">🌐 Communities</div>
+      <div class="pp-section-sub">View your child's community activity (read-only). Post and interact in the Parents' Corner below.</div>`;
+    if (children.length) {
+      children.forEach(child => {
+        const joined = getUserCommunities(child.id);
+        const comms = joined.map(cid => COMMUNITIES.find(c => c.id === cid)).filter(Boolean);
+        html += `<div class="pp-card">
+          <div class="pp-card-title">📁 ${escHtml(child.name)}'s Communities <span class="pp-tag pp-tag-blue" style="margin-left:6px">Read Only</span></div>
+          ${comms.length ? `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+            ${comms.map(c => `<span style="background:rgba(74,144,164,.1);border:1px solid rgba(74,144,164,.2);color:#4A90A4;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:800">${c.emoji} ${c.name}</span>`).join('')}
+          </div>
+          <div style="font-size:12px;color:#8A9BB5;font-weight:700">Recent posts in these communities are visible in Activity Monitor. You may not post or react in your child's communities.</div>`
+          : `<div style="font-size:13px;color:#8A9BB5;font-weight:700">No communities joined yet.</div>`}
+        </div>`;
+      });
+    }
+    html += `<div class="pp-card" style="border-color:rgba(201,168,76,.3)">
+      <div class="pp-card-title" style="color:#C9A84C">👨‍👩‍👧 Parents' Corner <span class="pp-tag pp-tag-gold" style="margin-left:6px">Interactive</span></div>
+      <div style="font-size:12px;color:#8A9BB5;font-weight:700;margin-bottom:14px">A dedicated space for parents to start threads, share tips, and support each other.</div>
+      <div style="background:#0F1923;border-radius:12px;padding:14px;margin-bottom:14px">
+        <textarea class="pp-textarea" id="pp-corner-text" placeholder="Start a thread — share a tip, ask a question, or celebrate your child's achievement..." rows="3"></textarea>
+        <div style="display:flex;justify-content:flex-end;margin-top:8px">
+          <button class="pp-btn pp-btn-gold" onclick="ppPostToCorner()">Post in Parents' Corner →</button>
+        </div>
+      </div>
+      ${cornerPosts.length ? cornerPosts.slice().reverse().slice(0,10).map(p => `
+        <div style="background:#0F1923;border-radius:10px;padding:12px;margin-bottom:8px;border:1px solid #2D3E50">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <div class="pp-av" style="width:32px;height:32px;font-size:13px">${(p.authorName||'?').charAt(0)}</div>
+            <div>
+              <div style="font-weight:900;font-size:12px;color:#E8EDF4">${escHtml(p.authorName||'Parent')}</div>
+              <div style="font-size:11px;color:#8A9BB5;font-weight:700">${timeAgo(p.timestamp)}</div>
+            </div>
+          </div>
+          <div style="font-size:13px;color:#E8EDF4;font-weight:700;line-height:1.5">${escHtml(p.text)}</div>
+        </div>`).join('')
+      : `<div style="text-align:center;padding:30px;color:#8A9BB5;font-size:13px;font-weight:700">No posts yet. Be the first to start a conversation! 👋</div>`}
+    </div>`;
+    el.innerHTML = html;
 
-  } else if (activeParentTab === 'analytics') {
-    renderParentAnalytics();
-    return;
+  // ── CHILD'S FRIENDS ────────────────────────────────────────
+  } else if (activeParentTab === 'friends') {
+    const children = getPpChildren();
+    let html = `<div class="pp-section-title">👫 Child's Friends</div>
+      <div class="pp-section-sub">View the friends your child has connected with on TYF Network.</div>`;
+    if (!children.length) {
+      html += `<div style="text-align:center;padding:60px 20px;color:#8A9BB5"><div style="font-size:2rem;margin-bottom:12px">👶</div><div style="font-size:13px;font-weight:700">No linked children found.</div></div>`;
+    } else {
+      children.forEach(child => {
+        const friends = getFriends(child.id);
+        const accounts = getAccounts();
+        const friendAccts = friends.map(f => {
+          const otherId = f.fromId === child.id ? f.toId : f.fromId;
+          return accounts.find(a => a.id === otherId);
+        }).filter(Boolean);
+        html += `<div class="pp-card">
+          <div class="pp-card-title">👫 ${escHtml(child.name)}'s Buddies (${friendAccts.length})</div>
+          ${friendAccts.length ? friendAccts.map(fr => `
+            <div class="pp-friend-row">
+              <div class="pp-av" style="width:38px;height:38px;font-size:14px">${fr.name.charAt(0)}</div>
+              <div style="flex:1">
+                <div style="font-weight:900;color:#E8EDF4;font-size:13px">@${escHtml(fr.username||fr.name)}</div>
+                <div style="font-size:12px;color:#8A9BB5;font-weight:700">Grade ${fr.grade} · ${escHtml(fr.schoolName||'')} · ${fr.profilePublic?'🌐 Public':'🔒 Private'}</div>
+              </div>
+              <span class="pp-tag pp-tag-${fr.status==='active'?'green':fr.status==='suspended'?'red':'orange'}">${fr.status||'active'}</span>
+            </div>`).join('')
+          : `<div style="font-size:13px;color:#8A9BB5;font-weight:700;padding:10px 0">No friends added yet.</div>`}
+        </div>`;
+      });
+    }
+    el.innerHTML = html;
 
+  // ── PARENT NETWORK ─────────────────────────────────────────
+  } else if (activeParentTab === 'network') {
+    const accounts = getAccounts();
+    const otherParents = accounts.filter(a => a.role === 'parent' && a.id !== (currentUser&&currentUser.id));
+    const connections = getParentConnections();
+    const myConns = connections.filter(c => c.fromId === (currentUser&&currentUser.id) || c.toId === (currentUser&&currentUser.id));
+    el.innerHTML = `
+      <div class="pp-section-title">🤝 Parent Network</div>
+      <div class="pp-section-sub">Connect with other parents to exchange contacts or quick notes. You cannot add students — only parents.</div>
+      <div class="pp-card" style="margin-bottom:16px">
+        <div class="pp-card-title">📨 My Connections (${myConns.filter(c=>c.status==='connected').length})</div>
+        ${myConns.filter(c=>c.status==='connected').length ? myConns.filter(c=>c.status==='connected').map(c => {
+          const otherId = c.fromId === (currentUser&&currentUser.id) ? c.toId : c.fromId;
+          const other = accounts.find(a => a.id === otherId);
+          if (!other) return '';
+          return `<div class="pp-parent-row">
+            <div class="pp-av">${other.name.charAt(0)}</div>
+            <div style="flex:1">
+              <div style="font-weight:900;color:#E8EDF4;font-size:13px">${escHtml(other.name)}</div>
+              <div style="font-size:12px;color:#8A9BB5;font-weight:700">${escHtml(other.email)}</div>
+              ${c.phone ? `<div style="font-size:12px;color:#4A90A4;font-weight:700">📞 ${escHtml(c.phone)}</div>` : ''}
+              ${c.note ? `<div style="font-size:12px;color:#E8EDF4;font-weight:700;margin-top:4px">"${escHtml(c.note)}"</div>` : ''}
+            </div>
+            <span class="pp-tag pp-tag-green">✅ Connected</span>
+          </div>`;
+        }).join('') : `<div style="font-size:13px;color:#8A9BB5;font-weight:700;padding:10px 0">No connections yet. Send a request below!</div>`}
+        ${myConns.filter(c=>c.status==='pending'&&c.toId===(currentUser&&currentUser.id)).length ? `
+          <hr class="pp-divider">
+          <div style="font-size:12px;font-weight:800;color:#E67E22;margin-bottom:8px">⏳ Incoming Requests</div>
+          ${myConns.filter(c=>c.status==='pending'&&c.toId===(currentUser&&currentUser.id)).map(c => {
+            const from = accounts.find(a => a.id === c.fromId);
+            if (!from) return '';
+            return `<div class="pp-parent-row">
+              <div class="pp-av">${from.name.charAt(0)}</div>
+              <div style="flex:1"><div style="font-weight:900;color:#E8EDF4;font-size:13px">${escHtml(from.name)}</div><div style="font-size:12px;color:#8A9BB5;font-weight:700">${escHtml(from.email)}</div></div>
+              <div style="display:flex;gap:6px">
+                <button class="pp-btn pp-btn-green" onclick="ppAcceptConnection('${c.id}')">✅ Accept</button>
+                <button class="pp-btn pp-btn-red" onclick="ppDeclineConnection('${c.id}')">Decline</button>
+              </div>
+            </div>`;
+          }).join('')}` : ''}
+      </div>
+      ${otherParents.length ? `<div class="pp-card">
+        <div class="pp-card-title">🔍 Other Parents on TYF</div>
+        ${otherParents.map(p => {
+          const existing = connections.find(c => (c.fromId===(currentUser&&currentUser.id)&&c.toId===p.id)||(c.toId===(currentUser&&currentUser.id)&&c.fromId===p.id));
+          const linked = getPpChildren().some(child => child.parentEmail === p.email);
+          return `<div class="pp-parent-row">
+            <div class="pp-av">${p.name.charAt(0)}</div>
+            <div style="flex:1">
+              <div style="font-weight:900;color:#E8EDF4;font-size:13px">${escHtml(p.name)}</div>
+              <div style="font-size:12px;color:#8A9BB5;font-weight:700">${linked ? '👨‍👩‍👧 Linked through your child\'s community' : 'TYF Parent'}</div>
+            </div>
+            ${!existing ? `<button class="pp-btn pp-btn-gold" onclick="ppSendConnectionRequest('${p.id}')">+ Connect</button>`
+            : existing.status==='pending' ? `<span class="pp-tag pp-tag-orange">Pending</span>`
+            : `<span class="pp-tag pp-tag-green">Connected</span>`}
+          </div>`;
+        }).join('')}
+      </div>` : `<div class="pp-card"><div style="font-size:13px;color:#8A9BB5;font-weight:700;text-align:center;padding:20px">No other parent accounts on the platform yet.</div></div>`}`;
+
+  // ── CONTROLS ───────────────────────────────────────────────
   } else if (activeParentTab === 'controls') {
     renderParentalControls(el);
-    return;
-
-  } else if (activeParentTab === 'communities') {
-    const accounts = getAccounts();
-    const studentAccounts = accounts.filter(a => a.role === 'student' && a.status === 'active');
-    if (!studentAccounts.length) { el.innerHTML = `<div class="empty"><span class="empty-icon">🌐</span><p>No child accounts found.</p></div>`; return; }
-    let html = '';
-    studentAccounts.forEach(child => {
-      const joined = getUserCommunities(child.id);
-      const comms = joined.map(cid => COMMUNITIES.find(c => c.id === cid)).filter(Boolean);
-      html += `<div class="card" style="margin-bottom:16px"><div class="card-body">
-        <div style="font-weight:900;font-size:14px;margin-bottom:10px">
-          <div class="av" style="background:${avatarColor(child.name)};display:inline-grid;margin-right:8px">${child.name.charAt(0)}</div>
-          ${escHtml(child.name)} — ${comms.length} communit${comms.length!==1?'ies':'y'}
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          ${comms.length ? comms.map(c => `<span class="badge blue">${c.emoji} ${c.name}</span>`).join('') : '<span style="font-size:13px;color:var(--muted);font-weight:700">No communities joined yet.</span>'}
-        </div>
-      </div></div>`;
-    });
-    el.innerHTML = html;
   }
 }
 
@@ -4540,6 +5136,82 @@ function rejectPost(id) {
   toast('Post rejected and removed.');
   renderParentQueue();
   renderParentSidebar();
+}
+
+function ppApproveAccount(id) {
+  const pending = getPendingAccounts();
+  const idx = pending.findIndex(a => a.id === id);
+  if (idx === -1) return;
+  const acct = pending[idx];
+  acct.status = 'approved';
+  pending[idx] = acct;
+  savePendingAccounts(pending);
+  const accounts = getAccounts();
+  const existing = accounts.find(a => a.id === id);
+  if (existing) { existing.status = 'active'; saveAccounts(accounts); }
+  toast('✅ ' + acct.name + '\'s account has been approved and activated!');
+  renderParentTabContent();
+  ppUpdateBadges();
+}
+
+function ppRejectAccount(id) {
+  const pending = getPendingAccounts();
+  const idx = pending.findIndex(a => a.id === id);
+  if (idx !== -1) { pending[idx].status = 'rejected'; savePendingAccounts(pending); }
+  const accounts = getAccounts();
+  const existingIdx = accounts.findIndex(a => a.id === id);
+  if (existingIdx !== -1) { accounts.splice(existingIdx, 1); saveAccounts(accounts); }
+  toast('Account request rejected.');
+  renderParentTabContent();
+  ppUpdateBadges();
+}
+
+function ppPostToCorner() {
+  const txt = (document.getElementById('pp-corner-text')&&document.getElementById('pp-corner-text').value || '').trim();
+  if (!txt) { toast('Please write something first'); return; }
+  if (txt.length > 500) { toast('Too long — keep it under 500 characters'); return; }
+  const posts = getParentsCornerPosts();
+  posts.push({ id: 'pc_' + Date.now(), authorId: currentUser.id, authorName: currentUser.name || currentUser.email, text: txt, timestamp: Date.now() });
+  saveParentsCornerPosts(posts);
+  document.getElementById('pp-corner-text').value = '';
+  toast('Posted in Parents\' Corner! 👋');
+  renderParentTabContent();
+}
+
+function ppSendWeeklySummary(childId, childName) {
+  const allPosts = getPosts();
+  const week = Date.now() - 7 * 86400000;
+  const weekPosts = allPosts.filter(p => p.authorId === childId && p.timestamp > week);
+  const totalRxns = weekPosts.reduce((s,p) => s + Object.values(p.reactions||{}).reduce((a,b)=>a+b,0), 0);
+  toast('📧 Weekly summary for ' + childName + ' sent to ' + (currentUser.email||'your email') + '!');
+  const msg = 'Week summary: ' + weekPosts.length + ' posts · ' + totalRxns + ' reactions · Foundry Score: ' + ((getAccounts().find(a=>a.id===childId)||{}).foundryScore||0);
+  setTimeout(() => toast('📊 ' + msg), 1500);
+}
+
+function ppSendConnectionRequest(toParentId) {
+  const connections = getParentConnections();
+  const existing = connections.find(c => (c.fromId===currentUser.id&&c.toId===toParentId)||(c.toId===currentUser.id&&c.fromId===toParentId));
+  if (existing) { toast('Request already sent or already connected.'); return; }
+  connections.push({ id: 'pc_' + Date.now(), fromId: currentUser.id, toId: toParentId, status: 'pending', createdAt: Date.now() });
+  saveParentConnections(connections);
+  toast('Connection request sent!');
+  renderParentTabContent();
+}
+
+function ppAcceptConnection(connId) {
+  const connections = getParentConnections();
+  const c = connections.find(x => x.id === connId);
+  if (c) { c.status = 'connected'; saveParentConnections(connections); }
+  toast('✅ Connected! You can now exchange contact details.');
+  renderParentTabContent();
+}
+
+function ppDeclineConnection(connId) {
+  const connections = getParentConnections();
+  const idx = connections.findIndex(x => x.id === connId);
+  if (idx !== -1) { connections.splice(idx, 1); saveParentConnections(connections); }
+  toast('Request declined.');
+  renderParentTabContent();
 }
 
 // ============================================================
