@@ -249,10 +249,17 @@ input,textarea,select{font-family:var(--body);}
   .field-row{grid-template-columns:1fr;}
   .comm-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));}
 }
+@media(max-width:768px){
+  .chat-wrap{grid-template-columns:1fr;height:auto;min-height:calc(100vh - 100px);}
+  .chat-list-panel{border-right:none;border-bottom:2px solid var(--line);max-height:200px;overflow-y:auto;}
+  .chat-main{min-height:420px;}
+}
 @media(max-width:560px){
   .topbar-nav .desktop-only{display:none;}
   .page-wrap{padding:16px;}
   .profile-stats{grid-template-columns:repeat(3,1fr);}
+  .chat-wrap{min-height:calc(100vh - 80px);}
+  .mobile-chat-link{display:block !important;}
 }
 
 /* NOTIFICATION DOT */
@@ -606,6 +613,7 @@ input,textarea,select{font-family:var(--body);}
           <button class="av-item" onclick="closeAvDropdown();openChangePassword()">🔑 Change Password</button>
           <button class="av-item" onclick="closeAvDropdown();openForgotPassword()">🔄 Reset Password</button>
           <div class="av-dropdown-sep"></div>
+          <button class="av-item mobile-chat-link" onclick="closeAvDropdown();showScreen('chat')" style="display:none">💬 Chat <span class="chat-badge" id="chat-badge-mobile" style="display:none">0</span></button>
           <button class="av-item" onclick="closeAvDropdown();openMyNetwork()">👥 My Network <span class="fr-badge" id="fr-badge" style="display:none">0</span></button>
           <button class="av-item" onclick="closeAvDropdown();openFindBuddy()">🔍 Find a Buddy</button>
           <div class="av-dropdown-sep"></div>
@@ -1429,11 +1437,13 @@ function getTotalUnread() {
   }, 0);
 }
 function updateChatBadge() {
-  const badge = document.getElementById('chat-badge');
-  if (!badge) return;
   const n = getTotalUnread();
-  if (n > 0) { badge.textContent = n; badge.style.display = 'inline-flex'; }
-  else badge.style.display = 'none';
+  ['chat-badge','chat-badge-mobile'].forEach(id => {
+    const b = document.getElementById(id);
+    if (!b) return;
+    if (n > 0) { b.textContent = n; b.style.display = 'inline-flex'; }
+    else b.style.display = 'none';
+  });
 }
 function markChatRead(myId, theirId) {
   const msgs = getMessages();
@@ -2201,13 +2211,13 @@ function getSeedThreads() {
 // TEXT VALIDATION (applies to all text inputs)
 // ============================================================
 function validateText(text) {
-  if (/[^a-zA-Z0-9\s]{2,}/.test(text))
-    return {ok:false, reason:'Contains invalid special characters (2+ in a row)'};
+  // Strip emojis/Unicode before special-char check so emoji messages pass
+  const noEmoji = text.replace(/[^\x00-\x7F]/g, '');
+  if (/[^a-zA-Z0-9\s!?.,:;'"()\-_*@#]{2,}|[!?.,:;'"()\-_]{5,}/.test(noEmoji))
+    return {ok:false, reason:'Contains too many consecutive special characters'};
   const letters = text.replace(/[^a-zA-Z]/g,'').length;
   if (text.replace(/\s/g,'').length > 6 && letters / text.replace(/\s/g,'').length < 0.4)
     return {ok:false, reason:'Text appears to be junk (too many numbers/symbols)'};
-  if (/[bcdfghjklmnpqrstvwxyz]{5,}/i.test(text))
-    return {ok:false, reason:'Unreadable text detected'};
   const lower = text.toLowerCase().replace(/[^a-z0-9\s]/g,' ');
   const TRANS_CURSES = [
     'bhenchod','behenchod','madarchod','maderchod','chutiya','chutia',
