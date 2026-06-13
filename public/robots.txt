@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://theyoungfoundry.vercel.app/sitemap.xml
