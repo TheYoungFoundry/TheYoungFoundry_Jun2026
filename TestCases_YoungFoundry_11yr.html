@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Young Foundry — Test Cases for Student Testers</title>
+<style>
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6fb; color: #222; margin: 0; padding: 0; }
+  .cover { background: linear-gradient(135deg,#E53935,#43A047); color: white; padding: 48px 40px 36px; }
+  .cover h1 { font-size: 2.2em; margin: 0 0 8px; }
+  .cover p { font-size: 1.1em; margin: 4px 0; opacity: 0.92; }
+  .cover .meta { margin-top: 18px; font-size: 0.95em; opacity: 0.85; }
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; padding: 18px 40px; background: #fff; border-bottom: 2px solid #eee; font-size: 0.9em; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+  .dot.pos { background: #43A047; }
+  .dot.neg { background: #E53935; }
+  .dot.ux  { background: #1E88E5; }
+  .dot.nav { background: #F97316; }
+  section { padding: 28px 40px 10px; }
+  section h2 { font-size: 1.3em; color: #333; border-left: 5px solid #E53935; padding-left: 12px; margin-bottom: 14px; }
+  .instructions-box { background: #fffde7; border: 2px solid #FDD835; border-radius: 10px; padding: 14px 18px; margin-bottom: 22px; font-size: 0.95em; line-height: 1.7; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88em; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.07); margin-bottom: 28px; }
+  th { background: #2d3748; color: #fff; padding: 11px 10px; text-align: left; font-size: 0.85em; letter-spacing: 0.4px; }
+  td { padding: 10px 10px; border-bottom: 1px solid #eee; vertical-align: top; line-height: 1.5; }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) { background: #f9fafb; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.78em; font-weight: 700; white-space: nowrap; }
+  .pos { background: #e8f5e9; color: #2e7d32; }
+  .neg { background: #ffebee; color: #c62828; }
+  .ux  { background: #e3f2fd; color: #1565c0; }
+  .nav { background: #fff3e0; color: #e65100; }
+  .result-box { background: #f1f8e9; border-left: 3px solid #43A047; padding: 3px 8px; border-radius: 4px; font-size: 0.85em; }
+  .fail-box   { background: #fce4ec; border-left: 3px solid #E53935; padding: 3px 8px; border-radius: 4px; font-size: 0.85em; }
+  .passfail { width: 90px; }
+  .pf-cell { text-align: center; }
+  .checkbox { font-size: 1.3em; }
+  .tid { font-weight: 700; color: #555; font-size: 0.82em; white-space: nowrap; }
+  .app-tag { display: inline-block; background: #ede7f6; color: #4527a0; padding: 2px 8px; border-radius: 12px; font-size: 0.78em; font-weight: 700; margin-bottom: 3px; }
+  .toc { background: #fff; padding: 18px 40px; border-bottom: 2px solid #eee; }
+  .toc h3 { margin: 0 0 10px; font-size: 1em; color: #555; }
+  .toc ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .toc ul li a { background: #e3f2fd; color: #1565c0; padding: 5px 14px; border-radius: 20px; font-size: 0.87em; font-weight: 700; text-decoration: none; }
+  .toc ul li a:hover { background: #1E88E5; color: white; }
+  .section-summary { display: flex; gap: 16px; font-size: 0.85em; margin-bottom: 12px; flex-wrap: wrap; }
+  .section-summary span { background: #f4f6fb; border: 1px solid #ddd; border-radius: 8px; padding: 4px 12px; }
+  @media print {
+    body { background: white; }
+    .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    section { page-break-inside: avoid; }
+    table { page-break-inside: auto; }
+    tr { page-break-inside: avoid; }
+  }
+  @media (max-width: 768px) {
+    section, .legend, .toc { padding: 16px; }
+    .cover { padding: 28px 16px; }
+    table { font-size: 0.78em; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <h1>🏭 The Young Foundry — Student Test Guide</h1>
+  <p>End-to-End Test Cases · Designed for 11-Year-Old Testers</p>
+  <div class="meta">
+    <div>📅 Version 1.0 &nbsp;|&nbsp; June 2026 &nbsp;|&nbsp; For: Student Beta Testers (Age 10–12)</div>
+    <div>🌐 Platform: theyoungfoundry.github.io</div>
+  </div>
+</div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <strong>Test Types:</strong>
+  <span><span class="dot pos"></span> Positive — Things that should WORK</span>
+  <span><span class="dot neg"></span> Negative — Things that should NOT break</span>
+  <span><span class="dot ux"></span> UX / Clarity — Is it easy to understand?</span>
+  <span><span class="dot nav"></span> Navigation — Can you find your way around?</span>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc">
+  <h3>📋 Jump to Section</h3>
+  <ul>
+    <li><a href="#sec-general">General Navigation</a></li>
+    <li><a href="#sec-mathlove">MathLove Platform</a></li>
+    <li><a href="#sec-algebra">Algebra Academy</a></li>
+    <li><a href="#sec-number">Number Sense Kingdom</a></li>
+    <li><a href="#sec-multiply">Multiplication Village</a></li>
+    <li><a href="#sec-fraction">Fraction Factory</a></li>
+    <li><a href="#sec-area">Area &amp; Perimeter Park</a></li>
+    <li><a href="#sec-flowchart">FlowChart Quest</a></li>
+    <li><a href="#sec-algolab">AlgoLab</a></li>
+    <li><a href="#sec-thinkfirst">ThinkFirst</a></li>
+    <li><a href="#sec-binary">Binary Decoder Ring</a></li>
+    <li><a href="#sec-logic">Logic Flow Designer</a></li>
+    <li><a href="#sec-chapter">MyFirstChapter</a></li>
+    <li><a href="#sec-telugu">Telugu Velugu</a></li>
+    <li><a href="#sec-mobile">Mobile / Tablet</a></li>
+  </ul>
+</div>
+
+<!-- TESTER INSTRUCTIONS -->
+<section>
+  <div class="instructions-box">
+    <strong>👋 Hey Tester! Read this first.</strong><br>
+    You are helping make this website better for kids your age! Your job is to try everything on the website and tell us what works great and what feels confusing or broken. There are no wrong answers — if something feels weird or doesn't make sense to you, that is VERY useful feedback!<br><br>
+    <strong>How to use this sheet:</strong><br>
+    1. Go through each test one by one.<br>
+    2. Follow the steps in the <em>"What To Do"</em> column.<br>
+    3. Check if what happened matches the <em>"Should See"</em> column.<br>
+    4. Tick ✅ PASS or mark ❌ FAIL in the last column.<br>
+    5. Write any extra notes in the <em>"Your Notes"</em> area at the end of each section.<br><br>
+    <strong>Ask a grown-up for help if you get stuck — that is also important feedback!</strong>
+  </div>
+</section>
+
+<!-- SECTION 1: GENERAL NAVIGATION -->
+<section id="sec-general">
+  <h2>🗺️ Section 1 — General Navigation &amp; Homepage</h2>
+  <div class="section-summary">
+    <span>Total Tests: 10</span>
+    <span>✅ Positive: 6</span>
+    <span>❌ Negative: 2</span>
+    <span>🔵 UX: 2</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:70px">Test ID</th>
+        <th style="width:110px">App / Area</th>
+        <th>Test Name</th>
+        <th>What To Do (Step by Step)</th>
+        <th>Should See ✅</th>
+        <th>Should NOT See ❌</th>
+        <th style="width:70px">Type</th>
+        <th style="width:80px">Pass / Fail</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tid">GEN-01</td>
+        <td><span class="app-tag">Homepage</span></td>
+        <td>Page loads without errors</td>
+        <td>1. Open the website link in Chrome or Firefox.<br>2. Wait 5 seconds.</td>
+        <td class="result-box">The homepage loads fully. You can see the title "The Young Foundry" and colorful cards or buttons.</td>
+        <td class="fail-box">White blank page, error message, or spinning wheel that never stops.</td>
+        <td><span class="badge pos">Positive</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">GEN-02</td>
+        <td><span class="app-tag">Homepage</span></td>
+        <td>All app cards are visible</td>
+        <td>1. Scroll slowly from top to bottom of the homepage.<br>2. Count how many app cards you can see (FlowChart Quest, AlgoLab, ThinkFirst, etc.).</td>
+        <td class="result-box">At least 6 app cards appear with names, descriptions, and a "Launch App" button each.</td>
+        <td class="fail-box">Any card shows a broken image, empty box, or missing text.</td>
+        <td><span class="badge pos">Positive</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">GEN-03</td>
+        <td><span class="app-tag">Homepage</span></td>
+        <td>Navigation menu links work</td>
+        <td>1. Look at the top of the page for menu links ("Apps", "Programs", "Free Resources", "Blog").<br>2. Click each one and check if the page scrolls to that section.</td>
+        <td class="result-box">Each menu link smoothly scrolls the page to the matching section.</td>
+        <td class="fail-box">Clicking a link does nothing, or jumps to a completely wrong place on the page.</td>
+        <td><span class="badge nav">Navigation</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">GEN-04</td>
+        <td><span class="app-tag">Homepage</span></td>
+        <td>"Launch App" buttons open the correct apps</td>
+        <td>1. Click "Launch App" on the FlowChart Quest card.<br>2. Press the back button.<br>3. Click "Launch App" on the AlgoLab card.</td>
+        <td class="result-box">Each button opens the correct app (FlowChart Quest opens the flowchart game, AlgoLab opens the algorithm challenge).</td>
+        <td class="fail-box">Wrong app opens, or you get a 404 "page not found" error.</td>
+        <td><span class="badge pos">Positive</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">GEN-05</td>
+        <td><span class="app-tag">Homepage</span></td>
+        <td>Footer links are visible and correct</td>
+        <td>1. Scroll all the way to the bottom of the homepage.<br>2. Read the copyright text and check what year it shows.</td>
+        <td class="result-box">Footer shows "© 2026 The Young Foundry" and "Made with 💛 in Hyderabad, India".</td>
+        <td class="fail-box">Footer shows wrong year, empty, or missing text.</td>
+        <td><span class="badge pos">Positive</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">GEN-06</td>
+        <td><span class="app-tag">Homepage</span></td>
+        <td>Is the homepage easy to understand?</td>
+        <td>1. Look at the homepage for 30 seconds without clicking anything.<br>2. Without help, can you figure out what this website is for?</td>
+        <td class="result-box">You can tell it is a learning platform for kids involving coding and maths.</td>
+        <td class="fail-box">You have no idea what the website is about or who it is for.</td>
+        <td><span class="badge ux">UX</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">GEN-07</td>
+        <td><span class="app-tag">Homepage</span></td>
+        <td>Broken or missing links</td>
+        <td>1. Scroll through the homepage.<br>2. Click every single link you can find (including in the footer: "Help Centre", "Contact", "Privacy Policy").</td>
+        <td class="result-box">Each link either opens a page or scrolls to a section.</td>
+        <td class="fail-box">Any link shows a 404 error page or does nothing at all.</td>
+        <td><span class="badge neg">Negative</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">GEN-08</td>
+        <td><span class="app-tag">Homepage</span></td>
+        <td>Hover effects on cards</td>
+        <td>1. Move your mouse slowly over each app card.<br>2. Watch what happens to the card when your mouse is on top of it.</td>
+        <td class="result-box">The card slightly lifts up (moves up a little) and gets a shadow effect. It looks clickable.</td>
+        <td class="fail-box">Nothing changes when you hover — it looks exactly the same as when you are not hovering.</td>
+        <td><span class="badge ux">UX</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">GEN-09</td>
+        <td><span class="app-tag">Homepage</span></td>
+        <td>"Explore Curated Programs" button works</td>
+        <td>1. Look at the big hero section at the top of the page.<br>2. Click the green "Explore Curated Programs" button.</td>
+        <td class="result-box">The page smoothly scrolls down to the Curated Programs section (Coding Base Camp).</td>
+        <td class="fail-box">Nothing happens, or you go to a blank page.</td>
+        <td><span class="badge pos">Positive</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">GEN-10</td>
+        <td><span class="app-tag">Homepage</span></td>
+        <td>Typing nothing in address bar still loads home</td>
+        <td>1. Click on the browser address bar.<br>2. Delete everything and type in just the base website URL (e.g., the main link without any extra words).<br>3. Press Enter.</td>
+        <td class="result-box">The homepage loads correctly.</td>
+        <td class="fail-box">Error page or broken layout appears.</td>
+        <td><span class="badge neg">Negative</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><strong>📝 Your Notes for Section 1:</strong> _______________________________________________________________________________</p><br>
+</section>
+
+<!-- SECTION 2: MATHLOVE -->
+<section id="sec-mathlove">
+  <h2>🔢 Section 2 — MathLove: World Map Homepage</h2>
+  <div class="section-summary"><span>Total Tests: 8</span><span>✅ Positive: 5</span><span>❌ Negative: 2</span><span>🔵 UX: 1</span></div>
+  <table>
+    <thead><tr><th>Test ID</th><th>App / Area</th><th>Test Name</th><th>What To Do</th><th>Should See ✅</th><th>Should NOT See ❌</th><th>Type</th><th>Pass / Fail</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="tid">ML-01</td>
+        <td><span class="app-tag">MathLove</span></td>
+        <td>MathLove homepage loads</td>
+        <td>1. Go to the MathLove section (via Free Resources on homepage).<br>2. Click "Launch App" for MathLove.</td>
+        <td class="result-box">You see a colourful page with 5 world cards: Number Sense Kingdom, Multiplication Village, Fraction Factory, Area &amp; Perimeter Park, Algebra Academy.</td>
+        <td class="fail-box">Blank page, broken layout, or missing world cards.</td>
+        <td><span class="badge pos">Positive</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">ML-02</td>
+        <td><span class="app-tag">MathLove</span></td>
+        <td>XP and coins display shows 0 at start</td>
+        <td>1. Open MathLove for the very first time (or after a reset).<br>2. Look at the top bar (HUD) — it should show your XP and coins.</td>
+        <td class="result-box">XP shows 0 and coins show 0 when you have not played yet.</td>
+        <td class="fail-box">Random large numbers appear even though you just started.</td>
+        <td><span class="badge pos">Positive</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">ML-03</td>
+        <td><span class="app-tag">MathLove</span></td>
+        <td>"Start Your Journey" button works</td>
+        <td>1. Look for the big "🚀 Start Your Journey" button in the hero area.<br>2. Click it.</td>
+        <td class="result-box">The page scrolls down to the world map / "Choose Your World" section.</td>
+        <td class="fail-box">Nothing happens or you get an error.</td>
+        <td><span class="badge pos">Positive</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">ML-04</td>
+        <td><span class="app-tag">MathLove</span></td>
+        <td>Each world card has a description</td>
+        <td>1. Look at all 5 world cards.<br>2. Read each card — does each one have a title, emoji, and a short description?</td>
+        <td class="result-box">All 5 cards have a colourful banner with an emoji, a title in bold, and a short description underneath.</td>
+        <td class="fail-box">Any card is empty, shows placeholder text like "undefined" or shows the same description as another card.</td>
+        <td><span class="badge pos">Positive</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">ML-05</td>
+        <td><span class="app-tag">MathLove</span></td>
+        <td>World card links to correct world</td>
+        <td>1. Click on the "Algebra Academy" world card.<br>2. Check if the page that opens is about algebra (balance scales, mystery boxes, equations).</td>
+        <td class="result-box">You enter the Algebra Academy. The page title says "Algebra Academy" and you see activities about algebra.</td>
+        <td class="fail-box">A different world opens, or you get a 404 error page.</td>
+        <td><span class="badge pos">Positive</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">ML-06</td>
+        <td><span class="app-tag">MathLove</span></td>
+        <td>Progress ring shows 0% on first visit</td>
+        <td>1. Look at the bottom right corner of each world card.<br>2. Check what percentage is shown in the circle.</td>
+        <td class="result-box">Each world card shows 0% in the progress ring if you have not played that world yet.</td>
+        <td class="fail-box">Random % numbers like 47% or 100% show up even though you have never played.</td>
+        <td><span class="badge neg">Negative</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">ML-07</td>
+        <td><span class="app-tag">MathLove</span></td>
+        <td>Reset button clears all progress</td>
+        <td>1. Complete one activity in any world (so you earn some XP).<br>2. Go back to the MathLove homepage.<br>3. Click the "↺ Reset" button in the student bar.<br>4. Confirm the reset when asked.</td>
+        <td class="result-box">All XP, coins and progress go back to 0. All world cards show 0% again.</td>
+        <td class="fail-box">Nothing changes after resetting, or progress goes to a weird number like -5 XP.</td>
+        <td><span class="badge neg">Negative</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">ML-08</td>
+        <td><span class="app-tag">MathLove</span></td>
+        <td>Philosophy strip is readable</td>
+        <td>1. Look for the green strip just below the hero section.<br>2. Read the text on it.</td>
+        <td class="result-box">You can read the text clearly: "Every lesson follows: Observe → Explore → Discover → Explain → Apply → Create → Teach"</td>
+        <td class="fail-box">Text is cut off, too small to read, or the background colour makes it impossible to see the words.</td>
+        <td><span class="badge ux">UX</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><strong>📝 Your Notes for Section 2:</strong> _______________________________________________________________________________</p><br>
+</section>
+
+<!-- SECTION 3: ALGEBRA ACADEMY -->
+<section id="sec-algebra">
+  <h2>⚖️ Section 3 — Algebra Academy (5 Activities)</h2>
+  <div class="section-summary"><span>Total Tests: 10</span><span>✅ Positive: 6</span><span>❌ Negative: 3</span><span>🔵 UX: 1</span></div>
+  <table>
+    <thead><tr><th>Test ID</th><th>Activity</th><th>Test Name</th><th>What To Do</th><th>Should See ✅</th><th>Should NOT See ❌</th><th>Type</th><th>Pass / Fail</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="tid">ALG-01</td>
+        <td><span class="app-tag">Mystery Box</span></td>
+        <td>Slider moves and changes the answer</td>
+        <td>1. Open Algebra Academy → Activity 1: Mystery Box.<br>2. Find the slider and drag it left and right.<br>3. Watch if the number in the mystery box changes.</td>
+        <td class="result-box">As you drag the slider, the number inside the mystery box updates immediately to show a new value.</td>
+        <td class="fail-box">Slider moves but nothing changes, or the page freezes.</td>
+        <td><span class="badge pos">Positive</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">ALG-02</td>
+        <td><span class="app-tag">Mystery Box</span></td>
+        <td>Correct answer earns XP</td>
+        <td>1. In the Mystery Box activity, guess the correct number and submit your answer.<br>2. Look at your XP counter in the top bar.</td>
+        <td class="result-box">XP number goes up after a correct answer. A congratulations message or animation appears.</td>
+        <td class="fail-box">XP stays the same or goes DOWN after a correct answer.</td>
+        <td><span class="badge pos">Positive</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">ALG-03</td>
+        <td><span class="app-tag">Balance Scale</span></td>
+        <td>Scale tilts correctly</td>
+        <td>1. Go to Activity 2: Balance Scale.<br>2. Add weights to one side so it is heavier than the other.<br>3. Watch the scale.</td>
+        <td class="result-box">The heavier side of the scale tilts downward (like a real balance). The lighter side goes up.</td>
+        <td class="fail-box">The scale does not move at all, or the wrong side goes down.</td>
+        <td><span class="badge pos">Positive</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">ALG-04</td>
+        <td><span class="app-tag">Balance Scale</span></td>
+        <td>Balance scale levels when equal</td>
+        <td>1. In the Balance Scale activity, make both sides equal.<br>2. Check the scale animation.</td>
+        <td class="result-box">When both sides are equal, the scale becomes level (perfectly horizontal). A success message appears.</td>
+        <td class="fail-box">Scale stays tilted even when both sides have the same value.</td>
+        <td><span class="badge pos">Positive</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">ALG-05</td>
+        <td><span class="app-tag">Build It</span></td>
+        <td>Tapping tokens builds an expression</td>
+        <td>1. Go to Activity 3: Build It.<br>2. Tap on the number/variable tokens shown on screen.<br>3. Watch if they appear in the expression builder area.</td>
+        <td class="result-box">Each token you tap appears in the expression builder in order. You can build something like "2x + 3".</td>
+        <td class="fail-box">Tapping does nothing, or tokens appear in a random order.</td>
+        <td><span class="badge pos">Positive</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">ALG-06</td>
+        <td><span class="app-tag">Solve It</span></td>
+        <td>Wrong answer gives a helpful hint</td>
+        <td>1. Go to Activity 4: Solve It.<br>2. Deliberately enter a wrong answer (e.g., type 999 if the answer is clearly smaller).<br>3. Submit the answer.</td>
+        <td class="result-box">A friendly hint or encouraging message appears (like "Not quite! Think about what you need to remove from both sides"). It does NOT just say "WRONG".</td>
+        <td class="fail-box">The app crashes, shows a scary red error, or gives no feedback at all.</td>
+        <td><span class="badge neg">Negative</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">ALG-07</td>
+        <td><span class="app-tag">Solve It</span></td>
+        <td>Empty answer submission is handled</td>
+        <td>1. In the Solve It activity, click the "Check" or "Submit" button WITHOUT typing any answer.<br>2. See what happens.</td>
+        <td class="result-box">A friendly prompt appears asking you to enter an answer (like "Oops! You need to type something first."). The game does not crash.</td>
+        <td class="fail-box">The page crashes, goes blank, or shows a JavaScript error in the corner.</td>
+        <td><span class="badge neg">Negative</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">ALG-08</td>
+        <td><span class="app-tag">Teach It</span></td>
+        <td>Teach-Back text box accepts typing</td>
+        <td>1. Go to Activity 5: Teach It.<br>2. Find the big text box where you explain what you learned.<br>3. Type a sentence like: "A variable is a mystery number we need to find."</td>
+        <td class="result-box">Your typing appears in the text box. You can type as much as you want.</td>
+        <td class="fail-box">The text box does not let you type, or your text disappears as you type.</td>
+        <td><span class="badge pos">Positive</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">ALG-09</td>
+        <td><span class="app-tag">Teach It</span></td>
+        <td>Submitting Teach-Back unlocks Diamond badge</td>
+        <td>1. In the Teach It activity, type a thoughtful explanation of what you learned.<br>2. Submit it.<br>3. Check if a diamond or special badge appears.</td>
+        <td class="result-box">A 💎 Diamond badge or mastery message appears congratulating you on completing the world.</td>
+        <td class="fail-box">No feedback after submitting, or you get an error message.</td>
+        <td><span class="badge pos">Positive</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">ALG-10</td>
+        <td><span class="app-tag">Algebra Academy</span></td>
+        <td>Instructions are clear for an 11-year-old</td>
+        <td>1. Read the instructions for Activity 1 (Mystery Box) carefully.<br>2. Ask yourself: Did you understand what to do WITHOUT asking for help?</td>
+        <td class="result-box">The instructions are short, simple, and clearly tell you what to do. No confusing adult words.</td>
+        <td class="fail-box">Instructions use big confusing words, are too long, or are missing entirely.</td>
+        <td><span class="badge ux">UX</span></td>
+        <td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><strong>📝 Your Notes for Section 3:</strong> _______________________________________________________________________________</p><br>
+</section>
+
+<!-- SECTION 4: NUMBER SENSE -->
+<section id="sec-number">
+  <h2>🏰 Section 4 — Number Sense Kingdom</h2>
+  <div class="section-summary"><span>Total Tests: 6</span><span>✅ Positive: 4</span><span>❌ Negative: 2</span></div>
+  <table>
+    <thead><tr><th>Test ID</th><th>Activity</th><th>Test Name</th><th>What To Do</th><th>Should See ✅</th><th>Should NOT See ❌</th><th>Type</th><th>Pass / Fail</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="tid">NS-01</td><td><span class="app-tag">Tower Builder</span></td><td>Tower builds with each click</td>
+        <td>1. Open Number Sense Kingdom → Tower Builder activity.<br>2. Click the button to add blocks/units to the tower one at a time.</td>
+        <td class="result-box">A new block appears on the tower each time you click. The total count updates.</td>
+        <td class="fail-box">Nothing appears, or the count jumps by more than 1 on a single click.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">NS-02</td><td><span class="app-tag">Number Line</span></td><td>Number line jump animation plays</td>
+        <td>1. Go to the Number Line Leap activity.<br>2. Choose a starting number and click to jump.</td>
+        <td class="result-box">A character or marker visibly jumps along the number line to the new position. You can see the movement.</td>
+        <td class="fail-box">The marker teleports instantly with no animation, making it confusing where you are on the line.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">NS-03</td><td><span class="app-tag">Compare Duel</span></td><td>Correct comparison symbol selected</td>
+        <td>1. In the Compare Duel activity, you are shown two numbers (e.g., 47 and 52).<br>2. Click the correct symbol: &lt; (less than), &gt; (greater than), or = (equal to).</td>
+        <td class="result-box">Selecting the correct symbol shows a green tick or "Correct!" message and earns you XP.</td>
+        <td class="fail-box">Correct answer is marked wrong, or the wrong answer is marked correct.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">NS-04</td><td><span class="app-tag">Compare Duel</span></td><td>Wrong comparison shows encouraging feedback</td>
+        <td>1. In Compare Duel, deliberately select the WRONG symbol.<br>2. See what message appears.</td>
+        <td class="result-box">A friendly message like "Try again! Which number is bigger?" appears. It does not say just "WRONG".</td>
+        <td class="fail-box">No message appears, or a harsh "INCORRECT" message with no hint shows.</td>
+        <td><span class="badge neg">Negative</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">NS-05</td><td><span class="app-tag">Secret Number</span></td><td>Secret number activity loads a puzzle</td>
+        <td>1. Go to the Secret Number activity.<br>2. Read the clues given and try to guess the secret number.</td>
+        <td class="result-box">Clues appear one at a time. There is an input box where you can type your guess.</td>
+        <td class="fail-box">No clues appear, the input box is missing, or the same clue repeats forever.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">NS-06</td><td><span class="app-tag">Number Sense</span></td><td>Entering letters in a number field</td>
+        <td>1. Find any activity with a number input box.<br>2. Try typing letters (e.g., "abc") instead of numbers.<br>3. Click submit/check.</td>
+        <td class="result-box">The app kindly asks you to enter a number, or the letters field is rejected automatically. The game does not crash.</td>
+        <td class="fail-box">The game crashes, shows a JavaScript error, or accepts "abc" as a valid number answer.</td>
+        <td><span class="badge neg">Negative</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><strong>📝 Your Notes for Section 4:</strong> _______________________________________________________________________________</p><br>
+</section>
+
+<!-- SECTION 5: MULTIPLICATION -->
+<section id="sec-multiply">
+  <h2>🏘️ Section 5 — Multiplication Village</h2>
+  <div class="section-summary"><span>Total Tests: 5</span><span>✅ Positive: 4</span><span>❌ Negative: 1</span></div>
+  <table>
+    <thead><tr><th>Test ID</th><th>Activity</th><th>Test Name</th><th>What To Do</th><th>Should See ✅</th><th>Should NOT See ❌</th><th>Type</th><th>Pass / Fail</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="tid">MV-01</td><td><span class="app-tag">Theater Seats</span></td><td>Rows and columns form a correct array</td>
+        <td>1. Open Multiplication Village → Theater Seats.<br>2. Set rows to 4 and columns to 3.<br>3. Count the seats shown on screen.</td>
+        <td class="result-box">You see exactly 12 seats arranged in 4 rows of 3. The total shown is 12.</td>
+        <td class="fail-box">Seats don't match the numbers you entered, or total shows a wrong answer like 7 instead of 12.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">MV-02</td><td><span class="app-tag">Array Builder</span></td><td>Dragging to build arrays works</td>
+        <td>1. In the Array Builder activity, try to build an array by clicking or dragging tiles.<br>2. Build a 3×5 array.</td>
+        <td class="result-box">15 tiles appear arranged in 3 rows of 5. The multiplication equation "3 × 5 = 15" is shown somewhere on screen.</td>
+        <td class="fail-box">Tiles overlap each other, won't place, or the equation never appears.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">MV-03</td><td><span class="app-tag">Skip Counter</span></td><td>Skip counting shows correct pattern</td>
+        <td>1. Go to Skip Counter activity.<br>2. Choose "Count by 4s".<br>3. Watch the numbers appear: 4, 8, 12, 16...</td>
+        <td class="result-box">Numbers appear in the correct skip-counting sequence: 4, 8, 12, 16, 20, 24...</td>
+        <td class="fail-box">Numbers are out of order (e.g., 4, 8, 10, 16) or the same number repeats (4, 4, 4...).</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">MV-04</td><td><span class="app-tag">Group Detective</span></td><td>Grouping items correctly solves the puzzle</td>
+        <td>1. In Group Detective, you are shown a number of objects and asked to group them.<br>2. Group them correctly and check your answer.</td>
+        <td class="result-box">Correct grouping is accepted with a positive message. The multiplication shown matches the grouping you did.</td>
+        <td class="fail-box">Correct grouping is rejected, or the multiplication shown does not match (e.g., shows 3×4 when you made 2×6).</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">MV-05</td><td><span class="app-tag">Theater Seats</span></td><td>Setting rows to 0 does not crash</td>
+        <td>1. In Theater Seats, if there is an input for rows, set rows to 0.<br>2. See what happens.</td>
+        <td class="result-box">App shows 0 seats or a friendly note like "Add at least 1 row!" — the page does not crash.</td>
+        <td class="fail-box">App crashes, shows NaN (Not a Number), or displays a broken layout.</td>
+        <td><span class="badge neg">Negative</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><strong>📝 Your Notes for Section 5:</strong> _______________________________________________________________________________</p><br>
+</section>
+
+<!-- SECTION 6: FRACTION FACTORY -->
+<section id="sec-fraction">
+  <h2>🍕 Section 6 — Fraction Factory</h2>
+  <div class="section-summary"><span>Total Tests: 5</span><span>✅ Positive: 4</span><span>❌ Negative: 1</span></div>
+  <table>
+    <thead><tr><th>Test ID</th><th>Activity</th><th>Test Name</th><th>What To Do</th><th>Should See ✅</th><th>Should NOT See ❌</th><th>Type</th><th>Pass / Fail</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="tid">FF-01</td><td><span class="app-tag">Pizza Cutter</span></td><td>Pizza slices into correct number of pieces</td>
+        <td>1. Open Fraction Factory → Pizza Cutter.<br>2. Choose to cut the pizza into 4 equal pieces.<br>3. Count the pieces shown.</td>
+        <td class="result-box">The pizza is visually cut into exactly 4 equal slices. Each slice looks the same size.</td>
+        <td class="fail-box">Slices are unequal sizes, the wrong number of cuts is shown, or the pizza disappears.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">FF-02</td><td><span class="app-tag">Fair Share</span></td><td>Sharing equally gives correct fraction</td>
+        <td>1. In Fair Share, share 6 chocolates equally between 3 friends.<br>2. Check the fraction shown.</td>
+        <td class="result-box">Each friend gets 2 chocolates. The fraction shown is 6/3 = 2.</td>
+        <td class="fail-box">Chocolates are shared unevenly, or the fraction shown is wrong (e.g., 6/3 = 3).</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">FF-03</td><td><span class="app-tag">Twin Fractions</span></td><td>Equivalent fractions are highlighted as equal</td>
+        <td>1. Go to Twin Fractions activity.<br>2. Match 1/2 with its equivalent (e.g., 2/4).<br>3. Check if they are accepted as equal.</td>
+        <td class="result-box">1/2 and 2/4 are accepted as equal. A visual shows both fractions representing the same amount.</td>
+        <td class="fail-box">1/2 and 2/4 are treated as different values, or the activity marks them as incorrect.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">FF-04</td><td><span class="app-tag">Fraction Face-Off</span></td><td>Correct comparison of fractions</td>
+        <td>1. In Fraction Face-Off, you are asked: "Is 3/4 bigger than 1/2?"<br>2. Select "Yes".</td>
+        <td class="result-box">Your answer is accepted as correct. A visual shows 3/4 is bigger than 1/2 on a fraction bar or pie chart.</td>
+        <td class="fail-box">The correct answer is marked wrong, or no visual comparison is shown.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">FF-05</td><td><span class="app-tag">Pizza Cutter</span></td><td>Cutting into 1 piece (no cut) works</td>
+        <td>1. In Pizza Cutter, try setting the number of slices to 1.<br>2. See what the pizza looks like.</td>
+        <td class="result-box">A whole un-cut pizza is shown. No error appears. The fraction 1/1 or "1 whole" is shown.</td>
+        <td class="fail-box">App crashes, shows a divide-by-zero error, or the pizza disappears.</td>
+        <td><span class="badge neg">Negative</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><strong>📝 Your Notes for Section 6:</strong> _______________________________________________________________________________</p><br>
+</section>
+
+<!-- SECTION 7: AREA & PERIMETER -->
+<section id="sec-area">
+  <h2>🌿 Section 7 — Area &amp; Perimeter Park</h2>
+  <div class="section-summary"><span>Total Tests: 5</span><span>✅ Positive: 3</span><span>❌ Negative: 2</span></div>
+  <table>
+    <thead><tr><th>Test ID</th><th>Activity</th><th>Test Name</th><th>What To Do</th><th>Should See ✅</th><th>Should NOT See ❌</th><th>Type</th><th>Pass / Fail</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="tid">AP-01</td><td><span class="app-tag">Tile Counter</span></td><td>Tiles fill a grid correctly</td>
+        <td>1. Open Area &amp; Perimeter Park → Tile Counter.<br>2. Click to fill a 4×3 grid with tiles.<br>3. Count the tiles shown and compare to what the app says.</td>
+        <td class="result-box">The app shows 12 tiles for a 4×3 grid. Each tile fits neatly in the grid with no gaps or overlaps.</td>
+        <td class="fail-box">Tiles overlap, go outside the grid, or the count shown is wrong.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">AP-02</td><td><span class="app-tag">Fence Builder</span></td><td>Fence perimeter calculation is correct</td>
+        <td>1. In Fence Builder, create a rectangle that is 5 units wide and 3 units tall.<br>2. Check the perimeter the app calculates.</td>
+        <td class="result-box">The app shows perimeter = 16 (because 5+3+5+3 = 16). The fence visually goes around all 4 sides.</td>
+        <td class="fail-box">Perimeter shows wrong number (e.g., 15 or 8), or fence only appears on 2 sides instead of all 4.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">AP-03</td><td><span class="app-tag">Garden Design</span></td><td>Designing a garden updates area and perimeter live</td>
+        <td>1. In Garden Design, change the width of your garden by dragging a slider or typing a number.<br>2. Watch if the area and perimeter values update automatically.</td>
+        <td class="result-box">As soon as you change a dimension, the area and perimeter numbers update immediately without needing to click "Calculate".</td>
+        <td class="fail-box">Values only update after pressing a separate button, or values don't update at all.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">AP-04</td><td><span class="app-tag">Tile Counter</span></td><td>Setting grid to 0×0 doesn't crash</td>
+        <td>1. In Tile Counter, try setting width to 0.<br>2. See what happens.</td>
+        <td class="result-box">Either the input rejects 0, or a message like "Try a grid bigger than 0!" appears. The game does not crash.</td>
+        <td class="fail-box">The app shows a blank grid with no message, shows NaN, or crashes entirely.</td>
+        <td><span class="badge neg">Negative</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">AP-05</td><td><span class="app-tag">Speed Counter</span></td><td>Speed Counter correctly beats tile counting</td>
+        <td>1. In Speed Counter, first count tiles one by one (slow method).<br>2. Then use the "fast" formula method.<br>3. Check if both give the same answer.</td>
+        <td class="result-box">Both methods give the same area. The app highlights that the formula is faster and shows why.</td>
+        <td class="fail-box">The two methods give different answers, suggesting a calculation bug.</td>
+        <td><span class="badge neg">Negative</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><strong>📝 Your Notes for Section 7:</strong> _______________________________________________________________________________</p><br>
+</section>
+
+<!-- SECTION 8: FLOWCHART QUEST -->
+<section id="sec-flowchart">
+  <h2>🧩 Section 8 — FlowChart Quest</h2>
+  <div class="section-summary"><span>Total Tests: 6</span><span>✅ Positive: 4</span><span>❌ Negative: 2</span></div>
+  <table>
+    <thead><tr><th>Test ID</th><th>Area</th><th>Test Name</th><th>What To Do</th><th>Should See ✅</th><th>Should NOT See ❌</th><th>Type</th><th>Pass / Fail</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="tid">FQ-01</td><td><span class="app-tag">FlowChart Quest</span></td><td>App opens and Level 1 is available</td>
+        <td>1. Click "Launch App" for FlowChart Quest.<br>2. Check if Level 1 is shown as available (unlocked).</td>
+        <td class="result-box">Level 1 is shown with an "Open" or "Start" button. The level name and description are visible.</td>
+        <td class="fail-box">All levels are locked, or the app shows a blank screen.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">FQ-02</td><td><span class="app-tag">FlowChart Quest</span></td><td>Drag-and-drop flowchart blocks work</td>
+        <td>1. Enter a level that has a flowchart builder.<br>2. Drag a block (e.g., "Start" block) from the palette to the canvas area.</td>
+        <td class="result-box">The block moves smoothly and lands on the canvas where you drop it. It stays there after you let go.</td>
+        <td class="fail-box">Block snaps back to its original position, disappears, or stays stuck to your mouse forever.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">FQ-03</td><td><span class="app-tag">FlowChart Quest</span></td>
+        <td>Connecting two blocks creates an arrow</td>
+        <td>1. Place a "Start" block and an "Action" block on the canvas.<br>2. Try to connect them by clicking on the connection point of Start and dragging to Action.</td>
+        <td class="result-box">An arrow appears between the two blocks showing the flow direction (Start → Action).</td>
+        <td class="fail-box">No arrow appears, or the arrow goes in the wrong direction.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">FQ-04</td><td><span class="app-tag">FlowChart Quest</span></td><td>Quiz gate at 85% accuracy</td>
+        <td>1. Complete the activities in a level.<br>2. When you reach the quiz gate, answer questions.<br>3. Try getting below 85% — see if you are blocked from advancing.</td>
+        <td class="result-box">You are told you need 85% accuracy to proceed. If you score below 85%, a message encourages you to try again.</td>
+        <td class="fail-box">You advance to the next level even with a 40% score, or you are blocked even with 100%.</td>
+        <td><span class="badge neg">Negative</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">FQ-05</td><td><span class="app-tag">FlowChart Quest</span></td><td>Completing Level 1 shows completion screen</td>
+        <td>1. Finish all activities in Level 1 with a score above 85%.<br>2. Watch for a completion screen or badge.</td>
+        <td class="result-box">A "Level Complete!" screen appears with your score, XP earned, and a button to go to Level 2.</td>
+        <td class="fail-box">Nothing appears after completing the level, or the app goes back to the main menu without any message.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">FQ-06</td><td><span class="app-tag">FlowChart Quest</span></td><td>Submitting incomplete flowchart gives feedback</td>
+        <td>1. In a flowchart activity, build an incomplete flowchart (missing an End block, for example).<br>2. Click "Check" or "Submit".</td>
+        <td class="result-box">App says something like "Hmm, your flowchart isn't finished yet — make sure every flow has an End!" It does not crash.</td>
+        <td class="fail-box">App crashes, accepts the incomplete flowchart as correct, or shows a technical error.</td>
+        <td><span class="badge neg">Negative</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><strong>📝 Your Notes for Section 8:</strong> _______________________________________________________________________________</p><br>
+</section>
+
+<!-- SECTION 9: ALGOLAB -->
+<section id="sec-algolab">
+  <h2>🧪 Section 9 — AlgoLab</h2>
+  <div class="section-summary"><span>Total Tests: 5</span><span>✅ Positive: 3</span><span>❌ Negative: 2</span></div>
+  <table>
+    <thead><tr><th>Test ID</th><th>Area</th><th>Test Name</th><th>What To Do</th><th>Should See ✅</th><th>Should NOT See ❌</th><th>Type</th><th>Pass / Fail</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="tid">AL-01</td><td><span class="app-tag">AlgoLab</span></td><td>White Belt is the starting belt</td>
+        <td>1. Open AlgoLab for the first time.<br>2. Check what belt level you start at.</td>
+        <td class="result-box">You start at White Belt. The belt system (White → Yellow → Green → ... → Black) is shown clearly.</td>
+        <td class="fail-box">You start at Black Belt, or no belt is shown.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">AL-02</td><td><span class="app-tag">AlgoLab</span></td><td>Completing a module earns XP</td>
+        <td>1. Complete one full module in AlgoLab.<br>2. Check your XP counter before and after.</td>
+        <td class="result-box">XP increases after completing the module. The amount gained is displayed (e.g., "+50 XP!").</td>
+        <td class="fail-box">XP stays the same, goes down, or the increase is not shown anywhere.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">AL-03</td><td><span class="app-tag">AlgoLab</span></td><td>Belt upgrade animation plays when levelling up</td>
+        <td>1. Earn enough XP to move from White Belt to Yellow Belt.<br>2. Watch what happens on screen.</td>
+        <td class="result-box">A belt upgrade animation or celebration screen appears. Your new belt colour is shown.</td>
+        <td class="fail-box">Belt changes silently with no celebration, or the wrong belt colour appears.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">AL-04</td><td><span class="app-tag">AlgoLab</span></td><td>Skipping a step in an algorithm puzzle</td>
+        <td>1. In a step-by-step algorithm puzzle, try to skip step 2 and go directly to step 3.<br>2. See if the app allows it.</td>
+        <td class="result-box">The app says something like "You need to complete step 2 first!" and does not let you jump ahead.</td>
+        <td class="fail-box">You can skip steps freely, making the puzzle pointless, or the app crashes.</td>
+        <td><span class="badge neg">Negative</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">AL-05</td><td><span class="app-tag">AlgoLab</span></td><td>All module titles are readable and make sense</td>
+        <td>1. Look at the list of all modules in AlgoLab.<br>2. Read each module name — do they all make sense to an 11-year-old?</td>
+        <td class="result-box">Module names are simple and clear (e.g., "Sorting", "Searching", "Loops"). You can guess what each one is about.</td>
+        <td class="fail-box">Module names use confusing technical words with no explanation, or some names are blank/missing.</td>
+        <td><span class="badge neg">Negative</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><strong>📝 Your Notes for Section 9:</strong> _______________________________________________________________________________</p><br>
+</section>
+
+<!-- SECTION 10: BINARY DECODER RING -->
+<section id="sec-binary">
+  <h2>💡 Section 10 — Binary Decoder Ring</h2>
+  <div class="section-summary"><span>Total Tests: 5</span><span>✅ Positive: 3</span><span>❌ Negative: 2</span></div>
+  <table>
+    <thead><tr><th>Test ID</th><th>Area</th><th>Test Name</th><th>What To Do</th><th>Should See ✅</th><th>Should NOT See ❌</th><th>Type</th><th>Pass / Fail</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="tid">BIN-01</td><td><span class="app-tag">Binary</span></td><td>Letter A converts to correct binary</td>
+        <td>1. Open Binary Decoder Ring.<br>2. Type the letter "A" into the text-to-binary converter.<br>3. Check the binary output.</td>
+        <td class="result-box">The binary output shows 01000001 (the correct binary code for the letter A).</td>
+        <td class="fail-box">Output shows wrong binary, shows nothing, or shows a random string of letters.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">BIN-02</td><td><span class="app-tag">Binary</span></td><td>Number 5 converts to correct binary</td>
+        <td>1. Switch to number-to-binary conversion.<br>2. Enter the number 5.<br>3. Check the binary output.</td>
+        <td class="result-box">The binary output shows 101 (the correct binary for 5).</td>
+        <td class="fail-box">Output shows 110, 011, or any other incorrect binary.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">BIN-03</td><td><span class="app-tag">Binary</span></td><td>Binary 1010 converts back to decimal 10</td>
+        <td>1. Switch to binary-to-number conversion.<br>2. Enter 1010 as binary.<br>3. Check the decimal output.</td>
+        <td class="result-box">The output shows 10 (the correct decimal value for binary 1010).</td>
+        <td class="fail-box">Output shows any number other than 10.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">BIN-04</td><td><span class="app-tag">Binary</span></td><td>Entering invalid binary (e.g., 2 or 3) is handled</td>
+        <td>1. In the binary input field, type "102" (which is NOT valid binary — binary only uses 0 and 1).<br>2. Click convert.</td>
+        <td class="result-box">App shows a friendly message like "Binary can only have 0s and 1s! Try again." It does not crash.</td>
+        <td class="fail-box">App tries to convert "102" as if it were valid binary, or it crashes entirely.</td>
+        <td><span class="badge neg">Negative</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">BIN-05</td><td><span class="app-tag">Binary</span></td><td>Empty input is handled gracefully</td>
+        <td>1. Clear the input box completely.<br>2. Click the Convert button without entering anything.</td>
+        <td class="result-box">App shows a prompt like "Please enter something to convert!" It does not crash or show "NaN".</td>
+        <td class="fail-box">App shows "NaN" (Not a Number), crashes, or shows a blank result without any message.</td>
+        <td><span class="badge neg">Negative</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><strong>📝 Your Notes for Section 10:</strong> _______________________________________________________________________________</p><br>
+</section>
+
+<!-- SECTION 11: MYFIRSTCHAPTER -->
+<section id="sec-chapter">
+  <h2>✍️ Section 11 — MyFirstChapter (Creative Writing)</h2>
+  <div class="section-summary"><span>Total Tests: 6</span><span>✅ Positive: 4</span><span>❌ Negative: 2</span></div>
+  <table>
+    <thead><tr><th>Test ID</th><th>Area</th><th>Test Name</th><th>What To Do</th><th>Should See ✅</th><th>Should NOT See ❌</th><th>Type</th><th>Pass / Fail</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="tid">MFC-01</td><td><span class="app-tag">MyFirstChapter</span></td><td>Picking a genre gives story options</td>
+        <td>1. Open MyFirstChapter.<br>2. Choose a genre (e.g., Fantasy).<br>3. See if story prompts or options appear.</td>
+        <td class="result-box">After choosing Fantasy, you see story prompts, a plot dice option, or a starting sentence to build your story from.</td>
+        <td class="fail-box">Nothing happens after choosing a genre, or the same options appear for every genre.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">MFC-02</td><td><span class="app-tag">MyFirstChapter</span></td><td>Rolling plot dice gives a new prompt</td>
+        <td>1. Find the "Plot Dice" or "Roll" button.<br>2. Click it 3 times in a row.<br>3. Check if each roll gives a different prompt.</td>
+        <td class="result-box">Each roll shows a different story prompt or twist. Not the same prompt every time.</td>
+        <td class="fail-box">Every roll shows the exact same prompt, or clicking Roll does nothing.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">MFC-03</td><td><span class="app-tag">MyFirstChapter</span></td><td>Word count updates as you type</td>
+        <td>1. Start typing your story in the writing area.<br>2. Type about 20 words.<br>3. Look for a word count somewhere on the page.</td>
+        <td class="result-box">A word counter updates in real time as you type (e.g., it shows "20 words" after you've typed 20 words).</td>
+        <td class="fail-box">Word count never appears, stays at 0 no matter how much you type, or shows the wrong number.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">MFC-04</td><td><span class="app-tag">MyFirstChapter</span></td><td>Chapter builder adds a new chapter</td>
+        <td>1. After writing your first chapter, look for an "Add Chapter" button.<br>2. Click it.<br>3. Check if a new blank chapter area appears.</td>
+        <td class="result-box">A new chapter section appears below the first one. You can start writing Chapter 2.</td>
+        <td class="fail-box">Chapter 1 disappears, or no new chapter area appears.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">MFC-05</td><td><span class="app-tag">MyFirstChapter</span></td><td>Exporting story to Word does not crash</td>
+        <td>1. Write at least one paragraph.<br>2. Click the Export or Download button (if present).<br>3. Watch what happens.</td>
+        <td class="result-box">A file is downloaded (or a prompt appears to save the file). No error messages appear.</td>
+        <td class="fail-box">Clicking Export shows a JavaScript error, the button is broken, or nothing downloads.</td>
+        <td><span class="badge neg">Negative</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">MFC-06</td><td><span class="app-tag">MyFirstChapter</span></td><td>Exporting an empty story is handled</td>
+        <td>1. Do NOT type anything in the story area.<br>2. Click the Export / Download button.</td>
+        <td class="result-box">App shows a message like "Your story is empty — write something first!" It does not download an empty or broken file.</td>
+        <td class="fail-box">An empty or 0-byte file downloads, or the app crashes.</td>
+        <td><span class="badge neg">Negative</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><strong>📝 Your Notes for Section 11:</strong> _______________________________________________________________________________</p><br>
+</section>
+
+<!-- SECTION 12: TELUGU VELUGU -->
+<section id="sec-telugu">
+  <h2>అ Section 12 — Telugu Velugu</h2>
+  <div class="section-summary"><span>Total Tests: 6</span><span>✅ Positive: 4</span><span>❌ Negative: 2</span></div>
+  <table>
+    <thead><tr><th>Test ID</th><th>Area</th><th>Test Name</th><th>What To Do</th><th>Should See ✅</th><th>Should NOT See ❌</th><th>Type</th><th>Pass / Fail</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="tid">TV-01</td><td><span class="app-tag">Telugu Velugu</span></td><td>App loads and shows Telugu letters</td>
+        <td>1. Open Telugu Velugu.<br>2. Look at the screen after it loads.</td>
+        <td class="result-box">You can see Telugu script characters (like అ, ఆ, ఇ) displayed clearly. They are not boxes or question marks.</td>
+        <td class="fail-box">Telugu characters show as empty boxes (□□□), question marks (???), or the page looks broken.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">TV-02</td><td><span class="app-tag">Telugu Velugu</span></td><td>Daily lesson timer counts down</td>
+        <td>1. Start a daily lesson in Telugu Velugu.<br>2. Watch the timer — it should count down from a set number of seconds.</td>
+        <td class="result-box">The timer counts down smoothly (e.g., 60... 59... 58...). It does not jump or freeze.</td>
+        <td class="fail-box">Timer stays stuck at the starting number, jumps wildly (e.g., 60, 40, 20), or counts upward instead of down.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">TV-03</td><td><span class="app-tag">Telugu Velugu</span></td><td>Selecting correct letter answer is accepted</td>
+        <td>1. When shown a Telugu letter and asked to identify it, select the correct answer.<br>2. Check the feedback.</td>
+        <td class="result-box">A green tick, "Correct!" message, or positive sound/animation confirms your correct answer.</td>
+        <td class="fail-box">Correct answer is marked wrong, no feedback appears at all, or the correct option is highlighted red.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">TV-04</td><td><span class="app-tag">Telugu Velugu</span></td><td>Wrong answer shows correct answer after attempt</td>
+        <td>1. Deliberately select a wrong answer.<br>2. See what feedback appears.</td>
+        <td class="result-box">The app shows which answer was correct (highlighted in green) after your wrong attempt. A friendly message like "Nice try! The correct answer is..." appears.</td>
+        <td class="fail-box">No correct answer is ever shown, or the same question keeps repeating forever without resolution.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">TV-05</td><td><span class="app-tag">Telugu Velugu</span></td><td>Timer running out ends the lesson gracefully</td>
+        <td>1. Start a timed lesson.<br>2. Do NOT answer any questions — just wait for the timer to reach 0.</td>
+        <td class="result-box">When time runs out, the lesson ends with a summary screen showing your score, how many you got right, and a button to try again.</td>
+        <td class="fail-box">The page freezes when the timer hits 0, crashes, or the timer goes to negative numbers (e.g., -1, -2...).</td>
+        <td><span class="badge neg">Negative</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">TV-06</td><td><span class="app-tag">Telugu Velugu</span></td><td>Parent dashboard shows progress data</td>
+        <td>1. Complete one full lesson.<br>2. Navigate to the Parent Dashboard section (if it's on the same page).<br>3. Check if your lesson results appear there.</td>
+        <td class="result-box">The Parent Dashboard shows data from the lesson you just completed — at minimum the score or number of correct answers.</td>
+        <td class="fail-box">Parent Dashboard is completely blank even after completing a lesson, or shows someone else's data.</td>
+        <td><span class="badge neg">Negative</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><strong>📝 Your Notes for Section 12:</strong> _______________________________________________________________________________</p><br>
+</section>
+
+<!-- SECTION 13: MOBILE / TABLET -->
+<section id="sec-mobile">
+  <h2>📱 Section 13 — Mobile &amp; Tablet Tests</h2>
+  <div class="section-summary"><span>Total Tests: 5</span><span>✅ Positive: 3</span><span>❌ Negative: 2</span></div>
+  <table>
+    <thead><tr><th>Test ID</th><th>Area</th><th>Test Name</th><th>What To Do</th><th>Should See ✅</th><th>Should NOT See ❌</th><th>Type</th><th>Pass / Fail</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="tid">MOB-01</td><td><span class="app-tag">All Apps</span></td><td>Homepage looks good on phone</td>
+        <td>1. Open the website on a mobile phone (or make the browser window very narrow).<br>2. Scroll from top to bottom.</td>
+        <td class="result-box">All text is readable without zooming. Cards stack on top of each other (not side by side). No content is cut off.</td>
+        <td class="fail-box">Text is too tiny to read, content overflows off the side of the screen, or buttons are too small to tap.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">MOB-02</td><td><span class="app-tag">All Apps</span></td><td>Hamburger menu works on mobile</td>
+        <td>1. On a phone-sized screen, look for a ☰ (three lines) menu button at the top.<br>2. Tap it.<br>3. Check if a menu slides out or appears.</td>
+        <td class="result-box">A menu overlay appears with all navigation links. You can tap a link to go to that section.</td>
+        <td class="fail-box">The ☰ button does nothing, or clicking a menu item does not close the menu.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">MOB-03</td><td><span class="app-tag">MathLove</span></td><td>MathLove world cards are tappable on phone</td>
+        <td>1. Open MathLove on a phone.<br>2. Tap on the "Algebra Academy" world card.</td>
+        <td class="result-box">Tapping the card opens the Algebra Academy on mobile. No need to pinch-zoom to tap it.</td>
+        <td class="fail-box">You have to zoom in to see the card clearly, or tapping does nothing on mobile.</td>
+        <td><span class="badge pos">Positive</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">MOB-04</td><td><span class="app-tag">FlowChart Quest</span></td><td>Drag and drop works with touch on tablet</td>
+        <td>1. Open FlowChart Quest on a tablet.<br>2. Try to drag a flowchart block using your finger.</td>
+        <td class="result-box">The block moves with your finger and stays where you drop it, just like on a computer.</td>
+        <td class="fail-box">Dragging with your finger does not work at all — the block refuses to move, or the page scrolls instead of dragging the block.</td>
+        <td><span class="badge neg">Negative</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+      <tr>
+        <td class="tid">MOB-05</td><td><span class="app-tag">All Apps</span></td><td>No horizontal scroll bar on phone</td>
+        <td>1. Open any app on a phone screen.<br>2. Try to scroll left-right (horizontal scroll).</td>
+        <td class="result-box">The page only scrolls up and down. There is no horizontal scrollbar and no way to scroll sideways.</td>
+        <td class="fail-box">A horizontal scrollbar appears at the bottom, or you can scroll sideways revealing blank space.</td>
+        <td><span class="badge neg">Negative</span></td><td class="pf-cell"><span class="checkbox">☐</span> Pass<br><span class="checkbox">☐</span> Fail</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><strong>📝 Your Notes for Section 13:</strong> _______________________________________________________________________________</p><br>
+</section>
+
+<!-- OVERALL FEEDBACK -->
+<section style="background:#fffde7;border-radius:12px;margin:0 40px 40px;padding:24px;border:2px solid #FDD835;">
+  <h2 style="border-left-color:#FDD835">⭐ Overall Feedback (Tell Us What You Think!)</h2>
+  <table style="background:transparent;box-shadow:none;">
+    <tbody>
+      <tr><td style="padding:10px 0;font-weight:700">1. What was the COOLEST thing about the website?</td><td style="width:60%">_______________________________________________________________________</td></tr>
+      <tr><td style="padding:10px 0;font-weight:700">2. What was the most CONFUSING thing?</td><td>_______________________________________________________________________</td></tr>
+      <tr><td style="padding:10px 0;font-weight:700">3. Which app was your FAVOURITE? Why?</td><td>_______________________________________________________________________</td></tr>
+      <tr><td style="padding:10px 0;font-weight:700">4. Which app was the HARDEST to use? Why?</td><td>_______________________________________________________________________</td></tr>
+      <tr><td style="padding:10px 0;font-weight:700">5. Was anything TOO easy (boring)?</td><td>_______________________________________________________________________</td></tr>
+      <tr><td style="padding:10px 0;font-weight:700">6. Was anything TOO hard (frustrating)?</td><td>_______________________________________________________________________</td></tr>
+      <tr><td style="padding:10px 0;font-weight:700">7. Would you use this website again? (Circle: YES / NO / MAYBE)</td><td>_______________________________________________________________________</td></tr>
+      <tr><td style="padding:10px 0;font-weight:700">8. Any other ideas to make it better?</td><td>_______________________________________________________________________</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- SUMMARY TABLE -->
+<section style="margin-bottom:48px">
+  <h2 style="border-left-color:#1E88E5">📊 Test Summary Scorecard</h2>
+  <table>
+    <thead><tr><th>Section</th><th>Total Tests</th><th>Passed ✅</th><th>Failed ❌</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Section 1 — General Navigation</td><td>10</td><td>___</td><td>___</td><td></td></tr>
+      <tr><td>Section 2 — MathLove Homepage</td><td>8</td><td>___</td><td>___</td><td></td></tr>
+      <tr><td>Section 3 — Algebra Academy</td><td>10</td><td>___</td><td>___</td><td></td></tr>
+      <tr><td>Section 4 — Number Sense Kingdom</td><td>6</td><td>___</td><td>___</td><td></td></tr>
+      <tr><td>Section 5 — Multiplication Village</td><td>5</td><td>___</td><td>___</td><td></td></tr>
+      <tr><td>Section 6 — Fraction Factory</td><td>5</td><td>___</td><td>___</td><td></td></tr>
+      <tr><td>Section 7 — Area &amp; Perimeter Park</td><td>5</td><td>___</td><td>___</td><td></td></tr>
+      <tr><td>Section 8 — FlowChart Quest</td><td>6</td><td>___</td><td>___</td><td></td></tr>
+      <tr><td>Section 9 — AlgoLab</td><td>5</td><td>___</td><td>___</td><td></td></tr>
+      <tr><td>Section 10 — Binary Decoder Ring</td><td>5</td><td>___</td><td>___</td><td></td></tr>
+      <tr><td>Section 11 — MyFirstChapter</td><td>6</td><td>___</td><td>___</td><td></td></tr>
+      <tr><td>Section 12 — Telugu Velugu</td><td>6</td><td>___</td><td>___</td><td></td></tr>
+      <tr><td>Section 13 — Mobile &amp; Tablet</td><td>5</td><td>___</td><td>___</td><td></td></tr>
+      <tr style="font-weight:700;background:#e8f5e9"><td>TOTAL</td><td>82</td><td>___</td><td>___</td><td></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer style="background:#2d3748;color:#ccc;text-align:center;padding:24px;font-size:0.85em">
+  🏭 The Young Foundry · Student Test Guide v1.0 · June 2026<br>
+  <span style="opacity:0.6">Thank you for helping make this platform better for kids everywhere! 💛</span>
+</footer>
+
+</body>
+</html>
