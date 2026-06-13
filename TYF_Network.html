@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AlphaVerse — powered by TYF Network</title>
+<title>TYF Network — AlphaVerse</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
+  scroll-behavior: smooth;
   --red:#E53935;--green:#43A047;--light:#F8F9FA;--dark:#2d3748;
   --yellow:#FDD835;--blue:#1E88E5;--orange:#F97316;--purple:#8B5CF6;
   --paper:#ffffff;--ink:#2d3748;--muted:#7b8694;--line:#eceef1;
@@ -484,42 +485,7 @@ input,textarea,select{font-family:var(--body);}
   --pp-orange:  #E67E22;
 }
 
-/* Parent login card override */
-.parent-login-card {
-  background: linear-gradient(135deg, #0F1923 0%, #1A2533 100%);
-  border: 1.5px solid #2D3E50;
-  border-radius: 20px;
-  padding: 28px 24px;
-  color: #E8EDF4;
-}
-.parent-login-card label { color: #8A9BB5; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .6px; }
-.parent-login-card input {
-  background: #0F1923;
-  border: 1.5px solid #2D3E50;
-  color: #E8EDF4;
-  border-radius: 10px;
-  padding: 10px 14px;
-  width: 100%;
-  font-size: 14px;
-  font-weight: 700;
-  outline: none;
-  box-sizing: border-box;
-}
-.parent-login-card input:focus { border-color: #C9A84C; }
-.parent-login-card .field { margin-bottom: 14px; }
-.btn-parent-gold {
-  background: linear-gradient(135deg, #C9A84C, #A07C28);
-  color: #0F1923;
-  border: none;
-  border-radius: 12px;
-  padding: 12px 20px;
-  font-weight: 900;
-  font-size: 14px;
-  width: 100%;
-  cursor: pointer;
-  letter-spacing: .3px;
-}
-.btn-parent-gold:hover { opacity: .9; }
+/* Parent login — uses shared .login-card .field .btn styles (no override needed) */
 
 /* Parent portal full-screen layout */
 #screen-parent-queue { background: #0F1923; }
@@ -755,8 +721,40 @@ input,textarea,select{font-family:var(--body);}
   .pp-stat-grid { grid-template-columns: repeat(2,1fr); }
 }
 </style>
+<script>
+  // Runs before DOM paint — suppress login flash when session exists
+  (function(){
+    try {
+      var s = JSON.parse(localStorage.getItem('yfs_active_session') || 'null');
+      if (s && s.id && (Date.now() - s.ts) < 8 * 3600 * 1000) {
+        document.documentElement.classList.add('has-session');
+      }
+    } catch(e) {}
+  })();
+</script>
+<style>
+  /* Instant loader — covers entire page until session check completes */
+  #app-loader {
+    position: fixed; inset: 0; z-index: 99999;
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 12px;
+    transition: opacity 0.15s ease;
+  }
+  #app-loader.fade-out { opacity: 0; pointer-events: none; }
+  #app-loader.gone { display: none; }
+  #app-loader .loader-logo { font-size: 2.6rem; animation: loaderPulse 1.2s ease-in-out infinite; }
+  #app-loader .loader-text { font-family: system-ui, sans-serif; font-size: 14px; color: #888; font-weight: 600; }
+  @keyframes loaderPulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.12);opacity:.7} }
+</style>
 </head>
 <body>
+
+<!-- INSTANT SESSION LOADER — hides login flash on refresh -->
+<div id="app-loader">
+  <div class="loader-logo">🚀</div>
+  <div class="loader-text">Loading TYF Network…</div>
+</div>
 
 <!-- BACKGROUND BLOBS -->
 <svg class="blob tl" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -775,9 +773,9 @@ input,textarea,select{font-family:var(--body);}
 <div class="screen active" id="screen-login">
   <div class="login-wrap">
     <div class="login-card">
-      <div class="login-brand" style="font-size:36px;letter-spacing:-1px"><span class="r">Alpha</span><span class="b">Verse</span></div>
-      <div style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:-4px;margin-bottom:6px">Powered by TYF Network</div>
-      <div class="login-tagline">A safe space where young minds connect, create & grow 🚀</div>
+      <div class="login-brand" style="font-size:32px;letter-spacing:-1px"><span class="r">TYF</span> <span class="g">Net</span><span class="b">work</span></div>
+      <div style="font-size:11px;font-weight:800;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:-4px;margin-bottom:6px">🚀 AlphaVerse · Safe Social Learning</div>
+      <div class="login-tagline">The Young Foundry's network where young minds connect, create & grow</div>
       <div class="rainbow-bar"></div>
 
       <div class="login-tabs">
@@ -810,30 +808,87 @@ input,textarea,select{font-family:var(--body);}
 
       <!-- Parent Login -->
       <div id="login-parent" style="display:none">
-        <div class="parent-login-card">
-          <div style="text-align:center;margin-bottom:20px">
-            <div style="font-size:2.2rem;margin-bottom:6px">🏛️</div>
-            <div style="font-family:'Fredoka One',cursive;font-size:20px;color:#C9A84C;letter-spacing:.5px">Parent Portal</div>
-            <div style="font-size:12px;color:#8A9BB5;font-weight:700;margin-top:4px">Monitor, guide, and keep your child safe</div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:2px dashed var(--line)">
+          <span style="font-size:2rem;line-height:1">🏛️</span>
+          <div>
+            <div style="font-family:var(--head);font-size:17px;color:var(--dark);font-weight:800">Parent Portal</div>
+            <div style="font-size:11px;color:var(--muted);font-weight:700;margin-top:2px">Monitor, guide, and keep your child safe</div>
+          </div>
+        </div>
+
+        <!-- SIGN IN form -->
+        <div id="p-form-login">
+          <div class="field">
+            <label>Email</label>
+            <input type="email" id="p-email" placeholder="parent@email.com" autocomplete="email" />
           </div>
           <div class="field">
-            <label>Your Name</label>
-            <input type="text" id="p-name" placeholder="Full name" />
+            <label>Password</label>
+            <input type="password" id="p-password" placeholder="Your password" autocomplete="current-password" />
           </div>
-          <div class="field">
-            <label>Your Email</label>
-            <input type="email" id="p-email" placeholder="parent@email.com" />
+          <div id="p-pin-login-wrap">
+            <div class="field">
+              <label>4-Digit PIN <span style="font-size:11px;color:var(--muted);font-weight:600">(optional — only if you created one)</span></label>
+              <input type="password" id="p-pin-login" placeholder="Leave blank if you did not set a PIN" maxlength="4" inputmode="numeric" />
+            </div>
           </div>
-          <button class="btn-parent-gold" onclick="parentLogin()">Enter Parent Portal →</button>
-          <div style="margin-top:14px;padding:12px;background:rgba(74,144,164,.08);border:1px solid rgba(74,144,164,.2);border-radius:12px;font-size:12px;font-weight:700;color:#8A9BB5;line-height:1.6">
-            ℹ️ Enter your email to access the portal. If your child has listed you as their parent, their account will appear automatically.<br>
-            <span style="color:#4A90A4">New here?</span> Your account is created the first time you log in.
+          <button class="btn blue" style="width:100%;margin-top:4px" onclick="parentLogin()">Enter Parent Portal →</button>
+          <div style="margin-top:14px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+            <button class="btn ghost sm" onclick="parentLogin('demo1')">⚡ Quick Demo Login</button>
           </div>
-          <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-            <button onclick="parentLogin('demo1')" style="background:none;border:1px solid rgba(201,168,76,.4);color:#C9A84C;border-radius:10px;padding:8px 16px;font-size:12px;font-weight:800;cursor:pointer;text-align:center">👶 1 Child<br><span style="font-size:10px;opacity:.8">Sunita S. · Maya (Gr.7)</span></button>
-            <button onclick="parentLogin('demo2')" style="background:none;border:1px solid rgba(74,144,164,.4);color:#4A90A4;border-radius:10px;padding:8px 16px;font-size:12px;font-weight:800;cursor:pointer;text-align:center">👶👶 2 Children<br><span style="font-size:10px;opacity:.8">Meena K. · Demo + Priya</span></button>
-            <button onclick="parentLogin('demo3')" style="background:none;border:1px solid rgba(91,140,90,.5);color:#5B8C5A;border-radius:10px;padding:8px 16px;font-size:12px;font-weight:800;cursor:pointer;text-align:center">👶👶👶 3 Children<br><span style="font-size:10px;opacity:.8">Raj K. · Arjun, Rishi, Ananya</span></button>
+          <div style="text-align:center;margin-top:10px;">
+            <button onclick="showParentForgot()" style="background:none;border:none;cursor:pointer;font-size:12px;color:var(--blue);font-weight:700;text-decoration:underline;padding:4px 0">Forgot password or PIN?</button>
           </div>
+
+          <!-- ── FORGOT / RESET INLINE PANEL ── -->
+          <div id="p-forgot-wrap" style="display:none;margin-top:16px;background:var(--soft);border-radius:14px;padding:16px;border-left:4px solid var(--blue)">
+            <div style="font-weight:800;font-size:13px;margin-bottom:12px;color:var(--dark);">🔑 Reset Password / PIN</div>
+
+            <!-- Step 1: enter email -->
+            <div id="p-forgot-step1">
+              <div class="field">
+                <label>Your Registered Email</label>
+                <input type="email" id="p-forgot-email" placeholder="parent@email.com" autocomplete="email" />
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+                <button class="btn blue sm" style="flex:1" onclick="parentForgotPassword()">Send Reset Link →</button>
+                <button class="btn ghost sm" onclick="hideForgot()">Cancel</button>
+              </div>
+            </div>
+
+            <!-- Step 2: set new creds -->
+            <div id="p-forgot-step2" style="display:none">
+              <div style="background:#e8f5e9;border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:#2e7d32;font-weight:700;line-height:1.5">
+                ✅ Reset link sent to your email!<br><span style="font-weight:600;color:#388e3c">In this prototype, enter your new credentials directly below.</span>
+              </div>
+              <div class="field">
+                <label>New Password <span style="font-size:11px;font-weight:600;color:var(--muted)">(min 6 chars)</span></label>
+                <input type="password" id="p-reset-pass1" placeholder="New password" autocomplete="new-password" />
+              </div>
+              <div class="field">
+                <label>Confirm New Password</label>
+                <input type="password" id="p-reset-pass2" placeholder="Repeat new password" autocomplete="new-password" />
+              </div>
+              <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;margin-bottom:10px;cursor:pointer">
+                <input type="checkbox" id="p-reset-pin-toggle" onchange="toggleResetPinField()" />
+                Change my 4-digit PIN too
+              </label>
+              <div id="p-reset-pin-wrap" style="display:none">
+                <div class="field">
+                  <label>New PIN <span style="font-size:11px;font-weight:600;color:var(--muted)">(4 digits)</span></label>
+                  <input type="password" id="p-reset-pin" placeholder="Enter new 4-digit PIN" maxlength="4" inputmode="numeric" />
+                </div>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+                <button class="btn blue sm" style="flex:1" onclick="parentResetPassword()">Update Credentials ✓</button>
+                <button class="btn ghost sm" onclick="hideForgot()">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;border-top:2px dashed var(--line);padding-top:14px;">
+          <p style="font-size:12px;color:var(--muted);font-weight:700;line-height:1.6">ℹ️ Your account is created when your child registers. Use the email and password you set during registration.</p>
         </div>
       </div>
 
@@ -892,6 +947,29 @@ input,textarea,select{font-family:var(--body);}
   <label>Parent Email (approval + notifications)</label>
   <input type="email" id="r-pemail" placeholder="parent@email.com" />
 </div>
+
+<!-- Parent account setup — created alongside the student account -->
+<div style="background:var(--soft);border-radius:14px;padding:14px 16px;margin-bottom:14px;border-left:4px solid var(--blue)">
+  <div style="font-weight:900;font-size:13px;color:var(--blue);margin-bottom:10px">🏛️ Create Your Parent Portal Account</div>
+  <div style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:12px">Set a password so you can log in to approve posts and monitor your child.</div>
+  <div class="field" style="margin-bottom:10px">
+    <label style="font-size:12px">Parent Password <span style="color:var(--muted);font-weight:600">(min 6 chars)</span></label>
+    <input type="password" id="r-parent-password" placeholder="Create a password for parent portal" autocomplete="new-password" />
+  </div>
+  <div class="field" style="margin-bottom:10px">
+    <label style="font-size:12px">Confirm Password</label>
+    <input type="password" id="r-parent-password2" placeholder="Repeat password" autocomplete="new-password" />
+  </div>
+  <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;font-weight:800;color:var(--dark)">
+    <input type="checkbox" id="r-parent-pin-toggle" onchange="toggleRegParentPin()" style="width:15px;height:15px;accent-color:var(--blue)" />
+    Add optional 4-digit PIN for extra security
+  </label>
+  <div id="r-parent-pin-wrap" style="display:none;margin-top:10px">
+    <input type="password" id="r-parent-pin" placeholder="4-digit PIN" maxlength="4" inputmode="numeric"
+      style="width:100%;padding:10px 12px;border:2px solid var(--line);border-radius:10px;font-size:15px;font-weight:700;box-sizing:border-box" />
+  </div>
+</div>
+
 <div id="r-password-box" style="display:none;background:var(--soft);border:2px solid var(--green);border-radius:12px;padding:12px 14px;margin-bottom:14px">
   <div style="font-weight:900;font-size:13px;color:var(--green);margin-bottom:8px">✅ Account Ready!</div>
   <div style="font-size:12px;font-weight:800;color:var(--dark);margin-bottom:4px">🪪 Your User ID (used to log in):</div>
@@ -934,7 +1012,7 @@ input,textarea,select{font-family:var(--body);}
 ============================================================ -->
 <div class="topbar" id="main-topbar" style="display:none">
   <div class="topbar-inner">
-    <div class="brand" onclick="showScreen('feed')"><span class="r">Alpha</span><span class="b">Verse</span></div>
+    <div class="brand" onclick="showScreen('feed')"><span class="r">TYF</span> <span class="g">Net</span><span class="b">work</span></div>
     <div class="tspacer"></div>
     <div id="topbar-search-wrap" style="display:none;flex:0 1 260px;">
       <input id="topbar-search" type="text" placeholder="🔍 Search posts, communities..." 
@@ -942,6 +1020,7 @@ input,textarea,select{font-family:var(--body);}
         oninput="liveSearch(this.value)" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--line)'" />
     </div>
     <div class="topbar-nav">
+      <span class="desktop-only" style="font-size:11px;font-weight:900;color:var(--muted);padding:4px 10px;background:var(--soft);border-radius:999px;letter-spacing:.5px;flex-shrink:0">🚀 AlphaVerse</span>
       <button onclick="showScreen('feed')" id="nav-feed" class="desktop-only">🏠 Feed</button>
       <button onclick="showScreen('communities')" id="nav-communities" class="desktop-only">🌐 Communities</button>
       <button onclick="showScreen('quests')" id="nav-quests" class="desktop-only">🏆 Quests</button>
@@ -963,7 +1042,7 @@ input,textarea,select{font-family:var(--body);}
           <button class="av-item" onclick="closeAvDropdown();openMyNetwork()">👥 My Network <span class="fr-badge" id="fr-badge" style="display:none">0</span></button>
           <button class="av-item" onclick="closeAvDropdown();openFindBuddy()">🔍 Find a Buddy</button>
           <div class="av-dropdown-sep"></div>
-          <button class="av-item" onclick="closeAvDropdown();openHelp()">❓ Help</button>
+          <button class="av-item" onclick="closeAvDropdown();openHelp()" aria-label="Open AlphaBot help assistant">❓ Help</button>
           <div class="av-dropdown-sep"></div>
           <button class="av-item av-item-danger" onclick="closeAvDropdown();logout()">⏏ Sign Out</button>
         </div>
@@ -1292,7 +1371,7 @@ input,textarea,select{font-family:var(--body);}
 </div>
 
 <!-- USER BASE COUNTER -->
-<div id="ub-counter">👥 <span id="ub-count">0</span> members in AlphaVerse</div>
+<div id="ub-counter">👥 <span id="ub-count">0</span> members in TYF Network</div>
 
 <!-- ============================================================
      SCREEN: PROFILE
@@ -1338,7 +1417,9 @@ input,textarea,select{font-family:var(--body);}
       <div class="pp-nav-item active" data-tab="approvals"  onclick="switchParentTab('approvals')">📋 Pending Approvals <span class="pp-nav-badge" id="pp-badge-approvals" style="display:none">0</span></div>
       <div class="pp-nav-item" data-tab="profiles"   onclick="switchParentTab('profiles')">👶 Child Profiles</div>
       <div class="pp-nav-item" data-tab="activity"   onclick="switchParentTab('activity')">👁️ Child's Activity <span class="pp-nav-badge" id="pp-badge-alerts" style="display:none">0</span></div>
+
       <div class="pp-nav-item" data-tab="communities" onclick="switchParentTab('communities')">🌐 Community View</div>
+      <div class="pp-nav-item" data-tab="controls"  onclick="switchParentTab('controls')">🛡️ Controls</div>
       <div class="pp-nav-item" data-tab="network"    onclick="switchParentTab('network')">🤝 Parent Network</div>
       <div style="margin-top:auto;padding:16px 20px;border-top:1px solid #2D3E50;display:flex;flex-direction:column;gap:8px">
         <div style="font-size:10px;color:#8A9BB5;font-weight:700;text-align:center;text-transform:uppercase;letter-spacing:.5px">TYF Network · Safe Learning Platform</div>
@@ -1357,9 +1438,12 @@ input,textarea,select{font-family:var(--body);}
   <div class="page-wrap">
     <div class="sectlab">🛡️ Moderation Dashboard</div>
     <div class="tabs">
-      <button class="tab active" onclick="switchModTab('flags')">🚩 Flagged Posts</button>
+      <button class="tab active" onclick="switchModTab('overview')">📊 Overview</button>
+      <button class="tab" onclick="switchModTab('flags')">🚩 Flagged Posts</button>
+      <button class="tab" onclick="switchModTab('queue')">📬 Post Queue</button>
       <button class="tab" onclick="switchModTab('accounts')">👤 Accounts</button>
-      <button class="tab" onclick="switchModTab('proposals')">💡 Top Proposals</button>
+      <button class="tab" onclick="switchModTab('families')">👨‍👩‍👧 Families</button>
+      <button class="tab" onclick="switchModTab('proposals')">💡 Proposals</button>
     </div>
     <div id="mod-tab-content"></div>
   </div>
@@ -1368,8 +1452,8 @@ input,textarea,select{font-family:var(--body);}
 <!-- FOOTER -->
 <div class="site-footer" id="main-footer" style="display:none">
   <div class="rainbow-bar" style="max-width:200px;margin:0 auto 14px"></div>
-  <button onclick="openComingSoon()">💡 What's Coming to AlphaVerse →</button>
-  <div style="font-size:12px;color:var(--muted);font-weight:700;margin-top:10px">AlphaVerse · A safe space for young minds 🚀 · <button onclick="openPrivacyPolicy()" style="color:var(--blue);font-weight:800;background:none;border:none;cursor:pointer;font-size:inherit">Privacy Policy</button> · <button onclick="openTerms()" style="color:var(--blue);font-weight:800;background:none;border:none;cursor:pointer;font-size:inherit">Terms of Use</button></div>
+  <button onclick="openComingSoon()">💡 What's Coming to TYF Network →</button>
+  <div style="font-size:12px;color:var(--muted);font-weight:700;margin-top:10px">© 2026 TYF Network · The Young Foundry · AlphaVerse · A safe space for young minds 🚀 · <button onclick="openPrivacyPolicy()" style="color:var(--blue);font-weight:800;background:none;border:none;cursor:pointer;font-size:inherit">Privacy Policy</button> · <button onclick="openTerms()" style="color:var(--blue);font-weight:800;background:none;border:none;cursor:pointer;font-size:inherit">Terms of Use</button></div>
 </div>
 
 <!-- ============================================================
@@ -1377,7 +1461,7 @@ input,textarea,select{font-family:var(--body);}
 ============================================================ -->
 <div class="modal-overlay" id="modal-post">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('modal-post')">✕</button>
+    <button class="modal-close" aria-label="Close" onclick="closeModal('modal-post')">✕</button>
     <h3>✍️ New Post</h3>
     <p class="sub">Share your work with the community</p>
     <div class="field">
@@ -1391,7 +1475,7 @@ input,textarea,select{font-family:var(--body);}
     <div class="field">
       <label>Attach Image (optional)</label>
       <input type="file" id="post-image" accept="image/*" onchange="previewImage(this)" style="border:none;padding:0;" />
-      <img id="post-image-preview" style="display:none;width:100%;border-radius:12px;margin-top:8px;max-height:200px;object-fit:cover;" />
+      <img id="post-image-preview" alt="Post image preview" style="display:none;width:100%;border-radius:12px;margin-top:8px;max-height:200px;object-fit:cover;" />
     </div>
     <div id="mentor-tip-toggle" style="display:none">
       <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:800;font-size:13px;margin-bottom:12px">
@@ -1412,7 +1496,7 @@ input,textarea,select{font-family:var(--body);}
 ============================================================ -->
 <div class="modal-overlay" id="modal-suggest">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('modal-suggest')">✕</button>
+    <button class="modal-close" aria-label="Close" onclick="closeModal('modal-suggest')">✕</button>
     <h3>💡 Suggest a Community</h3>
     <p class="sub">Get +10 to your Foundry Score if it gets created!</p>
     <div class="field">
@@ -1446,7 +1530,7 @@ input,textarea,select{font-family:var(--body);}
 ============================================================ -->
 <div class="modal-overlay" id="modal-thread">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('modal-thread')">✕</button>
+    <button class="modal-close" aria-label="Close" onclick="closeModal('modal-thread')">✕</button>
     <h3>🧵 New Thread</h3>
     <p class="sub" id="thread-modal-sub">Start a discussion</p>
     <div class="field">
@@ -1468,7 +1552,7 @@ input,textarea,select{font-family:var(--body);}
 ============================================================ -->
 <div class="modal-overlay" id="modal-subject">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('modal-subject')">✕</button>
+    <button class="modal-close" aria-label="Close" onclick="closeModal('modal-subject')">✕</button>
     <h3>📘 Suggest a Subject Group</h3>
     <p class="sub">Propose a subject community for a grade band</p>
     <div class="field">
@@ -1499,9 +1583,9 @@ input,textarea,select{font-family:var(--body);}
 ============================================================ -->
 <div class="modal-overlay" id="modal-coming">
   <div class="modal" style="max-width:640px">
-    <button class="modal-close" onclick="closeModal('modal-coming')">✕</button>
-    <h3>💡 What's Coming to AlphaVerse</h3>
-    <p class="sub">A peek at features we're building for students & families</p>
+    <button class="modal-close" aria-label="Close" onclick="closeModal('modal-coming')">✕</button>
+    <h3>💡 What's Coming to TYF Network</h3>
+    <p class="sub">A peek at features we're building for TYF Network students & families</p>
     <div class="coming-grid" id="coming-grid"></div>
   </div>
 </div>
@@ -1511,7 +1595,7 @@ input,textarea,select{font-family:var(--body);}
 ============================================================ -->
 <div class="modal-overlay" id="modal-report">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('modal-report')">✕</button>
+    <button class="modal-close" aria-label="Close" onclick="closeModal('modal-report')">✕</button>
     <h3>🚩 Report Post</h3>
     <p class="sub">Help keep TYF Network safe. Reports are reviewed by AI and admins.</p>
     <div class="field">
@@ -1534,7 +1618,7 @@ input,textarea,select{font-family:var(--body);}
 ============================================================ -->
 <div class="modal-overlay" id="modal-find-buddy">
   <div class="modal" style="max-width:540px">
-    <button class="modal-close" onclick="closeModal('modal-find-buddy')">✕</button>
+    <button class="modal-close" aria-label="Close" onclick="closeModal('modal-find-buddy')">✕</button>
     <h3>🔍 Find a Buddy</h3>
     <p class="sub">Search by username or email to connect with friends on AlphaVerse</p>
     <div style="display:flex;gap:8px;margin-bottom:4px">
@@ -1561,7 +1645,7 @@ input,textarea,select{font-family:var(--body);}
 ============================================================ -->
 <div class="modal-overlay" id="modal-my-network">
   <div class="modal" style="max-width:540px">
-    <button class="modal-close" onclick="closeModal('modal-my-network')">✕</button>
+    <button class="modal-close" aria-label="Close" onclick="closeModal('modal-my-network')">✕</button>
     <h3>👥 My Network</h3>
     <div class="fr-tabs">
       <button class="fr-tab active" id="frtab-incoming" onclick="switchFRTab('incoming')">Incoming <span id="fr-incoming-count"></span></button>
@@ -1595,7 +1679,7 @@ function toggleSidebarSection(key) {
   _sidebarOpen[key] = !_sidebarOpen[key];
   renderProfileSidebar();
 }
-let activeModTab = 'flags';
+let activeModTab = 'overview';
 let pendingPostCommunity = null;
 let pendingPostMentor = false;
 
@@ -1720,10 +1804,16 @@ const XP_LEVELS = [
 function getXPLevel(xp) {
   return XP_LEVELS.find(l => xp >= l.min && xp <= l.max) || XP_LEVELS[0];
 }
+function getXP(userId) {
+  const accounts = getAccounts();
+  const u = accounts.find(a => a.id === userId);
+  return (u && u.foundryScore) || 0;
+}
 function getXPProgress(xp) {
   const l = getXPLevel(xp);
-  if (l.max === 99999) return 100;
-  return Math.min(100, Math.floor(((xp - l.min) / (l.max - l.min + 1)) * 100));
+  if (l.max === 99999) return { pct: 100, next: xp };
+  const pct = Math.min(100, Math.floor(((xp - l.min) / (l.max - l.min + 1)) * 100));
+  return { pct, next: l.max + 1 };
 }
 function getLoginStreak(userId) {
   try { return JSON.parse(localStorage.getItem('yfs_streak_'+userId) || '{"count":0,"lastDate":""}'); }
@@ -3231,9 +3321,9 @@ function seedDemoData() {
   saveUserCommunities('seed-ananya', ['painting','photography']);
 
   // ── Parent accounts ────────────────────────────────────────────────────────
-  accounts.push({ id:'parent_demo_1', name:'Sunita S.', email:'parent1@tyf.test', role:'parent', status:'active', joined:Date.now()-86400000*45, foundryScore:0, badges:[], children:[] });
-  accounts.push({ id:'parent_demo_2', name:'Meena K.',  email:'parent2@tyf.test', role:'parent', status:'active', joined:Date.now()-86400000*30, foundryScore:0, badges:[], children:[] });
-  accounts.push({ id:'parent_demo_3', name:'Raj K.',    email:'parent3@tyf.test', role:'parent', status:'active', joined:Date.now()-86400000*60, foundryScore:0, badges:[], children:[] });
+  accounts.push({ id:'parent_demo_1', name:'Sunita S.', email:'parent1@tyf.test', role:'parent', status:'active', joined:Date.now()-86400000*45, foundryScore:0, badges:[], children:[], password:'demo123', pin:null });
+  accounts.push({ id:'parent_demo_2', name:'Meena K.',  email:'parent2@tyf.test', role:'parent', status:'active', joined:Date.now()-86400000*30, foundryScore:0, badges:[], children:[], password:'demo123', pin:null });
+  accounts.push({ id:'parent_demo_3', name:'Raj K.',    email:'parent3@tyf.test', role:'parent', status:'active', joined:Date.now()-86400000*60, foundryScore:0, badges:[], children:[], password:'demo123', pin:null });
   saveAccounts(accounts);
 
   // ── Friend requests / connections ──────────────────────────────────────────
@@ -3317,27 +3407,174 @@ function studentLogin() {
   enterApp();
 }
 
-function parentLogin(mode) {
-  let name, email;
-  if (mode === 'demo1')  { seedDemoData(); name = 'Sunita S.'; email = 'parent1@tyf.test'; }
-  else if (mode === 'demo2') { seedDemoData(); name = 'Meena K.'; email = 'parent2@tyf.test'; }
-  else if (mode === 'demo3') { seedDemoData(); name = 'Raj K.';   email = 'parent3@tyf.test'; }
-  else {
-    name = document.getElementById('p-name').value.trim();
-    email = document.getElementById('p-email').value.trim();
-  }
-  if (!name || !email) { toast('Please fill all fields'); return; }
+function toggleRegParentPin() {
+  const cb = document.getElementById('r-parent-pin-toggle');
+  const wrap = document.getElementById('r-parent-pin-wrap');
+  if (wrap) wrap.style.display = cb.checked ? '' : 'none';
+}
+
+// switchParentAuthTab removed — parent accounts are created during student registration
+
+function parentSignup() {
+  const name  = document.getElementById('p-name-new').value.trim();
+  const email = document.getElementById('p-email-new').value.trim();
+  const pass1 = document.getElementById('p-password-new').value;
+  const pass2 = document.getElementById('p-password-new2').value;
+  const pinCb = document.getElementById('p-pin-toggle');
+  const pin   = pinCb && pinCb.checked ? (document.getElementById('p-pin-new').value || '') : '';
+
+  if (!name || !email || !pass1 || !pass2) { toast('⚠️ Please fill in all fields.'); return; }
+  if (pass1.length < 6) { toast('⚠️ Password must be at least 6 characters.'); return; }
+  if (pass1 !== pass2) { toast('❌ Passwords do not match.'); return; }
+  if (pinCb && pinCb.checked && (!/^\d{4}$/.test(pin))) { toast('⚠️ PIN must be exactly 4 digits.'); return; }
+
   const accounts = getAccounts();
-  let account = accounts.find(a => a.email === email && a.role === 'parent');
-  if (!account) {
-    account = {id:'p_'+Date.now(),name,email,role:'parent',status:'active',joined:Date.now(),foundryScore:0,badges:[],children:[]};
-    accounts.push(account);
-    saveAccounts(accounts);
+  const existing = accounts.find(a => a.email === email && a.role === 'parent');
+  if (existing) { toast('⚠️ An account with that email already exists. Please sign in from the Parent tab.'); return; }
+
+  const account = {
+    id: 'p_' + Date.now(), name, email, role: 'parent', status: 'active',
+    joined: Date.now(), foundryScore: 0, badges: [], children: [],
+    password: pass1,
+    pin: pin || null
+  };
+  accounts.push(account);
+  saveAccounts(accounts);
+  currentUser = account;
+  toast('🎉 Parent account created! Welcome, ' + name.split(' ')[0] + '!');
+  enterApp();
+  ppUpdateBadges();
+}
+
+function parentLogin(mode) {
+  // Demo shortcuts
+  if (mode === 'demo1' || mode === 'demo2' || mode === 'demo3') {
+    seedDemoData();
+    const demoMap = { demo1: 'parent1@tyf.test', demo2: 'parent2@tyf.test', demo3: 'parent3@tyf.test' };
+    const accounts = getAccounts();
+    let account = accounts.find(a => a.email === demoMap[mode] && a.role === 'parent');
+    if (!account) {
+      account = { id:'p_demo_'+mode, name: mode==='demo1'?'Sunita S.':mode==='demo2'?'Meena K.':'Raj K.',
+        email: demoMap[mode], role:'parent', status:'active', joined:Date.now(),
+        foundryScore:0, badges:[], children:[], password:'demo123', pin:null };
+      accounts.push(account); saveAccounts(accounts);
+    }
+    currentUser = account; enterApp(); ppUpdateBadges(); return;
   }
+
+  // Normal sign-in
+  const email    = (document.getElementById('p-email') || {}).value.trim();
+  const password = (document.getElementById('p-password') || {}).value;
+  if (!email || !password) { toast('Please enter your email and password.'); return; }
+
+  const accounts = getAccounts();
+  const account  = accounts.find(a => a.email === email && a.role === 'parent');
+  if (!account) { toast('⚠️ No parent account found. Please register your child first — your parent account is created during student registration.'); switchLoginTab('register'); return; }
+  if (account.status === 'suspended') { toast('⚠️ Account suspended. Contact admin.'); return; }
+
+  // Password check (legacy accounts without password are still PIN-only)
+  if (account.password && account.password !== password) { toast('❌ Incorrect password.'); return; }
+
+  // PIN check (only if account has a PIN)
+  if (account.pin) {
+    const pinVal = (document.getElementById('p-pin-login') || {}).value;
+    if (!pinVal) { toast('🔐 This account has a PIN. Please enter your 4-digit PIN below.'); return; }
+    if (pinVal !== account.pin) { toast('❌ Incorrect PIN.'); return; }
+  }
+
   currentUser = account;
   enterApp();
   ppUpdateBadges();
 }
+
+// ── PARENT FORGOT / RESET FLOW ─────────────────────────────────────────────
+function showParentForgot() {
+  const wrap = document.getElementById('p-forgot-wrap');
+  if (!wrap) return;
+  wrap.style.display = '';
+  document.getElementById('p-forgot-step1').style.display = '';
+  document.getElementById('p-forgot-step2').style.display = 'none';
+  const ef = document.getElementById('p-forgot-email');
+  if (ef) { ef.value = ''; ef.focus(); }
+  // Reset step-2 fields
+  ['p-reset-pass1','p-reset-pass2','p-reset-pin'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  const pincb = document.getElementById('p-reset-pin-toggle');
+  if (pincb) pincb.checked = false;
+  const pinwrap = document.getElementById('p-reset-pin-wrap');
+  if (pinwrap) pinwrap.style.display = 'none';
+}
+
+function hideForgot() {
+  const wrap = document.getElementById('p-forgot-wrap');
+  if (wrap) wrap.style.display = 'none';
+}
+
+function toggleResetPinField() {
+  const cb = document.getElementById('p-reset-pin-toggle');
+  const pw = document.getElementById('p-reset-pin-wrap');
+  if (pw) pw.style.display = (cb && cb.checked) ? '' : 'none';
+}
+
+function parentForgotPassword() {
+  const emailEl = document.getElementById('p-forgot-email');
+  const email = (emailEl ? emailEl.value : '').trim().toLowerCase();
+  if (!email) { toast('Please enter your registered email address.'); return; }
+
+  const accounts = getAccounts();
+  const account = accounts.find(a => a.email.toLowerCase() === email && a.role === 'parent');
+  if (!account) { toast('⚠️ No parent account found with that email. Check spelling or register your child first.'); return; }
+
+  // Simulate email dispatch: store a timed reset token in localStorage
+  const token = Math.random().toString(36).slice(2) + Date.now().toString(36);
+  try { localStorage.setItem('yfs_pwr_' + email, JSON.stringify({ token, ts: Date.now() })); } catch(e) {}
+
+  // Transition to step 2
+  document.getElementById('p-forgot-step1').style.display = 'none';
+  document.getElementById('p-forgot-step2').style.display = '';
+}
+
+function parentResetPassword() {
+  const emailEl = document.getElementById('p-forgot-email');
+  const email = (emailEl ? emailEl.value : '').trim().toLowerCase();
+  const pass1 = (document.getElementById('p-reset-pass1') || {}).value || '';
+  const pass2 = (document.getElementById('p-reset-pass2') || {}).value || '';
+  const pinCb = document.getElementById('p-reset-pin-toggle');
+  const changingPin = pinCb && pinCb.checked;
+  const newPin = changingPin ? ((document.getElementById('p-reset-pin') || {}).value || '') : null;
+
+  if (!pass1 || pass1.length < 6) { toast('⚠️ New password must be at least 6 characters.'); return; }
+  if (pass1 !== pass2) { toast('❌ Passwords do not match.'); return; }
+  if (changingPin && !/^\d{4}$/.test(newPin)) { toast('⚠️ PIN must be exactly 4 digits.'); return; }
+
+  // Validate reset token (15-minute window)
+  let tokenOk = false;
+  try {
+    const raw = localStorage.getItem('yfs_pwr_' + email);
+    if (raw) { const { ts } = JSON.parse(raw); if (Date.now() - ts < 15 * 60 * 1000) tokenOk = true; }
+  } catch(e) {}
+  if (!tokenOk) { toast('⚠️ Reset session expired. Please start again.'); hideForgot(); return; }
+
+  // Update account
+  const accounts = getAccounts();
+  const idx = accounts.findIndex(a => a.email.toLowerCase() === email && a.role === 'parent');
+  if (idx === -1) { toast('⚠️ Account not found.'); hideForgot(); return; }
+  accounts[idx].password = pass1;
+  if (changingPin) accounts[idx].pin = newPin;
+  saveAccounts(accounts);
+
+  // Clear token
+  try { localStorage.removeItem('yfs_pwr_' + email); } catch(e) {}
+
+  toast('✅ Credentials updated! Sign in with your new password.');
+  hideForgot();
+
+  // Pre-fill email in login form for convenience
+  const loginEmail = document.getElementById('p-email');
+  if (loginEmail) loginEmail.value = accounts[idx].email;
+}
+// ── END PARENT FORGOT / RESET FLOW ─────────────────────────────────────────
 
 async function adminLogin() {
   const key = document.getElementById('a-key').value;
@@ -3382,10 +3619,21 @@ function requestAccount() {
   const nextGrade = document.getElementById('r-nextgrade').value;
   const parentName = document.getElementById('r-parentname').value.trim();
   const pemail = document.getElementById('r-pemail').value.trim();
+  // Parent password fields
+  const parentPass1 = document.getElementById('r-parent-password').value;
+  const parentPass2 = document.getElementById('r-parent-password2').value;
+  const parentPinCb = document.getElementById('r-parent-pin-toggle');
+  const parentPin   = parentPinCb && parentPinCb.checked ? (document.getElementById('r-parent-pin').value || '') : '';
+
   if (!name || !grade || !pemail || !email) { toast('Please fill all required fields'); return; }
+  if (!parentPass1 || !parentPass2) { toast('⚠️ Please create a password for the Parent Portal'); return; }
+  if (parentPass1.length < 6) { toast('⚠️ Parent password must be at least 6 characters'); return; }
+  if (parentPass1 !== parentPass2) { toast('❌ Parent passwords do not match'); return; }
+  if (parentPinCb && parentPinCb.checked && (!/^\d{4}$/.test(parentPin))) { toast('⚠️ PIN must be exactly 4 digits'); return; }
   if (!document.getElementById('r-consent').checked) { toast('⚠️ Please read and agree to the Privacy Policy to continue'); return; }
   if (accounts.find(a => a.email === email && a.role === 'student')) { toast('An account with this email already exists'); return; }
-  // Generate password
+
+  // Generate student temp password
   const pwd = 'TYF' + Math.random().toString(36).slice(2,6).toUpperCase() + Math.floor(10+Math.random()*90);
   const studentId = 'u_'+Date.now();
   const pending = {
@@ -3400,6 +3648,26 @@ function requestAccount() {
     profilePublic: true, avatar: null,
   };
   accounts.push(pending);
+
+  // Create parent account at the same time (if not already registered)
+  const existingParent = accounts.find(a => a.email === pemail && a.role === 'parent');
+  if (!existingParent) {
+    const parentAccount = {
+      id: 'p_' + (Date.now()+1), name: parentName || pemail.split('@')[0],
+      email: pemail, role: 'parent', status: 'active',
+      joined: Date.now(), foundryScore: 0, badges: [], children: [],
+      password: parentPass1,
+      pin: parentPin || null
+    };
+    accounts.push(parentAccount);
+  } else {
+    // Update password if parent exists but has no password yet
+    if (!existingParent.password) {
+      existingParent.password = parentPass1;
+      if (parentPin) existingParent.pin = parentPin;
+    }
+  }
+
   saveAccounts(accounts);
   // Add to pending approvals queue for parent
   const pendingAccts = getPendingAccounts();
@@ -3409,14 +3677,14 @@ function requestAccount() {
   const g = ensureSchoolGroup(school, studentId);
   if (g) saveUserCommunities(studentId, [schoolGroupGroupId(g)]);
   // Store parent notification (simulates email)
-  addParentNotification(pemail, 'account_created', `New TYF Network account request for ${name} (Grade ${grade}, ${school||schoolId}). Temporary password: ${pwd}. Log in to TYF Network with your email to approve.`);
+  addParentNotification(pemail, 'account_created', `New TYF Network account request for ${name} (Grade ${grade}, ${school||schoolId}). Temporary password: ${pwd}. Log in to TYF Network with your email and password to approve.`);
   // Show password box
   document.getElementById('r-gen-username').textContent = finalUsername;
   document.getElementById('r-gen-password').textContent = pwd;
   document.getElementById('r-password-box').style.display = 'block';
   document.getElementById('r-submit-btn').disabled = true;
   document.getElementById('r-submit-btn').textContent = '✅ Sent!';
-  toast('✅ Password generated! Parent will be notified to approve your account.');
+  toast('✅ Student account created! Parent portal account ready — parent can now sign in.');
 }
 
 function checkGradeUp() {
@@ -3466,6 +3734,9 @@ function checkBirthday() {
     const key = 'bday_' + currentUser.id + '_' + today.getFullYear();
     if (localStorage.getItem(key)) return;
     localStorage.setItem(key, '1');
+    // Award birthday Foundry Points
+    me.foundryPoints = (me.foundryPoints || 0) + 10;
+    saveAccounts(accounts);
     setTimeout(() => {
       const el = document.createElement('div');
       el.innerHTML = `<div style="position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;display:flex;align-items:center;justify-content:center" onclick="this.remove()"><div style="background:#fff;border-radius:28px;padding:36px 32px;max-width:360px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.25)" onclick="event.stopPropagation()"><div style="font-size:4rem;margin-bottom:8px">🎂</div><div style="font-family:var(--head);font-size:26px;color:var(--purple);margin-bottom:6px">Happy Birthday, ${escHtml(me.name)}!</div><div style="font-size:15px;font-weight:700;color:var(--muted);margin-bottom:18px">You're ${age} today! 🎉 The whole AlphaVerse community is cheering for you!</div><div style="font-size:2rem;margin-bottom:20px">🎈 🥳 🎁 ✨ 🎊</div><button class="btn green" onclick="this.closest('[style*=fixed]').remove()" style="width:100%">Thanks! Let's go 🚀</button></div></div>`;
@@ -3668,6 +3939,8 @@ function alphabotAddMsg(text, role) {
 
 function openChangePassword() {
   if (!currentUser || currentUser.role !== 'student') return;
+  const stale = document.getElementById('chpwd-modal-wrap');
+  if (stale) stale.remove(); // prevent duplicate
   const accounts = getAccounts();
   const me = accounts.find(a => a.id === currentUser.id);
   const el = document.createElement('div');
@@ -3754,6 +4027,7 @@ function logout() {
   activeChatGroupId = null;
   stopMsgPoller();
   currentUser = null;
+  try { localStorage.removeItem('yfs_active_session'); } catch(e) {}
   document.getElementById('main-topbar').style.display = 'none';
   document.getElementById('main-footer').style.display = 'none';
   document.getElementById('topbar-search-wrap').style.display = 'none';
@@ -3782,6 +4056,11 @@ function deleteMyAccount() {
 }
 
 function enterApp() {
+  // Persist session so page refresh restores the user
+  try {
+    const sessionData = { id: currentUser.id, role: currentUser.role, ts: Date.now() };
+    localStorage.setItem('yfs_active_session', JSON.stringify(sessionData));
+  } catch(e) {}
   document.getElementById('main-topbar').style.display = 'block';
   document.getElementById('main-footer').style.display = 'block';
   document.getElementById('topbar-search-wrap').style.display = 'block';
@@ -3909,10 +4188,22 @@ function liveSearch(query) {
   const matchedComms = COMMUNITIES.filter(c =>
     c.name.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q)
   );
+  // Search student profiles (public accounts only)
+  const matchedUsers = getAccounts()
+    .filter(a => a.role === 'student' && a.status === 'active' && a.profilePublic !== false)
+    .filter(a => (a.name||'').toLowerCase().includes(q) || (a.username||'').toLowerCase().includes(q));
   let html = `<div style="background:var(--soft);border-radius:16px;padding:14px 18px;margin-bottom:16px;font-weight:800;font-size:14px;color:var(--dark)">
-    🔍 Results for "<em>${escHtml(query)}</em>" — ${matchedPosts.length} post${matchedPosts.length!==1?'s':''}, ${matchedComms.length} communit${matchedComms.length!==1?'ies':'y'}
+    🔍 Results for "<em>${escHtml(query)}</em>" — ${matchedUsers.length} student${matchedUsers.length!==1?'s':''}, ${matchedComms.length} communit${matchedComms.length!==1?'ies':'y'}, ${matchedPosts.length} post${matchedPosts.length!==1?'s':''}
     <button class="btn ghost sm" style="margin-left:12px" onclick="document.getElementById('topbar-search').value='';showScreen('feed')">✕ Clear</button>
   </div>`;
+  if (matchedUsers.length) {
+    html += `<div class="sectlab" style="font-size:15px;margin-bottom:10px">👤 Students</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px">${matchedUsers.slice(0,12).map(u =>
+        `<div onclick="viewProfile('${u.id}')" role="button" tabindex="0" aria-label="View ${escHtml(u.name)}'s profile" style="cursor:pointer;background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:10px;min-width:180px;transition:border-color .15s" onmouseenter="this.style.borderColor='var(--blue)'" onmouseleave="this.style.borderColor='var(--line)'">
+          <div style="font-size:1.5rem">${u.avatar || '🧑'}</div>
+          <div><div style="font-weight:800;font-size:13px">${escHtml(u.name)}</div><div style="font-size:11px;color:var(--muted)">@${escHtml(u.username||'')} · Grade ${u.grade||'?'}</div></div>
+        </div>`).join('')}</div>`;
+  }
   if (matchedComms.length) {
     html += `<div class="sectlab" style="font-size:15px;margin-bottom:10px">🌐 Communities</div>
       <div class="comm-grid" style="margin-bottom:20px">${matchedComms.map(c => renderCommCard(c)).join('')}</div>`;
@@ -3921,7 +4212,7 @@ function liveSearch(query) {
     html += `<div class="sectlab" style="font-size:15px;margin-bottom:10px">📝 Posts</div>` +
       matchedPosts.slice(0,20).map(p => renderPostCard(p)).join('');
   }
-  if (!matchedPosts.length && !matchedComms.length) {
+  if (!matchedPosts.length && !matchedComms.length && !matchedUsers.length) {
     html += `<div class="empty"><span class="empty-icon">🔍</span><p>No results found for "${escHtml(query)}"</p></div>`;
   }
   container.innerHTML = html;
@@ -4692,7 +4983,12 @@ function submitPost() {
   const preview = document.getElementById('post-image-preview');
   const imageB64 = preview.style.display !== 'none' ? preview.src : null;
   const comm = COMMUNITIES.find(c => c.id === communityId);
-  const needsParentApproval = comm && comm.creative && currentUser.role === 'student';
+  // Respect parent's approvalMode setting AND community creative flag
+  const _pc = getParentalControls(currentUser.id);
+  const needsParentApproval = currentUser.role === 'student' && (
+    (comm && comm.creative) ||
+    (_pc && _pc.approvalMode === 'all')
+  );
   const post = {
     id:'p_'+Date.now(),
     authorId:currentUser.id,
@@ -4795,8 +5091,9 @@ function renderParentTabContent() {
   // ── APPROVALS ──────────────────────────────────────────────
   if (activeParentTab === 'approvals') {
     const allPosts = getPosts();
-    const pendingPosts = allPosts.filter(p => !p.parentApproved && p.aiStatus === 'approved');
-    const pendingAccts = getPendingAccounts().filter(a => a.status === 'pending');
+    const myChildIds = getPpChildren().map(c => c.id);
+    const pendingPosts = allPosts.filter(p => !p.parentApproved && p.aiStatus === 'approved' && myChildIds.includes(p.authorId));
+    const pendingAccts = getPendingAccounts().filter(a => a.status === 'pending' && a.parentEmail === currentUser.email);
     const total = pendingPosts.length + pendingAccts.length;
     el.innerHTML = `
       <div class="pp-section-title">📋 Approvals</div>
@@ -5276,85 +5573,6 @@ function renderParentTabContent() {
     el.innerHTML = html;
 
   // ── COMMUNITIES ────────────────────────────────────────────
-  } else if (activeParentTab === 'communities') {
-    const children = getPpChildren();
-    const cornerPosts = getParentsCornerPosts();
-    const allPostsC = getPosts();
-    const studentComms = COMMUNITIES.filter(c => !c.parent);
-    const childJoinedMap = {};
-    children.forEach(ch => { childJoinedMap[ch.id] = getUserCommunities(ch.id); });
-    let html = `<div class="pp-section-title">🌐 Community View</div>
-      <div class="pp-section-sub">Read-only view of all TYF communities. Your children's joined communities are highlighted in gold.</div>`;
-    // Child summary card
-    if (children.length) {
-      html += `<div class="pp-card" style="margin-bottom:14px">
-        <div class="pp-card-title">📁 Your Children's Communities</div>
-        ${children.map(ch => {
-          const joined = getUserCommunities(ch.id);
-          const comms = joined.map(cid=>COMMUNITIES.find(c=>c.id===cid)).filter(Boolean);
-          return `<div style="margin-bottom:${children.length>1?'12px':'0'}">
-            <div style="font-size:12px;font-weight:800;color:#E8EDF4;margin-bottom:6px">${escHtml(ch.name)} <span style="color:#8A9BB5;font-weight:700">(${comms.length})</span></div>
-            ${comms.length?`<div style="display:flex;gap:6px;flex-wrap:wrap">${comms.map(c=>`<span style="background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);color:#C9A84C;border-radius:999px;padding:3px 10px;font-size:11px;font-weight:800">${c.emoji} ${c.name}</span>`).join('')}</div>`:`<div style="font-size:12px;color:#8A9BB5;font-weight:700">No communities joined yet.</div>`}
-          </div>`;
-        }).join('')}
-      </div>`;
-    }
-    // All communities grid
-    html += `<div class="pp-card" style="margin-bottom:14px">
-      <div class="pp-card-title">🌍 All TYF Communities <span class="pp-tag pp-tag-blue" style="margin-left:6px">Read Only</span></div>
-      <div style="font-size:12px;color:#8A9BB5;font-weight:700;margin-bottom:12px">⭐ gold border = your child is a member</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">
-        ${studentComms.map(comm => {
-          const commPosts = allPostsC.filter(p=>p.communityId===comm.id&&p.parentApproved);
-          const recentPosts = commPosts.filter(p=>p.timestamp>Date.now()-7*24*3600*1000);
-          const childNames = children.filter(ch=>(childJoinedMap[ch.id]||[]).includes(comm.id)).map(ch=>ch.name);
-          const isJoined = childNames.length > 0;
-          return `<div style="background:#0F1923;border-radius:10px;padding:12px;border:1px solid ${isJoined?'rgba(201,168,76,.5)':'#2D3E50'}">
-            <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px">
-              <span style="font-size:1.4rem;flex-shrink:0">${comm.emoji}</span>
-              <div style="flex:1;min-width:0">
-                <div style="font-weight:900;font-size:12px;color:${isJoined?'#C9A84C':'#E8EDF4'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escHtml(comm.name)}</div>
-                ${isJoined?`<div style="font-size:10px;color:#C9A84C;font-weight:800">⭐ ${childNames.join(', ')}</div>`:`<div style="font-size:10px;color:#8A9BB5;font-weight:700;text-transform:uppercase">${comm.cat}</div>`}
-              </div>
-            </div>
-            <div style="font-size:11px;color:#8A9BB5;font-weight:700;line-height:1.5;margin-bottom:8px">${escHtml(comm.desc)}</div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:${commPosts.length?'8px':'0'}">
-              <span style="font-size:10px;color:#4A90A4;font-weight:800">📝 ${commPosts.length} posts</span>
-              ${recentPosts.length?`<span style="font-size:10px;color:#C9A84C;font-weight:800">🔥 ${recentPosts.length} this week</span>`:''}
-            </div>
-            ${commPosts.length?`<div style="padding-top:8px;border-top:1px solid #2D3E50">
-              ${commPosts.slice(-2).reverse().map(p=>`<div style="font-size:11px;color:#A0B0C5;font-weight:700;line-height:1.4;margin-bottom:3px">"${escHtml(p.text.slice(0,65))}${p.text.length>65?'…':''}"</div>`).join('')}
-            </div>`:''}
-          </div>`;
-        }).join('')}
-      </div>
-    </div>`;
-    // Parents' Corner
-    html += `<div class="pp-card" style="border-color:rgba(201,168,76,.3)">
-      <div class="pp-card-title" style="color:#C9A84C">👨‍👩‍👧 Parents' Corner <span class="pp-tag pp-tag-gold" style="margin-left:6px">Interactive</span></div>
-      <div style="font-size:12px;color:#8A9BB5;font-weight:700;margin-bottom:14px">A dedicated space for parents to start threads, share tips, and support each other.</div>
-      <div style="background:#0F1923;border-radius:12px;padding:14px;margin-bottom:14px">
-        <textarea class="pp-textarea" id="pp-corner-text" placeholder="Start a thread — share a tip, ask a question, or celebrate your child's achievement..." rows="3"></textarea>
-        <div style="display:flex;justify-content:flex-end;margin-top:8px">
-          <button class="pp-btn pp-btn-gold" onclick="ppPostToCorner()">Post in Parents' Corner →</button>
-        </div>
-      </div>
-      ${cornerPosts.length ? cornerPosts.slice().reverse().slice(0,10).map(p=>`
-        <div style="background:#0F1923;border-radius:10px;padding:12px;margin-bottom:8px;border:1px solid #2D3E50">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-            <div class="pp-av" style="width:32px;height:32px;font-size:13px">${(p.authorName||'?').charAt(0)}</div>
-            <div>
-              <div style="font-weight:900;font-size:12px;color:#E8EDF4">${escHtml(p.authorName||'Parent')}</div>
-              <div style="font-size:11px;color:#8A9BB5;font-weight:700">${timeAgo(p.timestamp)}</div>
-            </div>
-          </div>
-          <div style="font-size:13px;color:#E8EDF4;font-weight:700;line-height:1.5">${escHtml(p.text)}</div>
-        </div>`).join('')
-      : `<div style="text-align:center;padding:30px;color:#8A9BB5;font-size:13px;font-weight:700">No posts yet. Be the first to start a conversation! 👋</div>`}
-    </div>`;
-    el.innerHTML = html;
-
-  // ── CHILD'S FRIENDS ────────────────────────────────────────
   } else if (activeParentTab === 'friends') {
     const children = getPpChildren();
     let html = `<div class="pp-section-title">👫 Child's Friends</div>
@@ -5455,15 +5673,39 @@ function renderParentTabContent() {
 function approvePost(id) {
   const posts = getPosts();
   const p = posts.find(x => x.id === id);
-  if (p) { p.parentApproved = true; savePosts(posts); }
+  if (p && !getPpChildren().some(c => c.id === p.authorId)) { toast('⛔ This post does not belong to your child.'); return; }
+  if (p) {
+    p.parentApproved = true;
+    savePosts(posts);
+    // Award bonus XP to student and notify them
+    const accounts = getAccounts();
+    const author = accounts.find(a => a.id === p.authorId);
+    if (author) {
+      author.foundryPoints = (author.foundryPoints || 0) + (XP_REWARDS.postApproved || 5);
+      saveAccounts(accounts);
+      // Store a student-visible notification
+      const notifs = JSON.parse(localStorage.getItem('yfs_student_notifs_' + p.authorId) || '[]');
+      notifs.unshift({ id: 'n_'+Date.now(), type:'post_approved', msg:'🎉 Your post was approved by a parent and is now live! +' + (XP_REWARDS.postApproved||5) + ' XP', ts: Date.now(), read: false });
+      localStorage.setItem('yfs_student_notifs_' + p.authorId, JSON.stringify(notifs.slice(0,50)));
+    }
+  }
   toast('✅ Post approved and published!');
   renderParentQueue();
   renderParentSidebar();
 }
 
 function rejectPost(id) {
-  const posts = getPosts().filter(p => p.id !== id);
-  savePosts(posts);
+  const posts = getPosts();
+  const p = posts.find(x => x.id === id);
+  if (p && !getPpChildren().some(c => c.id === p.authorId)) { toast('⛔ This post does not belong to your child.'); return; }
+  if (p) {
+    // Notify student their post was not approved
+    const notifs = JSON.parse(localStorage.getItem('yfs_student_notifs_' + p.authorId) || '[]');
+    notifs.unshift({ id: 'n_'+Date.now(), type:'post_rejected', msg:'⚠️ One of your posts was not approved by a parent and has been removed.', ts: Date.now(), read: false });
+    localStorage.setItem('yfs_student_notifs_' + p.authorId, JSON.stringify(notifs.slice(0,50)));
+  }
+  const remaining = posts.filter(x => x.id !== id);
+  savePosts(remaining);
   toast('Post rejected and removed.');
   renderParentQueue();
   renderParentSidebar();
@@ -5527,12 +5769,14 @@ function saveParentControls(childId, controls) {
   localStorage.setItem('yfs_pctrl_' + childId, JSON.stringify(controls));
 }
 function toggleParentControl(childId, key, value) {
+  if (!getPpChildren().some(c => c.id === childId)) { toast('⛔ Permission denied.'); return; }
   const c = getParentControls(childId);
   c[key] = value;
   saveParentControls(childId, c);
   toast(value ? '✅ ' + key + ' enabled' : '○ ' + key + ' disabled');
 }
 function setChildStatus(childId, status) {
+  if (!getPpChildren().some(c => c.id === childId)) { toast('⛔ Permission denied.'); return; }
   const accounts = getAccounts();
   const acc = accounts.find(a => a.id === childId);
   if (!acc) return;
@@ -6083,37 +6327,182 @@ function sendBadgeMessage(chatId, emoji, badgeName) {
 // ============================================================
 function renderModTab() {
   const el = document.getElementById('mod-tab-content');
+  const TAB_ORDER = ['overview','flags','queue','accounts','families','proposals'];
   document.querySelectorAll('#screen-mod .tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('#screen-mod .tab')[['flags','accounts','proposals'].indexOf(activeModTab)].classList.add('active');
-  if (activeModTab === 'flags') {
+  const idx = TAB_ORDER.indexOf(activeModTab);
+  const tabBtns = document.querySelectorAll('#screen-mod .tab');
+  if (tabBtns[idx]) tabBtns[idx].classList.add('active');
+
+  if (activeModTab === 'overview') {
+    const allAccounts = getAccounts();
+    const students = allAccounts.filter(a => a.role === 'student');
+    const parents  = allAccounts.filter(a => a.role === 'parent');
+    const active   = students.filter(a => a.status === 'active').length;
+    const suspended = students.filter(a => a.status === 'suspended').length;
+    const pending  = getPendingAccounts().filter(a => a.status === 'pending').length;
+    const flags    = getFlags().length;
+    const queue    = getPosts().filter(p => p.aiStatus === 'approved' && !p.parentApproved).length;
+    const allPosts = getPosts();
+    const live     = allPosts.filter(p => p.parentApproved).length;
+    const statCard = (icon, label, val, color) =>
+      `<div style="background:var(--card);border-radius:14px;padding:18px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 2px 8px rgba(0,0,0,.07)">
+        <div style="font-size:2rem;line-height:1">${icon}</div>
+        <div>
+          <div style="font-size:22px;font-weight:900;color:${color}">${val}</div>
+          <div style="font-size:12px;color:var(--muted);font-weight:700;margin-top:2px">${label}</div>
+        </div>
+      </div>`;
+    el.innerHTML = `
+      <div style="margin-bottom:18px">
+        <div style="font-family:var(--head);font-size:15px;font-weight:800;color:var(--dark);margin-bottom:12px">📊 Platform Overview</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px">
+          ${statCard('👦','Students',students.length,'var(--blue)')}
+          ${statCard('✅','Active',active,'var(--green)')}
+          ${statCard('⏳','Pending Accounts',pending,'var(--orange)')}
+          ${statCard('🚫','Suspended',suspended,'var(--red)')}
+          ${statCard('👨‍👩‍👧','Parents Linked',parents.length,'var(--purple, #7C3AED)')}
+          ${statCard('📬','Posts In Queue',queue,'var(--orange)')}
+          ${statCard('🚩','Flagged',flags,'var(--red)')}
+          ${statCard('🌐','Live Posts',live,'var(--green)')}
+        </div>
+      </div>
+      ${pending ? `<div style="background:#fff8e1;border-radius:12px;padding:14px 18px;border-left:4px solid var(--orange);margin-bottom:12px">
+        <div style="font-weight:800;color:var(--orange)">⚠️ ${pending} account${pending>1?'s':''} waiting for approval</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">Go to the <b>Accounts</b> tab to review them.</div>
+      </div>` : ''}
+      ${queue ? `<div style="background:#e3f2fd;border-radius:12px;padding:14px 18px;border-left:4px solid var(--blue);margin-bottom:12px">
+        <div style="font-weight:800;color:var(--blue)">📬 ${queue} post${queue>1?'s':''} awaiting parent approval</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">View in the <b>Post Queue</b> tab. Admins can approve or remove any post.</div>
+      </div>` : ''}
+      ${flags ? `<div style="background:#ffebee;border-radius:12px;padding:14px 18px;border-left:4px solid var(--red);margin-bottom:12px">
+        <div style="font-weight:800;color:var(--red)">🚩 ${flags} flagged post${flags>1?'s':''} need review</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">Check the <b>Flagged Posts</b> tab.</div>
+      </div>` : ''}
+      ${!pending && !queue && !flags ? `<div style="background:#e8f5e9;border-radius:12px;padding:14px 18px;border-left:4px solid var(--green)">
+        <div style="font-weight:800;color:var(--green)">✅ Everything looks great — no pending actions.</div>
+      </div>` : ''}`;
+
+  } else if (activeModTab === 'flags') {
     const flags = getFlags();
     if (!flags.length) { el.innerHTML = `<div class="empty"><span class="empty-icon">✅</span><p>No flagged posts. Community is clean!</p></div>`; return; }
-    el.innerHTML = flags.map(f => `
-      <div class="mod-row">
+    el.innerHTML = flags.map(f => {
+      const post = getPosts().find(p => p.id === f.postId);
+      const author = post ? getAccounts().find(a => a.id === post.authorId) : null;
+      return `<div class="mod-row">
         <div class="mod-icon" style="background:#ffebee">🚩</div>
         <div class="mod-info">
           <div class="mod-title">${f.reason}</div>
-          <div class="mod-sub">Post ID: ${f.postId} · ${timeAgo(f.timestamp)}</div>
+          <div class="mod-sub">${author ? author.name + ' · ' : ''}Post: "${post ? (post.text||'').slice(0,50) : 'deleted'}" · ${timeAgo(f.timestamp)}</div>
         </div>
-        <button class="btn red sm" onclick="adminRemovePost('${f.postId}')">Remove Post</button>
-      </div>`).join('');
+        <button class="btn red sm" onclick="adminRemovePost('${f.postId}')">Remove</button>
+      </div>`;
+    }).join('');
+
+  } else if (activeModTab === 'queue') {
+    const allPosts = getPosts().filter(p => p.aiStatus === 'approved' && !p.parentApproved);
+    const allAccounts = getAccounts();
+    if (!allPosts.length) { el.innerHTML = `<div class="empty"><span class="empty-icon">📬</span><p>No posts waiting for approval.</p></div>`; return; }
+    el.innerHTML = `<div style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:10px">Admin can approve or remove any post — this overrides the parent queue.</div>` +
+      allPosts.map(p => {
+        const author = allAccounts.find(a => a.id === p.authorId);
+        const parentEmail = author ? (author.parentEmail || 'No parent linked') : 'Unknown';
+        const xp = getXP(p.authorId);
+        const level = getXPLevel(xp);
+        return `<div class="mod-row" style="flex-wrap:wrap;gap:8px">
+          <div class="av" style="background:${author?avatarColor(author.name):'#999'};width:40px;height:40px;flex-shrink:0">${author?author.name.charAt(0):'?'}</div>
+          <div class="mod-info" style="flex:1;min-width:0">
+            <div class="mod-title">${author ? author.name : 'Unknown'} · ${level.label} (${xp} XP)</div>
+            <div class="mod-sub" style="margin-bottom:4px">Parent: ${parentEmail} · ${timeAgo(p.timestamp)}</div>
+            <div style="font-size:13px;color:var(--dark);background:var(--bg);padding:8px 10px;border-radius:8px;line-height:1.5">${(p.text||'').slice(0,200)}${p.text&&p.text.length>200?'…':''}</div>
+          </div>
+          <div style="display:flex;gap:6px;align-self:flex-start;flex-shrink:0">
+            <button class="btn green sm" onclick="adminApprovePost('${p.id}')">✅ Approve</button>
+            <button class="btn red sm" onclick="adminRemovePost('${p.id}')">🗑 Remove</button>
+          </div>
+        </div>`;
+      }).join('');
+
   } else if (activeModTab === 'accounts') {
-    const accounts = getAccounts().filter(a => a.role === 'student');
-    if (!accounts.length) { el.innerHTML = `<div class="empty"><span class="empty-icon">👤</span><p>No student accounts yet.</p></div>`; return; }
-    el.innerHTML = accounts.map(a => `
-      <div class="mod-row">
-        <div class="av" style="background:${avatarColor(a.name)};width:40px;height:40px">${a.name.charAt(0)}</div>
-        <div class="mod-info">
-          <div class="mod-title">${a.name} · Grade ${a.grade}</div>
-          <div class="mod-sub">${a.schoolId} · <span style="color:${a.status==='active'?'var(--green)':a.status==='suspended'?'var(--red)':'var(--orange)'}">${a.status}</span></div>
-        </div>
-        ${a.status==='active'
-          ? `<button class="btn orange sm" onclick="suspendAccount('${a.id}')">Suspend</button>`
-          : a.status==='suspended'
-          ? `<button class="btn green sm" onclick="reinstateAccount('${a.id}')">Reinstate</button>`
-          : `<button class="btn green sm" onclick="approveAccount('${a.id}')">Approve</button>`
-        }
-      </div>`).join('');
+    const allAccounts = getAccounts();
+    const students = allAccounts.filter(a => a.role === 'student');
+    const pendingAccts = getPendingAccounts().filter(a => a.status === 'pending');
+    let html = '';
+    if (pendingAccts.length) {
+      html += `<div style="font-family:var(--head);font-size:13px;font-weight:800;color:var(--orange);margin-bottom:8px">⏳ Pending Approval (${pendingAccts.length})</div>`;
+      html += pendingAccts.map(a => `
+        <div class="mod-row" style="border-left:3px solid var(--orange)">
+          <div class="av" style="background:${avatarColor(a.name)};width:40px;height:40px">${a.name.charAt(0)}</div>
+          <div class="mod-info">
+            <div class="mod-title">${a.name} · Grade ${a.grade||'?'}</div>
+            <div class="mod-sub">School: ${a.schoolId||'?'} · Parent: ${a.parentEmail||'none'}</div>
+          </div>
+          <div style="display:flex;gap:6px">
+            <button class="btn green sm" onclick="approveAccount('${a.id}')">Approve</button>
+            <button class="btn red sm" onclick="rejectPendingAccount('${a.id}')">Reject</button>
+          </div>
+        </div>`).join('');
+      html += `<div style="border-top:2px dashed var(--line);margin:14px 0"></div>`;
+    }
+    if (!students.length && !pendingAccts.length) { el.innerHTML = `<div class="empty"><span class="empty-icon">👤</span><p>No student accounts yet.</p></div>`; return; }
+    if (students.length) {
+      html += `<div style="font-family:var(--head);font-size:13px;font-weight:800;color:var(--dark);margin-bottom:8px">👦 All Students (${students.length})</div>`;
+      html += students.map(a => {
+        const xp = getXP(a.id);
+        const level = getXPLevel(xp);
+        const xpProg = getXPProgress(xp);
+        return `<div class="mod-row" style="flex-wrap:wrap;gap:8px">
+          <div class="av" style="background:${avatarColor(a.name)};width:40px;height:40px;flex-shrink:0">${a.name.charAt(0)}</div>
+          <div class="mod-info" style="flex:1">
+            <div class="mod-title">${a.name} · Grade ${a.grade||'?'} · <span style="color:${a.status==='active'?'var(--green)':a.status==='suspended'?'var(--red)':'var(--orange)'}">${a.status}</span></div>
+            <div class="mod-sub">School: ${a.schoolId||'?'} · Parent: ${a.parentEmail||'none'} · ${level.label} (${xp} XP)</div>
+            <div style="height:6px;background:var(--line);border-radius:3px;margin-top:6px;width:140px">
+              <div style="height:6px;background:var(--green);border-radius:3px;width:${xpProg.pct}%"></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;flex-shrink:0;align-self:flex-start">
+            ${a.status==='active'
+              ? `<button class="btn orange sm" onclick="suspendAccount('${a.id}')">Suspend</button>`
+              : a.status==='suspended'
+              ? `<button class="btn green sm" onclick="reinstateAccount('${a.id}')">Reinstate</button>`
+              : `<button class="btn green sm" onclick="approveAccount('${a.id}')">Approve</button>`}
+            <button class="btn ghost sm" onclick="adminViewStudentProfile('${a.id}')">Profile</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+    el.innerHTML = html;
+
+  } else if (activeModTab === 'families') {
+    const allAccounts = getAccounts();
+    const parents = allAccounts.filter(a => a.role === 'parent');
+    const students = allAccounts.filter(a => a.role === 'student');
+    if (!parents.length) { el.innerHTML = `<div class="empty"><span class="empty-icon">👨‍👩‍👧</span><p>No parents registered yet.</p></div>`; return; }
+    el.innerHTML = `<div style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:12px">Shows every parent and their linked children.</div>` +
+      parents.map(p => {
+        const children = students.filter(s => s.parentEmail === p.email);
+        return `<div style="background:var(--card);border-radius:14px;padding:16px 18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.06)">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:${children.length?'12px':'0'}">
+            <div class="av" style="background:${avatarColor(p.name)};width:36px;height:36px;flex-shrink:0">${p.name.charAt(0)}</div>
+            <div>
+              <div style="font-weight:800;color:var(--dark)">${p.name}</div>
+              <div style="font-size:12px;color:var(--muted)">${p.email}</div>
+            </div>
+            <div style="margin-left:auto;font-size:12px;font-weight:700;color:var(--blue)">${children.length} child${children.length!==1?'ren':''}</div>
+          </div>
+          ${children.length ? children.map(c => {
+            const xp = getXP(c.id);
+            const level = getXPLevel(xp);
+            return `<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg);border-radius:10px;margin-top:6px">
+              <div class="av" style="background:${avatarColor(c.name)};width:30px;height:30px;font-size:13px">${c.name.charAt(0)}</div>
+              <div style="flex:1">
+                <div style="font-size:13px;font-weight:800;color:var(--dark)">${c.name} · Grade ${c.grade||'?'}</div>
+                <div style="font-size:11px;color:var(--muted)">${level.label} · ${xp} XP · <span style="color:${c.status==='active'?'var(--green)':'var(--red)'}">${c.status}</span></div>
+              </div>
+            </div>`;
+          }).join('') : '<div style="font-size:12px;color:var(--muted);font-style:italic;padding:4px 0">No children linked yet</div>'}
+        </div>`;
+      }).join('');
+
   } else if (activeModTab === 'proposals') {
     renderProposals();
   }
@@ -6131,6 +6520,57 @@ function adminRemovePost(id) {
   saveFlags(flags);
   toast('Post removed');
   renderModTab();
+}
+
+function adminApprovePost(id) {
+  const posts = getPosts();
+  const p = posts.find(x => x.id === id);
+  if (!p) { toast('Post not found.'); return; }
+  p.parentApproved = true;
+  savePosts(posts);
+  // Award XP to student
+  const accounts = getAccounts();
+  const author = accounts.find(a => a.id === p.authorId);
+  if (author) {
+    author.foundryPoints = (author.foundryPoints || 0) + (XP_REWARDS.postApproved || 5);
+    saveAccounts(accounts);
+    const notifs = JSON.parse(localStorage.getItem('yfs_student_notifs_' + p.authorId) || '[]');
+    notifs.unshift({ id: 'n_'+Date.now(), type:'post_approved', msg:'🎉 Your post was approved by an admin and is now live! +' + (XP_REWARDS.postApproved||5) + ' XP', ts: Date.now(), read: false });
+    localStorage.setItem('yfs_student_notifs_' + p.authorId, JSON.stringify(notifs.slice(0,50)));
+  }
+  toast('✅ Post approved and published!');
+  renderModTab();
+}
+
+function rejectPendingAccount(id) {
+  const pending = getPendingAccounts();
+  const idx = pending.findIndex(a => a.id === id);
+  if (idx === -1) return;
+  pending.splice(idx, 1);
+  savePendingAccounts(pending);
+  toast('Account request rejected and removed.');
+  renderModTab();
+}
+
+function adminViewStudentProfile(id) {
+  const accounts = getAccounts();
+  const s = accounts.find(a => a.id === id);
+  if (!s) { toast('Student not found.'); return; }
+  const xp = getXP(id);
+  const level = getXPLevel(xp);
+  const xpProg = getXPProgress(xp);
+  const posts = getPosts().filter(p => p.authorId === id);
+  const approved = posts.filter(p => p.parentApproved).length;
+  const pending = posts.filter(p => !p.parentApproved && p.aiStatus === 'approved').length;
+  alert([
+    '👤 ' + s.name,
+    'Grade: ' + (s.grade||'?') + ' · School: ' + (s.schoolId||'?'),
+    'Status: ' + s.status,
+    'Parent: ' + (s.parentEmail||'none'),
+    'Level: ' + level.label + ' (' + xp + ' XP · ' + xpProg.pct + '% to next)',
+    'Posts: ' + posts.length + ' total · ' + approved + ' live · ' + pending + ' in queue',
+    'Email: ' + (s.email||'?')
+  ].join('\n'));
 }
 
 function suspendAccount(id) {
@@ -6204,7 +6644,7 @@ function openPrivacyPolicy() { openModal('modal-privacy'); }
 function openForgotPassword() {
   document.getElementById('fp-username').value = '';
   document.getElementById('fp-result').style.display = 'none';
-  openModal('modal-forgot');
+  openModal('modal-forgot-password');
 }
 
 function lookupPassword() {
@@ -6262,34 +6702,24 @@ function lookupUsername() {
 function getParentalControls(childId) {
   var stored = localStorage.getItem('pc_' + childId);
   if (stored) { try { return JSON.parse(stored); } catch(e) {} }
-  return { approvalMode: 'all', screenTimeMins: 0, chatTimeLimitMins: 0, canChat: true, blockedCommunities: [], freeze: false, contentFilter: true };
+  return { approvalMode: 'all', screenTimeMins: 0, chatTimeLimitMins: 0, canChat: true, freeze: false, contentFilter: true };
 }
 function saveParentalControls(childId, settings) {
   localStorage.setItem('pc_' + childId, JSON.stringify(settings));
 }
 
 function renderParentalControls(el) {
-  var accounts = getAccounts();
-  var students = accounts.filter(function(a){ return a.role === 'student'; });
+  var students = getPpChildren();
   if (!students.length) {
-    el.innerHTML = '<div class="empty"><span class="empty-icon">👶</span><p>No child accounts found.</p></div>';
+    el.innerHTML = '<div style="text-align:center;padding:60px 20px;color:#8A9BB5"><div style="font-size:3rem;margin-bottom:12px">👶</div><div style="font-size:13px;font-weight:700">No linked children found. Your child must list your email when registering.</div></div>';
     return;
   }
-  var html = '<div style="margin-bottom:16px;background:#e8f5e9;border:2px solid #a5d6a7;border-radius:14px;padding:14px;font-size:13px;font-weight:700;color:#2e7d32">🔒 <b>Parental Controls</b> let you manage each child\'s experience. Changes take effect immediately.</div>';
+  var html = '<div class="pp-section-title">🛡️ Parental Controls</div><div class="pp-section-sub">Manage each child\'s experience. Changes take effect immediately.</div>';
 
   students.forEach(function(child) {
     var pc = getParentalControls(child.id);
     var today = new Date().toDateString();
     var usedMins = parseInt(localStorage.getItem('st_' + child.id + '_' + today) || '0');
-
-    // community checkboxes
-    var commsOpts = COMMUNITIES.map(function(c) {
-      var blocked = pc.blockedCommunities && pc.blockedCommunities.includes(c.id);
-      return '<label style="display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:10px;background:' + (blocked ? '#ffebee' : 'var(--soft)') + ';margin-bottom:6px;cursor:pointer;font-size:13px;font-weight:700">'
-        + '<input type="checkbox" ' + (blocked ? 'checked' : '') + ' onchange="toggleBlockCommunity(\'' + child.id + '\',\'' + c.id + '\',this.checked)" style="width:auto;cursor:pointer" />'
-        + (blocked ? '🚫' : c.emoji) + ' ' + c.name + (blocked ? ' <span style="color:var(--red);font-size:11px;margin-left:4px">(blocked)</span>' : '')
-        + '</label>';
-    }).join('');
 
     // toggle helper
     function tog(val, onColor) {
@@ -6367,18 +6797,13 @@ function renderParentalControls(el) {
       + '<input type="checkbox" ' + (pc.contentFilter ? 'checked' : '') + ' onchange="savePCSetting(\'' + child.id + '\',\'contentFilter\',this.checked)" style="opacity:0;position:absolute;width:44px;height:24px;cursor:pointer;margin:0" />'
       + '</label></div></div>'
 
-      // ── Community Blocklist ──
-      + '<div style="background:var(--soft);border-radius:12px;padding:12px 14px">'
-      + '<div style="font-weight:900;font-size:13px;margin-bottom:4px">🌐 Community Access</div>'
-      + '<div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:10px">✔ = blocked from this community</div>'
-      + commsOpts + '</div>'
-
       + '</div></div>';
   });
   el.innerHTML = html;
 }
 
 function savePCSetting(childId, key, value) {
+  if (!getPpChildren().some(function(c){ return c.id === childId; })) { toast('⛔ Permission denied.'); return; }
   var pc = getParentalControls(childId);
   pc[key] = value;
   saveParentalControls(childId, pc);
@@ -6386,6 +6811,7 @@ function savePCSetting(childId, key, value) {
 }
 
 function togglePCFreeze(childId, frozen) {
+  if (!getPpChildren().some(function(c){ return c.id === childId; })) { toast('⛔ Permission denied.'); return; }
   var pc = getParentalControls(childId);
   pc.freeze = frozen;
   saveParentalControls(childId, pc);
@@ -6396,17 +6822,7 @@ function togglePCFreeze(childId, frozen) {
   renderParentTabContent();
 }
 
-function toggleBlockCommunity(childId, commId, blocked) {
-  var pc = getParentalControls(childId);
-  if (!pc.blockedCommunities) pc.blockedCommunities = [];
-  if (blocked) {
-    if (!pc.blockedCommunities.includes(commId)) pc.blockedCommunities.push(commId);
-  } else {
-    pc.blockedCommunities = pc.blockedCommunities.filter(function(c){ return c !== commId; });
-  }
-  saveParentalControls(childId, pc);
-  toast(blocked ? '🚫 Community blocked for this child' : '✅ Community unblocked');
-}
+
 
 function openTerms() { openModal('modal-terms'); }
 
@@ -6833,7 +7249,7 @@ if (!localStorage.getItem('yfs_posts')) savePosts(getSeedPosts());
 <!-- MODAL: PRIVACY POLICY -->
 <div class="modal-overlay" id="modal-privacy">
   <div class="modal" style="max-width:580px">
-    <button class="modal-close" onclick="closeModal('modal-privacy')">✕</button>
+    <button class="modal-close" aria-label="Close" onclick="closeModal('modal-privacy')">✕</button>
     <h3>🔒 Privacy Policy</h3>
     <p class="sub">TYF Network — The Young Foundry · Effective June 2026</p>
     <div style="font-size:13px;font-weight:700;color:var(--ink);line-height:1.7;max-height:55vh;overflow-y:auto;padding-right:4px">
@@ -6855,9 +7271,9 @@ if (!localStorage.getItem('yfs_posts')) savePosts(getSeedPosts());
 
 
 <!-- MODAL: FORGOT PASSWORD -->
-<div class="modal-overlay" id="modal-forgot">
+<div class="modal-overlay" id="modal-forgot-password">
   <div class="modal" style="max-width:420px">
-    <button class="modal-close" onclick="closeModal('modal-forgot')">✕</button>
+    <button class="modal-close" aria-label="Close" onclick="closeModal('modal-forgot-password')">✕</button>
     <h3>🔑 Forgot Password</h3>
     <p class="sub">Enter your username and we'll show the password saved for your account.</p>
     <div class="field">
@@ -6873,7 +7289,7 @@ if (!localStorage.getItem('yfs_posts')) savePosts(getSeedPosts());
 <!-- MODAL: FORGOT USERNAME -->
 <div class="modal-overlay" id="modal-forgot-username">
   <div class="modal" style="max-width:420px">
-    <button class="modal-close" onclick="closeModal('modal-forgot-username')">✕</button>
+    <button class="modal-close" aria-label="Close" onclick="closeModal('modal-forgot-username')">✕</button>
     <h3>🪪 Forgot Username</h3>
     <p class="sub">Enter the email used during registration and we'll find your username.</p>
     <div class="field">
@@ -6889,7 +7305,7 @@ if (!localStorage.getItem('yfs_posts')) savePosts(getSeedPosts());
 <!-- MODAL: TERMS OF USE -->
 <div class="modal-overlay" id="modal-terms">
   <div class="modal" style="max-width:560px">
-    <button class="modal-close" onclick="closeModal('modal-terms')">✕</button>
+    <button class="modal-close" aria-label="Close" onclick="closeModal('modal-terms')">✕</button>
     <h3>📜 Terms of Use</h3>
     <p class="sub">TYF Network · Last updated June 2026</p>
     <div style="font-size:13px;font-weight:700;color:var(--ink);line-height:1.7;max-height:55vh;overflow-y:auto;padding-right:4px">
@@ -6909,9 +7325,9 @@ if (!localStorage.getItem('yfs_posts')) savePosts(getSeedPosts());
 <!-- MODAL: REPORT MESSAGE -->
 <div class="modal-overlay" id="modal-report-msg">
   <div class="modal" style="max-width:420px">
-    <button class="modal-close" onclick="closeModal('modal-report-msg')">✕</button>
+    <button class="modal-close" aria-label="Close" onclick="closeModal('modal-report-msg')">✕</button>
     <h3>⚠️ Report / Block</h3>
-    <p class="sub">Help keep AlphaVerse safe. All reports are reviewed by admins.</p>
+    <p class="sub">Help keep TYF Network safe. All reports are reviewed by admins.</p>
     <input type="hidden" id="report-msg-id">
     <input type="hidden" id="report-msg-to">
     <div class="field">
@@ -6938,7 +7354,7 @@ if (!localStorage.getItem('yfs_posts')) savePosts(getSeedPosts());
 <!-- MODAL: SHARE BADGE -->
 <div class="modal-overlay" id="modal-share-badge">
   <div class="modal" style="max-width:420px">
-    <button class="modal-close" onclick="closeModal('modal-share-badge')">✕</button>
+    <button class="modal-close" aria-label="Close" onclick="closeModal('modal-share-badge')">✕</button>
     <div style="font-family:'Fredoka One',cursive;font-size:20px;margin-bottom:6px">🎉 Share Your Badge!</div>
     <div id="share-badge-preview" style="text-align:center;padding:14px;background:var(--soft);border-radius:14px;margin-bottom:16px"></div>
     <div style="font-weight:800;font-size:13px;color:var(--dark);margin-bottom:10px">Send to friends or groups:</div>
@@ -6950,7 +7366,7 @@ if (!localStorage.getItem('yfs_posts')) savePosts(getSeedPosts());
 <!-- MODAL: CREATE GROUP CHAT -->
 <div class="modal-overlay" id="modal-create-group">
   <div class="modal" style="max-width:460px">
-    <button class="modal-close" onclick="closeModal('modal-create-group')">✕</button>
+    <button class="modal-close" aria-label="Close" onclick="closeModal('modal-create-group')">✕</button>
     <h3>👥 Create Group Chat</h3>
     <p class="sub">Bring your friends together in one conversation!</p>
     <div class="field-row" style="gap:10px;margin-bottom:10px">
@@ -6981,7 +7397,7 @@ if (!localStorage.getItem('yfs_posts')) savePosts(getSeedPosts());
 <!-- MODAL: GROUP SETTINGS -->
 <div class="modal-overlay" id="modal-group-settings">
   <div class="modal" style="max-width:460px">
-    <button class="modal-close" onclick="closeModal('modal-group-settings')">✕</button>
+    <button class="modal-close" aria-label="Close" onclick="closeModal('modal-group-settings')">✕</button>
     <div id="group-settings-body"></div>
   </div>
 </div>
@@ -7218,6 +7634,57 @@ function showBuddyBtn() {
   const screenId = active ? active.id.replace('screen-','') : 'feed';
   showScreenWizard(screenId);
 }
+
+// ============================================================
+// SESSION RESTORE ON PAGE LOAD
+// ============================================================
+function hideLoader() {
+  const el = document.getElementById('app-loader');
+  if (!el) return;
+  el.classList.add('fade-out');
+  setTimeout(function(){ el.classList.add('gone'); }, 160);
+}
+
+function restoreSession() {
+  // Always hide the loader no matter what path we take
+  try {
+    const raw = localStorage.getItem('yfs_active_session');
+    if (!raw) { hideLoader(); return; }
+    const session = JSON.parse(raw);
+    // Expire sessions older than 8 hours
+    if (!session || !session.id || (Date.now() - session.ts) > 8 * 3600 * 1000) {
+      localStorage.removeItem('yfs_active_session');
+      hideLoader(); return;
+    }
+    if (session.role === 'admin') {
+      currentUser = {id:'admin',name:'Admin',role:'admin',status:'active',grade:null,foundryScore:999,isMentor:false,badges:['admin'],joinedCommunities:[]};
+      enterApp();
+      hideLoader(); return;
+    }
+    const accounts = getAccounts();
+    const account = accounts.find(a => a.id === session.id);
+    if (!account || account.status === 'suspended') {
+      localStorage.removeItem('yfs_active_session');
+      hideLoader(); return;
+    }
+    currentUser = account;
+    enterApp();
+    // enterApp() already handles parent routing, but ensure topbar is hidden for parents
+    if (account.role === 'parent') {
+      document.getElementById('main-topbar').style.display = 'none';
+      document.getElementById('main-footer').style.display = 'none';
+      document.getElementById('topbar-search-wrap').style.display = 'none';
+    }
+  } catch(e) {
+    localStorage.removeItem('yfs_active_session');
+  }
+  hideLoader();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  restoreSession();
+});
+
 </script>
 
 </body>
